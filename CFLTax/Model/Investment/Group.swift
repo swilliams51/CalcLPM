@@ -32,4 +32,16 @@ public struct Group: Identifiable {
         self.unDeletable = unDeletable
     }
     
+    init() {
+        amount = "18357.37"
+        endDate = addPeriodsToDate(dateStart: Date(), payPerYear: .monthly, noOfPeriods: 60, referDate: Date(), bolEOMRule: true)
+        locked = false
+        noOfPayments = 60
+        startDate = Date()
+        timing = .arrears
+        paymentType = .baseRental
+        isInterim = false
+        unDeletable = true
+    }
+    
 }

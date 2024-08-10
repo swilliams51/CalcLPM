@@ -8,11 +8,40 @@
 import SwiftUI
 
 struct ViewsManager: View {
+    @Bindable var myInvestment: Investment
+    @Binding var path: [Int]
+    @Binding var isDark: Bool
+    @Binding var selectedGroup: Group
+    
+    var selectedView: Int
+    
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+      switch selectedView {
+        case 1:
+          AssetView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+        case 2:
+            LeaseTermView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+        case 3:
+          RentView(myInvestment: myInvestment, selectedGroup: $selectedGroup, path: $path, isDark: $isDark)
+        case 4:
+           DepreciationView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+        case 5:
+           TaxAssumptionsView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+        case 6:
+            FeeView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+        case 7:
+            EconomicsView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+        case 8:
+            Text("Lease Payment")
+      case 9:
+          LessorCostTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+        default:
+            Text("Hello")
+        }
     }
 }
 
 #Preview {
-    ViewsManager()
+    ViewsManager(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false), selectedGroup: .constant(Group()), selectedView: 4)
 }

@@ -85,6 +85,15 @@ extension String {
     }
 }
 
+extension String {
+    func isDecimal() -> Bool {
+        let formatter = NumberFormatter()
+        formatter.allowsFloats = true
+        formatter.locale = Locale.current
+        return formatter.number (from: self) != nil
+    }
+}
+
 
 extension Int {
     func toString () -> String {
