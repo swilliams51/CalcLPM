@@ -8,7 +8,7 @@
 import Foundation
 
 
-func isAmountValid(strAmount: String, decLow: Decimal, decHigh: Decimal, inclusiveLow:  Bool, inclusiveHigh: Bool) -> Bool {
+public func isAmountValid(strAmount: String, decLow: Decimal, decHigh: Decimal, inclusiveLow:  Bool, inclusiveHigh: Bool) -> Bool {
     // IsDecimal
     if strAmount.isDecimal() == false {
         return false
@@ -36,4 +36,24 @@ func isAmountValid(strAmount: String, decLow: Decimal, decHigh: Decimal, inclusi
     }
 
     return true
+}
+
+public func isNameValid(strIn: String) -> Bool {
+    if strIn.isEmpty == true {
+        return false
+    }
+    if strIn.count < 2 {
+        return false
+    }
+    
+    if strIn.count > 30 {
+        return false
+    }
+    
+    if strIn.hasIllegalChars() == true {
+        return false
+    }
+    
+    return true
+    
 }

@@ -12,14 +12,14 @@ struct LessorCostTextFieldView: View {
     @Binding var path: [Int]
     @Binding var isDark: Bool
     
-    @State var myLessorCost: String = ""
-    @State private var editLessorCostStarted: Bool = false
-    @State private var maximumCost: Decimal = 1.0
-    @FocusState private var costIsFocused: Bool
+    @State var myAmount: String = ""
+    @State private var editAmountStarted: Bool = false
+    @State private var maximumAmount: Decimal = 1.0
+    @FocusState private var amountIsFocused: Bool
     @State private var showPopover: Bool = false
     private let pasteBoard = UIPasteboard.general
     
-    @State private var costOnEntry: String = ""
+    @State private var amountOnEntry: String = ""
     @State private var alertTitle: String = ""
     @State private var showAlert: Bool = false
     @State var payHelp = leaseAmountHelp
@@ -43,9 +43,9 @@ struct LessorCostTextFieldView: View {
         .navigationBarBackButtonHidden()
         .environment(\.colorScheme, isDark ? .dark : .light)
         .onAppear{
-            self.costOnEntry = myInvestment.asset.lessorCost
-            self.maximumCost = maximumLessorCost.toDecimal()
-            self.myLessorCost = myInvestment.asset.lessorCost
+            self.amountOnEntry = myInvestment.asset.lessorCost
+            self.maximumAmount = maximumLessorCost.toDecimal()
+            self.myAmount = myInvestment.asset.lessorCost
             
         }
     }
@@ -76,17 +76,17 @@ struct LessorCostTextFieldView: View {
     var rightSideAmountItem: some View {
         ZStack(alignment: .trailing) {
             TextField("",
-                      text: $myLessorCost,
+                      text: $myAmount,
               onEditingChanged: { (editing) in
                 if editing == true {
-                    self.editLessorCostStarted = true
+                    self.editAmountStarted = true
             }})
                 .keyboardType(.decimalPad).foregroundColor(.clear)
-                .focused($costIsFocused)
+                .focused($amountIsFocused)
                 .textFieldStyle(PlainTextFieldStyle())
                 .disableAutocorrection(true)
                 .accentColor(.clear)
-            Text("\(amountFormatted(editStarted: editLessorCostStarted))")
+            Text("\(amountFormatted(editStarted: editAmountStarted))")
                 .font(myFont)
                 .foregroundColor(isDark ? .white : .black)
         }
@@ -94,9 +94,9 @@ struct LessorCostTextFieldView: View {
     
     func amountFormatted(editStarted: Bool) -> String {
         if editStarted == true {
-            return myLessorCost
+            return myAmount
         } else {
-            return amountFormatter(amount: myLessorCost, locale: myLocale)
+            return amountFormatter(amount: myAmount, locale: myLocale)
         }
     }
     
@@ -109,16 +109,16 @@ struct LessorCostTextFieldView: View {
 
 extension LessorCostTextFieldView {
     func updateForCancel() {
-        if self.editLessorCostStarted == true {
-            self.myLessorCost = self.costOnEntry
-            self.editLessorCostStarted = false
+        if self.editAmountStarted == true {
+            self.myAmount = self.amountOnEntry
+            self.editAmountStarted = false
         }
-        self.costIsFocused = false
+        self.amountIsFocused = false
     }
     
     func copyToClipboard() {
-        if self.costIsFocused {
-            pasteBoard.string = self.myLessorCost
+        if self.amountIsFocused {
+            pasteBoard.string = self.myAmount
         }
     }
     
@@ -126,38 +126,38 @@ extension LessorCostTextFieldView {
         if var string = pasteBoard.string {
             string.removeAll(where: { removeCharacters.contains($0) } )
             if string.isDecimal() {
-                if self.costIsFocused {
-                    self.myLessorCost = string
+                if self.amountIsFocused {
+                    self.myAmount = string
                 }
             }
         }
     }
     
     func clearAllText() {
-        if self.costIsFocused == true {
-            self.myLessorCost = ""
+        if self.amountIsFocused == true {
+            self.myAmount = ""
         }
     }
    
     func updateForSubmit() {
-        if self.editLessorCostStarted == true {
+        if self.editAmountStarted == true {
             updateForLeaseAmount()
             path.removeLast()
         }
-        self.costIsFocused = false
+        self.amountIsFocused = false
     }
     
     func updateForLeaseAmount() {
-        if isAmountValid(strAmount: myLessorCost, decLow: 0.0, decHigh: maximumLessorCost.toDecimal(), inclusiveLow: true, inclusiveHigh: true) == false {
-            self.myLessorCost = self.costOnEntry
+        if isAmountValid(strAmount: myAmount, decLow: 0.0, decHigh: maximumLessorCost.toDecimal(), inclusiveLow: true, inclusiveHigh: true) == false {
+            self.myAmount = self.amountOnEntry
             alertTitle = alertMaxAmount
             showAlert.toggle()
         } else {
             //Amount is Valid
-            //self.myLease.resetPaymentAmountToMax()
+            self.myInvestment.asset.lessorCost = myAmount
         }
             
-        self.editLessorCostStarted = false
+        self.editAmountStarted = false
     }
     
 }

@@ -21,35 +21,13 @@ struct HomeView: View {
         NavigationStack (path: $path){
             Form {
                 Section(header: Text("Parameters")) {
-                    Text("Asset")
-                        .onTapGesture {
-                            path.append(1)
-                        }
-                    Text("Lease Term")
-                        .onTapGesture {
-                            path.append(2)
-                        }
-                    Text("Rent")
-                        .onTapGesture {
-                            path.append(3)
-                        }
-                    Text("Depreciation")
-                        .onTapGesture {
-                            path.append(4)
-                        }
-                    Text("Tax Assumptions")
-                        .onTapGesture {
-                            path.append(5)
-                        }
-                    Text("Fee")
-                        .onTapGesture {
-                            path.append(6)
-                        }
-                    Text("Economics")
-                        .onTapGesture {
-                            path.append(7)
-                        }
-                    
+                    assetItem
+                    LeaseTermItem
+                    rentItem
+                    depreciationItem
+                    taxAssumptionsItem
+                    feeItem
+                    economicsItem
                 }
                 Section(header: Text("Results")) {
                     Text("Net After Tax Cashflows")
@@ -65,6 +43,84 @@ struct HomeView: View {
             
         }
     }
+    
+    var assetItem: some View {
+        HStack {
+            Text("Asset")
+                .onTapGesture {
+                    path.append(1)
+                }
+            Spacer()
+            Image(systemName: "chevron.right")
+        }
+    }
+    
+    var LeaseTermItem: some View {
+        HStack {
+            Text("Lease Term")
+                .onTapGesture {
+                    path.append(2)
+                }
+            Spacer()
+            Image(systemName: "chevron.right")
+        }
+    }
+    
+    var rentItem: some View {
+        HStack {
+            Text("Rent")
+                .onTapGesture {
+                path.append(3)
+                }
+            Spacer()
+            Image(systemName: "chevron.right")
+        }
+    }
+    
+    var depreciationItem: some View {
+        HStack {
+            Text("Depreciation")
+                .onTapGesture {
+                    path.append(4)
+                }
+            Spacer()
+            Image(systemName: "chevron.right")
+        }
+    }
+    
+    var taxAssumptionsItem: some View {
+        HStack{
+            Text("Tax Assumptions")
+                .onTapGesture {
+                    path.append(5)
+                }
+            Spacer()
+            Image(systemName: "chevron.right")
+        }
+    }
+    
+    var feeItem: some View {
+        HStack{
+            Text("Fee")
+                .onTapGesture {
+                    path.append(6)
+                }
+            Spacer()
+            Image(systemName: "chevron.right")
+        }
+    }
+    
+    var economicsItem: some View {
+        HStack{
+            Text("Economics")
+                .onTapGesture {
+                    path.append(7)
+                }
+            Spacer()
+            Image(systemName: "chevron.right")
+        }
+    }
+    
 }
 
 #Preview {

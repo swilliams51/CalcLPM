@@ -34,8 +34,14 @@ struct ViewsManager: View {
             EconomicsView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         case 8:
             Text("Lease Payment")
-      case 9:
-          LessorCostTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+        case 9:
+            LessorCostTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+        case 10:
+            ResidualTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+        case 11:
+            LseGtyTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+      case 12:
+          AssetNameTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         default:
             Text("Hello")
         }

@@ -18,7 +18,6 @@ public enum SolveForOption {
     case residualValue
     case unLockedRentals
     
-   
     static let yields: [SolveForOption]  = [.afterTaxMISF, .beforeTaxMISF, .irrPTCF]
     static let amounts: [SolveForOption] = [.fee, .implicitRate, .presentValueOfRents, .residualValue, .unLockedRentals]
     
@@ -178,7 +177,6 @@ public enum Frequency: Int, CaseIterable {
 public enum InterimRentType {
     case dailyEquivAll
     case dailyEquivNext
-    case interestOnly
     case specified
     
     func toString() -> String {
@@ -187,14 +185,12 @@ public enum InterimRentType {
             return "DeAll"
         case .dailyEquivNext:
             return "DeNext"
-        case .interestOnly:
-            return " Interest Only"
         default:
             return "Specified"
         }
     }
     
-    static let allTypes: [InterimRentType] = [.dailyEquivAll, .dailyEquivNext, .interestOnly, .specified]
+    static let allTypes: [InterimRentType] = [.dailyEquivAll, .dailyEquivNext, .specified]
 }
 
 public enum PaymentType {
@@ -210,7 +206,7 @@ public enum PaymentType {
         case .dailyEquivNext:
             return "DeNext"
         case .baseRental:
-            return "Basic Rent"
+            return "Rent"
         default:
             return "Specified"
         }
