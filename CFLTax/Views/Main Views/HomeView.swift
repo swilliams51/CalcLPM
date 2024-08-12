@@ -12,6 +12,7 @@ struct HomeView: View {
     @State public var path: [Int] = [Int]()
     @State public var isDark: Bool = false
     @State var selectedGroup: Group = Group()
+    @State var  index: Int = 0
     
 //    @State public var myNetAfterTaxCFs: NetAfterTaxCashflows = NetAfterTaxCashflows()
 //    @State public var myATCashflows: Cashflows = Cashflows()
@@ -38,7 +39,7 @@ struct HomeView: View {
             }
             .navigationBarTitle("Home")
             .navigationDestination(for: Int.self) { selectedView in
-                ViewsManager(myInvestment: myInvestment, path: $path, isDark: $isDark, selectedGroup: $selectedGroup, selectedView: selectedView)
+                ViewsManager(myInvestment: myInvestment, path: $path, isDark: $isDark, selectedGroup: $selectedGroup, index: $index, selectedView: selectedView)
             }
             
         }

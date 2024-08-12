@@ -15,6 +15,15 @@ public struct Rent {
         self.groups = groups
     }
     
+    public func interimExists() -> Bool {
+        if groups.count > 0 {
+            if groups[0].isInterim == true {
+                return true
+            }
+        }
+        return false
+    }
+    
     public func getTotalNumberOfPayments() -> Int {
         var runTotalPayments: Int = 0
         
@@ -50,6 +59,67 @@ public struct Rent {
         }
           
         return runTotalAmount
+    }
+    
+    func getIndexOfGroup(aGroup: Group) -> Int {
+        var idx: Int = -1
+
+        for x in 0..<groups.count {
+            if aGroup.id == groups[x].id {
+                idx = x
+                break
+            }
+        }
+        return idx
+    }
+    
+    public func getTotalNoOfBasePayments(aFreq: Frequency, eomRule: Bool, interimGroupExists: Bool) -> Int {
+        var runTotalNoOfPmts: Int = 0
+
+        for x in 0..<groups.count {
+            if x == 0 {
+                if interimGroupExists == true && groups[x].noOfPayments == 1{
+                    continue
+                }
+            }
+            runTotalNoOfPmts = runTotalNoOfPmts + groups[x].noOfPayments
+        }
+        
+        return runTotalNoOfPmts
+    }
+    
+    func getMinTotalNumberPayments(aFrequency: Frequency) -> Int {
+        switch aFrequency {
+        case .annual:
+            return 1
+        case .semiannual:
+            return 2
+        case .quarterly:
+            return 4
+        default:
+            return 12
+        }
+    }
+    
+    func getMaxRemainNumberPayments(maxBaseTerm: Int, freq: Frequency, eom: Bool, aRefer: Date) -> Int {
+        let totalPossible = getMaxTotalNumberPayments(maxBaseTerm: maxBaseTerm, aFrequency: freq)
+        let totalExisting: Int = getTotalNoOfBasePayments(aFreq: freq, eomRule: eom,  interimGroupExists: self.interimExists())
+        
+        return totalPossible - totalExisting
+    }
+    
+    
+    public func getMaxTotalNumberPayments(maxBaseTerm: Int, aFrequency: Frequency) -> Int {
+        switch aFrequency {
+        case .annual:
+            return maxBaseTerm / 12
+        case .semiannual:
+            return maxBaseTerm / 6
+        case .quarterly:
+            return maxBaseTerm / 3
+        default:
+            return maxBaseTerm
+        }
     }
     
     

@@ -12,6 +12,7 @@ struct ViewsManager: View {
     @Binding var path: [Int]
     @Binding var isDark: Bool
     @Binding var selectedGroup: Group
+    @Binding var index: Int
     
     var selectedView: Int
     
@@ -40,8 +41,12 @@ struct ViewsManager: View {
             ResidualTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         case 11:
             LseGtyTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
-      case 12:
+        case 12:
           AssetNameTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+        case 13:
+          GroupDetailView(myInvestment: myInvestment, selectedGroup: $selectedGroup, index: .constant(0), isDark: $isDark, path: $path)
+      case 14:
+          PaymentAmountTextFieldView(myInvestment: myInvestment, selectedGroup: $selectedGroup, index: $index, isDark: $isDark, path: $path)
         default:
             Text("Hello")
         }
@@ -49,5 +54,5 @@ struct ViewsManager: View {
 }
 
 #Preview {
-    ViewsManager(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false), selectedGroup: .constant(Group()), selectedView: 4)
+    ViewsManager(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false), selectedGroup: .constant(Group()), index: .constant(0), selectedView: 4)
 }

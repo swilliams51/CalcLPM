@@ -13,4 +13,5 @@ public let toleranceAmounts: Decimal = 0.0075
 public let myFont: Font = .subheadline
 public let maximumLessorCost: String = "50000000.00"
 public let minimumLessorCost: String = "9.99"
+public let maxBaseTerm: Int = 360
 public let removeCharacters: Set<Character> = [",", "$","-", "+","%"]

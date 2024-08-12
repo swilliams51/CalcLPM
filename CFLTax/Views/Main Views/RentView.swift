@@ -45,7 +45,7 @@ extension RentView {
                         .font(myFont)
                         .onTapGesture {
                             self.selectedGroup = group
-                            self.path.append(2)
+                            self.path.append(13)
                         }
                     Spacer()
                 }
@@ -54,7 +54,7 @@ extension RentView {
                         .font(myFont)
                         .onTapGesture {
                             self.selectedGroup = group
-                            self.path.append(2)
+                            self.path.append(13)
                         }
                     Spacer()
                 }
