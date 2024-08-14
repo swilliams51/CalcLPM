@@ -15,6 +15,15 @@ public struct Rent {
         self.groups = groups
     }
     
+    mutating func addDuplicateGroup(groupToCopy: Group, numberPayments: Int) {
+        var newGroup: Group = groupToCopy
+        newGroup.noOfPayments = numberPayments
+        newGroup.unDeletable = true
+        
+        self.groups.append(newGroup)
+    }
+    
+    
     public func interimExists() -> Bool {
         if groups.count > 0 {
             if groups[0].isInterim == true {
@@ -121,8 +130,6 @@ public struct Rent {
             return maxBaseTerm
         }
     }
-    
-    
 }
 
 

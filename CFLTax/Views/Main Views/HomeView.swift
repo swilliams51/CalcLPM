@@ -31,98 +31,171 @@ struct HomeView: View {
                     economicsItem
                 }
                 Section(header: Text("Results")) {
-                    Text("Net After Tax Cashflows")
-                        .onTapGesture {
-                            path.append(8)
-                        }
+                    calculatedItem
                 }
             }
             .navigationBarTitle("Home")
             .navigationDestination(for: Int.self) { selectedView in
                 ViewsManager(myInvestment: myInvestment, path: $path, isDark: $isDark, selectedGroup: $selectedGroup, index: $index, selectedView: selectedView)
             }
-            
+                
         }
     }
     
+        
     var assetItem: some View {
         HStack {
             Text("Asset")
+                .font(myFont2)
                 .onTapGesture {
                     path.append(1)
                 }
             Spacer()
             Image(systemName: "chevron.right")
+                .onTapGesture {
+                    path.append(1)
+                }
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            path.append(1)
         }
     }
     
     var LeaseTermItem: some View {
         HStack {
             Text("Lease Term")
+                .font(myFont2)
                 .onTapGesture {
                     path.append(2)
                 }
             Spacer()
             Image(systemName: "chevron.right")
+                .onTapGesture {
+                    path.append(2)
+                }
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            path.append(2)
         }
     }
     
     var rentItem: some View {
         HStack {
             Text("Rent")
+                .font(myFont2)
                 .onTapGesture {
-                path.append(3)
+                    path.append(3)
                 }
             Spacer()
             Image(systemName: "chevron.right")
+                .onTapGesture {
+                    path.append(3)
+                }
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            path.append(3)
         }
     }
     
     var depreciationItem: some View {
         HStack {
             Text("Depreciation")
+                .font(myFont2)
                 .onTapGesture {
                     path.append(4)
                 }
             Spacer()
             Image(systemName: "chevron.right")
+                .onTapGesture {
+                    path.append(4)
+                }
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            path.append(4)
         }
     }
     
     var taxAssumptionsItem: some View {
         HStack{
             Text("Tax Assumptions")
+                .font(myFont2)
                 .onTapGesture {
                     path.append(5)
                 }
             Spacer()
             Image(systemName: "chevron.right")
+                .onTapGesture {
+                    path.append(5)
+                }
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            path.append(5)
         }
     }
     
     var feeItem: some View {
         HStack{
             Text("Fee")
+                .font(myFont2)
                 .onTapGesture {
                     path.append(6)
                 }
             Spacer()
             Image(systemName: "chevron.right")
+                .onTapGesture {
+                    path.append(6)
+                }
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            path.append(6)
         }
     }
     
     var economicsItem: some View {
         HStack{
             Text("Economics")
+                .font(myFont2)
                 .onTapGesture {
                     path.append(7)
                 }
             Spacer()
             Image(systemName: "chevron.right")
+                .onTapGesture {
+                    path.append(7)
+                }
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            path.append(7)
         }
     }
     
+    var calculatedItem: some View {
+        HStack{
+            Text("Net After Tax Cashflows")
+                .font(myFont2)
+                .onTapGesture {
+                    path.append(8)
+                }
+            Spacer()
+            Image(systemName: "chevron.right")
+                .onTapGesture {
+                    path.append(8)
+                }
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            
+        }
+    }
 }
+
 
 #Preview {
     HomeView(myInvestment: Investment())

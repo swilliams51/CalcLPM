@@ -45,7 +45,7 @@ public struct Group: Identifiable {
     }
     
     
-    mutating func isCalculatedPaymentType() -> Bool {
+    func isCalculatedPaymentType() -> Bool {
         var bolIsCalcPayment: Bool = false
         
         if self.paymentType == .dailyEquivAll || self.paymentType == .dailyEquivNext {

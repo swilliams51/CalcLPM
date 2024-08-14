@@ -158,7 +158,7 @@ extension GroupDetailView {
                     .font(.subheadline)
             }
             .onChange(of: selectedGroup.timing) { oldValue, newValue in
-                
+              
             }
         }.disabled(timingIsLocked)
     }
@@ -166,16 +166,27 @@ extension GroupDetailView {
     var tempPaymentItem: some View {
         HStack{
             Text("Amount:")
-                .font(.subheadline)
+                .font(myFont)
+                .onTapGesture {
+                    if isCalculatedPayment == false {
+                        path.append(14)
+                    }
+                }
             Spacer()
-            Text("\(amountFormatter(amount: selectedGroup.amount, locale: myLocale))")
-                .font(.subheadline)
+            Text("\(paymentFormatted(editStarted: editStarted))")
+                .font(myFont)
                 .onTapGesture {
                     if isCalculatedPayment == false {
                         path.append(14)
                     }
                     
                 }
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            if isCalculatedPayment == false {
+                path.append(14)
+            }
         }
     }
     
@@ -283,6 +294,7 @@ extension GroupDetailView {
         return Alert(title: Text(alertTitle))
     }
     
+    
     func getPaymentTypes() -> [PaymentType] {
         if self.isInterimGroup {
             return PaymentType.interimTypes
@@ -296,17 +308,8 @@ extension GroupDetailView {
     }
     
     func getDefaultPaymentAmount() -> String {
-        var defaultAmount: String = (self.myInvestment.asset.lessorCost.toDecimal() * 0.015).toString(decPlaces: 3)
-        
-        if self.myInvestment.rent.groups.count > 1 {
-            for x in 0..<self.myInvestment.rent.groups.count {
-                if self.myInvestment.rent.groups[x].amount != "CALCULATED" {
-                    defaultAmount = self.myInvestment.rent.groups[x].amount.toDecimal().toString(decPlaces: 3)
-                    break
-                }
-            }
-        }
-        
+        let defaultAmount: String =  (self.myInvestment.asset.lessorCost.toDecimal()  * 0.015).toString(decPlaces: 4)
+    
         return defaultAmount
     }
     
@@ -325,22 +328,14 @@ extension GroupDetailView {
             isCalculatedPayment = true
             pmtTextFieldIsLocked = true
             selectedGroup.locked = true
-            if selectedGroup.amount != "CALCULATED" {
-                selectedGroup.amount = "CALCULATED"
-            }
+            selectedGroup.amount = "CALCULATED"
+            self.sliderIsLocked = true
         } else {
             isCalculatedPayment = false
             pmtTextFieldIsLocked = false
-            if selectedGroup.amount == "CALCULATED" {
-                selectedGroup.amount = getDefaultPaymentAmount()
-                selectedGroup.locked = false
-            }
-            
-            if self.isInterimGroup == true || self.isResidualGroup == true {
-                self.sliderIsLocked = true
-            } else {
-                self.sliderIsLocked = false
-            }
+            selectedGroup.amount = getDefaultPaymentAmount()
+            selectedGroup.locked = false
+            self.sliderIsLocked = false
         }
         
     }
