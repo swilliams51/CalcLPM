@@ -96,6 +96,71 @@ extension String {
 
 
 extension String {
+    func toInteger () -> Int {
+        return Int(self)!
+    }
+}
+
+
+extension String {
+    func toPaymentType() -> PaymentType {
+        switch self {
+        case "DeAll":
+            return .dailyEquivAll
+        case "DeNext":
+            return .dailyEquivNext
+        case "Rent":
+            return .baseRental
+        default :
+            return .specified
+        }
+    }
+}
+
+extension String {
+    func toTimingType() -> TimingType {
+        switch self {
+        case "Advance":
+            return .advance
+        case "Arrears":
+            return .arrears
+        default:
+            return .equals
+        }
+    }
+}
+extension String {
+    func toFrequency() -> Frequency {
+        switch self {
+        case "Monthly":
+            return .monthly
+        case "Quarterly":
+            return .quarterly
+        case "Semiannual":
+            return .semiannual
+        case "Annual":
+            return .annual
+        default:
+            return .monthly
+        }
+    }
+}
+
+extension String {
+    func toBool() -> Bool {
+        switch self {
+        case "True":
+            return true
+        case "False":
+            return false
+        default:
+            return false
+        }
+    }
+}
+
+
+extension String {
     func hasIllegalChars() -> Bool {
         let myIllegalChars = "!@$%^&|"
         let charSet = CharacterSet(charactersIn: myIllegalChars)
@@ -103,6 +168,16 @@ extension String {
             return true
         } else {
             return false
+        }
+    }
+}
+
+extension Bool {
+    func toString() -> String {
+        if (self) {
+            return "True"
+        } else {
+            return "False"
         }
     }
 }

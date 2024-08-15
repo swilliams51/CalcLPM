@@ -44,6 +44,10 @@ public struct Group: Identifiable {
         unDeletable = true
     }
     
+    func clone() -> Group {
+        return Group(amount: amount, endDate: endDate, locked: locked, noOfPayments: noOfPayments, startDate: startDate, timing: timing, paymentType: paymentType, isInterim: isInterim, unDeletable: unDeletable)
+    }
+    
     
     func isCalculatedPaymentType() -> Bool {
         var bolIsCalcPayment: Bool = false

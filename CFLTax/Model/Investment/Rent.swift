@@ -11,7 +11,11 @@ import Foundation
 public struct Rent {
     public var groups: [Group]
     
-    init(groups: [Group]) {
+    init () {
+        groups = []
+    }
+    
+    init (groups: [Group]) {
         self.groups = groups
     }
     

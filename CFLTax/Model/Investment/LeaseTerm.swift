@@ -10,13 +10,12 @@ import Foundation
 
 public struct LeaseTerm {
     public var baseCommenceDate: Date
-    //public var baseTermInMonths: Int
     public var paymentFrequency: Frequency
-    public var endOfMonthRule: Bool = true
+    public var endOfMonthRule: Bool
     
-    init(baseCommenceDate: Date, baseTermInMonths: Int, paymentFrequency: Frequency) {
+    init(baseCommenceDate: Date, paymentFrequency: Frequency, eomRule: Bool = true) {
         self.baseCommenceDate = baseCommenceDate
-        //self.baseTermInMonths = baseTermInMonths
         self.paymentFrequency = paymentFrequency
+        self.endOfMonthRule = eomRule
     }
 }

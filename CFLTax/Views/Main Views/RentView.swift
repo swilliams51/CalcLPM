@@ -29,9 +29,26 @@ struct RentView: View {
             ToolbarItem(placement: .topBarLeading) {
                 BackButtonView(path: $path, isDark: $isDark)
             }
+            ToolbarItem(placement: .bottomBar) {
+                Menu(content: {
+                    structuresMenu
+                }, label: {
+                    Text("new structure")
+                        .foregroundColor(ColorTheme().accent)
+                })
+            }
+            ToolbarItem(placement: .bottomBar) {
+                Menu(content: {
+                    structuresMenu
+                }, label: {
+                    Text("new structure")
+                        .foregroundColor(ColorTheme().accent)
+                })
+            }
         }
-      
+        .environment(\.colorScheme, isDark ? .dark : .light)
         .navigationTitle("Rent")
+        .navigationBarBackButtonHidden(true)
 
     }
 }
@@ -147,5 +164,21 @@ extension RentView {
             
         }
     }
+}
+
+extension RentView {
+    private var structuresMenu: some View {
+        VStack {
+//            firstAndLast
+//            firstAndLastTwo
+//            lowHigh
+//            highLow
+//            escalation
+//            skipPaymentsItem
+        }
+    }
+    
+    
+    
 }
 

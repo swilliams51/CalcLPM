@@ -30,6 +30,18 @@ public class Investment {
         self.earlyBuyout = earlyBuyout
     }
     
+    public init(aAsset: Asset, aLeaseTerm: LeaseTerm, aRent: Rent, aDepreciation: Depreciation, aTaxAssumptions: TaxAssumptions, aEconomics: Economics, aFee: Fee, aEarlyBuyout: EarlyBuyout) {
+        self.asset = aAsset
+        self.leaseTerm = aLeaseTerm
+        self.rent = aRent
+        self.depreciation = aDepreciation
+        self.taxAssumptions = aTaxAssumptions
+        self.economics = aEconomics
+        self.fee = aFee
+        self.earlyBuyout = aEarlyBuyout
+        
+    }
+    
     public func feeExists() -> Bool {
         if fee.amount.toDecimal() != 0.0 {
             return true
@@ -63,5 +75,14 @@ public class Investment {
     public func getLeaseMaturityDate() -> Date {
          return addPeriodsToDate(dateStart: leaseTerm.baseCommenceDate, payPerYear: .monthly, noOfPeriods: getBaseTermInMonths(), referDate: leaseTerm.baseCommenceDate, bolEOMRule: false)
     }
+    
+    public func clone() -> Investment {
+        let strInvestment = self.writeInvestment()
+        let strInvestmentCopy = readInvestment(file: strInvestment)
+        
+        return strInvestmentCopy
+    }
+        
+    
    
 }

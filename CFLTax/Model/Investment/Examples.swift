@@ -11,7 +11,7 @@ import Foundation
 //Simple - 5 year monthly pay,  no interim, 20% residual, 5 yr MACRs
 public let baseCommencementDate: Date = Date()
 public let leaseFundingDate: Date = Date()
-public let simpleLeaseTerm: LeaseTerm = LeaseTerm(baseCommenceDate: Date(), baseTermInMonths: 60, paymentFrequency: .monthly)
+public let simpleLeaseTerm: LeaseTerm = LeaseTerm(baseCommenceDate: Date(), paymentFrequency: .monthly)
 public let simpleAsset: Asset = Asset(name: "Freightliner Tractor", fundingDate: Date(), lessorCost: "100000.00", residualValue: "20000.00")
 public let simpleRent: Rent = Rent(groups: [simpleGroup])
 public let simpleGroup: Group =  Group(amount: "8500.75", endDate: addPeriodsToDate(dateStart: baseCommencementDate, payPerYear: .monthly, noOfPeriods: 60, referDate: baseCommencementDate, bolEOMRule: false), locked: false, noOfPayments: 60, startDate: baseCommencementDate, timing: .arrears, paymentType: .baseRental, isInterim: false, unDeletable: true)
@@ -22,7 +22,7 @@ public let simpleFee: Fee = Fee(amount: "2000.00", datePaid: "08/12/24".toDate()
 
 
 
-public let simple2LeaseTerm: LeaseTerm = LeaseTerm(baseCommenceDate: "01/15/25".toDate(), baseTermInMonths: 60, paymentFrequency: .semiannual)
+public let simple2LeaseTerm: LeaseTerm = LeaseTerm(baseCommenceDate: "01/15/25".toDate(), paymentFrequency: .semiannual)
 public let simple2Asset: Asset = Asset(name: "Freightliner Tractor", fundingDate: "12/15/24".toDate(), lessorCost: "100000.00", residualValue: "20000.00")
 public let simple2Rent: Rent = Rent(groups: [simple2Group1, simple2Group2])
 public let simple2Group1: Group = Group(amount: "7600.00", endDate: "01/15/25".toDate(), locked: false, noOfPayments: 1, startDate: "12/15/24".toDate(), timing: .arrears, paymentType: .specified, isInterim: true, unDeletable: true)
@@ -31,7 +31,7 @@ public let simple2Group2: Group =  Group(amount: "10135.00", endDate: addPeriods
 
 
 
-public let leaseTermEx1: LeaseTerm = LeaseTerm(baseCommenceDate: baseCommencementDate, baseTermInMonths: 60, paymentFrequency: .monthly)
+public let leaseTermEx1: LeaseTerm = LeaseTerm(baseCommenceDate: baseCommencementDate, paymentFrequency: .monthly)
 //Asset
 public let assetEx1: Asset = Asset(name: "Freightliner Tractor", fundingDate: Date(), lessorCost: "100000.00", residualValue: "20000.00")
 

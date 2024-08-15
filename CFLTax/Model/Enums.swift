@@ -9,22 +9,50 @@ import Foundation
 
 
 public enum SolveForOption {
-    case afterTaxMISF
-    case beforeTaxMISF
     case fee
-    case implicitRate
-    case irrPTCF
-    case presentValueOfRents
+    case lessorCost
     case residualValue
     case unLockedRentals
+    case yield
     
-    static let yields: [SolveForOption]  = [.afterTaxMISF, .beforeTaxMISF, .irrPTCF]
-    static let amounts: [SolveForOption] = [.fee, .implicitRate, .presentValueOfRents, .residualValue, .unLockedRentals]
+    static let allCases: [SolveForOption] = [.fee, .lessorCost, .residualValue, .unLockedRentals, .yield]
     
+    public func toString() -> String {
+        switch self {
+        case .fee:
+            return "Fee"
+        case .lessorCost:
+            return "Lessor Cost"
+        case .residualValue:
+            return "Residual Value"
+        case .unLockedRentals:
+            return "Unlocked Rentals"
+        default:
+            return "Yield"
+        }
+    }
+}
+
+extension String {
+    func toSolveFor() -> SolveForOption {
+        switch self {
+        case "Fee":
+            return .fee
+        case "Lessor Cost":
+            return .lessorCost
+        case "Residual Value":
+            return .residualValue
+        case "Unlocked Rentals":
+            return .unLockedRentals
+        default:
+            return .yield
+        }
+    }
 }
 
 
-public enum YieldType {
+
+public enum YieldMethod {
     case MISF_AT
     case MISF_BT
     case IRR_PTCF
@@ -43,8 +71,22 @@ public enum YieldType {
         }
     }
     
-    
-    static let allTypes: [YieldType] = [.IRR_PTCF,.MISF_AT,.MISF_BT,.implicitRate]
+    static let allTypes: [YieldMethod] = [.IRR_PTCF,.MISF_AT,.MISF_BT,.implicitRate]
+}
+
+extension String {
+    func toYieldMethod() -> YieldMethod? {
+        switch self {
+        case "Pre-tax IRR":
+            return .IRR_PTCF
+        case "MISF A/T":
+            return .MISF_AT
+        case "MISF B/T":
+            return .MISF_BT
+        default:
+            return .implicitRate
+        }
+    }
 }
 
 public enum TaxYearEnd: Int {
@@ -65,6 +107,38 @@ public enum TaxYearEnd: Int {
     static let allCases: [TaxYearEnd] = [.January, .February, .March, .April, .May, .June, .July, .August, .September, .October, .November, .December]
 }
 
+extension String {
+    func toTaxYearEnd() -> TaxYearEnd? {
+        switch self {
+        case "January":
+            return .January
+        case "February":
+            return .February
+        case "March":
+            return .March
+        case "April":
+            return .April
+        case "May":
+            return .May
+        case "June":
+            return .June
+        case "July":
+            return .July
+        case "August":
+            return .August
+        case "September":
+            return .September
+        case "October":
+            return .October
+        case "November":
+            return .November
+        default :
+            return .December
+            
+        }
+    }
+}
+
 public enum ConventionType {
     case halfYear
     case midMonth
@@ -82,6 +156,23 @@ public enum ConventionType {
     }
     
     static let allCases: [ConventionType] = [.halfYear, .midMonth, .midQuarter]
+}
+
+extension String {
+    func toConventionType() -> ConventionType? {
+        switch self {
+        case "Half Year":
+            return .halfYear
+        case "Mid-Month":
+            return .midMonth
+        case "Mid-Quarter":
+            return .midQuarter
+        default:
+            return .halfYear
+        }
+    }
+    
+    
 }
 
 public enum DayCountMethod: Int {
@@ -110,6 +201,21 @@ public enum DayCountMethod: Int {
     static let allTypes: [DayCountMethod] = [.thirtyThreeSixty, .actualThreeSixty, .actualActual, .actualThreeSixty]
 }
 
+extension String {
+    func toDayCountMethod() -> DayCountMethod? {
+        switch self {
+        case "30/360":
+            return .thirtyThreeSixty
+        case "Actual/365":
+            return .actualThreeSixtyFive
+        case "Actual/Actual":
+            return .actualActual
+        default :
+            return .actualThreeSixty
+        }
+    }
+}
+
 
 public enum DepreciationType {
     case MACRS
@@ -133,6 +239,21 @@ public enum DepreciationType {
     static let allTypes: [DepreciationType] = [.MACRS, .One_Fifty_DB, .One_Seventy_Five_DB, .StraightLine]
 }
 
+extension String {
+    func toDepreciationType () -> DepreciationType? {
+        switch self {
+        case "MACRS":
+            return .MACRS
+        case "One Fifty DB":
+            return .One_Fifty_DB
+        case "One SeventyFive DB":
+            return .One_Seventy_Five_DB
+        default:
+            return .StraightLine
+        }
+    }
+}
+
 public enum FeeType{
     case expense
     case income
@@ -147,6 +268,17 @@ public enum FeeType{
     }
     
     static let allTypes: [FeeType] = [.expense, .income]
+}
+
+extension String {
+    func toFeeType () -> FeeType? {
+        switch self {
+        case "Income":
+            return .income
+        default :
+            return .expense
+        }
+    }
 }
 
 public enum Frequency: Int, CaseIterable {
@@ -236,6 +368,7 @@ public enum TimingType {
     
     static let nonResidualPayments: [TimingType] = [.advance, .arrears]
 }
+
 
 
 
