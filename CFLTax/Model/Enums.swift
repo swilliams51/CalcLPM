@@ -50,8 +50,6 @@ extension String {
     }
 }
 
-
-
 public enum YieldMethod {
     case MISF_AT
     case MISF_BT
@@ -61,7 +59,7 @@ public enum YieldMethod {
     public func toString() -> String {
         switch self {
         case .IRR_PTCF:
-            return "Pre-tax IRR"
+            return "Pre_Tax IRR"
         case .MISF_AT:
             return "MISF A/T"
         case .MISF_BT:
@@ -77,7 +75,7 @@ public enum YieldMethod {
 extension String {
     func toYieldMethod() -> YieldMethod? {
         switch self {
-        case "Pre-tax IRR":
+        case "Pre_Tax IRR":
             return .IRR_PTCF
         case "MISF A/T":
             return .MISF_AT
@@ -147,11 +145,11 @@ public enum ConventionType {
     public func toString() -> String {
         switch self {
         case .halfYear:
-            return " Half Year"
+            return " Half_Year"
         case .midMonth:
-            return "Mid-Month"
+            return "Mid_Month"
         default:
-            return "Mid-Quarter"
+            return "Mid_Quarter"
         }
     }
     
@@ -161,11 +159,11 @@ public enum ConventionType {
 extension String {
     func toConventionType() -> ConventionType? {
         switch self {
-        case "Half Year":
+        case "Half_Year":
             return .halfYear
-        case "Mid-Month":
+        case "Mid_Month":
             return .midMonth
-        case "Mid-Quarter":
+        case "Mid_Quarter":
             return .midQuarter
         default:
             return .halfYear
@@ -347,7 +345,21 @@ public enum PaymentType {
     static let allTypes: [PaymentType] = [.dailyEquivAll, .dailyEquivNext, .baseRental, .specified]
     static let interimTypes: [PaymentType] = [.dailyEquivAll, .dailyEquivNext, .specified]
     static let baseTermTypes: [PaymentType] = [.baseRental]
-    
+}
+
+extension String {
+    func toPaymentType() -> PaymentType {
+        switch self {
+        case "DeAll":
+            return .dailyEquivAll
+        case "DeNext":
+            return .dailyEquivNext
+        case "Rent":
+            return .baseRental
+        default :
+            return .specified
+        }
+    }
 }
 
 public enum TimingType {

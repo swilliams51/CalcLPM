@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State public var myInvestment: Investment = Investment()
+    @State public var myInvestment: Investment = Investment(aFile: sampleFile)
     @State public var path: [Int] = [Int]()
     @State public var isDark: Bool = false
     @State var selectedGroup: Group = Group()

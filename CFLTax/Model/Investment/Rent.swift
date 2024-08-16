@@ -19,7 +19,7 @@ public struct Rent {
         self.groups = groups
     }
     
-    mutating func addDuplicateGroup(groupToCopy: Group, numberPayments: Int) {
+    mutating func addNewGroup(groupToCopy: Group, numberPayments: Int) {
         var newGroup: Group = groupToCopy
         newGroup.noOfPayments = numberPayments
         newGroup.unDeletable = true
@@ -27,6 +27,19 @@ public struct Rent {
         self.groups.append(newGroup)
     }
     
+    public func getNumberOfPaymentsForNewGroup(aGroup: Group, aFrequency: Frequency, eomRule: Bool, referDate: Date) -> Int {
+        var numberOfPayments: Int = aGroup.noOfPayments
+        let maxRemaining: Int = self.getMaxRemainNumberPayments(maxBaseTerm: maxBaseTerm, freq: aFrequency, eom: eomRule, aRefer: referDate)
+        if maxRemaining > 0 {
+            if numberOfPayments > maxRemaining {
+                numberOfPayments = maxRemaining
+            }
+        } else {
+            numberOfPayments = 0
+        }
+        
+        return numberOfPayments
+    }
     
     public func interimExists() -> Bool {
         if groups.count > 0 {

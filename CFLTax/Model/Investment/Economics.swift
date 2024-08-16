@@ -14,13 +14,14 @@ public struct Economics {
     public var solveFor: SolveForOption
     public var dayCountMethod: DayCountMethod
     public var discountRateForRent: String
-    public var sinkingFundDate: String = "0.00"
+    public var sinkingFundRate: String
    
-    init(yieldMethod: YieldMethod, yieldTarget: String, solveFor: SolveForOption, dayCountMethod: DayCountMethod, discountRateForRent: String) {
+    init(yieldMethod: YieldMethod, yieldTarget: String, solveFor: SolveForOption, dayCountMethod: DayCountMethod, discountRateForRent: String, sinkingFundRate: String = "0.00") {
         self.yieldMethod = yieldMethod
         self.yieldTarget = yieldTarget
         self.solveFor = solveFor
         self.dayCountMethod = dayCountMethod
         self.discountRateForRent = discountRateForRent
+        self.sinkingFundRate = sinkingFundRate
     }
 }

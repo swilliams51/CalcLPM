@@ -102,20 +102,7 @@ extension String {
 }
 
 
-extension String {
-    func toPaymentType() -> PaymentType {
-        switch self {
-        case "DeAll":
-            return .dailyEquivAll
-        case "DeNext":
-            return .dailyEquivNext
-        case "Rent":
-            return .baseRental
-        default :
-            return .specified
-        }
-    }
-}
+
 
 extension String {
     func toTimingType() -> TimingType {

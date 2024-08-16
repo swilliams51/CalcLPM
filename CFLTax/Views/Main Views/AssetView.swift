@@ -121,6 +121,7 @@ struct AssetView: View {
         self.myInvestment.asset.lessorCost = lessorCost
         self.myInvestment.asset.residualValue = residualValue
         self.myInvestment.asset.lesseeGuarantyAmount = lesseeGuaranty
+        self.myInvestment.resetForFundingDateChange()
         path.removeLast()
     }
     

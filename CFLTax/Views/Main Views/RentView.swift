@@ -13,6 +13,10 @@ struct RentView: View {
     @Binding var path: [Int]
     @Binding var isDark: Bool
     
+    @State var noOfPayments: Int = 0
+    @State var totalRent: String = "0.00"
+    @State var interimExists: Bool = false
+    
     var body: some View {
         Form {
             Section(header: Text("Rent")) {
@@ -39,17 +43,24 @@ struct RentView: View {
             }
             ToolbarItem(placement: .bottomBar) {
                 Menu(content: {
-                    structuresMenu
+                    addNewMenu
                 }, label: {
-                    Text("new structure")
+                    Text("Add")
                         .foregroundColor(ColorTheme().accent)
+
                 })
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
         .navigationTitle("Rent")
         .navigationBarBackButtonHidden(true)
-
+        .onAppear{
+            self.noOfPayments = myInvestment.rent.getTotalNumberOfPayments()
+            self.totalRent = myInvestment.rent.getTotalAmountOfPayments(aFreq: myInvestment.leaseTerm.paymentFrequency).toString(decPlaces: 2)
+            if myInvestment.rent.interimExists() {
+                self.interimExists = true
+            }
+        }
     }
 }
 
@@ -59,9 +70,15 @@ struct RentView: View {
 
 
 extension RentView {
-    private func addNewGroup (groupIndex: Int, noOfPayments: Int) {
-        self.myInvestment.rent.addDuplicateGroup(groupToCopy: myInvestment.rent.groups[groupIndex], numberPayments: noOfPayments)
-        self.myInvestment.resetRemainderOfGroups(startGrp: groupIndex + 1)
+    private func addNewGroup () {
+        let idx = myInvestment.rent.groups.count - 1
+        let maxNoPmnts = myInvestment.rent.getNumberOfPaymentsForNewGroup(aGroup: myInvestment.rent.groups[idx], aFrequency: myInvestment.leaseTerm.paymentFrequency, eomRule: myInvestment.leaseTerm.endOfMonthRule, referDate: myInvestment.leaseTerm.baseCommenceDate)
+        if maxNoPmnts > 0 {
+            self.myInvestment.rent.addNewGroup(groupToCopy: myInvestment.rent.groups[idx], numberPayments: maxNoPmnts)
+            self.myInvestment.resetRemainderOfGroups(startGrp: idx)
+        } else {
+            print("alert")
+        }
     }
 }
 
@@ -155,11 +172,11 @@ extension RentView {
     
     private var totalAmounts: some View {
         HStack {
-            let strAmount: String = myInvestment.rent.getTotalAmountOfPayments(aFreq: myInvestment.leaseTerm.paymentFrequency).toString(decPlaces: 2)
-            Text("\(myInvestment.rent.getTotalNumberOfPayments())")
+          
+            Text("\(noOfPayments)")
                 .font(myFont)
             Spacer()
-            Text("\(amountFormatter(amount: strAmount, locale: myLocale))")
+            Text("\(amountFormatter(amount: totalRent, locale: myLocale))")
                 .font(myFont)
             
         }
@@ -167,17 +184,98 @@ extension RentView {
 }
 
 extension RentView {
+    private var addNewMenu: some View {
+        VStack {
+           addNewMenuItem
+            
+        }
+    }
+    
+    private var addNewMenuItem: some View {
+        Button(action: {
+            addNewGroup()
+        }) {
+            Label("Add New Group", systemImage: "arrowshape.turn.up.backward")
+                .font(myFont)
+        }
+    }
+    
+    
+}
+
+
+extension RentView {
     private var structuresMenu: some View {
         VStack {
-//            firstAndLast
-//            firstAndLastTwo
-//            lowHigh
-//            highLow
+            firstAndLast
+            firstAndLastTwo
+            lowHigh
+            highLow
 //            escalation
 //            skipPaymentsItem
         }
     }
     
+   
+    private var firstAndLast: some View {
+        Button(action: {
+            if self.myInvestment.rent.structureCanBeApplied(freq: myInvestment.leaseTerm.paymentFrequency) == false {
+//                alertTitle = alertForStructureWarning()
+//                showAlert.toggle()
+            } else {
+                self.myInvestment.rent.firstAndLast(freq: myInvestment.leaseTerm.paymentFrequency, baseCommence: myInvestment.leaseTerm.baseCommenceDate, EOMRule: myInvestment.leaseTerm.endOfMonthRule)
+                //solveForRate()
+            }
+        }) {
+            Label("1stAndLast", systemImage: "arrowshape.turn.up.backward")
+                .font(myFont)
+        }
+    }
+    
+    private var firstAndLastTwo: some View {
+        Button(action: {
+            if self.myInvestment.rent.structureCanBeApplied(freq: myInvestment.leaseTerm.paymentFrequency) == false {
+//                alertTitle = alertForStructureWarning()
+//                showAlert.toggle()
+            } else {
+                self.myInvestment.rent.firstAndLastTwo(freq: myInvestment.leaseTerm.paymentFrequency, baseCommence: myInvestment.leaseTerm.baseCommenceDate, EOMRule: myInvestment.leaseTerm.endOfMonthRule)
+             
+            }
+        }) {
+            Label("1stAndLastTwo", systemImage: "arrowshape.turn.up.backward.2")
+                .font(myFont)
+        }
+    }
+    
+    private var lowHigh: some View {
+        Button(action: {
+            if self.myInvestment.rent.structureCanBeApplied(freq: myInvestment.leaseTerm.paymentFrequency) == false {
+//                alertTitle = alertForStructureWarning()
+//                showAlert.toggle()
+            } else {
+                self.myInvestment.rent.unevenPayments(lowHigh: true, freq: myInvestment.leaseTerm.paymentFrequency, baseCommence: myInvestment.leaseTerm.baseCommenceDate, EOMRule: myInvestment.leaseTerm.endOfMonthRule)
+                self.totalRent = myInvestment.rent.getTotalAmountOfPayments(aFreq: myInvestment.leaseTerm.paymentFrequency).toString(decPlaces: 4)
+
+            }
+        }) {
+            Label("Low-High", systemImage: "arrow.up.right")
+                .font(myFont)
+        }
+    }
+    
+    private var highLow: some View {
+        Button(action: {
+            if self.myInvestment.rent.structureCanBeApplied(freq: myInvestment.leaseTerm.paymentFrequency) == false  {
+                
+            } else {
+                self.myInvestment.rent.unevenPayments(lowHigh: false, freq: myInvestment.leaseTerm.paymentFrequency, baseCommence: myInvestment.leaseTerm.baseCommenceDate, EOMRule: myInvestment.leaseTerm.endOfMonthRule)
+               
+            }
+        }) {
+            Label("High-Low", systemImage: "arrow.down.right")
+                .font(myFont)
+        }
+    }
     
     
 }

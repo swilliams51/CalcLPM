@@ -44,7 +44,7 @@ struct ViewsManager: View {
         case 12:
           AssetNameTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         case 13:
-          GroupDetailView(myInvestment: myInvestment, selectedGroup: $selectedGroup, index: .constant(0), isDark: $isDark, path: $path)
+          GroupDetailView(myInvestment: myInvestment, selectedGroup: $selectedGroup, isDark: $isDark, path: $path)
       case 14:
           PaymentAmountTextFieldView(myInvestment: myInvestment, selectedGroup: $selectedGroup, index: $index, isDark: $isDark, path: $path)
         default:

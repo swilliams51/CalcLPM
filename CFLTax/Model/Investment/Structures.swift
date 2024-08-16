@@ -205,6 +205,29 @@ extension Rent {
     }
     
     
+    public func structureCanBeApplied(freq: Frequency) -> Bool {
+        //must be only one group
+        guard groups.count == 1 else {
+            return false
+        }
+        
+        //Check Term is equal to or greater than 2 years
+        let divisor = Double(freq.rawValue)
+        let numerator = Double(groups[0].noOfPayments)
+        let term: Double = numerator / divisor
+        guard term >= 2.0 else {
+            return false
+        }
+        
+        //Check Payment Type of Group is Payments
+        guard groups[0].paymentType == .baseRental else {
+            return false
+        }
+        
+        return true
+    }
+    
+    
 }
 
 

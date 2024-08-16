@@ -10,10 +10,11 @@ import SwiftUI
 struct GroupDetailView: View {
     @Bindable var myInvestment: Investment
     @Binding var selectedGroup: Group
-    @Binding var index: Int
     @Binding var isDark: Bool
     @Binding var path: [Int]
     
+    
+    @State var index: Int = 0
     @State var amount: String = "10000.00"
     @State private var alertTitle: String = ""
 
@@ -57,7 +58,7 @@ struct GroupDetailView: View {
             .navigationBarBackButtonHidden()
             .onAppear{
                 viewOnAppear()
-                maximumAmount = myInvestment.asset.lessorCost.toDecimal()
+              
             }
             .alert(isPresented: $showAlert, content: getAlert)
        
@@ -65,7 +66,7 @@ struct GroupDetailView: View {
 }
 
 #Preview {
-    GroupDetailView(myInvestment: Investment(), selectedGroup: .constant(Group()), index: .constant(0), isDark: .constant(false), path: .constant([Int]()))
+    GroupDetailView(myInvestment: Investment(), selectedGroup: .constant(Group()), isDark: .constant(false), path: .constant([Int]()))
 }
 
 //View on Appear
@@ -91,7 +92,7 @@ extension GroupDetailView {
         if self.selectedGroup.isCalculatedPaymentType() {
             self.resetForPaymentTypeChange()
         }
-        
+        self.maximumAmount = myInvestment.asset.lessorCost.toDecimal()
         self.noOfPayments = self.selectedGroup.noOfPayments.toDouble()
         self.startingNoOfPayments = self.noOfPayments
         self.startingTotalPayments = Double(self.myInvestment.rent.getTotalNumberOfPayments())

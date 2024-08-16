@@ -103,7 +103,7 @@ extension Investment {
         while x < self.rent.groups.count {
             let lastEndDate: Date = self.rent.groups[x - 1].endDate
             self.rent.groups[x].startDate = lastEndDate
-            let dateEnd: Date = addPeriodsToDate(dateStart: rent.groups[x].startDate, payPerYear: self.leaseTerm.paymentFrequency, noOfPeriods: self.rent.groups[x].noOfPayments, referDate: self.leaseTerm.baseCommenceDate, bolEOMRule: self.leaseTerm.endOfMonthRule)
+            let dateEnd: Date = addPeriodsToDate(dateStart: lastEndDate, payPerYear: self.leaseTerm.paymentFrequency, noOfPeriods: self.rent.groups[x].noOfPayments, referDate: self.leaseTerm.baseCommenceDate, bolEOMRule: self.leaseTerm.endOfMonthRule)
             self.rent.groups[x].endDate = dateEnd
             x = x + 1
         }

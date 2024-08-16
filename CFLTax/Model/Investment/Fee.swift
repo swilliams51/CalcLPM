@@ -10,8 +10,8 @@ import Foundation
 
 public struct Fee {
     public var amount: String
-    public var datePaid: Date
     public var feeType: FeeType
+    public var datePaid: Date
     
     init(amount: String, feeType: FeeType = .expense, datePaid: Date = Date()) {
         self.amount = amount
