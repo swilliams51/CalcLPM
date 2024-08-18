@@ -88,11 +88,10 @@ public class Investment {
     
     public func clone() -> Investment {
         let strInvestment = self.writeInvestment()
-        let strInvestmentCopy = readInvestment(file: strInvestment)
+        let investmentClone: Investment = readInvestment(file: strInvestment)
         
-        return strInvestmentCopy
+        return investmentClone
     }
         
-    
    
 }

@@ -27,13 +27,19 @@ struct AssetView: View {
                 fundingDateItem
                 residualValueItem
                 lesseeGuarantyItem
-                
             }
             Section(header: Text("Submit Form")) {
                 SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isDark: $isDark)
             }
         }
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                BackButtonView(path: $path, isDark: $isDark)
+            }
+        }
         .navigationBarTitle("Asset")
+        .environment(\.colorScheme, isDark ? .dark : .light)
+        .navigationBarBackButtonHidden(true)
         .onAppear {
             self.assetName = self.myInvestment.asset.name
             self.fundingDate = self.myInvestment.asset.fundingDate
@@ -46,10 +52,10 @@ struct AssetView: View {
     var assetNameItem: some View{
         HStack {
             Text("Name:")
-                .font(myFont)
+                .font(myFont2)
             Spacer()
             Text("\(assetName)")
-                .font(myFont)
+                .font(myFont2)
                 .onTapGesture {
                     //self.component = [0,0]
                     path.append(12)
@@ -60,7 +66,7 @@ struct AssetView: View {
     var fundingDateItem: some View{
         HStack {
             Text("Funding Date:")
-                .font(myFont)
+                .font(myFont2)
             Spacer()
             DatePicker("", selection: $fundingDate, displayedComponents: [.date])
                 .transformEffect(.init(scaleX: 1.0, y: 0.9))
@@ -74,10 +80,10 @@ struct AssetView: View {
     var lessorCostItem: some View{
         HStack {
             Text("Lessor Cost:")
-                .font(myFont)
+                .font(myFont2)
             Spacer()
             Text("\(amountFormatter(amount: lessorCost, locale: myLocale))")
-                .font(myFont)
+                .font(myFont2)
                 .onTapGesture {
                     //self.component = [0,0]
                     path.append(9)
@@ -88,10 +94,10 @@ struct AssetView: View {
     var residualValueItem: some View{
         HStack {
             Text("Residual:")
-                .font(myFont)
+                .font(myFont2)
             Spacer()
             Text("\(amountFormatter(amount:residualValue, locale: myLocale))")
-                .font(myFont)
+                .font(myFont2)
                 .onTapGesture {
                     path.append(10)
                 }
@@ -101,10 +107,10 @@ struct AssetView: View {
     var lesseeGuarantyItem: some View{
         HStack {
             Text("Lessee Guaranty:")
-                .font(myFont)
+                .font(myFont2)
             Spacer()
             Text("\(amountFormatter(amount:lesseeGuaranty, locale: myLocale))")
-                .font(myFont)
+                .font(myFont2)
                 .onTapGesture {
                     path.append(11)
                 }

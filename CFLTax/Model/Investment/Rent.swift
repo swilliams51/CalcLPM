@@ -19,13 +19,10 @@ public struct Rent {
         self.groups = groups
     }
     
-    mutating func addNewGroup(groupToCopy: Group, numberPayments: Int) {
-        var newGroup: Group = groupToCopy
-        newGroup.noOfPayments = numberPayments
-        newGroup.unDeletable = true
-        
-        self.groups.append(newGroup)
+    public mutating func addGroup(groupToAdd: Group) {
+        self.groups.append(groupToAdd)
     }
+    
     
     public func getNumberOfPaymentsForNewGroup(aGroup: Group, aFrequency: Frequency, eomRule: Bool, referDate: Date) -> Int {
         var numberOfPayments: Int = aGroup.noOfPayments

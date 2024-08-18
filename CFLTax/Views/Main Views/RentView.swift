@@ -72,16 +72,17 @@ struct RentView: View {
 extension RentView {
     private func addNewGroup () {
         let idx = myInvestment.rent.groups.count - 1
-        let maxNoPmnts = myInvestment.rent.getNumberOfPaymentsForNewGroup(aGroup: myInvestment.rent.groups[idx], aFrequency: myInvestment.leaseTerm.paymentFrequency, eomRule: myInvestment.leaseTerm.endOfMonthRule, referDate: myInvestment.leaseTerm.baseCommenceDate)
-        if maxNoPmnts > 0 {
-            self.myInvestment.rent.addNewGroup(groupToCopy: myInvestment.rent.groups[idx], numberPayments: maxNoPmnts)
-            self.myInvestment.resetRemainderOfGroups(startGrp: idx)
+        let maxNoPayments = myInvestment.rent.getNumberOfPaymentsForNewGroup(aGroup: myInvestment.rent.groups[idx], aFrequency: myInvestment.leaseTerm.paymentFrequency, eomRule: myInvestment.leaseTerm.endOfMonthRule, referDate: myInvestment.leaseTerm.baseCommenceDate)
+        if maxNoPayments > 0 {
+            var newGroup = myInvestment.rent.groups[idx].clone()
+            newGroup.noOfPayments = maxNoPayments
+            self.myInvestment.rent.addGroup(groupToAdd: newGroup)
+            self.myInvestment.resetFirstGroup(isInterim: interimExists)
         } else {
             print("alert")
         }
     }
 }
-
 
 extension RentView {
     @ViewBuilder func groupDisplayRow(group: Group) -> some View {
@@ -89,7 +90,7 @@ extension RentView {
             VStack {
                 HStack{
                     Text(groupToFirstText(aGroup: group))
-                        .font(myFont)
+                        .font(myFont2)
                         .onTapGesture {
                             self.selectedGroup = group
                             self.path.append(13)
@@ -98,7 +99,7 @@ extension RentView {
                 }
                 HStack {
                     Text(groupToSecondText(aGroup: group))
-                        .font(myFont)
+                        .font(myFont2)
                         .onTapGesture {
                             self.selectedGroup = group
                             self.path.append(13)
@@ -163,10 +164,10 @@ extension RentView {
     private var totalsHeader: some View {
         HStack {
             Text("Number:")
-                .font(myFont)
+                .font(myFont2)
             Spacer()
             Text("Net Amount:")
-                .font(myFont)
+                .font(myFont2)
         }
     }
     
@@ -174,10 +175,10 @@ extension RentView {
         HStack {
           
             Text("\(noOfPayments)")
-                .font(myFont)
+                .font(myFont2)
             Spacer()
             Text("\(amountFormatter(amount: totalRent, locale: myLocale))")
-                .font(myFont)
+                .font(myFont2)
             
         }
     }

@@ -10,6 +10,8 @@ import Foundation
 
 public let sampleFile: String = "Mack Trucks,100000,10/01/24,20000,10000,0.00*01/15/25,Monthly,True*4000.50,01/15/25,False,1,10/01/24,Advance,Specified,True,True|1925.60,01/15/30,False,60,01/15/25,Arrears,Rent,False,False*0.00,0.00,Half_Year,5,MACRS,0.0,0.0,0*0.21,December,15*MISF_B/T,0.075,Yield,Actual/365,0.08,0.00*0.00,Expense,10/01/24*0.00,01/15/29,True"
 
+
+
 extension Investment {
     public func writeInvestment() -> String {
         
@@ -70,23 +72,29 @@ extension Investment {
     public func writeRent(aRent: Rent) -> String {
         var strGroups: String = ""
         for x in 0..<aRent.groups.count {
-            let strAmount: String = aRent.groups[x].amount
-            let strEndDate: String = aRent.groups[x].endDate.toStringDateShort(yrDigits: 4)
-            let strLocked: String = aRent.groups[x].locked.toString()
-            let strNoOfPayments: String = aRent.groups[x].noOfPayments.toString()
-            let strStartDate: String = aRent.groups[x].startDate.toStringDateShort(yrDigits: 4)
-            let strTiming: String = aRent.groups[x].timing.toString()
-            let strType: String = aRent.groups[x].paymentType.toString()
-            let strIsInterim: String = aRent.groups[x].isInterim.toString()
-            let strUndeletable: String = aRent.groups[x].unDeletable.toString()
-            
-            let groupProperties: Array = [strAmount, strEndDate, strLocked, strNoOfPayments, strStartDate, strTiming, strType, strUndeletable, strIsInterim]
-            let strGroupProperties = groupProperties.joined(separator: ",")
-            strGroups = strGroups + strGroupProperties + "|"
+            let myGroup: String = writeGroup(aGroup: aRent.groups[x])
+            strGroups = strGroups + myGroup
+            strGroups = strGroups + "|"
         }
         strGroups = String(strGroups.dropLast())
         
         return strGroups
+    }
+    
+    public func writeGroup(aGroup: Group) -> String {
+        let strAmount: String = aGroup.amount
+        let strEndDate: String = aGroup.endDate.toStringDateShort(yrDigits: 4)
+        let strLocked: String = aGroup.locked.toString()
+        let strNoOfPayments: String = aGroup.noOfPayments.toString()
+        let strStartDate: String = aGroup.startDate.toStringDateShort(yrDigits: 4)
+        let strTiming: String = aGroup.timing.toString()
+        let strType: String = aGroup.paymentType.toString()
+        let strIsInterim: String = aGroup.isInterim.toString()
+        let strUndeletable: String = aGroup.unDeletable.toString()
+        let groupProperties: Array = [strAmount, strEndDate, strLocked, strNoOfPayments, strStartDate, strTiming, strType, strUndeletable, strIsInterim]
+        let strGroupProperties = groupProperties.joined(separator: ",")
+        
+        return strGroupProperties
     }
     
     public func writeDepreciation(aDepreciation: Depreciation) -> String {
@@ -131,9 +139,9 @@ extension Investment {
     
     public func writeFee(aFee: Fee) -> String {
         let strAmount: String = aFee.amount
-        let strDatePaid: String = aFee.datePaid.toStringDateShort(yrDigits: 4)
         let strFeeType: String = aFee.feeType.toString()
-        let feeProperties: Array = [strAmount, strDatePaid, strFeeType]
+        let strDatePaid: String = aFee.datePaid.toStringDateShort(yrDigits: 4)
+        let feeProperties: Array = [strAmount, strFeeType, strDatePaid]
         let strFeeProperties = feeProperties.joined(separator: ",")
         
         return strFeeProperties
@@ -179,22 +187,31 @@ extension Investment {
     public func readRent(arrayGroups: [String]) -> Rent {
         var myRent: Rent = Rent()
         for x in 0..<arrayGroups.count {
-            let myGroup = arrayGroups[x].components(separatedBy: ",")
-            let myAmount:String = myGroup[0]
-            let myEndDate: Date = myGroup[1].toDate()
-            let myLocked: Bool = myGroup[2].toBool()
-            let myNoOfPayments: Int = myGroup[3].toInteger()
-            let myStartDate: Date = myGroup[4].toDate()
-            let myTiming: TimingType = myGroup[5].toTimingType()
-            let myType: PaymentType = myGroup[6].toPaymentType()
-            let myIsInterim: Bool = myGroup[7].toBool()
-            let myUndeletable: Bool = myGroup[8].toBool()
-            let newGroup: Group = Group(amount: myAmount, endDate: myEndDate, locked: myLocked, noOfPayments: myNoOfPayments, startDate: myStartDate, timing: myTiming, paymentType: myType, isInterim: myIsInterim, unDeletable: myUndeletable)
+           let newGroup: Group = readGroup(arrayGroup: arrayGroups[x])
             myRent.groups.append(newGroup)
         }
         
         return myRent
     }
+    
+    
+    public func readGroup(arrayGroup: String) -> Group {
+        let myGroup = arrayGroup.components(separatedBy: ",")
+        let myAmount:String = myGroup[0]
+        let myEndDate: Date = myGroup[1].toDate()
+        let myLocked: Bool = myGroup[2].toBool()
+        let myNoOfPayments: Int = myGroup[3].toInteger()
+        let myStartDate: Date = myGroup[4].toDate()
+        let myTiming: TimingType = myGroup[5].toTimingType()
+        let myType: PaymentType = myGroup[6].toPaymentType()
+        let myIsInterim: Bool = myGroup[7].toBool()
+        let myUndeletable: Bool = myGroup[8].toBool()
+        let newGroup: Group = Group(amount: myAmount, endDate: myEndDate, locked: myLocked, noOfPayments: myNoOfPayments, startDate: myStartDate, timing: myTiming, paymentType: myType, isInterim: myIsInterim, unDeletable: myUndeletable)
+        
+        return newGroup
+    }
+    
+    
      public func readDepreciation(arrayDepreciation: [String]) -> Depreciation {
          let basisReduction: Decimal = arrayDepreciation[0].toDecimal()
          let bonusDepreciation: Decimal = arrayDepreciation[1].toDecimal()

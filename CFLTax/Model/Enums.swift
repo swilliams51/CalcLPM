@@ -100,6 +100,35 @@ public enum TaxYearEnd: Int {
     case October = 10
     case November = 11
     case December = 12
+    
+    func toString() -> String {
+        switch self {
+        case .January:
+            return "January"
+        case .February:
+            return "February"
+        case .March:
+            return "March"
+        case .April:
+            return "April"
+        case .May:
+            return "May"
+        case .June:
+            return "June"
+        case .July:
+            return "July"
+        case .August:
+            return "August"
+        case .September:
+            return "September"
+        case .October:
+            return "October"
+        case .November:
+            return "November"
+        case .December:
+            return "December"
+        }
+    }
 
     
     static let allCases: [TaxYearEnd] = [.January, .February, .March, .April, .May, .June, .July, .August, .September, .October, .November, .December]
@@ -196,7 +225,7 @@ public enum DayCountMethod: Int {
         return self.rawValue
     }
     
-    static let allTypes: [DayCountMethod] = [.thirtyThreeSixty, .actualThreeSixty, .actualActual, .actualThreeSixty]
+    static let allTypes: [DayCountMethod] = [.thirtyThreeSixty, .actualThreeSixtyFive, .actualActual, .actualThreeSixty]
 }
 
 extension String {
@@ -212,6 +241,8 @@ extension String {
             return .actualThreeSixty
         }
     }
+    
+    
 }
 
 
@@ -235,6 +266,7 @@ public enum DepreciationType {
     }
     
     static let allTypes: [DepreciationType] = [.MACRS, .One_Fifty_DB, .One_Seventy_Five_DB, .StraightLine]
+    static let macrs: [DepreciationType] = [.MACRS]
 }
 
 extension String {

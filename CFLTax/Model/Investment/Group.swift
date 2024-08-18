@@ -44,12 +44,8 @@ public struct Group: Identifiable {
         unDeletable = true
     }
     
-    func clone() -> Group {
-        return Group(amount: amount, endDate: endDate, locked: locked, noOfPayments: noOfPayments, startDate: startDate, timing: timing, paymentType: paymentType, isInterim: isInterim, unDeletable: unDeletable)
-    }
     
-    
-    func isCalculatedPaymentType() -> Bool {
+    public func isCalculatedPaymentType() -> Bool {
         var bolIsCalcPayment: Bool = false
         
         if self.paymentType == .dailyEquivAll || self.paymentType == .dailyEquivNext {
@@ -57,6 +53,46 @@ public struct Group: Identifiable {
         }
         
         return bolIsCalcPayment
+    }
+    
+    public func clone() -> Group {
+        let strGroup: String = self.writeGroup()
+        let groupClone: Group = readGroup(strGroup)
+        
+        return groupClone
+    }
+    
+    
+    public func writeGroup() -> String {
+        let strAmount: String = self.amount
+        let strEndDate: String = self.endDate.toStringDateShort(yrDigits: 4)
+        let strLocked: String = self.locked.toString()
+        let strNoOfPayments: String = self.noOfPayments.toString()
+        let strStartDate: String = self.startDate.toStringDateShort(yrDigits: 4)
+        let strTiming: String = self.timing.toString()
+        let strType: String = self.paymentType.toString()
+        let strIsInterim: String = self.isInterim.toString()
+        let strUndeletable: String = self.unDeletable.toString()
+        let groupProperties: Array = [strAmount, strEndDate, strLocked, strNoOfPayments, strStartDate, strTiming, strType, strUndeletable, strIsInterim]
+        let strGroupProperties = groupProperties.joined(separator: ",")
+        
+        return strGroupProperties
+    }
+    
+    public func readGroup(_ strGroup: String) -> Group {
+        let myGroup = strGroup.components(separatedBy: ",")
+        let myAmount:String = myGroup[0]
+        let myEndDate: Date = myGroup[1].toDate()
+        let myLocked: Bool = myGroup[2].toBool()
+        let myNoOfPayments: Int = myGroup[3].toInteger()
+        let myStartDate: Date = myGroup[4].toDate()
+        let myTiming: TimingType = myGroup[5].toTimingType()
+        let myType: PaymentType = myGroup[6].toPaymentType()
+        let myIsInterim: Bool = myGroup[7].toBool()
+        let myUndeletable: Bool = myGroup[8].toBool()
+        let newGroup: Group = Group(amount: myAmount, endDate: myEndDate, locked: myLocked, noOfPayments: myNoOfPayments, startDate: myStartDate, timing: myTiming, paymentType: myType, isInterim: myIsInterim, unDeletable: myUndeletable)
+        
+        return newGroup
     }
     
 }

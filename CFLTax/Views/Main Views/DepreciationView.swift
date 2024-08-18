@@ -11,8 +11,15 @@ struct DepreciationView: View {
     @Bindable var myInvestment: Investment
     @Binding var path: [Int]
     @Binding var isDark: Bool
-   
-    @State var myDepreciation: Depreciation = depreciationEx2
+    
+    
+    @State var myMethod: DepreciationType = .MACRS
+    @State var myLife: Int = 3
+    @State var myConvention: ConventionType = .halfYear
+    @State var myBonus: String = "0.0"
+    @State var myITC: String = "0.0"
+    @State var myBasisReduction: String = "0.0"
+    @State var mySalvageValue: String = "0.0"
     
     var intLife_MACRS: [Int] = [3, 5, 7, 10, 15, 20]
     var intLife_SL: [Int] = [3,4,5,6,7,8,9,10,11,12,13,14,15]
@@ -25,80 +32,88 @@ struct DepreciationView: View {
                     depreciationMethod
                     depreciableLife
                     depreciationConvention
-                    if myInvestment.depreciation.method == .MACRS {
-                        bonusDepreciation
-                        investmentTaxCredit
-                        basisReduction
-                    } else {
-                        salvageValue
-                    }
+                    bonusDepreciation
                 }
             }
             Section(header: Text("Submit Form")) {
                 SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isDark: $isDark)
             }
         }
-        .navigationTitle("Depreciation")
-        .onAppear{
-            self.myDepreciation = myInvestment.depreciation
-           
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                BackButtonView(path: $path, isDark: $isDark)
+            }
         }
+        .environment(\.colorScheme, isDark ? .dark : .light)
+        .navigationTitle("Depreciation")
+        .navigationBarBackButtonHidden(true)
+        .onAppear{
+            self.myMethod = myInvestment.depreciation.method
+            self.myLife = myInvestment.depreciation.life
+            self.myConvention = myInvestment.depreciation.convention
+            self.myBonus = myInvestment.depreciation.bonusDeprecPercent.toString(decPlaces: 4)
+            self.myITC = myInvestment.depreciation.bonusDeprecPercent.toString()
+            self.myBasisReduction = myInvestment.depreciation.basisReduction.toString()
+            self.mySalvageValue = myInvestment.depreciation.salvageValue
+        }
+        
     }
     var depreciationMethod: some View {
         HStack {
             Text("Method:")
-           Picker(selection: $myDepreciation.method, label: Text("")) {
-               ForEach(DepreciationType.allTypes, id: \.self) { item in
-                   Text(item.toString())
-
-               }
+                .font(myFont2)
+            Picker(selection: $myMethod, label: Text("")) {
+                ForEach(DepreciationType.macrs, id: \.self) { item in
+                    Text(item.toString())
+                }
             }
         }
     }
-
+    
     var depreciableLife: some View {
         HStack {
             Text("Life (in years):")
-            Picker(selection: $myDepreciation.life, label: Text("")) {
-               ForEach(intLife_MACRS, id: \.self) { item in
+                .font(myFont2)
+            Picker(selection: $myLife, label: Text("")) {
+                ForEach(intLife_MACRS, id: \.self) { item in
                     Text(item.toString())
-
+                        .font(myFont2)
                 }
             }
         }
     }
-
+    
     var depreciationConvention: some View {
         HStack {
             Text("Convention:")
-           Picker(selection: $myDepreciation.convention, label: Text("")) {
+                .font(myFont2)
+            Picker(selection: $myConvention, label: Text("")) {
                 ForEach(ConventionType.allCases, id: \.self) { item in
-                   Text(item.toString())
-
+                    Text(item.toString())
+                        .font(myFont2)
                 }
             }
         }
+        .padding(.bottom, 5)
     }
-
+    
     var bonusDepreciation: some View {
         HStack {
             Text("Bonus:")
-           Picker(selection: $myDepreciation.bonusDeprecPercent, label: Text("")) {
-                ForEach(decBonus, id: \.self) { item in
-                    Text("\(percentFormatter(percent: item.toString(decPlaces: 2), locale: myLocale))")
-
-                }
-           }
+                .font(myFont2)
+            Spacer()
+            Text("\(percentFormatter(percent: myBonus, locale: myLocale, places: 2))")
+                .font(myFont2)
         }
-            .padding(.bottom, 10)
-    }
+        .padding(.bottom, 5)
+        }
 
 
     var investmentTaxCredit: some View {
         HStack {
             Text("ITC:")
             Spacer()
-            Text("\(percentFormatter(percent:myDepreciation.investmentTaxCredit.toString(decPlaces: 3), locale: myLocale))")
+            Text("\(percentFormatter(percent: myITC, locale: myLocale))")
         }
         .padding(.bottom, 10)
     }
@@ -107,26 +122,34 @@ struct DepreciationView: View {
         HStack {
             Text("Basis Reduction:")
             Spacer()
-            Text("\(percentFormatter(percent: myDepreciation.basisReduction.toString(decPlaces: 3), locale: myLocale))")
+            Text("\(percentFormatter(percent: myBasisReduction, locale: myLocale))")
         }
-        .padding(.top, 5)
+        .padding(.top, 10)
     }
 
     var salvageValue: some View {
         HStack {
             Text("Salvage Value")
             Spacer()
-            Text("\(amountFormatter(amount: myDepreciation.salvageValue, locale: myLocale))")
+            Text("\(amountFormatter(amount: mySalvageValue, locale: myLocale))")
         }
         .padding(.top,10)
     }
     
     func myCancel() {
-        
+        self.path.removeLast()
     }
     
     func myDone() {
+        self.myInvestment.depreciation.method = myMethod
+        self.myInvestment.depreciation.life = myLife
+        self.myInvestment.depreciation.convention = myConvention
+        self.myInvestment.depreciation.bonusDeprecPercent = myBonus.toDecimal()
+        self.myInvestment.depreciation.investmentTaxCredit = myITC.toDecimal()
+        self.myInvestment.depreciation.basisReduction = myBasisReduction.toDecimal()
+        self.myInvestment.depreciation.salvageValue = mySalvageValue
         
+        self.path.removeLast()
     }
 }
 

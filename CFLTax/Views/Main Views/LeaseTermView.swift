@@ -31,7 +31,15 @@ struct LeaseTermView: View {
                 SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isDark: $isDark)
             }
         }
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                BackButtonView(path: $path, isDark: $isDark)
+            }
+        }
+        .environment(\.colorScheme, isDark ? .dark : .light)
         .navigationBarTitle("Lease Term")
+        .navigationBarBackButtonHidden(true)
+        
         .onAppear {
             self.baseCommenceDate = myInvestment.leaseTerm.baseCommenceDate
             self.myPaymentFrequency = myInvestment.leaseTerm.paymentFrequency
@@ -42,7 +50,7 @@ struct LeaseTermView: View {
     var baseCommenceDateItem: some View {
         HStack{
             Text("Base Start:")
-                .font(myFont)
+                .font(myFont2)
             Image(systemName: "questionmark.circle")
                 .foregroundColor(Color.theme.accent)
                 .onTapGesture {
@@ -52,6 +60,7 @@ struct LeaseTermView: View {
             DatePicker("", selection: $baseCommenceDate, in: rangeBaseTermDates, displayedComponents:[.date])
                 .transformEffect(.init(scaleX: 1.0, y: 0.90))
                 .environment(\.locale, myLocale)
+                .font(myFont2)
                 .onChange(of: baseCommenceDate) { oldValue, newValue in
                     //reset for base commence date change
                     //self.myLease.resetLease()
@@ -67,10 +76,11 @@ struct LeaseTermView: View {
     var paymentFrequencyItem: some View {
         HStack {
             Text("Frequency:")
-                .font(myFont)
+                .font(myFont2)
             Picker(selection: $myPaymentFrequency, label: Text("")) {
                 ForEach(Frequency.three, id: \.self) { item in
                    Text(item.toString())
+                        .font(myFont2)
 
                }
             }
@@ -81,7 +91,7 @@ struct LeaseTermView: View {
         HStack{
             Toggle(isOn: $endOfMonthRule) {
                 Text(endOfMonthRule ? "EOM Rule is On:" : "EOM Rule is Off:")
-                .font(myFont)
+                .font(myFont2)
             }
         }
     }
@@ -89,9 +99,10 @@ struct LeaseTermView: View {
     var baseTermInMonthsItem: some View {
         HStack{
             Text("Base Term in Months:")
-                .font(myFont)
+                .font(myFont2)
             Spacer()
             Text("\(myInvestment.getBaseTermInMonths())")
+                .font(myFont2)
         }
     }
     

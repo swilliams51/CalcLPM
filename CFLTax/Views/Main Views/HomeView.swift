@@ -34,9 +34,10 @@ struct HomeView: View {
                     calculatedItem
                 }
             }
+            .environment(\.colorScheme, isDark ? .dark : .light)
             .navigationBarTitle("Home")
             .navigationDestination(for: Int.self) { selectedView in
-                ViewsManager(myInvestment: myInvestment, path: $path, isDark: $isDark, selectedGroup: $selectedGroup, index: $index, selectedView: selectedView)
+                ViewsManager(myInvestment: myInvestment, path: $path, isDark: $isDark, selectedGroup: $selectedGroup, selectedView: selectedView)
             }
                 
         }
@@ -76,6 +77,7 @@ struct HomeView: View {
                 }
         }
         .contentShape(Rectangle())
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onTapGesture {
             path.append(2)
         }

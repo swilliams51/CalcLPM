@@ -11,6 +11,7 @@ import Foundation
 extension Rent {
     mutating func firstAndLast(freq: Frequency, baseCommence: Date, EOMRule: Bool) {
       
+        
         //Insert Two Duplicate Groups
         let newGroup: Group = self.groups[0].clone()
         self.groups.insert(newGroup, at: 0)

@@ -12,19 +12,18 @@ struct ViewsManager: View {
     @Binding var path: [Int]
     @Binding var isDark: Bool
     @Binding var selectedGroup: Group
-    @Binding var index: Int
-    
+   
     var selectedView: Int
     
     
     var body: some View {
       switch selectedView {
         case 1:
-          AssetView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+            AssetView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         case 2:
             LeaseTermView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         case 3:
-          RentView(myInvestment: myInvestment, selectedGroup: $selectedGroup, path: $path, isDark: $isDark)
+            RentView(myInvestment: myInvestment, selectedGroup: $selectedGroup, path: $path, isDark: $isDark)
         case 4:
            DepreciationView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         case 5:
@@ -34,19 +33,38 @@ struct ViewsManager: View {
         case 7:
             EconomicsView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         case 8:
-            Text("Lease Payment")
+            Text("Early Buyout Option Form")
         case 9:
+            //Asset
             LessorCostTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         case 10:
+            //Asset
             ResidualTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         case 11:
+            //Asset
             LseGtyTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         case 12:
-          AssetNameTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+            //Asset
+            AssetNameTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         case 13:
-          GroupDetailView(myInvestment: myInvestment, selectedGroup: $selectedGroup, isDark: $isDark, path: $path)
-      case 14:
-          PaymentAmountTextFieldView(myInvestment: myInvestment, selectedGroup: $selectedGroup, index: $index, isDark: $isDark, path: $path)
+            //Rent
+            GroupDetailView(myInvestment: myInvestment, selectedGroup: $selectedGroup, isDark: $isDark, path: $path)
+        case 14:
+            //Rent
+            PaymentAmountTextFieldView(myInvestment: myInvestment, selectedGroup: $selectedGroup, isDark: $isDark, path: $path)
+        case 15:
+            Text("Federal Tax Rate TextField")
+        case 16:
+            Text("Yield Target TextField")
+        case 17:
+            Text("Discount Rate for Rent TextField")
+        case 18:
+            Text("Fee Amount TextField")
+        case 19:
+            Text("Federal Tax Rate TextField")
+        case 20:
+            Text("Results Form")
+      
         default:
             Text("Hello")
         }
@@ -54,5 +72,5 @@ struct ViewsManager: View {
 }
 
 #Preview {
-    ViewsManager(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false), selectedGroup: .constant(Group()), index: .constant(0), selectedView: 4)
+    ViewsManager(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false), selectedGroup: .constant(Group()), selectedView: 4)
 }

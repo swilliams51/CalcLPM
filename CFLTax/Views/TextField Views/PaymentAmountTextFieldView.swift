@@ -10,7 +10,7 @@ import SwiftUI
 struct PaymentAmountTextFieldView: View {
     @Bindable var myInvestment: Investment
     @Binding var selectedGroup: Group
-    @Binding var index: Int
+    @State var index: Int = 0
     @Binding var isDark: Bool
     @Binding var path: [Int]
     
@@ -45,6 +45,11 @@ struct PaymentAmountTextFieldView: View {
         .navigationBarBackButtonHidden()
         .environment(\.colorScheme, isDark ? .dark : .light)
         .onAppear{
+            print("\(index)")
+            print("\(selectedGroup.id)")
+            self.index = myInvestment.rent.getIndexOfGroup(aGroup: selectedGroup)
+            print("\(myInvestment.rent.groups[index].id)")
+            
             if self.selectedGroup.isCalculatedPaymentType() {
                 self.isCalculatedPayment = true
             }
@@ -112,7 +117,7 @@ struct PaymentAmountTextFieldView: View {
 }
 
 #Preview {
-    PaymentAmountTextFieldView(myInvestment: Investment(), selectedGroup: .constant(Group()), index: .constant(1), isDark: .constant(false), path: .constant([Int]()))
+    PaymentAmountTextFieldView(myInvestment: Investment(), selectedGroup: .constant(Group()), isDark: .constant(false), path: .constant([Int]()))
 }
 
 extension PaymentAmountTextFieldView {
@@ -157,11 +162,9 @@ extension PaymentAmountTextFieldView {
     }
     
     func updateForPaymentAmount() {
-        
         if selectedGroup.amount == "" {
             self.selectedGroup.amount = "0.00"
         }
-
        
         if self.selectedGroup.amount.toDecimal() > 0.00 && self.selectedGroup.amount.toDecimal() < 1.0 {
             self.selectedGroup.amount = percentToAmount(percent:  selectedGroup.amount)

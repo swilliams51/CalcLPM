@@ -12,8 +12,6 @@ struct GroupDetailView: View {
     @Binding var selectedGroup: Group
     @Binding var isDark: Bool
     @Binding var path: [Int]
-    
-    
     @State var index: Int = 0
     @State var amount: String = "10000.00"
     @State private var alertTitle: String = ""
@@ -40,7 +38,7 @@ struct GroupDetailView: View {
     
     var body: some View {
             Form {
-                Section(header: Text("Details").font(.footnote)) {
+                Section(header: Text(isInterimGroup ? "Interim Rent Details" : "Base Rent Details").font(.footnote)) {
                    groupDetailsSection
                 }
                 Section(header: Text("Submit Form").font(.footnote)){
@@ -55,7 +53,7 @@ struct GroupDetailView: View {
             .environment(\.colorScheme, isDark ? .dark : .light)
             .navigationTitle("Payment Group")
             .navigationBarTitleDisplayMode(.large)
-            .navigationBarBackButtonHidden()
+            .navigationBarBackButtonHidden(true)
             .onAppear{
                 viewOnAppear()
               
@@ -75,7 +73,7 @@ struct GroupDetailView: View {
 extension GroupDetailView {
     func viewOnAppear() {
         self.index = self.myInvestment.rent.getIndexOfGroup(aGroup: selectedGroup)
-        print("\(index)")
+        //print("\(index)")
         self.count = self.myInvestment.rent.groups.count - 1
         
         if self.selectedGroup.isInterim == true {
@@ -108,13 +106,13 @@ extension GroupDetailView {
             paymentTimingItem
             tempPaymentItem
             paymentLockedItem
-            
         }
     }
     var paymentTypeItem: some View {
-        Picker(selection: $selectedGroup.paymentType, label: Text("Type:").font(myFont)) {
+        Picker(selection: $selectedGroup.paymentType, label: Text("Type:").font(myFont2)) {
             ForEach(getPaymentTypes(), id: \.self) { paymentType in
                 Text(paymentType.toString())
+                    .font(myFont2)
             }
             .onChange(of: selectedGroup.paymentType) { oldValue, newValue in
                 self.resetForPaymentTypeChange()
@@ -127,10 +125,10 @@ extension GroupDetailView {
         VStack {
             HStack {
                 Text("No. of payments:")
-                    .font(.subheadline)
+                    .font(myFont2)
                 Spacer()
                 Text("\(selectedGroup.noOfPayments.toString())")
-                    .font(.subheadline)
+                    .font(myFont2)
             }
             Slider(value: $noOfPayments, in: rangeOfPayments, step: 1) {
 
@@ -153,10 +151,10 @@ extension GroupDetailView {
     }
     
     var paymentTimingItem: some View {
-        Picker(selection: $selectedGroup.timing, label: Text("Timing:").font(myFont)) {
+        Picker(selection: $selectedGroup.timing, label: Text("Timing:").font(myFont2)) {
             ForEach(TimingType.nonResidualPayments, id: \.self) { PaymentTiming in
                 Text(PaymentTiming.toString())
-                    .font(.subheadline)
+                    .font(myFont2)
             }
             .onChange(of: selectedGroup.timing) { oldValue, newValue in
               
@@ -167,7 +165,7 @@ extension GroupDetailView {
     var tempPaymentItem: some View {
         HStack{
             Text("Amount:")
-                .font(myFont)
+                .font(myFont2)
                 .onTapGesture {
                     if isCalculatedPayment == false {
                         path.append(14)
@@ -175,7 +173,7 @@ extension GroupDetailView {
                 }
             Spacer()
             Text("\(paymentFormatted(editStarted: editStarted))")
-                .font(myFont)
+                .font(myFont2)
                 .onTapGesture {
                     if isCalculatedPayment == false {
                         path.append(14)
@@ -205,9 +203,9 @@ extension GroupDetailView {
     var paymentLockedItem: some View {
         Toggle(isOn: $selectedGroup.locked) {
             Text(selectedGroup.locked ? "Locked:" : "Unlocked:")
-                .font(.subheadline)
+                .font(myFont2)
         }
-        .font(.subheadline)
+        .font(myFont2)
     }
 }
 
@@ -233,9 +231,6 @@ extension GroupDetailView {
                 }
         }
     }
-    
-    
-    
 }
 
 //Local Functions
@@ -258,15 +253,14 @@ extension GroupDetailView {
             }
         }
     
-    
     func submitForm() {
         self.myInvestment.rent.groups[index].amount = self.selectedGroup.amount
         self.myInvestment.rent.groups[index].locked = self.selectedGroup.locked
         self.myInvestment.rent.groups[index].noOfPayments = self.selectedGroup.noOfPayments
         self.myInvestment.rent.groups[index].timing = selectedGroup.timing
         self.myInvestment.rent.groups[index].paymentType = selectedGroup.paymentType
+        self.myInvestment.resetFirstGroup(isInterim: self.myInvestment.rent.interimExists())
         
-        self.myInvestment.resetFirstGroup(isInterim: self.isInterimGroup)
         self.path.removeLast()
     }
     
@@ -309,11 +303,18 @@ extension GroupDetailView {
     }
     
     func getDefaultPaymentAmount() -> String {
-        let defaultAmount: String =  (self.myInvestment.asset.lessorCost.toDecimal()  * 0.015).toString(decPlaces: 4)
-    
+        var defaultAmount: String =  (self.myInvestment.asset.lessorCost.toDecimal()  * 0.015).toString(decPlaces: 4)
+        
+        if self.myInvestment.rent.groups.count > 1 {
+            for x in 0..<self.myInvestment.rent.groups.count {
+                if self.myInvestment.rent.groups[x].amount != "CALCULATED" {
+                    defaultAmount = self.myInvestment.rent.groups[x].amount.toDecimal().toString(decPlaces: 3)
+                    break
+                }
+            }
+        }
         return defaultAmount
     }
-    
     
     func rangeNumberOfPayments () -> ClosedRange<Double> {
         let starting: Double = 1.0
