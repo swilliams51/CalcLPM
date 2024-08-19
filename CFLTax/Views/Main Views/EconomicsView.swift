@@ -62,8 +62,16 @@ struct EconomicsView: View {
     var yieldTargetItem: some View {
         HStack {
             Text("Yield Target:")
+                .font(myFont2)
+                .onTapGesture {
+                    self.path.append(17)
+                }
             Spacer()
             Text("\(percentFormatter(percent:myYieldTarget, locale: myLocale, places: 2))")
+                .font(myFont2)
+                .onTapGesture {
+                    self.path.append(17)
+                }
         }
     }
     
@@ -81,8 +89,16 @@ struct EconomicsView: View {
     var discountRateItem: some View {
         HStack {
             Text("Discount Rate:")
+                .font(myFont2)
+                .onTapGesture {
+                    self.path.append(18)
+                }
             Spacer()
             Text("\(percentFormatter(percent:myDiscountRate, locale: myLocale, places: 2))")
+                .font(myFont2)
+                .onTapGesture {
+                    self.path.append(18)
+                }
         }
     }
     

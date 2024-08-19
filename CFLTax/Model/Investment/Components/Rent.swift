@@ -85,7 +85,7 @@ public struct Rent {
     }
     
     func getIndexOfGroup(aGroup: Group) -> Int {
-        var idx: Int = -1
+        var idx: Int = 0
 
         for x in 0..<groups.count {
             if aGroup.id == groups[x].id {

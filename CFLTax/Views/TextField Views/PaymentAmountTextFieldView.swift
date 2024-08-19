@@ -31,6 +31,7 @@ struct PaymentAmountTextFieldView: View {
             Section (header: Text("Enter New Payment")){
                 paymentAmountItem
             }
+            .font(myFont2)
         }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
@@ -45,10 +46,7 @@ struct PaymentAmountTextFieldView: View {
         .navigationBarBackButtonHidden()
         .environment(\.colorScheme, isDark ? .dark : .light)
         .onAppear{
-            print("\(index)")
-            print("\(selectedGroup.id)")
             self.index = myInvestment.rent.getIndexOfGroup(aGroup: selectedGroup)
-            print("\(myInvestment.rent.groups[index].id)")
             
             if self.selectedGroup.isCalculatedPaymentType() {
                 self.isCalculatedPayment = true
@@ -69,7 +67,7 @@ struct PaymentAmountTextFieldView: View {
     var leftSideAmountItem: some View {
         HStack {
             Text(isCalculatedPayment ? "amount:" : "amount: \(Image(systemName: "return"))")
-                .font(.subheadline)
+                .font(myFont2)
                 .foregroundColor(isDark ? .white : .black)
             Image(systemName: "questionmark.circle")
                 .foregroundColor(Color.theme.accent)
@@ -97,7 +95,7 @@ struct PaymentAmountTextFieldView: View {
                 .disableAutocorrection(true)
                 .accentColor(.clear)
             Text("\(paymentFormatted(editStarted: editPaymentAmountStarted))")
-                .font(.subheadline)
+                .font(myFont2)
                 .foregroundColor(isDark ? .white : .black)
         }
         

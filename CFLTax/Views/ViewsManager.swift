@@ -12,9 +12,8 @@ struct ViewsManager: View {
     @Binding var path: [Int]
     @Binding var isDark: Bool
     @Binding var selectedGroup: Group
-   
+    @Bindable var myATCashflows: Cashflows
     var selectedView: Int
-    
     
     var body: some View {
       switch selectedView {
@@ -25,9 +24,9 @@ struct ViewsManager: View {
         case 3:
             RentView(myInvestment: myInvestment, selectedGroup: $selectedGroup, path: $path, isDark: $isDark)
         case 4:
-           DepreciationView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+            DepreciationView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         case 5:
-           TaxAssumptionsView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+            TaxAssumptionsView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         case 6:
             FeeView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         case 7:
@@ -53,18 +52,19 @@ struct ViewsManager: View {
             //Rent
             PaymentAmountTextFieldView(myInvestment: myInvestment, selectedGroup: $selectedGroup, isDark: $isDark, path: $path)
         case 15:
-            Text("Federal Tax Rate TextField")
+            FedTaxRateTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         case 16:
-            Text("Yield Target TextField")
+            BonusDeprecTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         case 17:
-            Text("Discount Rate for Rent TextField")
+            YieldTargetTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         case 18:
-            Text("Fee Amount TextField")
+            DiscountRateTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         case 19:
-            Text("Federal Tax Rate TextField")
+            FeeAmountTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         case 20:
-            Text("Results Form")
-      
+          NetAfterTaxCashflowsView(myInvestment: myInvestment, myATCashflows: myATCashflows, path: $path, isDark: $isDark)
+        case 21:
+         Text("Hello")
         default:
             Text("Hello")
         }
@@ -72,5 +72,5 @@ struct ViewsManager: View {
 }
 
 #Preview {
-    ViewsManager(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false), selectedGroup: .constant(Group()), selectedView: 4)
+    ViewsManager(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false), selectedGroup: .constant(Group()), myATCashflows: Cashflows(), selectedView: 4)
 }

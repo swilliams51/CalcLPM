@@ -46,9 +46,15 @@ struct FeeView: View {
         HStack {
             Text("Amount:")
                 .font(myFont2)
+                .onTapGesture {
+                    self.path.append(19)
+                }
             Spacer()
             Text("\(amountFormatter(amount: myAmount, locale: .current))")
                 .font(myFont2)
+                .onTapGesture {
+                    self.path.append(19)
+                }
         }
     }
     

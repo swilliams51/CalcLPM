@@ -13,9 +13,8 @@ struct HomeView: View {
     @State public var isDark: Bool = false
     @State var selectedGroup: Group = Group()
     @State var  index: Int = 0
-    
-//    @State public var myNetAfterTaxCFs: NetAfterTaxCashflows = NetAfterTaxCashflows()
-//    @State public var myATCashflows: Cashflows = Cashflows()
+    @State public var myATCashflows: Cashflows = Cashflows()
+    @State public var myNetAfterTaxCFs: NetAfterTaxCashflows = NetAfterTaxCashflows()
     
     
     var body: some View {
@@ -34,10 +33,30 @@ struct HomeView: View {
                     calculatedItem
                 }
             }
+            .toolbar{
+                ToolbarItem(placement: .topBarTrailing) {
+                    Menu(content: {
+                        fileMenuItem
+                    }, label: {
+                        Text("Menu")
+                            .foregroundColor(ColorTheme().accent)
+                    })
+                }
+            }
             .environment(\.colorScheme, isDark ? .dark : .light)
             .navigationBarTitle("Home")
             .navigationDestination(for: Int.self) { selectedView in
-                ViewsManager(myInvestment: myInvestment, path: $path, isDark: $isDark, selectedGroup: $selectedGroup, selectedView: selectedView)
+                ViewsManager(myInvestment: myInvestment, path: $path, isDark: $isDark, selectedGroup: $selectedGroup, myATCashflows: myATCashflows, selectedView: selectedView)
+            }
+            
+            .onAppear {
+                if myATCashflows.count() > 0 {
+                    self.myATCashflows.removeAll()
+                }
+                
+                if myNetAfterTaxCFs.count() > 0 {
+                    self.myNetAfterTaxCFs.removeAll()
+                }
             }
                 
         }
@@ -183,22 +202,69 @@ struct HomeView: View {
             Text("Net After Tax Cashflows")
                 .font(myFont2)
                 .onTapGesture {
-                    path.append(8)
+                    setATCashflows()
+                    path.append(20)
                 }
             Spacer()
             Image(systemName: "chevron.right")
                 .onTapGesture {
-                    path.append(8)
+                    setATCashflows()
+                    path.append(20)
                 }
         }
         .contentShape(Rectangle())
         .onTapGesture {
-            
+            path.append(20)
         }
+    }
+    
+    func setATCashflows() {
+        myATCashflows.addAll(aCFs: myNetAfterTaxCFs.createNetAfterTaxCashflows(aInvestment: myInvestment))
     }
 }
 
 
 #Preview {
     HomeView(myInvestment: Investment())
+}
+
+extension HomeView {
+    var fileMenuItem: some View {
+        VStack{
+            Button(action: {
+                self.myInvestment.resetToDefault()
+            }) {
+                Label("New", systemImage: "doc.text")
+                    .font(myFont)
+            }
+            
+            Button(action: {
+                self.path.append(4)
+            }) {
+                Label("File", systemImage: "calendar")
+                    .font(myFont)
+            }
+            
+            Button(action: {
+                self.path.append(4)
+            }) {
+                Label("Reports", systemImage: "square.and.pencil")
+                    .font(myFont)
+            }
+            
+            Button(action: {
+                self.path.append(9)
+            }) {
+                Label("Preferences", systemImage: "gear")
+                    .font(myFont)
+            }
+            
+            Button(action: {
+                self.path.append(3)
+            }) {
+                Label("About", systemImage: "info.circle")
+                    .font(myFont)
+            }
+        }
+    }
 }

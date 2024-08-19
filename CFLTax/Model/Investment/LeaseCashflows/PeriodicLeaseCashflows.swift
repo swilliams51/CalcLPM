@@ -20,6 +20,7 @@ public class PeriodicLeaseCashflows: CollCashflows {
         self.myRentalCashflows.removeAll()
         self.myResidualCashflows.removeAll()
         self.myLeaseTemplate.removeAll()
+        
         createLeaseTemplate(aInvestment: aInvestment)
         myAssetCashflows.createTable(aInvestment: aInvestment,aLeaseTemplate: myLeaseTemplate)
         self.addCashflows(myAssetCashflows)

@@ -27,8 +27,9 @@ struct LessorCostTextFieldView: View {
     var body: some View {
         Form {
             Section (header: Text("Enter New Amount")) {
-                leaseAmountItem
+                lessorCostItem
             }
+            .font(myFont2)
         }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
@@ -38,7 +39,7 @@ struct LessorCostTextFieldView: View {
                 DecimalPadButtonsView(cancel: updateForCancel, copy: copyToClipboard, paste: paste, clear: clearAllText, enter: updateForSubmit, isDark: $isDark)
             }
         }
-        .navigationTitle("Amount")
+        .navigationTitle("Lessor Cost")
         .navigationBarTitleDisplayMode(.large)
         .navigationBarBackButtonHidden()
         .environment(\.colorScheme, isDark ? .dark : .light)
@@ -49,7 +50,7 @@ struct LessorCostTextFieldView: View {
             
         }
     }
-    var leaseAmountItem: some View {
+    var lessorCostItem: some View {
         HStack{
             leftSideAmountItem
             Spacer()
@@ -61,7 +62,7 @@ struct LessorCostTextFieldView: View {
         HStack {
             Text("amount: \(Image(systemName: "return"))")
                 .foregroundColor(isDark ? .white : .black)
-                .font(myFont)
+                .font(myFont2)
             Image(systemName: "questionmark.circle")
                 .foregroundColor(.black)
                 .onTapGesture {
@@ -87,7 +88,7 @@ struct LessorCostTextFieldView: View {
                 .disableAutocorrection(true)
                 .accentColor(.clear)
             Text("\(amountFormatted(editStarted: editAmountStarted))")
-                .font(myFont)
+                .font(myFont2)
                 .foregroundColor(isDark ? .white : .black)
         }
     }
@@ -141,13 +142,13 @@ extension LessorCostTextFieldView {
    
     func updateForSubmit() {
         if self.editAmountStarted == true {
-            updateForLeaseAmount()
+            updateForLessorCost()
             path.removeLast()
         }
         self.amountIsFocused = false
     }
     
-    func updateForLeaseAmount() {
+    func updateForLessorCost() {
         if isAmountValid(strAmount: myAmount, decLow: 0.0, decHigh: maximumLessorCost.toDecimal(), inclusiveLow: true, inclusiveHigh: true) == false {
             self.myAmount = self.amountOnEntry
             alertTitle = alertMaxAmount

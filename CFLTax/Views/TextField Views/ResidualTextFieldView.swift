@@ -27,8 +27,9 @@ struct ResidualTextFieldView: View {
     var body: some View {
         Form {
             Section (header: Text("Enter New Amount")) {
-                leaseAmountItem
+                residualAmountItem
             }
+            .font(myFont2)
         }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
@@ -38,7 +39,7 @@ struct ResidualTextFieldView: View {
                 DecimalPadButtonsView(cancel: updateForCancel, copy: copyToClipboard, paste: paste, clear: clearAllText, enter: updateForSubmit, isDark: $isDark)
             }
         }
-        .navigationTitle("Amount")
+        .navigationTitle("Residual")
         .navigationBarTitleDisplayMode(.large)
         .navigationBarBackButtonHidden()
         .environment(\.colorScheme, isDark ? .dark : .light)
@@ -49,7 +50,7 @@ struct ResidualTextFieldView: View {
             
         }
     }
-    var leaseAmountItem: some View {
+    var residualAmountItem: some View {
         HStack{
             leftSideAmountItem
             Spacer()
@@ -87,7 +88,7 @@ struct ResidualTextFieldView: View {
                 .disableAutocorrection(true)
                 .accentColor(.clear)
             Text("\(amountFormatted(editStarted: editAmountStarted))")
-                .font(myFont)
+                .font(myFont2)
                 .foregroundColor(isDark ? .white : .black)
         }
     }

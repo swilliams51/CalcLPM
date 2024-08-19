@@ -47,9 +47,15 @@ struct TaxAssumptionsView: View {
         HStack {
             Text("Federal Tax Rate:")
                 .font(myFont2)
+                .onTapGesture {
+                    self.path.append(15)
+                }
             Spacer()
             Text("\(percentFormatter(percent: myTaxRate, locale: myLocale, places: 2))")
                 .font(myFont2)
+                .onTapGesture {
+                    self.path.append(15)
+                }
         }
     }
     

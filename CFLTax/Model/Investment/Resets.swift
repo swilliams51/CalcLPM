@@ -109,4 +109,15 @@ extension Investment {
         }
     }
     
+    func resetToDefault() {
+        self.asset = simple2Asset
+        self.leaseTerm = simple2LeaseTerm
+        self.rent = simple2Rent
+        self.depreciation = simpleDepreciation
+        self.taxAssumptions = simpleTaxAssumptions
+        self.economics = simpleEconomics
+        self.fee = simpleFee
+        self.earlyBuyout = eboEx1
+    }
+    
 }

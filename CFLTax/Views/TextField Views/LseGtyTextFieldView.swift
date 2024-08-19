@@ -28,8 +28,9 @@ struct LseGtyTextFieldView: View {
     var body: some View {
         Form {
             Section (header: Text("Enter New Amount")) {
-                leaseAmountItem
+                lesseeGuarantyItem
             }
+            .font(myFont2)
         }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
@@ -39,7 +40,7 @@ struct LseGtyTextFieldView: View {
                 DecimalPadButtonsView(cancel: updateForCancel, copy: copyToClipboard, paste: paste, clear: clearAllText, enter: updateForSubmit, isDark: $isDark)
             }
         }
-        .navigationTitle("Amount")
+        .navigationTitle("Lessee Guaranty")
         .navigationBarTitleDisplayMode(.large)
         .navigationBarBackButtonHidden()
         .environment(\.colorScheme, isDark ? .dark : .light)
@@ -50,7 +51,7 @@ struct LseGtyTextFieldView: View {
             
         }
     }
-    var leaseAmountItem: some View {
+    var lesseeGuarantyItem: some View {
         HStack{
             leftSideAmountItem
             Spacer()
@@ -62,7 +63,7 @@ struct LseGtyTextFieldView: View {
         HStack {
             Text("amount: \(Image(systemName: "return"))")
                 .foregroundColor(isDark ? .white : .black)
-                .font(myFont)
+                .font(myFont2)
             Image(systemName: "questionmark.circle")
                 .foregroundColor(.black)
                 .onTapGesture {
@@ -88,7 +89,7 @@ struct LseGtyTextFieldView: View {
                 .disableAutocorrection(true)
                 .accentColor(.clear)
             Text("\(amountFormatted(editStarted: editAmountStarted))")
-                .font(myFont)
+                .font(myFont2)
                 .foregroundColor(isDark ? .white : .black)
         }
     }

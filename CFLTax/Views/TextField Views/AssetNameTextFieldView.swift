@@ -29,6 +29,7 @@ struct AssetNameTextFieldView: View {
                 Section (header: Text("Enter New Name")) {
                     leaseAmountItem
                 }
+                .font(myFont2)
             }
             .toolbar {
                 ToolbarItem(placement: .topBarLeading) {
@@ -60,7 +61,7 @@ struct AssetNameTextFieldView: View {
         HStack {
             Text("Name: \(Image(systemName: "return"))")
                 .foregroundColor(isDark ? .white : .black)
-                .font(myFont)
+                .font(myFont2)
             Image(systemName: "questionmark.circle")
                 .foregroundColor(.black)
                 .onTapGesture {
@@ -86,7 +87,7 @@ struct AssetNameTextFieldView: View {
                 .disableAutocorrection(true)
                 .accentColor(.clear)
             Text("\(myName)")
-                .font(myFont)
+                .font(myFont2)
                 .foregroundColor(isDark ? .white : .black)
         }
     }

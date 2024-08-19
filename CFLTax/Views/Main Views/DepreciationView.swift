@@ -101,12 +101,18 @@ struct DepreciationView: View {
         HStack {
             Text("Bonus:")
                 .font(myFont2)
+                .onTapGesture {
+                    self.path.append(16)
+                }
             Spacer()
             Text("\(percentFormatter(percent: myBonus, locale: myLocale, places: 2))")
                 .font(myFont2)
+                .onTapGesture {
+                    self.path.append(16)
+                }
         }
         .padding(.bottom, 5)
-        }
+    }
 
 
     var investmentTaxCredit: some View {

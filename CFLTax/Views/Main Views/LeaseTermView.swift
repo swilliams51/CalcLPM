@@ -62,8 +62,7 @@ struct LeaseTermView: View {
                 .environment(\.locale, myLocale)
                 .font(myFont2)
                 .onChange(of: baseCommenceDate) { oldValue, newValue in
-                    //reset for base commence date change
-                    //self.myLease.resetLease()
+                  
                 }
         }
         .disabled(false)

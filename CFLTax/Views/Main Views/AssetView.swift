@@ -37,8 +37,8 @@ struct AssetView: View {
                 BackButtonView(path: $path, isDark: $isDark)
             }
         }
-        .navigationBarTitle("Asset")
         .environment(\.colorScheme, isDark ? .dark : .light)
+        .navigationBarTitle("Asset")
         .navigationBarBackButtonHidden(true)
         .onAppear {
             self.assetName = self.myInvestment.asset.name
