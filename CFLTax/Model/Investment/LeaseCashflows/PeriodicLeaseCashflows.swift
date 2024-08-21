@@ -14,7 +14,6 @@ public class PeriodicLeaseCashflows: CollCashflows {
     var myRentalCashflows: RentalCashflows = RentalCashflows()
     var myResidualCashflows: ResidualCashflows = ResidualCashflows()
     
-    
     public func createTable(aInvestment: Investment) {
         self.myAssetCashflows.removeAll()
         self.myRentalCashflows.removeAll()

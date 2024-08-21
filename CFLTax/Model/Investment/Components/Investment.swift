@@ -18,6 +18,8 @@ public class Investment {
     var economics: Economics = simpleEconomics
     var fee: Fee = simpleFee
     var earlyBuyout: EarlyBuyout = eboEx1
+    var afterTaxCashflows: Cashflows = Cashflows()
+    var beforeTaxCashflows: Cashflows = Cashflows()
     
    public init() {
         self.asset = asset
@@ -92,6 +94,61 @@ public class Investment {
         
         return investmentClone
     }
+    
+    public func calculate() {
+        setAfterTaxCashflows()
+        setBeforeTaxCashflows()
+    }
+    
+    public func setAfterTaxCashflows() {
+        let myATCollCashflows: NetAfterTaxCashflows = NetAfterTaxCashflows()
         
-   
+        let myTempCashflows = myATCollCashflows.createNetAfterTaxCashflows(aInvestment: self)
+        if afterTaxCashflows.count() > 0 {
+            afterTaxCashflows.removeAll()
+        }
+        for x in 0..<myTempCashflows.count() {
+            afterTaxCashflows.add(item: myTempCashflows.items[x])
+        }
+    }
+    
+    public func setBeforeTaxCashflows() {
+        let myBTCollCashflows: PeriodicLeaseCashflows = PeriodicLeaseCashflows()
+        let myTempCashflows: Cashflows = myBTCollCashflows.createPeriodicLeaseCashflows(aInvestment: self)
+        if beforeTaxCashflows.count() > 0 {
+            beforeTaxCashflows.removeAll()
+        }
+        for x in 0..<myTempCashflows.count() {
+            beforeTaxCashflows.add(item: myTempCashflows.items[x])
+        }
+    }
+    
+    
+    public func getMISF_AT_Yield () -> Decimal{
+        var atYield: Decimal = 0.0
+        if afterTaxCashflows.count() > 0 {
+            atYield = afterTaxCashflows.XIRR2(guessRate: 0.1, _DayCountMethod: self.economics.dayCountMethod)
+        }
+        
+        return atYield
+    }
+        
+    public func getMISF_BT_Yield () -> Decimal{
+        return getMISF_AT_Yield() / (1.0 - self.taxAssumptions.federalTaxRate.toDecimal())
+        }
+    
+    public func getIRR_PTCF() -> Decimal{
+        var pretaxIRR: Decimal = 0.0
+        if beforeTaxCashflows.count() > 0 {
+            pretaxIRR = beforeTaxCashflows.XIRR2(guessRate: 0.1, _DayCountMethod: self.economics.dayCountMethod)
+        }
+        
+        return pretaxIRR
+    }
+    
+    
 }
+
+    
+   
+

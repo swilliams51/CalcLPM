@@ -270,3 +270,33 @@ extension Investment {
     
 }
 
+extension Cashflows {
+    public func writeCashflows () -> String {
+        var strCashflows: String = ""
+        for i in 0..<items.count {
+            let strDueDate = items[i].dueDate.toStringDateShort(yrDigits: 4)
+            let strAmount = items[i].amount
+            let strOneCashflow = strDueDate + "," + strAmount
+            strCashflows = strCashflows + strOneCashflow + str_split_Cashflows
+        }
+        return String(strCashflows.dropLast())
+    }
+
+    public func readCashflows (strCFs: String) -> Cashflows {
+        let strCashFlows = strCFs.components(separatedBy: str_split_Cashflows)
+        let myCashflows = Cashflows()
+        
+        for strCF in strCashFlows {
+            let arryCF = strCF.components(separatedBy: ",")
+            
+            let dateDue = arryCF[0].toDate()
+            let amount = arryCF[1]
+            
+            let myCF = Cashflow(dueDate: dateDue, amount: amount)
+            myCashflows.items.append(myCF)
+        }
+        
+        return myCashflows
+    }
+}
+

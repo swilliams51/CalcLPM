@@ -8,7 +8,7 @@
 import Foundation
 
 
-public let str_split_Cashflows = "#"
+
 
 func amountFormatter(amount: String, locale: Locale) -> String {
     let decAmount: Decimal = amount.toDecimal()

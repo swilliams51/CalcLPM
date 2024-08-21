@@ -1,26 +1,26 @@
 //
-//  NetAfterTaxCashflowsView.swift
+//  PreTaxLeaseCashflowsView.swift
 //  CFLTax
 //
-//  Created by Steven Williams on 8/19/24.
+//  Created by Steven Williams on 8/20/24.
 //
 
 import SwiftUI
 
-struct NetAfterTaxCashflowsView: View {
+struct PreTaxLeaseCashflowsView: View {
     @Bindable var myInvestment: Investment
     @Binding var path: [Int]
     @Binding var isDark: Bool
     
     var body: some View {
-        Form {
+        Form{
             Section(header: Text("Schedule")) {
-                if myInvestment.afterTaxCashflows.items.count == 0 {
-                    VStack {
+                if myInvestment.beforeTaxCashflows.count() == 0 {
+                    VStack{
                         Text("No Cashflows")
                     }
                 } else {
-                    ForEach(myInvestment.afterTaxCashflows.items) { item in
+                    ForEach(myInvestment.beforeTaxCashflows.items) { item in
                         HStack {
                             Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
                             Spacer()
@@ -29,34 +29,31 @@ struct NetAfterTaxCashflowsView: View {
                     }
                 }
             }
-            Section(header: Text("Totals")) {
-                if myInvestment.afterTaxCashflows.items.count == 0 {
+            Section(header: Text("Results")) {
+                if myInvestment.beforeTaxCashflows.count() == 0 {
                     VStack {
                         Text("No Totals")
                     }
                 } else {
                     HStack {
-                        Text("\(myInvestment.afterTaxCashflows.count())")
+                        Text("\(myInvestment.beforeTaxCashflows.count())")
                         Spacer()
-                        Text("\(amountFormatter(amount: myInvestment.afterTaxCashflows.getTotal().toString(decPlaces: 2), locale: myLocale))")
+                        Text("\(amountFormatter(amount: myInvestment.beforeTaxCashflows.getTotal().toString(decPlaces: 2), locale: myLocale))")
                     }
                 }
+                
             }
-            
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        .navigationTitle("Net A/T Cashflows")
+        .navigationBarTitle("Pre-Tax Cashflows")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
-            self.myInvestment.calculate()
-            
+            myInvestment.setBeforeTaxCashflows()
         }
     }
-            
 }
 
 
-
 #Preview {
-    NetAfterTaxCashflowsView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false))
+    PreTaxLeaseCashflowsView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false))
 }

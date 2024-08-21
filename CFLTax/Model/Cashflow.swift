@@ -112,9 +112,11 @@ public class Cashflows {
         return consolidationIsValid
     }
     
-    public func deepClone () -> Cashflows {
-        let strCashflows: String = writeCashflows(aCFs: self)
-        return readCashflows(strCFs: strCashflows)
+    public func clone () -> Cashflows {
+        let strCashflows: String = writeCashflows()
+        let myClone: Cashflows = readCashflows(strCFs: strCashflows)
+        
+        return myClone
     }
     
     func XIRR2(guessRate: Decimal, _DayCountMethod: DayCountMethod) -> Decimal {
@@ -145,6 +147,7 @@ public class Cashflows {
             newX = newX + newX / factor
             newY = XNPV(aDiscountRate: newX, aDayCountMethod: _DayCountMethod)
         }
+        
         return mxbFactor(factor1: x1, value1: y1, factor2: newX, value2: newY)
     }
     
@@ -158,6 +161,7 @@ public class Cashflows {
             newX = newX - newX / factor
             newY = XNPV(aDiscountRate: newX, aDayCountMethod: _DayCountMethod)
         }
+        
         return mxbFactor(factor1: x1, value1: y1, factor2: newX, value2: newY)
     }
     
@@ -179,6 +183,7 @@ public class Cashflows {
                 x = x + 1
             }
         }
+        
         return tempSum
     }
     
@@ -194,6 +199,7 @@ public class Cashflows {
             let currFVFactor = prevFVFactor * compoundRate
             prevFVFactor = currFVFactor
         }
+        
        return aPVAmount * prevFVFactor
     }
     
@@ -203,30 +209,3 @@ public class Cashflows {
 }
 
 
-//Cashflows
-public func writeCashflows (aCFs: Cashflows) -> String {
-    var strCashflows: String = ""
-    for i in 0..<aCFs.items.count {
-        let strDueDate = aCFs.items[i].dueDate.toStringDateShort(yrDigits: 4)
-        let strAmount = aCFs.items[i].amount
-        let strOneCashflow = strDueDate + "," + strAmount
-        strCashflows = strCashflows + strOneCashflow + str_split_Cashflows
-    }
-    return String(strCashflows.dropLast())
-}
-
-public func readCashflows (strCFs: String) -> Cashflows {
-    let strCashFlows = strCFs.components(separatedBy: str_split_Cashflows)
-    let myCashflows = Cashflows()
-    
-    for strCF in strCashFlows {
-        let arryCF = strCF.components(separatedBy: ",")
-        
-        let dateDue = arryCF[0].toDate()
-        let amount = arryCF[1]
-        
-        let myCF = Cashflow(dueDate: dateDue, amount: amount)
-        myCashflows.items.append(myCF)
-    }
-    return myCashflows
-}

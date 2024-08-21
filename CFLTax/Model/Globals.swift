@@ -16,3 +16,4 @@ public let maximumLessorCost: String = "50000000.00"
 public let minimumLessorCost: String = "9.99"
 public let maxBaseTerm: Int = 360
 public let removeCharacters: Set<Character> = [",", "$","-", "+","%"]
+public let str_split_Cashflows = "#"

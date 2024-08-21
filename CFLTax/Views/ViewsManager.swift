@@ -9,10 +9,11 @@ import SwiftUI
 
 struct ViewsManager: View {
     @Bindable var myInvestment: Investment
+    @Bindable var myDepreciationTable: DepreciationIncomes
     @Binding var path: [Int]
     @Binding var isDark: Bool
     @Binding var selectedGroup: Group
-    @Bindable var myATCashflows: Cashflows
+    
     var selectedView: Int
     
     var body: some View {
@@ -62,9 +63,17 @@ struct ViewsManager: View {
         case 19:
             FeeAmountTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         case 20:
-          NetAfterTaxCashflowsView(myInvestment: myInvestment, myATCashflows: myATCashflows, path: $path, isDark: $isDark)
+            NetAfterTaxCashflowsView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         case 21:
-         Text("Hello")
+            ReportsManagerView(myInvestment: myInvestment, myDepreciationTable: myDepreciationTable, path: $path, isDark: $isDark)
+        case 22:
+           Text("Depreciation Schedule")
+        case 23:
+            PreTaxLeaseCashflowsView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+        case 24:
+            NetAfterTaxCashflowsView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+        case 25:
+            SummaryOfResultsView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         default:
             Text("Hello")
         }
@@ -72,5 +81,5 @@ struct ViewsManager: View {
 }
 
 #Preview {
-    ViewsManager(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false), selectedGroup: .constant(Group()), myATCashflows: Cashflows(), selectedView: 4)
+    ViewsManager(myInvestment: Investment(), myDepreciationTable: DepreciationIncomes(), path: .constant([Int]()), isDark: .constant(false), selectedGroup: .constant(Group()), selectedView: 22)
 }

@@ -13,8 +13,9 @@ struct HomeView: View {
     @State public var isDark: Bool = false
     @State var selectedGroup: Group = Group()
     @State var  index: Int = 0
-    @State public var myATCashflows: Cashflows = Cashflows()
-    @State public var myNetAfterTaxCFs: NetAfterTaxCashflows = NetAfterTaxCashflows()
+    @State var myDepreciationTable: DepreciationIncomes = DepreciationIncomes()
+//    @State public var myATCashflows: Cashflows = Cashflows()
+//    @State public var myNetAfterTaxCFs: NetAfterTaxCashflows = NetAfterTaxCashflows()
     
     
     var body: some View {
@@ -46,17 +47,11 @@ struct HomeView: View {
             .environment(\.colorScheme, isDark ? .dark : .light)
             .navigationBarTitle("Home")
             .navigationDestination(for: Int.self) { selectedView in
-                ViewsManager(myInvestment: myInvestment, path: $path, isDark: $isDark, selectedGroup: $selectedGroup, myATCashflows: myATCashflows, selectedView: selectedView)
+                ViewsManager(myInvestment: myInvestment, myDepreciationTable: myDepreciationTable, path: $path, isDark: $isDark, selectedGroup: $selectedGroup, selectedView: selectedView)
             }
             
             .onAppear {
-                if myATCashflows.count() > 0 {
-                    self.myATCashflows.removeAll()
-                }
-                
-                if myNetAfterTaxCFs.count() > 0 {
-                    self.myNetAfterTaxCFs.removeAll()
-                }
+              
             }
                 
         }
@@ -202,25 +197,22 @@ struct HomeView: View {
             Text("Net After Tax Cashflows")
                 .font(myFont2)
                 .onTapGesture {
-                    setATCashflows()
-                    path.append(20)
+    
+                    path.append(25)
                 }
             Spacer()
             Image(systemName: "chevron.right")
                 .onTapGesture {
-                    setATCashflows()
-                    path.append(20)
+
+                    path.append(25)
                 }
         }
         .contentShape(Rectangle())
         .onTapGesture {
-            path.append(20)
+            path.append(25)
         }
     }
     
-    func setATCashflows() {
-        myATCashflows.addAll(aCFs: myNetAfterTaxCFs.createNetAfterTaxCashflows(aInvestment: myInvestment))
-    }
 }
 
 
@@ -246,7 +238,7 @@ extension HomeView {
             }
             
             Button(action: {
-                self.path.append(4)
+                self.path.append(21)
             }) {
                 Label("Reports", systemImage: "square.and.pencil")
                     .font(myFont)
