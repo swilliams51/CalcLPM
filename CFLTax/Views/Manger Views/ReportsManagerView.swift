@@ -15,13 +15,34 @@ struct ReportsManagerView: View {
     
     var body: some View {
         Form{
+            leaseRentalsItem
             depreciationScheduleItem
             beforeTaxLeaseCashflowsItem
             afterTaxLeaseCashflowsItem
         }
+        .toolbar{
+            ToolbarItem(placement: .topBarLeading) {
+                BackButtonView(path: $path, isDark: $isDark)
+            }
+        }
         .environment(\.colorScheme, isDark ? .dark : .light)
         .navigationBarTitle("Reports")
         .navigationBarBackButtonHidden(true)
+    }
+    
+    var leaseRentalsItem: some View {
+        HStack {
+            Text("Lease Rentals")
+                .font(myFont2)
+                .onTapGesture {
+                    path.append(21)
+                }
+            Spacer()
+            Image(systemName: "chevron.right")
+                .onTapGesture {
+                    path.append(21)
+                }
+        }
     }
     
     var depreciationScheduleItem: some View {

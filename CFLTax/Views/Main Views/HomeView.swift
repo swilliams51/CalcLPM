@@ -13,9 +13,8 @@ struct HomeView: View {
     @State public var isDark: Bool = false
     @State var selectedGroup: Group = Group()
     @State var  index: Int = 0
-    @State var myDepreciationTable: DepreciationIncomes = DepreciationIncomes()
-//    @State public var myATCashflows: Cashflows = Cashflows()
-//    @State public var myNetAfterTaxCFs: NetAfterTaxCashflows = NetAfterTaxCashflows()
+    @State var myDepreciationSchedule: DepreciationIncomes = DepreciationIncomes()
+
     
     
     var body: some View {
@@ -32,28 +31,14 @@ struct HomeView: View {
                 }
                 Section(header: Text("Results")) {
                     calculatedItem
-                }
-            }
-            .toolbar{
-                ToolbarItem(placement: .topBarTrailing) {
-                    Menu(content: {
-                        fileMenuItem
-                    }, label: {
-                        Text("Menu")
-                            .foregroundColor(ColorTheme().accent)
-                    })
+                    subMenuItem
                 }
             }
             .environment(\.colorScheme, isDark ? .dark : .light)
             .navigationBarTitle("Home")
             .navigationDestination(for: Int.self) { selectedView in
-                ViewsManager(myInvestment: myInvestment, myDepreciationTable: myDepreciationTable, path: $path, isDark: $isDark, selectedGroup: $selectedGroup, selectedView: selectedView)
+                ViewsManager(myInvestment: myInvestment, myDepreciationTable: myDepreciationSchedule, path: $path, isDark: $isDark, selectedGroup: $selectedGroup, selectedView: selectedView)
             }
-            
-            .onAppear {
-              
-            }
-                
         }
     }
     
@@ -194,7 +179,7 @@ struct HomeView: View {
     
     var calculatedItem: some View {
         HStack{
-            Text("Net After Tax Cashflows")
+            Text("Summary of Results")
                 .font(myFont2)
                 .onTapGesture {
     
@@ -210,6 +195,27 @@ struct HomeView: View {
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(25)
+        }
+    }
+    
+    var subMenuItem: some View {
+        HStack{
+            Text("File Menu")
+                .font(myFont2)
+                .onTapGesture {
+    
+                    path.append(26)
+                }
+            Spacer()
+            Image(systemName: "chevron.right")
+                .onTapGesture {
+
+                    path.append(26)
+                }
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            path.append(26)
         }
     }
     

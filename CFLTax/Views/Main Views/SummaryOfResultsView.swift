@@ -28,21 +28,22 @@ struct SummaryOfResultsView: View {
                     
                 }
             }
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    BackButtonView(path: $path, isDark: $isDark)
-                }
-            }
-            .environment(\.colorScheme, isDark ? .dark : .light)
-            .navigationTitle("Summary")
-            .navigationBarBackButtonHidden(true)
-            .onAppear{
-                myInvestment.calculate()
-                myATYield = myInvestment.getMISF_AT_Yield()
-                myBTYield = myInvestment.getMISF_BT_Yield()
-                myIRRPTCF = myInvestment.getIRR_PTCF()
+        }
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                BackButtonView(path: $path, isDark: $isDark)
             }
         }
+        .environment(\.colorScheme, isDark ? .dark : .light)
+        .navigationTitle("Summary")
+        .navigationBarBackButtonHidden(true)
+        .onAppear{
+            myInvestment.calculate()
+            myATYield = myInvestment.getMISF_AT_Yield()
+            myBTYield = myInvestment.getMISF_BT_Yield()
+            myIRRPTCF = myInvestment.getIRR_PTCF()
+        }
+        
     }
 
     var afterTaxYieldItem: some View {

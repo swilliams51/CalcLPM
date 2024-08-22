@@ -63,9 +63,9 @@ struct ViewsManager: View {
         case 19:
             FeeAmountTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         case 20:
-            NetAfterTaxCashflowsView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+            Text("Early Buyout Option Text Field")
         case 21:
-            ReportsManagerView(myInvestment: myInvestment, myDepreciationTable: myDepreciationTable, path: $path, isDark: $isDark)
+            Text("Lease Rentals Cashflow")
         case 22:
            Text("Depreciation Schedule")
         case 23:
@@ -74,6 +74,20 @@ struct ViewsManager: View {
             NetAfterTaxCashflowsView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         case 25:
             SummaryOfResultsView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+        case 26:
+            FileMenuView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+        case 27:
+            Text("File Open")
+        case 28:
+            Text("File Save")
+        case 29:
+            Text("File Save As")
+        case 30:
+            ReportsManagerView(myInvestment: myInvestment, myDepreciationTable: myDepreciationTable, path: $path, isDark: $isDark)
+        case 31:
+            Text("Preferences")
+        case 32:
+            Text("About")
         default:
             Text("Hello")
         }
