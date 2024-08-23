@@ -44,9 +44,15 @@ struct PreTaxLeaseCashflowsView: View {
                 
             }
         }
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                BackButtonView(path: $path, isDark: $isDark)
+            }
+        }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        .navigationBarTitle("Pre-Tax Cashflows")
+        .navigationBarTitle("Pre-Tax Cash")
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
         .onAppear {
             myInvestment.setBeforeTaxCashflows()
         }

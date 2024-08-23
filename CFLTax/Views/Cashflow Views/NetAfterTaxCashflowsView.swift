@@ -44,9 +44,15 @@ struct NetAfterTaxCashflowsView: View {
             }
             
         }
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                BackButtonView(path: $path, isDark: $isDark)
+            }
+        }
         .environment(\.colorScheme, isDark ? .dark : .light)
         .navigationTitle("Net A/T Cashflows")
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
         .onAppear {
             self.myInvestment.calculate()
             

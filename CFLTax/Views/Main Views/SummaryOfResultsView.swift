@@ -11,22 +11,30 @@ struct SummaryOfResultsView: View {
     @Bindable var myInvestment: Investment
     @Binding var path: [Int]
     @Binding var isDark: Bool
-    
+    //Yields
     @State var myATYield: Decimal = 0.075
     @State var myBTYield: Decimal = 0.075
     @State var myIRRPTCF: Decimal = 0.075
-    
-    @State var viewAsPercentOfCost: Bool = true
+    //Cashflow
+    @State var viewAsPercentOfCost: Bool = false
     @State var assetCost: String = "-100000.00"
     @State var feeAmount: String = "-2750.00"
-    @State var totalInvestment: String = "-100000.00"
+    @State var totalCashOut: String = "-100000.00"
+    @State var totalCashIn: String = "120000.00"
     @State var rentAmount: String = "92500.00"
     @State var residualAmount: String = "21500.00"
     @State var bTProfit: String = "-100000.00"
     @State var taxesPaid: String = "-7100.00"
     @State var itc: String = "0.00"
     @State var aTCash: String = "-100000.00"
+    //Rentals
+    @State var implicitRate: String = "0.00"
+    @State var presentValue: String = "0.00"
+    @State var discountRate: String = "0.00"
     
+    
+    @State var lineHeight: CGFloat = 10
+    @State var frameHeight: CGFloat = 10
     
     var body: some View {
         Form {
@@ -38,9 +46,10 @@ struct SummaryOfResultsView: View {
             Section(header: Text("Cashflow")) {
                 assetCostItem
                 feeAmountItem
-                totalAmountItem
+                totalCashOutItem
                 rentAmountItem
                 residualAmountItem
+                totalCashInItem
                 btProfitItem
                 taxesPaidItem
                 itcItem
@@ -48,9 +57,10 @@ struct SummaryOfResultsView: View {
             }
             
             Section(header: Text("Rentals")){
-                
+                implicitRateItem
+                presentValueItem
             }
-        }
+        }.environment(\.defaultMinListRowHeight, lineHeight)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 BackButtonView(path: $path, isDark: $isDark)
@@ -65,14 +75,19 @@ struct SummaryOfResultsView: View {
             myBTYield = myInvestment.getMISF_BT_Yield()
             myIRRPTCF = myInvestment.getIRR_PTCF()
             
-            let myTotal: Decimal = assetCost.toDecimal() + feeAmount.toDecimal()
-            totalInvestment = myTotal.toString(decPlaces: 2)
+            self.assetCost = myInvestment.getAssetCost().toDecimal().toString(decPlaces: 2)
+            self.feeAmount = myInvestment.getFeeAmount().toDecimal().toString(decPlaces: 2)
+            self.rentAmount = myInvestment.getTotalRent().toDecimal().toString(decPlaces: 2)
+            self.residualAmount = myInvestment.getAssetResidualValue().toDecimal().toString(decPlaces: 2)
+            self.bTProfit = myInvestment.getBeforeTaxCash().toDecimal().toString(decPlaces: 2)
+            self.taxesPaid = myInvestment.getTaxesPaid().toDecimal().toString(decPlaces: 2)
+            self.aTCash = myInvestment.getAfterTaxCash().toDecimal().toString(decPlaces: 2)
             
-            let myPTProfit: Decimal = (rentAmount.toDecimal() + residualAmount.toDecimal()) + totalInvestment.toDecimal()
-            bTProfit = myPTProfit.toString(decPlaces: 2)
+            let myTotalOut: Decimal = assetCost.toDecimal() + feeAmount.toDecimal()
+            totalCashOut = myTotalOut.toString(decPlaces: 2)
+            let myTotalIn: Decimal = rentAmount.toDecimal() + residualAmount.toDecimal()
+            totalCashIn = myTotalIn.toString(decPlaces: 2)
             
-            let myATProfit: Decimal = myPTProfit + taxesPaid.toDecimal() + itc.toDecimal()
-            aTCash = myATProfit.toString(decPlaces: 2)
         }
         
         
@@ -92,7 +107,7 @@ extension SummaryOfResultsView {
             Spacer()
             Text("\(percentFormatter(percent: myATYield.toString(decPlaces: 5), locale: myLocale, places:3))")
                 .font(myFont)
-        }
+        }.frame(height: frameHeight)
     }
     
     var beforeTaxYieldItem: some View {
@@ -102,7 +117,7 @@ extension SummaryOfResultsView {
             Spacer()
             Text("\(percentFormatter(percent:myBTYield.toString(decPlaces: 5), locale: myLocale, places: 3))")
                 .font(myFont)
-        }
+        }.frame(height: frameHeight)
     }
     
     
@@ -113,10 +128,10 @@ extension SummaryOfResultsView {
             Spacer()
             Text("\(percentFormatter(percent:myIRRPTCF.toString(decPlaces: 5), locale: myLocale, places: 3))")
                 .font(myFont)
-        }
+        }.frame(height: frameHeight)
     }
 }
-
+// Cashflow
 extension SummaryOfResultsView {
      var assetCostItem: some View {
          HStack {
@@ -125,7 +140,7 @@ extension SummaryOfResultsView {
              Spacer()
              Text("\(getFormattedValue(amount: assetCost))" )
                  .font(myFont)
-         }
+         }.frame(height: frameHeight)
     }
     
     var feeAmountItem: some View {
@@ -135,19 +150,20 @@ extension SummaryOfResultsView {
             Spacer()
             Text("\(getFormattedValue(amount: feeAmount))")
                 .font(myFont)
-        }
+                .underline()
+        }.frame(height: frameHeight)
     }
     
-    var totalAmountItem: some View {
+    var totalCashOutItem: some View {
         HStack{
-            Text("Total")
+            Text("Total Cash Out:")
                 .font(myFont)
                 .textCase(.uppercase)
-                .padding(.leading, 50)
+                .padding(.leading, 0)
             Spacer()
-            Text("\(getFormattedValue(amount: totalInvestment))")
+            Text("\(getFormattedValue(amount: totalCashOut))")
                 .font(myFont)
-        }
+        }.frame(height: frameHeight)
     }
     
     var rentAmountItem: some View {
@@ -157,7 +173,7 @@ extension SummaryOfResultsView {
             Spacer()
             Text("\(getFormattedValue(amount: rentAmount))")
                 .font(myFont)
-        }
+        }.frame(height: frameHeight)
     }
     
     var residualAmountItem: some View {
@@ -167,7 +183,20 @@ extension SummaryOfResultsView {
             Spacer()
             Text(getFormattedValue(amount: residualAmount))
                 .font(myFont)
-        }
+        }.frame(height: frameHeight)
+    }
+    
+    var totalCashInItem: some View {
+        HStack{
+            Text("Total Cash In:")
+                .font(myFont)
+                .textCase(.uppercase)
+                .padding(.leading, 0)
+            Spacer()
+            Text("\(getFormattedValue(amount: totalCashIn))")
+                .font(myFont)
+                .underline()
+        }.frame(height: frameHeight)
     }
     
     var btProfitItem: some View {
@@ -175,11 +204,11 @@ extension SummaryOfResultsView {
             Text("B/T Profit")
                 .font(myFont)
                 .textCase(.uppercase)
-                .padding(.leading, 50)
+                .padding(.leading, 0)
             Spacer()
             Text("\(getFormattedValue(amount: bTProfit))")
                 .font(myFont)
-        }
+        }.frame(height: frameHeight)
     }
     
     var taxesPaidItem: some View {
@@ -189,17 +218,19 @@ extension SummaryOfResultsView {
             Spacer()
             Text("\(getFormattedValue(amount: taxesPaid))")
                 .font(myFont)
-        }
+        }.frame(height: frameHeight)
     }
     
     var itcItem: some View {
         HStack {
             Text("ITC:")
                 .font(myFont)
+
             Spacer()
             Text(getFormattedValue(amount: itc))
                 .font(myFont)
-        }
+                .underline()
+        }.frame(height: frameHeight)
     }
     
     var atProfitItem: some View {
@@ -207,11 +238,11 @@ extension SummaryOfResultsView {
             Text("A/T Cash")
                 .font(myFont)
                 .textCase(.uppercase)
-                .padding(.leading, 50)
+                .padding(.leading, 0)
             Spacer()
             Text("\(getFormattedValue(amount: aTCash))")
                 .font(myFont)
-        }
+        }.frame(height: frameHeight)
     }
     
     func getFormattedValue (amount: String) -> String {
@@ -226,4 +257,33 @@ extension SummaryOfResultsView {
              return amountFormatter(amount: amount, locale: myLocale)
         }
     }
+}
+
+//Rentals
+extension SummaryOfResultsView {
+    var implicitRateItem: some View {
+        HStack{
+            Text("Implicit Rate:")
+                .font(myFont)
+            Spacer()
+            Text("\(percentFormatter(percent: implicitRate, locale: myLocale, places:3))")
+                .font(myFont)
+        }.frame(height: frameHeight)
+    }
+    
+    var presentValueItem: some View {
+            HStack{
+                Text("PV @ \(getDiscountRateText()):")
+                    .font(myFont)
+                Spacer()
+                Text("\(getFormattedValue(amount: presentValue))")
+                    .font(myFont)
+            }.frame(height: frameHeight)
+    }
+    
+    func getDiscountRateText() -> String {
+        let strDiscountRate: String = percentFormatter(percent: discountRate, locale: myLocale, places: 2)
+        return strDiscountRate
+    }
+    
 }

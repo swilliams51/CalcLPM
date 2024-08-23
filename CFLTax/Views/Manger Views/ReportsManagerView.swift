@@ -9,7 +9,7 @@ import SwiftUI
 
 struct ReportsManagerView: View {
     @Bindable var myInvestment: Investment
-    @Bindable var myDepreciationTable: DepreciationIncomes
+    @Bindable var myDepreciationSchedule: DepreciationIncomes
     @Binding var path: [Int]
     @Binding var isDark: Bool
     
@@ -32,7 +32,7 @@ struct ReportsManagerView: View {
     
     var leaseRentalsItem: some View {
         HStack {
-            Text("Lease Rentals")
+            Text("Schedule of Rents")
                 .font(myFont2)
                 .onTapGesture {
                     path.append(21)
@@ -105,5 +105,5 @@ struct ReportsManagerView: View {
 }
 
 #Preview {
-    ReportsManagerView(myInvestment: Investment(), myDepreciationTable: DepreciationIncomes(), path: .constant([Int]()), isDark: .constant(false))
+    ReportsManagerView(myInvestment: Investment(), myDepreciationSchedule: DepreciationIncomes(), path: .constant([Int]()), isDark: .constant(false))
 }

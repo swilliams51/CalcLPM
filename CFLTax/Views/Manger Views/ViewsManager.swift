@@ -9,7 +9,8 @@ import SwiftUI
 
 struct ViewsManager: View {
     @Bindable var myInvestment: Investment
-    @Bindable var myDepreciationTable: DepreciationIncomes
+    @Bindable var myDepreciationSchedule: DepreciationIncomes
+    @Bindable var myRentalSchedule: RentalCashflows
     @Binding var path: [Int]
     @Binding var isDark: Bool
     @Binding var selectedGroup: Group
@@ -65,9 +66,9 @@ struct ViewsManager: View {
         case 20:
             Text("Early Buyout Option Text Field")
         case 21:
-            Text("Lease Rentals Cashflow")
+          RentScheduleView(myInvestment: myInvestment, myRentalSchedule: myRentalSchedule, path: $path, isDark: $isDark)
         case 22:
-           Text("Depreciation Schedule")
+          DepreciationScheduleView(myInvestment: myInvestment, myDepreciationSchedule: myDepreciationSchedule, path: $path, isDark: $isDark)
         case 23:
             PreTaxLeaseCashflowsView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         case 24:
@@ -83,7 +84,7 @@ struct ViewsManager: View {
         case 29:
             Text("File Save As")
         case 30:
-            ReportsManagerView(myInvestment: myInvestment, myDepreciationTable: myDepreciationTable, path: $path, isDark: $isDark)
+            ReportsManagerView(myInvestment: myInvestment, myDepreciationSchedule: myDepreciationSchedule, path: $path, isDark: $isDark)
         case 31:
             Text("Preferences")
         case 32:
@@ -95,5 +96,5 @@ struct ViewsManager: View {
 }
 
 #Preview {
-    ViewsManager(myInvestment: Investment(), myDepreciationTable: DepreciationIncomes(), path: .constant([Int]()), isDark: .constant(false), selectedGroup: .constant(Group()), selectedView: 22)
+    ViewsManager(myInvestment: Investment(), myDepreciationSchedule: DepreciationIncomes(), myRentalSchedule: RentalCashflows(), path: .constant([Int]()), isDark: .constant(false), selectedGroup: .constant(Group()), selectedView: 22)
 }

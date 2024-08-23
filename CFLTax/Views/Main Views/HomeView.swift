@@ -14,8 +14,8 @@ struct HomeView: View {
     @State var selectedGroup: Group = Group()
     @State var  index: Int = 0
     @State var myDepreciationSchedule: DepreciationIncomes = DepreciationIncomes()
+    @State var myRentalSchedule: RentalCashflows = RentalCashflows()
 
-    
     
     var body: some View {
         NavigationStack (path: $path){
@@ -37,7 +37,7 @@ struct HomeView: View {
             .environment(\.colorScheme, isDark ? .dark : .light)
             .navigationBarTitle("Home")
             .navigationDestination(for: Int.self) { selectedView in
-                ViewsManager(myInvestment: myInvestment, myDepreciationTable: myDepreciationSchedule, path: $path, isDark: $isDark, selectedGroup: $selectedGroup, selectedView: selectedView)
+                ViewsManager(myInvestment: myInvestment, myDepreciationSchedule: myDepreciationSchedule, myRentalSchedule: myRentalSchedule, path: $path, isDark: $isDark, selectedGroup: $selectedGroup, selectedView: selectedView)
             }
         }
     }

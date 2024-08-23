@@ -146,6 +146,40 @@ public class Investment {
         return pretaxIRR
     }
     
+    public func getAssetCost() -> String {
+        return self.asset.lessorCost
+    }
+    
+    public func getFeeAmount() -> String {
+        return self.fee.amount
+    }
+    
+    public func getTotalRent() -> String {
+        let tempCashflow = RentalCashflows()
+        tempCashflow.createTable(aRent: self.rent, aLeaseTerm: self.leaseTerm, aAsset: self.asset, eomRule: self.leaseTerm.endOfMonthRule)
+        
+        return tempCashflow.getTotal().toString(decPlaces: 3)
+    }
+    
+     public func getAssetResidualValue() -> String {
+        return self.asset.residualValue
+    }
+    
+    public func getAfterTaxCash() -> String {
+        return afterTaxCashflows.getTotal().toString(decPlaces: 3)
+    }
+    
+    public func getBeforeTaxCash() -> String {
+        return beforeTaxCashflows.getTotal().toString(decPlaces: 3)
+    }
+    
+    
+    public func getTaxesPaid() -> String {
+        let tempCashflow = AnnualTaxableIncomes()
+        let taxesPaid = tempCashflow.createPeriodicTaxesPaid_STD(aInvestment: self)
+        
+        return taxesPaid.getTotal().toString(decPlaces: 3)
+    }
     
 }
 
