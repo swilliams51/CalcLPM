@@ -41,27 +41,25 @@ extension Investment {
     //Mark - Frequency Resets
     func resetForFrequencyChange() {
         var bolInterimExists: Bool = true
-        if self.leaseTerm.baseCommenceDate == self.asset.fundingDate {
-            bolInterimExists = false
-        }
-        
+
         for x in 0..<self.rent.groups.count {
-            let groupTermInMons: Decimal = Decimal(monthsDiff(start: self.rent.groups[x].startDate, end: self.rent.groups[x].endDate))
-            var newNoOfPayments: Decimal = 1.0
-            
-            if self.rent.groups[x].isInterim == false {
-                switch self.leaseTerm.paymentFrequency {
-                case .monthly:
-                    newNoOfPayments = groupTermInMons
-                case .quarterly:
-                    newNoOfPayments = groupTermInMons / 3
-                case .semiannual:
-                    newNoOfPayments = groupTermInMons / 6
-                case .annual:
-                    newNoOfPayments = groupTermInMons / 12
-                }
+            if self.rent.groups[x].isInterim {
+                bolInterimExists = false
+            } else {
+                let groupTermInMons: Decimal = Decimal(monthsDiff(start: self.rent.groups[x].startDate, end: self.rent.groups[x].endDate))
+                var newNoOfPayments: Decimal = 1.0
+                    switch self.leaseTerm.paymentFrequency {
+                    case .monthly:
+                        newNoOfPayments = groupTermInMons
+                    case .quarterly:
+                        newNoOfPayments = groupTermInMons / 3
+                    case .semiannual:
+                        newNoOfPayments = groupTermInMons / 6
+                    case .annual:
+                        newNoOfPayments = groupTermInMons / 12
+                    }
+                self.rent.groups[x].noOfPayments = newNoOfPayments.toInteger()
             }
-            self.rent.groups[x].noOfPayments = newNoOfPayments.toInteger()
         }
 
         resetFirstGroup(isInterim: bolInterimExists)

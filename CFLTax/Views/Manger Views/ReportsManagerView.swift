@@ -43,6 +43,8 @@ struct ReportsManagerView: View {
                     path.append(21)
                 }
         }
+        .contentShape(Rectangle())
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
     var depreciationScheduleItem: some View {
@@ -59,6 +61,7 @@ struct ReportsManagerView: View {
                 }
         }
         .contentShape(Rectangle())
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onTapGesture {
             path.append(22)
         }
@@ -78,6 +81,7 @@ struct ReportsManagerView: View {
                 }
         }
         .contentShape(Rectangle())
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onTapGesture {
             path.append(23)
         }
@@ -97,6 +101,7 @@ struct ReportsManagerView: View {
                 }
         }
         .contentShape(Rectangle())
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onTapGesture {
             path.append(24)
         }

@@ -57,6 +57,7 @@ struct HomeView: View {
                 }
         }
         .contentShape(Rectangle())
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onTapGesture {
             path.append(1)
         }
@@ -96,6 +97,7 @@ struct HomeView: View {
                 }
         }
         .contentShape(Rectangle())
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onTapGesture {
             path.append(3)
         }
@@ -115,6 +117,7 @@ struct HomeView: View {
                 }
         }
         .contentShape(Rectangle())
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onTapGesture {
             path.append(4)
         }
@@ -134,6 +137,7 @@ struct HomeView: View {
                 }
         }
         .contentShape(Rectangle())
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onTapGesture {
             path.append(5)
         }
@@ -153,6 +157,7 @@ struct HomeView: View {
                 }
         }
         .contentShape(Rectangle())
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onTapGesture {
             path.append(6)
         }
@@ -172,6 +177,7 @@ struct HomeView: View {
                 }
         }
         .contentShape(Rectangle())
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onTapGesture {
             path.append(7)
         }
@@ -182,17 +188,16 @@ struct HomeView: View {
             Text("Summary of Results")
                 .font(myFont2)
                 .onTapGesture {
-    
                     path.append(25)
                 }
             Spacer()
             Image(systemName: "chevron.right")
                 .onTapGesture {
-
                     path.append(25)
                 }
         }
         .contentShape(Rectangle())
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onTapGesture {
             path.append(25)
         }
@@ -203,7 +208,7 @@ struct HomeView: View {
             Text("File Menu")
                 .font(myFont2)
                 .onTapGesture {
-    
+
                     path.append(26)
                 }
             Spacer()
@@ -214,6 +219,7 @@ struct HomeView: View {
                 }
         }
         .contentShape(Rectangle())
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onTapGesture {
             path.append(26)
         }
@@ -226,43 +232,3 @@ struct HomeView: View {
     HomeView(myInvestment: Investment())
 }
 
-extension HomeView {
-    var fileMenuItem: some View {
-        VStack{
-            Button(action: {
-                self.myInvestment.resetToDefault()
-            }) {
-                Label("New", systemImage: "doc.text")
-                    .font(myFont)
-            }
-            
-            Button(action: {
-                self.path.append(4)
-            }) {
-                Label("File", systemImage: "calendar")
-                    .font(myFont)
-            }
-            
-            Button(action: {
-                self.path.append(21)
-            }) {
-                Label("Reports", systemImage: "square.and.pencil")
-                    .font(myFont)
-            }
-            
-            Button(action: {
-                self.path.append(9)
-            }) {
-                Label("Preferences", systemImage: "gear")
-                    .font(myFont)
-            }
-            
-            Button(action: {
-                self.path.append(3)
-            }) {
-                Label("About", systemImage: "info.circle")
-                    .font(myFont)
-            }
-        }
-    }
-}

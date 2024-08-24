@@ -57,7 +57,7 @@ struct LeaseTermView: View {
                     self.showPopover.toggle()
                 }
             Spacer()
-            DatePicker("", selection: $baseCommenceDate, in: rangeBaseTermDates, displayedComponents:[.date])
+            DatePicker("", selection: $baseCommenceDate, in: rangeBaseTermCommenceDates, displayedComponents:[.date])
                 .transformEffect(.init(scaleX: 1.0, y: 0.90))
                 .environment(\.locale, myLocale)
                 .font(myFont2)
@@ -113,36 +113,30 @@ struct LeaseTermView: View {
         self.myInvestment.leaseTerm.baseCommenceDate = self.baseCommenceDate
         self.myInvestment.leaseTerm.paymentFrequency = self.myPaymentFrequency
         self.myInvestment.leaseTerm.endOfMonthRule = self.endOfMonthRule
-        self.myInvestment.resetForBaseTermCommenceDateChange()
         self.myInvestment.resetForFrequencyChange()
+        self.myInvestment.resetForBaseTermCommenceDateChange()
         path.removeLast()
     }
     
-    var rangeBaseTermDates: ClosedRange<Date> {
-        let starting: Date = myInvestment.asset.fundingDate
-    var maxInterim: Int
-    var dayAdder: Int = -1
+    var rangeBaseTermCommenceDates: ClosedRange<Date> {
+        let start: Date = myInvestment.asset.fundingDate
+        var maxInterim: Int
 
-    switch myInvestment.leaseTerm.paymentFrequency {
-    case .quarterly:
-        maxInterim = 3
-    case .semiannual:
-        maxInterim = 6
-    case .annual:
-        maxInterim = 12
-    default:
-        maxInterim = 3
+        switch myInvestment.leaseTerm.paymentFrequency {
+        case .quarterly:
+            maxInterim = 3
+        case .semiannual:
+            maxInterim = 6
+        case .annual:
+            maxInterim = 12
+        default:
+            maxInterim = 3
+        }
+
+        let end: Date = addPeriodsToDate(dateStart: start, payPerYear: myInvestment.leaseTerm.paymentFrequency, noOfPeriods: maxInterim, referDate: start, bolEOMRule: myInvestment.leaseTerm.endOfMonthRule)
+
+        return start...end
     }
-
-    if maxInterim == 3 {
-        dayAdder = 0
-    }
-
-    var ending: Date = Calendar.current.date(byAdding: .month, value: maxInterim, to: starting)!
-    ending = Calendar.current.date(byAdding: .day, value: dayAdder, to: ending)!
-
-    return starting...ending
-}
     
 }
 

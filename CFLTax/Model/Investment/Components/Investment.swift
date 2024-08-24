@@ -114,7 +114,7 @@ public class Investment {
     
     public func setBeforeTaxCashflows() {
         let myBTCollCashflows: PeriodicLeaseCashflows = PeriodicLeaseCashflows()
-        let myTempCashflows: Cashflows = myBTCollCashflows.createPeriodicLeaseCashflows(aInvestment: self)
+        let myTempCashflows: Cashflows = myBTCollCashflows.createPeriodicLeaseCashflows(aInvestment: self, lesseePerspective: false)
         if beforeTaxCashflows.count() > 0 {
             beforeTaxCashflows.removeAll()
         }
@@ -179,6 +179,22 @@ public class Investment {
         let taxesPaid = tempCashflow.createPeriodicTaxesPaid_STD(aInvestment: self)
         
         return taxesPaid.getTotal().toString(decPlaces: 3)
+    }
+    
+    public func getImplicitRate() -> Decimal {
+        let tempLeaseCashflow = PeriodicLeaseCashflows()
+        let myCashflows: Cashflows = tempLeaseCashflow.createPeriodicLeaseCashflows(aInvestment: self, lesseePerspective: true)
+        
+        return myCashflows.XIRR2(guessRate: 0.10, _DayCountMethod: self.economics.dayCountMethod)
+    }
+    
+    public func getPVOfRents() -> Decimal{
+        let tempCashflow = RentalCashflows()
+        tempCashflow.createTable(aRent: self.rent, aLeaseTerm: self.leaseTerm, aAsset: self.asset, eomRule: self.leaseTerm.endOfMonthRule)
+        
+        let pvOfRents: Decimal = tempCashflow.XNPV(aDiscountRate: self.economics.discountRateForRent.toDecimal(), aDayCountMethod: self.economics.dayCountMethod)
+        
+        return pvOfRents
     }
     
 }

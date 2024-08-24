@@ -43,7 +43,7 @@ struct FileMenuView: View {
                     path.removeLast()
                 }
             Spacer()
-            Image(systemName: "chevron.right")
+            Image(systemName: "return")
                 .onTapGesture {
                     self.myInvestment.resetToDefault()
                     path.removeLast()
@@ -64,6 +64,8 @@ struct FileMenuView: View {
                     path.append(27)
                 }
         }
+        .contentShape(Rectangle())
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
     var saveFileItem: some View {
@@ -79,6 +81,8 @@ struct FileMenuView: View {
                     path.append(28)
                 }
         }
+        .contentShape(Rectangle())
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
     var saveAsFileItem: some View {
@@ -94,6 +98,8 @@ struct FileMenuView: View {
                     path.append(29)
                 }
         }
+        .contentShape(Rectangle())
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
     var reportsItem: some View {
@@ -109,6 +115,8 @@ struct FileMenuView: View {
                     path.append(30)
                 }
         }
+        .contentShape(Rectangle())
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
     var preferencesItem: some View {
@@ -124,6 +132,8 @@ struct FileMenuView: View {
                     path.append(31)
                 }
         }
+        .contentShape(Rectangle())
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
     
     var aboutItem: some View {
@@ -139,8 +149,9 @@ struct FileMenuView: View {
                     path.append(32)
                 }
         }
+        .contentShape(Rectangle())
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
     }
-    
     
 }
 

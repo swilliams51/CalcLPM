@@ -49,7 +49,6 @@ struct SummaryOfResultsView: View {
                 totalCashOutItem
                 rentAmountItem
                 residualAmountItem
-                totalCashInItem
                 btProfitItem
                 taxesPaidItem
                 itcItem
@@ -88,6 +87,9 @@ struct SummaryOfResultsView: View {
             let myTotalIn: Decimal = rentAmount.toDecimal() + residualAmount.toDecimal()
             totalCashIn = myTotalIn.toString(decPlaces: 2)
             
+            self.implicitRate = myInvestment.getImplicitRate().toString(decPlaces: 4)
+            self.discountRate = myInvestment.economics.discountRateForRent.toDecimal().toString(decPlaces: 2)
+            self.presentValue = myInvestment.getPVOfRents().toString(decPlaces: 2)
         }
         
         
@@ -156,9 +158,8 @@ extension SummaryOfResultsView {
     
     var totalCashOutItem: some View {
         HStack{
-            Text("Total Cash Out:")
+            Text("Total Investment:")
                 .font(myFont)
-                .textCase(.uppercase)
                 .padding(.leading, 0)
             Spacer()
             Text("\(getFormattedValue(amount: totalCashOut))")
@@ -183,27 +184,14 @@ extension SummaryOfResultsView {
             Spacer()
             Text(getFormattedValue(amount: residualAmount))
                 .font(myFont)
-        }.frame(height: frameHeight)
-    }
-    
-    var totalCashInItem: some View {
-        HStack{
-            Text("Total Cash In:")
-                .font(myFont)
-                .textCase(.uppercase)
-                .padding(.leading, 0)
-            Spacer()
-            Text("\(getFormattedValue(amount: totalCashIn))")
-                .font(myFont)
                 .underline()
         }.frame(height: frameHeight)
     }
     
     var btProfitItem: some View {
         HStack {
-            Text("B/T Profit")
+            Text("Before-Tax Profit")
                 .font(myFont)
-                .textCase(.uppercase)
                 .padding(.leading, 0)
             Spacer()
             Text("\(getFormattedValue(amount: bTProfit))")
@@ -223,7 +211,7 @@ extension SummaryOfResultsView {
     
     var itcItem: some View {
         HStack {
-            Text("ITC:")
+            Text("Investment Tax Credit:")
                 .font(myFont)
 
             Spacer()
@@ -235,9 +223,8 @@ extension SummaryOfResultsView {
     
     var atProfitItem: some View {
         HStack{
-            Text("A/T Cash")
+            Text("After-Tax Cash:")
                 .font(myFont)
-                .textCase(.uppercase)
                 .padding(.leading, 0)
             Spacer()
             Text("\(getFormattedValue(amount: aTCash))")
@@ -266,7 +253,7 @@ extension SummaryOfResultsView {
             Text("Implicit Rate:")
                 .font(myFont)
             Spacer()
-            Text("\(percentFormatter(percent: implicitRate, locale: myLocale, places:3))")
+            Text("\(percentFormatter(percent: implicitRate, locale: myLocale, places: 2))")
                 .font(myFont)
         }.frame(height: frameHeight)
     }

@@ -16,7 +16,7 @@ public class NetAfterTaxCashflows: CollCashflows {
     public func createTable(aInvestment: Investment) {
         myPeriodicLeaseCashflows.removeAll()
         myPeriodicTaxesPaid.removeAll()
-        myPeriodicLeaseCashflows.addAll(aCFs: PeriodicLeaseCashflows().createPeriodicLeaseCashflows(aInvestment: aInvestment))
+        myPeriodicLeaseCashflows.addAll(aCFs: PeriodicLeaseCashflows().createPeriodicLeaseCashflows(aInvestment: aInvestment, lesseePerspective: false))
         self.addCashflows(myPeriodicLeaseCashflows)
         myPeriodicTaxesPaid.addAll(aCFs: AnnualTaxableIncomes().createPeriodicTaxesPaid_STD(aInvestment: aInvestment))
         self.addCashflows(myPeriodicTaxesPaid)
