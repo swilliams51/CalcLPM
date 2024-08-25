@@ -38,16 +38,13 @@ struct FileMenuView: View {
         HStack {
             Text("New")
                 .font(myFont2)
-                .onTapGesture {
-                    self.myInvestment.resetToDefault()
-                    path.removeLast()
-                }
             Spacer()
             Image(systemName: "return")
-                .onTapGesture {
-                    self.myInvestment.resetToDefault()
-                    path.removeLast()
-                }
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            self.myInvestment.resetToDefault()
+            path.removeLast()
         }
     }
     
@@ -55,102 +52,78 @@ struct FileMenuView: View {
         HStack {
             Text("Open")
                 .font(myFont2)
-                .onTapGesture {
-                    path.append(27)
-                }
             Spacer()
             Image(systemName: "chevron.right")
-                .onTapGesture {
-                    path.append(27)
-                }
         }
         .contentShape(Rectangle())
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .onTapGesture {
+            path.append(27)
+        }
     }
     
     var saveFileItem: some View {
         HStack {
             Text("Save")
                 .font(myFont2)
-                .onTapGesture {
-                    path.append(28)
-                }
             Spacer()
             Image(systemName: "chevron.right")
-                .onTapGesture {
-                    path.append(28)
-                }
         }
         .contentShape(Rectangle())
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .onTapGesture {
+            path.append(28)
+        }
     }
     
     var saveAsFileItem: some View {
         HStack {
             Text("Save As")
                 .font(myFont2)
-                .onTapGesture {
-                    path.append(29)
-                }
             Spacer()
             Image(systemName: "chevron.right")
-                .onTapGesture {
-                    path.append(29)
-                }
         }
         .contentShape(Rectangle())
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .onTapGesture {
+            path.append(29)
+        }
     }
     
     var reportsItem: some View {
         HStack {
             Text("Reports")
                 .font(myFont2)
-                .onTapGesture {
-                    path.append(30)
-                }
             Spacer()
             Image(systemName: "chevron.right")
-                .onTapGesture {
-                    path.append(30)
-                }
         }
         .contentShape(Rectangle())
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .onTapGesture {
+            path.append(30)
+        }
     }
     
     var preferencesItem: some View {
         HStack {
             Text("Preferences")
                 .font(myFont2)
-                .onTapGesture {
-                    path.append(31)
-                }
             Spacer()
             Image(systemName: "chevron.right")
-                .onTapGesture {
-                    path.append(31)
-                }
         }
         .contentShape(Rectangle())
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .onTapGesture {
+            path.append(31)
+        }
     }
     
     var aboutItem: some View {
         HStack {
             Text("About")
                 .font(myFont2)
-                .onTapGesture {
-                    path.append(32)
-                }
             Spacer()
             Image(systemName: "chevron.right")
-                .onTapGesture {
-                    path.append(32)
-                }
         }
         .contentShape(Rectangle())
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .onTapGesture {
+            path.append(32)
+        }
     }
     
 }

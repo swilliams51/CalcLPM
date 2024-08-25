@@ -47,17 +47,10 @@ struct HomeView: View {
         HStack {
             Text("Asset")
                 .font(myFont2)
-                .onTapGesture {
-                    path.append(1)
-                }
             Spacer()
             Image(systemName: "chevron.right")
-                .onTapGesture {
-                    path.append(1)
-                }
         }
         .contentShape(Rectangle())
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onTapGesture {
             path.append(1)
         }
@@ -67,17 +60,10 @@ struct HomeView: View {
         HStack {
             Text("Lease Term")
                 .font(myFont2)
-                .onTapGesture {
-                    path.append(2)
-                }
             Spacer()
             Image(systemName: "chevron.right")
-                .onTapGesture {
-                    path.append(2)
-                }
         }
         .contentShape(Rectangle())
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onTapGesture {
             path.append(2)
         }
@@ -87,17 +73,11 @@ struct HomeView: View {
         HStack {
             Text("Rent")
                 .font(myFont2)
-                .onTapGesture {
-                    path.append(3)
-                }
+
             Spacer()
             Image(systemName: "chevron.right")
-                .onTapGesture {
-                    path.append(3)
-                }
         }
         .contentShape(Rectangle())
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onTapGesture {
             path.append(3)
         }
@@ -107,17 +87,10 @@ struct HomeView: View {
         HStack {
             Text("Depreciation")
                 .font(myFont2)
-                .onTapGesture {
-                    path.append(4)
-                }
             Spacer()
             Image(systemName: "chevron.right")
-                .onTapGesture {
-                    path.append(4)
-                }
         }
         .contentShape(Rectangle())
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onTapGesture {
             path.append(4)
         }
@@ -127,17 +100,10 @@ struct HomeView: View {
         HStack{
             Text("Tax Assumptions")
                 .font(myFont2)
-                .onTapGesture {
-                    path.append(5)
-                }
             Spacer()
             Image(systemName: "chevron.right")
-                .onTapGesture {
-                    path.append(5)
-                }
         }
         .contentShape(Rectangle())
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onTapGesture {
             path.append(5)
         }
@@ -147,17 +113,10 @@ struct HomeView: View {
         HStack{
             Text("Fee")
                 .font(myFont2)
-                .onTapGesture {
-                    path.append(6)
-                }
             Spacer()
             Image(systemName: "chevron.right")
-                .onTapGesture {
-                    path.append(6)
-                }
         }
         .contentShape(Rectangle())
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onTapGesture {
             path.append(6)
         }
@@ -167,17 +126,10 @@ struct HomeView: View {
         HStack{
             Text("Economics")
                 .font(myFont2)
-                .onTapGesture {
-                    path.append(7)
-                }
             Spacer()
             Image(systemName: "chevron.right")
-                .onTapGesture {
-                    path.append(7)
-                }
         }
         .contentShape(Rectangle())
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onTapGesture {
             path.append(7)
         }
@@ -187,17 +139,10 @@ struct HomeView: View {
         HStack{
             Text("Summary of Results")
                 .font(myFont2)
-                .onTapGesture {
-                    path.append(25)
-                }
             Spacer()
             Image(systemName: "chevron.right")
-                .onTapGesture {
-                    path.append(25)
-                }
         }
         .contentShape(Rectangle())
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onTapGesture {
             path.append(25)
         }
@@ -207,19 +152,10 @@ struct HomeView: View {
         HStack{
             Text("File Menu")
                 .font(myFont2)
-                .onTapGesture {
-
-                    path.append(26)
-                }
             Spacer()
             Image(systemName: "chevron.right")
-                .onTapGesture {
-
-                    path.append(26)
-                }
         }
         .contentShape(Rectangle())
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onTapGesture {
             path.append(26)
         }

@@ -34,34 +34,23 @@ struct ReportsManagerView: View {
         HStack {
             Text("Schedule of Rents")
                 .font(myFont2)
-                .onTapGesture {
-                    path.append(21)
-                }
             Spacer()
             Image(systemName: "chevron.right")
-                .onTapGesture {
-                    path.append(21)
-                }
         }
         .contentShape(Rectangle())
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .onTapGesture {
+            path.append(21)
+        }
     }
     
     var depreciationScheduleItem: some View {
         HStack {
             Text("Depreciation Schedule")
                 .font(myFont2)
-                .onTapGesture {
-                    path.append(22)
-                }
             Spacer()
             Image(systemName: "chevron.right")
-                .onTapGesture {
-                    path.append(22)
-                }
         }
         .contentShape(Rectangle())
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onTapGesture {
             path.append(22)
         }
@@ -71,17 +60,10 @@ struct ReportsManagerView: View {
         HStack {
             Text("Before-Tax Lease Cashflows")
                 .font(myFont2)
-                .onTapGesture {
-                    path.append(23)
-                }
             Spacer()
             Image(systemName: "chevron.right")
-                .onTapGesture {
-                    path.append(23)
-                }
         }
         .contentShape(Rectangle())
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onTapGesture {
             path.append(23)
         }
@@ -91,17 +73,10 @@ struct ReportsManagerView: View {
         HStack {
             Text("After-Tax Lease Cashflows")
                 .font(myFont2)
-                .onTapGesture {
-                    path.append(24)
-                }
             Spacer()
             Image(systemName: "chevron.right")
-                .onTapGesture {
-                    path.append(24)
-                }
         }
         .contentShape(Rectangle())
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .onTapGesture {
             path.append(24)
         }
