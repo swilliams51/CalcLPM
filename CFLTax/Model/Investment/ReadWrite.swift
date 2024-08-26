@@ -206,6 +206,7 @@ extension Investment {
         let myType: PaymentType = myGroup[6].toPaymentType()
         let myIsInterim: Bool = myGroup[7].toBool()
         let myUndeletable: Bool = myGroup[8].toBool()
+        
         let newGroup: Group = Group(amount: myAmount, endDate: myEndDate, locked: myLocked, noOfPayments: myNoOfPayments, startDate: myStartDate, timing: myTiming, paymentType: myType, isInterim: myIsInterim, unDeletable: myUndeletable)
         
         return newGroup
@@ -240,10 +241,10 @@ extension Investment {
         let myEBOAmount = arrayEBO[0]
         let myOptionsDate = arrayEBO[1].toDate()
         let myRentDueIsPaid: Bool = arrayEBO[2].toBool()
+        
         let myEBO = EarlyBuyout(amount: myEBOAmount, exerciseDate: myOptionsDate, rentDueIsPaid: myRentDueIsPaid)
         
         return myEBO
-        
     }
     
     public func readFee(arrayFee: [String]) -> Fee {
@@ -263,6 +264,7 @@ extension Investment {
         let myDayCountMethod: DayCountMethod = arrayEconomics[3].toDayCountMethod()!
         let myDiscountRate: String = arrayEconomics[4]
         let mySinkingFundRate: String = arrayEconomics[5]
+        
         let myEconomics: Economics = Economics(yieldMethod: myYieldMethod, yieldTarget: myYieldTarget, solveFor: mySolveFor, dayCountMethod: myDayCountMethod, discountRateForRent: myDiscountRate, sinkingFundRate: mySinkingFundRate)
         
         return myEconomics

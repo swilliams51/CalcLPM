@@ -103,18 +103,18 @@ public class Investment {
             yieldIsAfterTax = true
         }
         
-//        switch self.economics.solveFor {
-//        case .fee:
-//            break
-//        case .lessorCost:
-//            break
-//        case .residualValue:
-//            break
-//        case .unLockedRentals:
-//            solveForPayments(targetYield: aTargetYield, isAfterTax: yieldIsAfterTax)
-//        case .yield:
-//            break
-//        }
+        switch self.economics.solveFor {
+        case .fee:
+            break
+        case .lessorCost:
+            break
+        case .residualValue:
+            break
+        case .unLockedRentals:
+            solveForPayments(targetYield: aTargetYield, isAfterTax: yieldIsAfterTax)
+        case .yield:
+            break
+        }
         
         setAfterTaxCashflows()
         setBeforeTaxCashflows()

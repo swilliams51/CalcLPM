@@ -17,7 +17,7 @@ public let simpleRent: Rent = Rent(groups: [simpleGroup])
 public let simpleGroup: Group =  Group(amount: "8500.75", endDate: addPeriodsToDate(dateStart: baseCommencementDate, payPerYear: .monthly, noOfPeriods: 60, referDate: baseCommencementDate, bolEOMRule: false), locked: false, noOfPayments: 60, startDate: baseCommencementDate, timing: .arrears, paymentType: .baseRental, isInterim: false, unDeletable: true)
 public let simpleDepreciation: Depreciation = Depreciation(basisReduction: 0.0, bonusDeprecPercent: 0.00, convention: .halfYear, life: 5, method: .MACRS, investmentTaxCredit: 0.0, salvageValue: "0.00", vestingPeriod: 5)
 public let simpleTaxAssumptions: TaxAssumptions = TaxAssumptions(federalTaxRate: "0.21", fiscalMonthEnd: .December, dayOfMonPaid: 15)
-public let simpleEconomics: Economics = Economics(yieldMethod: .MISF_BT, yieldTarget: "0.05", solveFor: .unLockedRentals, dayCountMethod: .actualThreeSixty, discountRateForRent: "0.065")
+public let simpleEconomics: Economics = Economics(yieldMethod: .MISF_BT, yieldTarget: "0.05", solveFor: .yield, dayCountMethod: .actualThreeSixty, discountRateForRent: "0.065")
 public let simpleFee: Fee = Fee(amount: "2000.00", datePaid: "08/12/24".toDate())
 
 
@@ -50,7 +50,7 @@ public let depreciationEx1: Depreciation = Depreciation(basisReduction: 0.00, bo
 public let depreciationEx2: Depreciation = Depreciation(basisReduction: 0.0, bonusDeprecPercent: 0.00, convention: .halfYear, life: 5, method: .MACRS, investmentTaxCredit: 0.0, salvageValue: "0.00", vestingPeriod: 5)
 public let depreciationEx3: Depreciation = Depreciation(basisReduction: 0.0, bonusDeprecPercent: 0.5, convention: .halfYear, life: 5, method: .MACRS, investmentTaxCredit: 0.0, salvageValue: "0.00", vestingPeriod: 5)
 
-public let economicsEx1: Economics = Economics(yieldMethod: .MISF_BT, yieldTarget: "0.05", solveFor: .unLockedRentals, dayCountMethod: .actualThreeSixty, discountRateForRent: "0.065")
+public let economicsEx1: Economics = Economics(yieldMethod: .MISF_BT, yieldTarget: "0.05", solveFor: .yield, dayCountMethod: .actualThreeSixty, discountRateForRent: "0.065")
 
 public let fee1: Fee = Fee(amount: "20000.00", datePaid: leaseFundingDate)
 
