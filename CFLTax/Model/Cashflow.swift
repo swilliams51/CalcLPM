@@ -90,7 +90,7 @@ public class Cashflows {
                         }
                         if items[x].dueDate == items[x + y].dueDate {
                             let newAmount: Decimal = items[x].amount.toDecimal() + items[x + y].amount.toDecimal()
-                            items[x].amount = newAmount.toString(decPlaces: 4)
+                            items[x].amount = newAmount.toString(decPlaces: 8)
                             items.remove(at: x + y)
                         }
                     }
@@ -124,7 +124,7 @@ public class Cashflows {
         var y: Decimal = XNPV(aDiscountRate: irr, aDayCountMethod: _DayCountMethod)
         var iCount: Int = 1
         
-        while abs(y) > toleranceAmounts {
+        while abs(y) > tolerancePaymentAmounts {
             if y > 0.0 {
                 irr = incrementRate(x1: irr, y1: y, iCounter: iCount, _DayCountMethod: _DayCountMethod)
             } else {

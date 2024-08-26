@@ -38,7 +38,7 @@ public class BaseRentalIncomes: Cashflows {
                             fiscalIncome = fiscalIncome + aRent.groups[x].amount.toDecimal()
                         } else {
                             fiscalIncome = fiscalIncome + aRent.groups[x].amount.toDecimal()
-                            addToRentalIncomes(aFiscalDate: nextFiscalYearEnd, aFiscalAmount: fiscalIncome.toString(decPlaces: 4))
+                            addToRentalIncomes(aFiscalDate: nextFiscalYearEnd, aFiscalAmount: fiscalIncome.toString(decPlaces: 10))
                             nextFiscalYearEnd = addNextFiscalYearEnd(aDateIn: nextFiscalYearEnd)
                             fiscalIncome = 0
                         }
@@ -51,7 +51,7 @@ public class BaseRentalIncomes: Cashflows {
                             //print("\(proRataRent)")
                             fiscalIncome = fiscalIncome + proRataRent
                             
-                            addToRentalIncomes(aFiscalDate: nextFiscalYearEnd, aFiscalAmount: fiscalIncome.toString(decPlaces: 4) )
+                            addToRentalIncomes(aFiscalDate: nextFiscalYearEnd, aFiscalAmount: fiscalIncome.toString(decPlaces: 10) )
                             let proRataStart: Decimal = abs(aRent.groups[x].amount.toDecimal() - proRataRent)
                             nextFiscalYearEnd = addNextFiscalYearEnd(aDateIn: nextFiscalYearEnd)
                             fiscalIncome = proRataStart

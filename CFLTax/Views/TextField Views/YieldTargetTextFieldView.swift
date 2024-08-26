@@ -152,7 +152,7 @@ extension YieldTargetTextFieldView {
             showAlert.toggle()
         } else {
             //Amount is Valid
-            self.myInvestment.economics.discountRateForRent = myPercent
+            self.myInvestment.economics.yieldTarget = myPercent
         }
             
         self.editPercentStarted = false

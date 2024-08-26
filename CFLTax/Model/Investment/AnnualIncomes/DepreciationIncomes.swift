@@ -38,7 +38,7 @@ public class DepreciationIncomes: Cashflows {
             currentDepreciation = getCurrentYearDepreciation(aBasis: decBasis, year: 0)
             currentDepreciation = currentDepreciation * -1.0
             
-            let myAnnualExpense = Cashflow(dueDate: firstFiscalYearEnd, amount: currentDepreciation.toString(decPlaces: 4))
+            let myAnnualExpense = Cashflow(dueDate: firstFiscalYearEnd, amount: currentDepreciation.toString(decPlaces: 10))
             items.append(myAnnualExpense)
             
             runTotalDepreciation = runTotalDepreciation + currentDepreciation
@@ -49,7 +49,7 @@ public class DepreciationIncomes: Cashflows {
                 nextFiscalYearEnd = addNextFiscalYearEnd(aDateIn: nextFiscalYearEnd)
                 if x == intYears {
                     currentDepreciation = currentDeprecBalance * -1.0
-                    let annualExpense = Cashflow(dueDate: nextFiscalYearEnd, amount: currentDepreciation.toString(decPlaces: 4))
+                    let annualExpense = Cashflow(dueDate: nextFiscalYearEnd, amount: currentDepreciation.toString(decPlaces: 10))
                     items.append(annualExpense)
                     break
                 } else {
@@ -60,7 +60,7 @@ public class DepreciationIncomes: Cashflows {
                     }
                 }
                 currentDepreciation = currentDepreciation * -1.0
-                let annualExpense = Cashflow(dueDate: nextFiscalYearEnd, amount: currentDepreciation.toString(decPlaces: 4))
+                let annualExpense = Cashflow(dueDate: nextFiscalYearEnd, amount: currentDepreciation.toString(decPlaces: 10))
                 items.append(annualExpense)
                 runTotalDepreciation = runTotalDepreciation + currentDepreciation
                 currentDeprecBalance = decBasis + runTotalDepreciation
@@ -71,7 +71,7 @@ public class DepreciationIncomes: Cashflows {
             currentDepreciation = depreciationSL * decConvention
             currentDepreciation = currentDepreciation * -1.0
             
-            let annualExpense = Cashflow(dueDate: firstFiscalYearEnd, amount: currentDepreciation.toString(decPlaces: 4))
+            let annualExpense = Cashflow(dueDate: firstFiscalYearEnd, amount: currentDepreciation.toString(decPlaces: 10))
             items.append(annualExpense)
             runTotalDepreciation = runTotalDepreciation + currentDepreciation
             currentDeprecBalance = decBasis + runTotalDepreciation
@@ -81,7 +81,7 @@ public class DepreciationIncomes: Cashflows {
                 nextFiscalYearEnd = addNextFiscalYearEnd(aDateIn: nextFiscalYearEnd)
                 if x == intYears {
                     currentDepreciation = currentDeprecBalance * -1.0 - decSalvageValue
-                    let annualExpense: Cashflow = Cashflow(dueDate: nextFiscalYearEnd, amount: currentDepreciation.toString(decPlaces: 4))
+                    let annualExpense: Cashflow = Cashflow(dueDate: nextFiscalYearEnd, amount: currentDepreciation.toString(decPlaces: 10))
                     items.append(annualExpense)
                     break
                 } else {
@@ -92,7 +92,7 @@ public class DepreciationIncomes: Cashflows {
                     }
                 }
                 currentDepreciation = currentDepreciation * -1.0
-                let annualExpense = Cashflow(dueDate: nextFiscalYearEnd, amount: currentDepreciation.toString(decPlaces: 4))
+                let annualExpense = Cashflow(dueDate: nextFiscalYearEnd, amount: currentDepreciation.toString(decPlaces: 10))
                 items.append(annualExpense)
                 runTotalDepreciation = runTotalDepreciation + currentDepreciation
                 currentDeprecBalance = decBasis + runTotalDepreciation

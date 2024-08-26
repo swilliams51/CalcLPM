@@ -64,7 +64,7 @@ public enum YieldMethod {
             return "MISF A/T"
         case .MISF_BT:
             return "MISF B/T"
-        default:
+        case .implicitRate:
             return "Implicit Rate"
         }
     }
@@ -73,7 +73,7 @@ public enum YieldMethod {
 }
 
 extension String {
-    func toYieldMethod() -> YieldMethod? {
+    func toYieldMethod() -> YieldMethod {
         switch self {
         case "Pre_Tax IRR":
             return .IRR_PTCF
@@ -81,8 +81,10 @@ extension String {
             return .MISF_AT
         case "MISF B/T":
             return .MISF_BT
-        default:
+        case "Implicit Rate":
             return .implicitRate
+        default:
+            return .MISF_AT
         }
     }
 }

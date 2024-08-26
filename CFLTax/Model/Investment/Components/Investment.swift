@@ -96,11 +96,19 @@ public class Investment {
     }
     
     public func calculate() {
+        let aYieldType: YieldMethod = self.economics.yieldMethod
         let aTargetYield: Decimal = self.economics.yieldTarget.toDecimal()
         
         var yieldIsAfterTax: Bool = false
-        if self.economics.yieldMethod == .MISF_AT {
-            yieldIsAfterTax = true
+        switch self.economics.yieldMethod {
+            case .MISF_AT:
+                yieldIsAfterTax = true
+            case .MISF_BT:
+                yieldIsAfterTax = false
+            case .IRR_PTCF:
+                yieldIsAfterTax = false
+            case .implicitRate:
+                yieldIsAfterTax = false
         }
         
         switch self.economics.solveFor {
@@ -111,8 +119,8 @@ public class Investment {
         case .residualValue:
             break
         case .unLockedRentals:
-            solveForPayments(targetYield: aTargetYield, isAfterTax: yieldIsAfterTax)
-        case .yield:
+            solveForPayments(aYieldMethod: aYieldType, aTargetYield: aTargetYield, isAfterTax: yieldIsAfterTax)
+        default:
             break
         }
         
@@ -178,7 +186,7 @@ public class Investment {
         let tempCashflow = RentalCashflows()
         tempCashflow.createTable(aRent: self.rent, aLeaseTerm: self.leaseTerm, aAsset: self.asset, eomRule: self.leaseTerm.endOfMonthRule)
         
-        return tempCashflow.getTotal().toString(decPlaces: 3)
+        return tempCashflow.getTotal().toString(decPlaces: 10)
     }
     
      public func getAssetResidualValue() -> String {
@@ -186,11 +194,11 @@ public class Investment {
     }
     
     public func getAfterTaxCash() -> String {
-        return afterTaxCashflows.getTotal().toString(decPlaces: 3)
+        return afterTaxCashflows.getTotal().toString(decPlaces: 10)
     }
     
     public func getBeforeTaxCash() -> String {
-        return beforeTaxCashflows.getTotal().toString(decPlaces: 3)
+        return beforeTaxCashflows.getTotal().toString(decPlaces: 10)
     }
     
     
@@ -198,7 +206,7 @@ public class Investment {
         let tempCashflow = AnnualTaxableIncomes()
         let taxesPaid = tempCashflow.createPeriodicTaxesPaid_STD(aInvestment: self)
         
-        return taxesPaid.getTotal().toString(decPlaces: 3)
+        return taxesPaid.getTotal().toString(decPlaces: 10)
     }
     
     public func getImplicitRate() -> Decimal {

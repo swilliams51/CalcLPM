@@ -43,7 +43,7 @@ public class CollCashflows {
                             break
                         } else if items[1].items[0].dueDate == items[0].items[x].dueDate { // occurs on same date
                             let myAmount: Decimal = (items[1].items[0].amount.toDecimal() + items[0].items[x].amount.toDecimal())
-                            items[0].items[x].amount = myAmount.toString(decPlaces: 4)
+                            items[0].items[x].amount = myAmount.toString(decPlaces: 10)
                             items[1].items.remove(at: 0)
                             break
                         } else {

@@ -20,11 +20,11 @@ extension Investment {
         let strRent: String = writeRent(aRent: self.rent)
         let strDepreciation: String = writeDepreciation(aDepreciation: self.depreciation)
         let strTaxAssumptions: String = writeTaxAssumptions(aTaxAssumptions: self.taxAssumptions)
-        let strEconomics: String = writeEconomics(aEconomics: self.economics)
-        let strFee: String = writeFee(aFee: self.fee)
         let strEBO: String = writeEBO(aEBO: self.earlyBuyout)
-    
-        let investmentProperties: Array = [strAsset, strLeaseTerm, strRent, strDepreciation, strTaxAssumptions, strEconomics, strFee, strEBO]
+        let strFee: String = writeFee(aFee: self.fee)
+        let strEconomics: String = writeEconomics(aEconomics: self.economics)
+        
+        let investmentProperties: Array = [strAsset, strLeaseTerm, strRent, strDepreciation, strTaxAssumptions, strEBO, strFee, strEconomics]
         
         return investmentProperties.joined(separator: "*")
     }
@@ -258,7 +258,7 @@ extension Investment {
     }
     
     public func readEconomics(arrayEconomics: [String]) -> Economics {
-        let myYieldMethod = arrayEconomics[0].toYieldMethod()!
+        let myYieldMethod = arrayEconomics[0].toYieldMethod()
         let myYieldTarget: String = arrayEconomics[1]
         let mySolveFor: SolveForOption = arrayEconomics[2].toSolveFor()
         let myDayCountMethod: DayCountMethod = arrayEconomics[3].toDayCountMethod()!

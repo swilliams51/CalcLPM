@@ -33,11 +33,11 @@ public class InterimRentalIncomes: Cashflows {
                         let intDaysInPeriod = daysDiff(start: dateStart, end: dateEnd)
                         let intDaysInFiscal = daysDiff(start: dateStart, end: nextFiscalYearEnd)
                         let allocatedRent: Decimal = aRent.groups[0].amount.toDecimal() / Decimal(intDaysInPeriod) * Decimal(intDaysInFiscal)
-                        var interimRentExpense = Cashflow(dueDate: nextFiscalYearEnd, amount: allocatedRent.toString(decPlaces: 4))
+                        var interimRentExpense = Cashflow(dueDate: nextFiscalYearEnd, amount: allocatedRent.toString(decPlaces: 10))
                         items.append(interimRentExpense)
                         let remainRent: Decimal = aRent.groups[0].amount.toDecimal() - allocatedRent
                         nextFiscalYearEnd = addNextFiscalYearEnd(aDateIn: nextFiscalYearEnd)
-                        interimRentExpense = Cashflow(dueDate: nextFiscalYearEnd, amount: remainRent.toString(decPlaces: 4))
+                        interimRentExpense = Cashflow(dueDate: nextFiscalYearEnd, amount: remainRent.toString(decPlaces: 10))
                         items.append(interimRentExpense)
                     }
                 }
@@ -58,9 +58,9 @@ public class InterimRentalIncomes: Cashflows {
     private func getInterimAmount(aRent: Rent, interimAmount: String, aFreq: Frequency) -> String {
         if interimAmount == "CALCULATED" {
             if aRent.groups[0].paymentType == .dailyEquivNext {
-                return getDailyRentForNext(aRent: aRent, aFreq: aFreq).toString(decPlaces: 4)
+                return getDailyRentForNext(aRent: aRent, aFreq: aFreq).toString(decPlaces: 10)
             } else {
-                return getDailyRentForAll(aRent: aRent, aFreq: aFreq).toString(decPlaces: 4)
+                return getDailyRentForAll(aRent: aRent, aFreq: aFreq).toString(decPlaces: 10)
             }
         } else {
             return interimAmount

@@ -19,7 +19,7 @@ public class FeeIncomes: Cashflows {
             while currentFiscalDate <= aMaturityDate {
                 let daysInFiscal = daysDiff(start: dateStart, end: currentFiscalDate)
                 let amount = perDiemFee * Decimal(daysInFiscal) * -1.0
-                let currentFiscalIncome: Cashflow = Cashflow(dueDate: currentFiscalDate, amount: amount.toString(decPlaces: 4))
+                let currentFiscalIncome: Cashflow = Cashflow(dueDate: currentFiscalDate, amount: amount.toString(decPlaces: 10))
                 items.append(currentFiscalIncome)
                 dateStart = currentFiscalDate
                 currentFiscalDate = addNextFiscalYearEnd(aDateIn: currentFiscalDate)
@@ -27,7 +27,7 @@ public class FeeIncomes: Cashflows {
             
             let daysInLastFiscal = daysDiff(start: dateStart, end: aMaturityDate)
             let amount = perDiemFee * Decimal(daysInLastFiscal) * -1.0
-            let lastFiscalIncome: Cashflow = Cashflow(dueDate: currentFiscalDate, amount: amount.toString(decPlaces: 4))
+            let lastFiscalIncome: Cashflow = Cashflow(dueDate: currentFiscalDate, amount: amount.toString(decPlaces: 10))
             items.append(lastFiscalIncome)
         } else {
             let currentFiscalIncome = Cashflow(dueDate: currentFiscalDate, amount: aFee.amount)
