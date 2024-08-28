@@ -147,16 +147,34 @@ extension FeeAmountTextFieldView {
     }
     
     func updateForFeeAmount() {
+        if self.myAmount.isEmpty {
+            self.myAmount = "0.00"
+        }
+        
         if isAmountValid(strAmount: myAmount, decLow: 0.0, decHigh: maximumLessorCost.toDecimal(), inclusiveLow: true, inclusiveHigh: true) == false {
             self.myAmount = self.amountOnEntry
             alertTitle = alertMaxAmount
             showAlert.toggle()
         } else {
             //Amount is Valid
-            self.myInvestment.asset.lessorCost = myAmount
+            if self.myAmount.toDecimal() > 0.00 && self.myAmount.toDecimal() <= 1.0 {
+                self.myAmount = percentToAmount(percent:  myAmount)
+            }
+            
+            if myAmount.toDecimal() != 0.0 {
+                self.myInvestment.feeExists = true
+            } else {
+                self.myInvestment.feeExists = false
+            }
+            self.myInvestment.fee.amount = myAmount
         }
             
         self.editAmountStarted = false
+    }
+    
+    func percentToAmount(percent: String) -> String {
+        let decAmount: Decimal = percent.toDecimal() * myInvestment.asset.lessorCost.toDecimal()
+        return decAmount.toString(decPlaces: 2)
     }
     
 }

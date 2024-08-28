@@ -20,6 +20,8 @@ public class Investment {
     var earlyBuyout: EarlyBuyout = eboEx1
     var afterTaxCashflows: Cashflows = Cashflows()
     var beforeTaxCashflows: Cashflows = Cashflows()
+    var earlyBuyoutExists: Bool = false
+    var feeExists: Bool = false
     
    public init() {
         self.asset = asset
@@ -30,6 +32,8 @@ public class Investment {
         self.economics = economics
         self.fee = fee
         self.earlyBuyout = earlyBuyout
+        self.setEBO()
+        self.setFee()
     }
     
     public init(aAsset: Asset, aLeaseTerm: LeaseTerm, aRent: Rent, aDepreciation: Depreciation, aTaxAssumptions: TaxAssumptions, aEconomics: Economics, aFee: Fee, aEarlyBuyout: EarlyBuyout) {
@@ -41,6 +45,8 @@ public class Investment {
         self.economics = aEconomics
         self.fee = aFee
         self.earlyBuyout = aEarlyBuyout
+        self.setEBO()
+        self.setFee()
     }
     
     public init(aFile: String) {
@@ -53,21 +59,23 @@ public class Investment {
         self.economics = readEconomics(arrayEconomics: arrayInvestment[5].components(separatedBy: ","))
         self.fee = readFee(arrayFee: arrayInvestment[6].components(separatedBy: ","))
         self.earlyBuyout = readEarlyBuyout(arrayEBO: arrayInvestment[7].components(separatedBy: ","))
+        self.setEBO()
+        self.setFee()
     }
     
-    public func eboExists() -> Bool {
+    public func setEBO() {
         if earlyBuyout.amount.toDecimal() != 0.0 {
-            return true
+            earlyBuyoutExists = true
         } else {
-            return false
+            earlyBuyoutExists = false
         }
     }
     
-    public func feeExists() -> Bool {
+    public func setFee() {
         if fee.amount.toDecimal() != 0.0 {
-            return true
+            self.feeExists = true
         } else {
-            return false
+            self.feeExists = false
         }
     }
     
@@ -107,19 +115,17 @@ public class Investment {
                 yieldIsAfterTax = false
             case .IRR_PTCF:
                 yieldIsAfterTax = false
-            case .implicitRate:
-                yieldIsAfterTax = false
         }
         
         switch self.economics.solveFor {
         case .fee:
-            break
+            solveForFee(aYieldMethod: aYieldType, aTargetYield: aTargetYield, isAfterTax: yieldIsAfterTax)
         case .lessorCost:
             break
         case .residualValue:
             break
         case .unLockedRentals:
-            solveForPayments(aYieldMethod: aYieldType, aTargetYield: aTargetYield, isAfterTax: yieldIsAfterTax)
+            solveForPaymentsV2(aYieldMethod: aYieldType, aTargetYield: aTargetYield, isAfterTax: yieldIsAfterTax)
         default:
             break
         }

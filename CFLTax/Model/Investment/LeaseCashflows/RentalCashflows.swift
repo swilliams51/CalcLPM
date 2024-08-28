@@ -14,14 +14,23 @@ public class RentalCashflows: Cashflows {
     public func createTable(aRent: Rent, aLeaseTerm: LeaseTerm, aAsset: Asset, eomRule: Bool) {
         var dateStart: Date = aLeaseTerm.baseCommenceDate
         var counter: Int = 0
+        var rentAmount: String = "0.00"
         
         //Interim Rent
         if aAsset.fundingDate != aLeaseTerm.baseCommenceDate {
             dateStart = aAsset.fundingDate
+            switch aRent.groups[0].paymentType {
+                case .dailyEquivAll:
+                    rentAmount = getDailyRentForAll(aRent: aRent, aFreq: aLeaseTerm.paymentFrequency).toString(decPlaces: 4)
+                case .dailyEquivNext:
+                    rentAmount = getDailyRentForNext(aRent: aRent, aFreq: aLeaseTerm.paymentFrequency).toString(decPlaces: 4)
+                default :
+                    rentAmount = aRent.groups[0].amount
+            }
             // Interim in arrears
             if aRent.groups[0].timing == .advance {
                 // interim in advance
-                let myStartCF = Cashflow(dueDate: dateStart, amount: aRent.groups[0].amount)
+                let myStartCF = Cashflow(dueDate: dateStart, amount: rentAmount)
                 items.append(myStartCF)
                 dateStart = aLeaseTerm.baseCommenceDate
                 let myEndCF = Cashflow(dueDate: dateStart, amount: "0.00")
@@ -30,7 +39,7 @@ public class RentalCashflows: Cashflows {
                 let myStartCF = Cashflow(dueDate: dateStart, amount: "0.00")
                 items.append(myStartCF)
                 dateStart = aLeaseTerm.baseCommenceDate
-                let myEndCF = Cashflow(dueDate: dateStart, amount: aRent.groups[0].amount)
+                let myEndCF = Cashflow(dueDate: dateStart, amount: rentAmount)
                 items.append(myEndCF)
             }
             counter += 1

@@ -110,11 +110,16 @@ struct LeaseTermView: View {
     }
     
     func myDone() {
-        self.myInvestment.leaseTerm.baseCommenceDate = self.baseCommenceDate
-        self.myInvestment.leaseTerm.paymentFrequency = self.myPaymentFrequency
+        if self.myInvestment.leaseTerm.baseCommenceDate != self.baseCommenceDate {
+            self.myInvestment.leaseTerm.baseCommenceDate = self.baseCommenceDate
+            self.myInvestment.resetForBaseTermCommenceDateChange()
+        }
+        if self.myInvestment.leaseTerm.paymentFrequency != self.myPaymentFrequency{
+            self.myInvestment.leaseTerm.paymentFrequency = self.myPaymentFrequency
+            self.myInvestment.resetForFrequencyChange()
+        }
+        
         self.myInvestment.leaseTerm.endOfMonthRule = self.endOfMonthRule
-        self.myInvestment.resetForFrequencyChange()
-        self.myInvestment.resetForBaseTermCommenceDateChange()
         path.removeLast()
     }
     

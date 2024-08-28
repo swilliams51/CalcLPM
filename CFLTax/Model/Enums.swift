@@ -16,6 +16,7 @@ public enum SolveForOption {
     case yield
     
     static let allCases: [SolveForOption] = [.fee, .lessorCost, .residualValue, .unLockedRentals, .yield]
+    static let baseCases: [SolveForOption] = [.lessorCost, .residualValue, .unLockedRentals, .yield]
     
     public func toString() -> String {
         switch self {
@@ -54,7 +55,7 @@ public enum YieldMethod {
     case MISF_AT
     case MISF_BT
     case IRR_PTCF
-    case implicitRate
+
     
     public func toString() -> String {
         switch self {
@@ -64,12 +65,10 @@ public enum YieldMethod {
             return "MISF A/T"
         case .MISF_BT:
             return "MISF B/T"
-        case .implicitRate:
-            return "Implicit Rate"
         }
     }
     
-    static let allTypes: [YieldMethod] = [.IRR_PTCF,.MISF_AT,.MISF_BT,.implicitRate]
+    static let allTypes: [YieldMethod] = [.IRR_PTCF,.MISF_AT,.MISF_BT]
 }
 
 extension String {
@@ -81,8 +80,6 @@ extension String {
             return .MISF_AT
         case "MISF B/T":
             return .MISF_BT
-        case "Implicit Rate":
-            return .implicitRate
         default:
             return .MISF_AT
         }

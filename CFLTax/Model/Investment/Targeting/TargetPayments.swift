@@ -14,10 +14,8 @@ extension Investment {
     public func solveForPayments(aYieldMethod: YieldMethod, aTargetYield: Decimal, isAfterTax: Bool) {
         if aYieldMethod == .MISF_AT  || aYieldMethod == .MISF_BT {
             solveForPayments_MISF(aTargetYield: aTargetYield, isAfterTax: isAfterTax)
-        } else if aYieldMethod == .IRR_PTCF {
-            solveForPayments_IRROfPTCF(aTargetYield: aTargetYield)
         } else {
-            //solveForPayments_ImplicitRate(aTargetYield: aTargetYield)
+            solveForPayments_IRROfPTCF(aTargetYield: aTargetYield)
         }
     }
 
@@ -190,15 +188,6 @@ extension Investment {
         let x3: Decimal = (x1 * npvX2 - x2 * npvX1) / (npvX2 - npvX1)
         
         return x3
-    }
-    
-    
-    
-    
-    
-    
-    private func solveForPayments_ImplicitRate(aTargetYield: Decimal) {
-        
     }
     
                                                         

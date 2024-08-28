@@ -205,6 +205,7 @@ extension GroupDetailView {
             Text(selectedGroup.locked ? "Locked:" : "Unlocked:")
                 .font(myFont2)
         }
+        .disabled(self.selectedGroup.isCalculatedPaymentType() ? true : false)
         .font(myFont2)
     }
 }

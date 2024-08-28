@@ -142,23 +142,35 @@ extension ResidualTextFieldView {
    
     func updateForSubmit() {
         if self.editAmountStarted == true {
-            updateForLeaseAmount()
+            updateForResidualAmount()
             path.removeLast()
         }
         self.amountIsFocused = false
     }
     
-    func updateForLeaseAmount() {
+    func updateForResidualAmount() {
+        if myAmount.isEmpty {
+            self.myAmount = "0.00"
+        }
+        
         if isAmountValid(strAmount: myAmount, decLow: 0.0, decHigh: maximumLessorCost.toDecimal(), inclusiveLow: true, inclusiveHigh: true) == false {
             self.myAmount = self.amountOnEntry
             alertTitle = alertMaxResidual
             showAlert.toggle()
         } else {
             //Amount is Valid
+            if self.myAmount.toDecimal() > 0.00 && self.myAmount.toDecimal() <= 1.0 {
+                self.myAmount = percentToAmount(percent:  myAmount)
+            }
             self.myInvestment.asset.residualValue = myAmount
         }
             
         self.editAmountStarted = false
+    }
+    
+    func percentToAmount(percent: String) -> String {
+        let decAmount: Decimal = percent.toDecimal() * myInvestment.asset.lessorCost.toDecimal()
+        return decAmount.toString(decPlaces: 2)
     }
     
 }

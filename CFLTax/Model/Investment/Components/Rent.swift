@@ -150,25 +150,26 @@ public struct Rent {
 public func getDailyRentForNext(aRent: Rent, aFreq: Frequency) -> Decimal {
     let nextAmount:Decimal = aRent.groups[1].amount.toDecimal()
     let daysInPeriod: Decimal = 360.0 / Decimal(aFreq.rawValue)
+    let daysInInterim = daysDiff(start: aRent.groups[0].startDate, end: aRent.groups[0].endDate)
+    let dailyRent = nextAmount / daysInPeriod
+    let interimRent = dailyRent * daysInInterim.toString().toDecimal()
     
-    return nextAmount / daysInPeriod
+    return interimRent
 }
 
 public func getDailyRentForAll (aRent: Rent, aFreq: Frequency) -> Decimal {
     var runTotalAmount: Decimal = 0.00
-    var runTotalNumber: Decimal = 0.00
     
-    for x in 0..<aRent.groups.count {
-        if aRent.groups[x].paymentType == .baseRental {
-            let decAmount = aRent.groups[x].amount.toDecimal()
-            let decNumber = Decimal(aRent.groups[x].noOfPayments)
-            let totalAmount = decAmount * decNumber
-            runTotalAmount = runTotalAmount + totalAmount
-            runTotalNumber = runTotalNumber + decNumber
-        }
+    for x in 1..<aRent.groups.count {
+        let decAmount = aRent.groups[x].amount.toDecimal()
+        let decNumber = Decimal(aRent.groups[x].noOfPayments)
+        let totalAmount = decAmount * decNumber
+        runTotalAmount = runTotalAmount + totalAmount
     }
-    let average: Decimal = safeDivision(aNumerator: runTotalAmount, aDenominator: runTotalNumber)
-    let daysInPeriod: Decimal = 360.0 / Decimal(aFreq.rawValue)
-    
-    return average / daysInPeriod
+    let daysInLease = daysDiff(start: aRent.groups[0].startDate, end: aRent.groups[aRent.groups.count - 1].endDate)
+    let dailyRent = runTotalAmount / daysInLease.toString().toDecimal()
+    let daysInInterim = daysDiff(start: aRent.groups[0].startDate, end: aRent.groups[0].endDate)
+    let interimRent = dailyRent * daysInInterim.toString().toDecimal()
+
+    return interimRent
 }

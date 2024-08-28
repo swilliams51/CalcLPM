@@ -164,19 +164,17 @@ extension PaymentAmountTextFieldView {
             self.selectedGroup.amount = "0.00"
         }
        
-        if self.selectedGroup.amount.toDecimal() > 0.00 && self.selectedGroup.amount.toDecimal() < 1.0 {
-            self.selectedGroup.amount = percentToAmount(percent:  selectedGroup.amount)
-        }
-        
         if isAmountValid(strAmount: selectedGroup.amount, decLow: 0.0, decHigh: maximumAmount, inclusiveLow: true, inclusiveHigh: true) == false {
-            
             self.selectedGroup.amount = self.paymentOnEntry
             alertTitle = alertPaymentAmount
             showAlert.toggle()
-        }
-        
-        if selectedGroup.amount.toDecimal() == 0.00 {
-            selectedGroup.locked = true
+        } else {
+            if self.selectedGroup.amount.toDecimal() > 0.00 && self.selectedGroup.amount.toDecimal() <= 1.0 {
+                self.selectedGroup.amount = percentToAmount(percent:  selectedGroup.amount)
+            }
+            if selectedGroup.amount.toDecimal() == 0.00 {
+                selectedGroup.locked = true
+            }
         }
             
         self.editPaymentAmountStarted = false

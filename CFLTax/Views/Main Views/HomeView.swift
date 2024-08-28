@@ -137,10 +137,10 @@ struct HomeView: View {
     
     var calculatedItem: some View {
         HStack{
-            Text("Summary of Results")
+            Text("Calculate")
                 .font(myFont2)
             Spacer()
-            Image(systemName: "chevron.right")
+            Image(systemName: "return")
         }
         .contentShape(Rectangle())
         .onTapGesture {
