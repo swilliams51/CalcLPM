@@ -72,7 +72,7 @@ public class Investment {
     }
     
     public func setFee() {
-        if fee.amount.toDecimal() != 0.0 {
+        if self.getFeeAmount() != 0.0 {
             self.feeExists = true
         } else {
             self.feeExists = false
@@ -180,12 +180,24 @@ public class Investment {
         return pretaxIRR
     }
     
-    public func getAssetCost() -> String {
-        return self.asset.lessorCost
+    public func getAssetCost(isCashflow: Bool) -> Decimal {
+        var factor: Decimal = 1.0
+        if isCashflow {
+            factor = -1.0
+        }
+        return self.asset.lessorCost.toDecimal() * factor
     }
     
-    public func getFeeAmount() -> String {
-        return self.fee.amount
+    public func getFeeAmount() -> Decimal {
+        if self.fee.amount.isEmpty {
+            return 0.0
+        }
+        var factor: Decimal = 1.0
+        if self.fee.feeType == .expense {
+            factor = -1.0
+        }
+        
+        return fee.amount.toDecimal() * factor
     }
     
     public func getTotalRent() -> String {
@@ -195,8 +207,8 @@ public class Investment {
         return tempCashflow.getTotal().toString(decPlaces: 10)
     }
     
-     public func getAssetResidualValue() -> String {
-        return self.asset.residualValue
+     public func getAssetResidualValue() -> Decimal {
+         return self.asset.residualValue.toDecimal()
     }
     
     public func getAfterTaxCash() -> String {
@@ -206,7 +218,6 @@ public class Investment {
     public func getBeforeTaxCash() -> String {
         return beforeTaxCashflows.getTotal().toString(decPlaces: 10)
     }
-    
     
     public func getTaxesPaid() -> String {
         let tempCashflow = AnnualTaxableIncomes()

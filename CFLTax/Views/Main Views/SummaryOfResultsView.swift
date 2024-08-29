@@ -74,10 +74,11 @@ struct SummaryOfResultsView: View {
             myBTYield = myInvestment.getMISF_BT_Yield()
             myIRRPTCF = myInvestment.getIRR_PTCF()
             
-            self.assetCost = myInvestment.getAssetCost().toDecimal().toString(decPlaces: 2)
-            self.feeAmount = myInvestment.getFeeAmount().toDecimal().toString(decPlaces: 2)
+            self.assetCost = myInvestment.getAssetCost(isCashflow: true).toString(decPlaces: 2)
+            self.feeAmount = myInvestment.getFeeAmount().toString(decPlaces: 2)
+            
             self.rentAmount = myInvestment.getTotalRent().toDecimal().toString(decPlaces: 2)
-            self.residualAmount = myInvestment.getAssetResidualValue().toDecimal().toString(decPlaces: 2)
+            self.residualAmount = myInvestment.getAssetResidualValue().toString(decPlaces: 2)
             self.bTProfit = myInvestment.getBeforeTaxCash().toDecimal().toString(decPlaces: 2)
             self.taxesPaid = myInvestment.getTaxesPaid().toDecimal().toString(decPlaces: 2)
             self.aTCash = myInvestment.getAfterTaxCash().toDecimal().toString(decPlaces: 2)
