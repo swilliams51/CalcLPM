@@ -107,25 +107,15 @@ public class Investment {
         let aYieldType: YieldMethod = self.economics.yieldMethod
         let aTargetYield: Decimal = self.economics.yieldTarget.toDecimal()
         
-        var yieldIsAfterTax: Bool = false
-        switch self.economics.yieldMethod {
-            case .MISF_AT:
-                yieldIsAfterTax = true
-            case .MISF_BT:
-                yieldIsAfterTax = false
-            case .IRR_PTCF:
-                yieldIsAfterTax = false
-        }
-        
         switch self.economics.solveFor {
         case .fee:
-            solveForFee(aYieldMethod: aYieldType, aTargetYield: aTargetYield, isAfterTax: yieldIsAfterTax)
+            solveForFee(aYieldMethod: aYieldType, aTargetYield: aTargetYield)
         case .lessorCost:
-            break
+            solveForLessorCost(aYieldMethod: aYieldType, aTargetYield: aTargetYield)
         case .residualValue:
-            break
+            solveForResidual(aYieldMethod: aYieldType, aTargetYield: aTargetYield)
         case .unLockedRentals:
-            solveForPaymentsV2(aYieldMethod: aYieldType, aTargetYield: aTargetYield, isAfterTax: yieldIsAfterTax)
+            solveForPaymentsV2(aYieldMethod: aYieldType, aTargetYield: aTargetYield)
         default:
             break
         }
@@ -135,6 +125,7 @@ public class Investment {
     }
     
     public func setAfterTaxCashflows() {
+        //if setAfterTaxCashflows is not called to the calculate function then items in afterTaxCashflows must e removed
         let myATCollCashflows: NetAfterTaxCashflows = NetAfterTaxCashflows()
         
         let myTempCashflows = myATCollCashflows.createNetAfterTaxCashflows(aInvestment: self)
@@ -147,6 +138,7 @@ public class Investment {
     }
     
     public func setBeforeTaxCashflows() {
+        //if setBeforeTaxCashflows is not called to the calculate function then items in beforeTaxCashflows must e removed
         let myBTCollCashflows: PeriodicLeaseCashflows = PeriodicLeaseCashflows()
         let myTempCashflows: Cashflows = myBTCollCashflows.createPeriodicLeaseCashflows(aInvestment: self, lesseePerspective: false)
         if beforeTaxCashflows.count() > 0 {
@@ -180,9 +172,9 @@ public class Investment {
         return pretaxIRR
     }
     
-    public func getAssetCost(isCashflow: Bool) -> Decimal {
+    public func getAssetCost(asCashflow: Bool) -> Decimal {
         var factor: Decimal = 1.0
-        if isCashflow {
+        if asCashflow {
             factor = -1.0
         }
         return self.asset.lessorCost.toDecimal() * factor

@@ -14,7 +14,7 @@ struct YieldTargetTextFieldView: View {
     
     @State var myPercent: String = ""
     @State private var editPercentStarted: Bool = false
-    @State private var maximumPercent: Decimal = 1.0
+    @State private var maximumPercent: Decimal = maximumYield.toDecimal()
     @FocusState private var percentIsFocused: Bool
     @State private var showPopover: Bool = false
     private let pasteBoard = UIPasteboard.general

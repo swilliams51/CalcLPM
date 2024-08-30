@@ -11,10 +11,15 @@ import Foundation
 extension Investment {
 
    //Secant Method
-    public func solveForPayments(aYieldMethod: YieldMethod, aTargetYield: Decimal, isAfterTax: Bool) {
-        if aYieldMethod == .MISF_AT  || aYieldMethod == .MISF_BT {
-            solveForPayments_MISF(aTargetYield: aTargetYield, isAfterTax: isAfterTax)
-        } else {
+    
+    
+    public func solveForPayments(aYieldMethod: YieldMethod, aTargetYield: Decimal) {
+        switch aYieldMethod {
+        case .MISF_AT:
+            solveForPayments_MISF(aTargetYield: aTargetYield, isAfterTax: true)
+        case .MISF_BT:
+            solveForPayments_MISF(aTargetYield: aTargetYield, isAfterTax: false)
+        case .IRR_PTCF:
             solveForPayments_IRROfPTCF(aTargetYield: aTargetYield)
         }
     }
@@ -103,9 +108,6 @@ extension Investment {
         
         return x3
     }
-    
-    
-    
     
     // IRR of PTCF
     private func solveForPayments_IRROfPTCF(aTargetYield: Decimal) {

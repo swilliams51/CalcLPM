@@ -90,7 +90,7 @@ extension GroupDetailView {
         if self.selectedGroup.isCalculatedPaymentType() {
             self.resetForPaymentTypeChange()
         }
-        self.maximumAmount = myInvestment.asset.lessorCost.toDecimal()
+        self.maximumAmount = myInvestment.getAssetCost(asCashflow: true)
         self.noOfPayments = self.selectedGroup.noOfPayments.toDouble()
         self.startingNoOfPayments = self.noOfPayments
         self.startingTotalPayments = Double(self.myInvestment.rent.getTotalNumberOfPayments())
@@ -304,7 +304,7 @@ extension GroupDetailView {
     }
     
     func getDefaultPaymentAmount() -> String {
-        var defaultAmount: String =  (self.myInvestment.asset.lessorCost.toDecimal()  * 0.015).toString(decPlaces: 4)
+        var defaultAmount: String =  (self.myInvestment.getAssetCost(asCashflow: true)  * 0.015).toString(decPlaces: 4)
         
         if self.myInvestment.rent.groups.count > 1 {
             for x in 0..<self.myInvestment.rent.groups.count {

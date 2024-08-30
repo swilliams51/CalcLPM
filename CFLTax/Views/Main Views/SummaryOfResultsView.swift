@@ -74,7 +74,7 @@ struct SummaryOfResultsView: View {
             myBTYield = myInvestment.getMISF_BT_Yield()
             myIRRPTCF = myInvestment.getIRR_PTCF()
             
-            self.assetCost = myInvestment.getAssetCost(isCashflow: true).toString(decPlaces: 2)
+            self.assetCost = myInvestment.getAssetCost(asCashflow: true).toString(decPlaces: 2)
             self.feeAmount = myInvestment.getFeeAmount().toString(decPlaces: 2)
             
             self.rentAmount = myInvestment.getTotalRent().toDecimal().toString(decPlaces: 2)
@@ -191,7 +191,7 @@ extension SummaryOfResultsView {
     
     var btProfitItem: some View {
         HStack {
-            Text("Before-Tax Profit")
+            Text("Before-Tax Profit:")
                 .font(myFont)
                 .padding(.leading, 0)
             Spacer()

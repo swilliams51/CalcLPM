@@ -21,7 +21,11 @@ public class PeriodicLeaseCashflows: CollCashflows {
         self.myLeaseTemplate.removeAll()
         
         createLeaseTemplate(aInvestment: aInvestment)
-        myAssetCashflows.createTable_Lessor(aInvestment: aInvestment,aLeaseTemplate: myLeaseTemplate)
+        if lesseePerspective {
+            myAssetCashflows.createTable_Lessee(aInvestment: aInvestment, aLeaseTemplate: myLeaseTemplate)
+        } else {
+            myAssetCashflows.createTable_Lessor(aInvestment: aInvestment,aLeaseTemplate: myLeaseTemplate)
+        }
         self.addCashflows(myAssetCashflows)
         myRentalCashflows.createTable(aRent: aInvestment.rent, aLeaseTerm: aInvestment.leaseTerm, aAsset: aInvestment.asset, eomRule: false)
         self.addCashflows(myRentalCashflows)
