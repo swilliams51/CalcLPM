@@ -51,8 +51,9 @@ extension Investment {
         //4. Calculate y2, then use mxbFactor function to calculate final fee
         tempInvestment.setAfterTaxCashflows()
         let y2: Decimal = tempInvestment.afterTaxCashflows.XNPV(aDiscountRate: yield, aDayCountMethod: self.economics.dayCountMethod)
-        let newFeeAmount = mxbFactor(factor1: x1.toDecimal(), value1: y1, factor2: x2, value2: y2)
-
+        var newFeeAmount = mxbFactor(factor1: x1.toDecimal(), value1: y1, factor2: x2, value2: y2)
+        newFeeAmount = checkedFeeAmount(aFeeAmount: newFeeAmount, aAssetCost: self.getAssetCost(asCashflow: false))
+        
         //5. Then set the fee in the actual investment to the value of the mxbFactor function
         self.fee.amount = newFeeAmount.toString(decPlaces: 4)
         self.fee.feeType = myFeeType
@@ -86,12 +87,22 @@ extension Investment {
         //4. Calculate y2, then use mxbFactor function to calculate final fee
         tempInvestment.setBeforeTaxCashflows()
         let y2: Decimal = tempInvestment.beforeTaxCashflows.XNPV(aDiscountRate: aTargetYield, aDayCountMethod: self.economics.dayCountMethod)
-        let newFeeAmount = mxbFactor(factor1: x1.toDecimal(), value1: y1, factor2: x2, value2: y2)
+        var newFeeAmount = mxbFactor(factor1: x1.toDecimal(), value1: y1, factor2: x2, value2: y2)
+        newFeeAmount = checkedFeeAmount(aFeeAmount: newFeeAmount, aAssetCost: self.getAssetCost(asCashflow: false))
         
         //5. Then set the fee in the actual investment to the value of the mxbFactor function
         self.fee.amount = newFeeAmount.toString(decPlaces: 4)
         self.fee.feeType = myFeeType
         tempInvestment.beforeTaxCashflows.items.removeAll()
+    }
+    
+    private func checkedFeeAmount(aFeeAmount: Decimal, aAssetCost: Decimal) -> Decimal {
+        var checkedFeeAmount: Decimal = aFeeAmount
+        if abs(checkedFeeAmount / aAssetCost) < 0.0005 {
+            checkedFeeAmount = 0.0
+        }
+        
+        return checkedFeeAmount
     }
     
 }
