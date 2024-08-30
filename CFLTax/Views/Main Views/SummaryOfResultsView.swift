@@ -29,7 +29,8 @@ struct SummaryOfResultsView: View {
     @State var aTCash: String = "-100000.00"
     //Rentals
     @State var implicitRate: String = "0.00"
-    @State var presentValue: String = "0.00"
+    @State var presentValue1: String = "0.00"
+    @State var presentValue2: String = "0.00"
     @State var discountRate: String = "0.00"
     
     
@@ -58,6 +59,7 @@ struct SummaryOfResultsView: View {
             Section(header: Text("Rentals")){
                 implicitRateItem
                 presentValueItem
+                presentValue2Item
             }
         }.environment(\.defaultMinListRowHeight, lineHeight)
         .toolbar {
@@ -90,7 +92,8 @@ struct SummaryOfResultsView: View {
             
             self.implicitRate = myInvestment.getImplicitRate().toString(decPlaces: 4)
             self.discountRate = myInvestment.economics.discountRateForRent.toDecimal().toString(decPlaces: 2)
-            self.presentValue = myInvestment.getPVOfRents().toString(decPlaces: 2)
+            self.presentValue1 = myInvestment.getPVOfRents().toString(decPlaces: 2)
+            self.presentValue2 = myInvestment.getPVOfObligations().toString(decPlaces: 2)
         }
         
         
@@ -261,12 +264,22 @@ extension SummaryOfResultsView {
     
     var presentValueItem: some View {
             HStack{
-                Text("PV @ \(getDiscountRateText()):")
+                Text("PV1 @ \(getDiscountRateText()):")
                     .font(myFont)
                 Spacer()
-                Text("\(getFormattedValue(amount: presentValue))")
+                Text("\(getFormattedValue(amount: presentValue1))")
                     .font(myFont)
             }.frame(height: frameHeight)
+    }
+    
+    var presentValue2Item: some View {
+        HStack{
+            Text("PV2 @ \(getDiscountRateText()):")
+                .font(myFont)
+            Spacer()
+            Text("\(getFormattedValue(amount: presentValue2))")
+                .font(myFont)
+        }.frame(height: frameHeight)
     }
     
     func getDiscountRateText() -> String {

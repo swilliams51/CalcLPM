@@ -234,6 +234,20 @@ public class Investment {
         return pvOfRents
     }
     
+    public func getPVOfObligations() -> Decimal{
+        let tempCashflow = RentalCashflows()
+        tempCashflow.createTable(aRent: self.rent, aLeaseTerm: self.leaseTerm, aAsset: self.asset, eomRule: self.leaseTerm.endOfMonthRule)
+        let leaseEndDate: Date = self.getLeaseMaturityDate()
+        let residualGuaranty: Decimal = self.asset.lesseeGuarantyAmount.toDecimal()
+        let additionalCF: Cashflow = Cashflow(dueDate: leaseEndDate, amount: residualGuaranty.toString(decPlaces: 4))
+        tempCashflow.add(item: additionalCF)
+        tempCashflow.consolidateCashflows()
+        
+        let pvOfObligations: Decimal = tempCashflow.XNPV(aDiscountRate: self.economics.discountRateForRent.toDecimal(), aDayCountMethod: self.economics.dayCountMethod)
+        
+        return pvOfObligations
+    }
+    
 }
 
     
