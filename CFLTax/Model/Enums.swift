@@ -330,10 +330,30 @@ public enum Frequency: Int, CaseIterable {
         
     }
     
+    public static let allCases: [Frequency] = [.monthly, .quarterly, .semiannual, .annual]
     static let three: [Frequency] = [.monthly, .quarterly, .semiannual]
     static let two: [Frequency] = [.monthly, .quarterly]
     static let one: [Frequency] = [.monthly]
 }
+
+extension String {
+    func toFrequency() -> Frequency {
+        switch self {
+        case "Monthly":
+            return .monthly
+        case "Quarterly":
+            return .quarterly
+        case "Semiannual":
+            return .semiannual
+        case "Annual":
+            return .annual
+        default:
+            return .monthly
+        }
+    }
+}
+
+
 
 public enum InterimRentType {
     case dailyEquivAll

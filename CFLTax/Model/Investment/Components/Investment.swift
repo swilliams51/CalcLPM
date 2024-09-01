@@ -103,6 +103,18 @@ public class Investment {
         return investmentClone
     }
     
+    public func yieldCalculationIsValid() -> Bool {
+        var isValid: Bool = true
+        let tempInvestment: Investment = self.clone()
+        tempInvestment.setAfterTaxCashflows()
+        if tempInvestment.afterTaxCashflows.getTotal() < 0 {
+            isValid = false
+        }
+        tempInvestment.afterTaxCashflows.removeAll()
+        
+        return isValid
+    }
+    
     public func calculate() {
         let aYieldType: YieldMethod = self.economics.yieldMethod
         let aTargetYield: Decimal = self.economics.yieldTarget.toDecimal()

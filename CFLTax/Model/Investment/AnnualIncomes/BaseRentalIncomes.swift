@@ -8,7 +8,7 @@
 import Foundation
 
 public class BaseRentalIncomes: Cashflows {
-    
+    //This is for Base Rentals only, Interim Rentals handled separately
     public func createTable(aRent: Rent, aFundingDate: Date,aBaseCommence: Date, aFrequency: Frequency, aFiscalMonthEnd: TaxYearEnd, aLeaseExpiry: Date) {
         var nextFiscalYearEnd: Date = getFiscalYearEnd(askDate: aFundingDate, fiscalMonthEnd: aFiscalMonthEnd.rawValue)
         let finalFiscalYearEnd: Date = getFiscalYearEnd(askDate: aLeaseExpiry, fiscalMonthEnd: aFiscalMonthEnd.rawValue)

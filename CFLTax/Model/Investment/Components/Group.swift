@@ -44,7 +44,6 @@ public struct Group: Identifiable {
         unDeletable = true
     }
     
-    
     public func isCalculatedPaymentType() -> Bool {
         var bolIsCalcPayment: Bool = false
         
@@ -53,6 +52,29 @@ public struct Group: Identifiable {
         }
         
         return bolIsCalcPayment
+    }
+    
+    public func getTotalPayments() -> Decimal {
+        let myAmount: Decimal = self.amount.toDecimal()
+        let numberOfPayments: Decimal = Decimal(self.noOfPayments)
+        let totalPayments: Decimal = myAmount * numberOfPayments
+        
+        return totalPayments
+    }
+    
+    public func copyGroup() -> Group {
+        var myGroup = Group()
+        myGroup.amount = self.amount
+        myGroup.endDate = self.endDate
+        myGroup.locked = self.locked
+        myGroup.noOfPayments = self.noOfPayments
+        myGroup.startDate = self.startDate
+        myGroup.timing = self.timing
+        myGroup.paymentType = self.paymentType
+        myGroup.isInterim = false
+        myGroup.unDeletable = false
+        
+        return myGroup
     }
     
     public func clone() -> Group {

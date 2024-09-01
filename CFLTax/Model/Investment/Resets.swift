@@ -39,28 +39,71 @@ extension Investment {
     }
     
     //Mark - Frequency Resets
-    func resetForFrequencyChange() {
+    func resetForFrequencyChange(oldFrequently: Frequency) {
         var start = 0
         var bolInterimExists: Bool = false
         if self.rent.groups[0].isInterim {
             bolInterimExists = true
             start = 1
         }
-
+        
+        
         for x in start..<self.rent.groups.count {
             let groupTermInMons: Decimal = Decimal(monthsDiff(start: self.rent.groups[x].startDate, end: self.rent.groups[x].endDate))
             var newNoOfPayments: Decimal = 1.0
+            var myAmount:Decimal = self.rent.groups[x].amount.toDecimal()
                 switch self.leaseTerm.paymentFrequency {
                 case .monthly:
                     newNoOfPayments = groupTermInMons
+                    switch oldFrequently {
+                    case .quarterly:
+                        myAmount = myAmount / 3.0
+                    case .semiannual:
+                        myAmount = myAmount / 6.0
+                    case .annual:
+                        myAmount = myAmount / 12.0
+                    default:
+                        break
+                    }
                 case .quarterly:
                     newNoOfPayments = groupTermInMons / 3
+                    switch oldFrequently {
+                    case .monthly:
+                        myAmount = myAmount * 3.0
+                    case .semiannual:
+                        myAmount = myAmount / 2.0
+                    case .annual:
+                        myAmount = myAmount / 4.0
+                    default:
+                        break
+                    }
                 case .semiannual:
                     newNoOfPayments = groupTermInMons / 6
+                    switch oldFrequently {
+                    case .monthly:
+                        myAmount = myAmount * 6.0
+                    case .quarterly:
+                        myAmount = myAmount * 2.0
+                    case .annual:
+                        myAmount = myAmount / 2.0
+                    default:
+                        break
+                    }
                 case .annual:
                     newNoOfPayments = groupTermInMons / 12
+                    switch oldFrequently {
+                    case .monthly:
+                        myAmount = myAmount * 12.0
+                    case .quarterly:
+                        myAmount = myAmount * 4.0
+                    case .semiannual:
+                        myAmount = myAmount * 2.0
+                    default :
+                        break
+                    }
                 }
             self.rent.groups[x].noOfPayments = newNoOfPayments.toInteger()
+            self.rent.groups[x].amount = myAmount.toString(decPlaces: 4)
         }
 
         resetFirstGroup(isInterim: bolInterimExists)

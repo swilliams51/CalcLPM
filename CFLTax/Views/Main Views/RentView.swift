@@ -74,7 +74,7 @@ extension RentView {
         let idx = myInvestment.rent.groups.count - 1
         let maxNoPayments = myInvestment.rent.getNumberOfPaymentsForNewGroup(aGroup: myInvestment.rent.groups[idx], aFrequency: myInvestment.leaseTerm.paymentFrequency, eomRule: myInvestment.leaseTerm.endOfMonthRule, referDate: myInvestment.leaseTerm.baseCommenceDate)
         if maxNoPayments > 0 {
-            var newGroup = myInvestment.rent.groups[idx].clone()
+            var newGroup = myInvestment.rent.groups[idx].copyGroup()
             newGroup.noOfPayments = maxNoPayments
             self.myInvestment.rent.addGroup(groupToAdd: newGroup)
             self.myInvestment.resetFirstGroup(isInterim: interimExists)
@@ -174,10 +174,10 @@ extension RentView {
     private var totalAmounts: some View {
         HStack {
           
-            Text("\(noOfPayments)")
+            Text("\(myInvestment.rent.getTotalNumberOfPayments())")
                 .font(myFont2)
             Spacer()
-            Text("\(amountFormatter(amount: totalRent, locale: myLocale))")
+            Text("\(amountFormatter(amount: myInvestment.rent.getTotalAmountOfPayments(aFreq: myInvestment.leaseTerm.paymentFrequency).toString(), locale: myLocale))")
                 .font(myFont2)
             
         }

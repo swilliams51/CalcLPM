@@ -14,6 +14,7 @@ struct LeaseTermView: View {
     
     @State var baseCommenceDate: Date = Date()
     @State var myPaymentFrequency: Frequency = .monthly
+    @State var paymentFrequencyOnEntry: Frequency = .monthly
     @State var endOfMonthRule: Bool = false
     @State var baseTermInMonths: Int = 12
     @State var showPopover: Bool = false
@@ -42,6 +43,7 @@ struct LeaseTermView: View {
         
         .onAppear {
             self.baseCommenceDate = myInvestment.leaseTerm.baseCommenceDate
+            self.paymentFrequencyOnEntry = myInvestment.leaseTerm.paymentFrequency
             self.myPaymentFrequency = myInvestment.leaseTerm.paymentFrequency
             self.endOfMonthRule = myInvestment.leaseTerm.endOfMonthRule
         }
@@ -77,7 +79,7 @@ struct LeaseTermView: View {
             Text("Frequency:")
                 .font(myFont2)
             Picker(selection: $myPaymentFrequency, label: Text("")) {
-                ForEach(Frequency.three, id: \.self) { item in
+                ForEach(Frequency.allCases, id: \.self) { item in
                    Text(item.toString())
                         .font(myFont2)
 
@@ -116,7 +118,7 @@ struct LeaseTermView: View {
         }
         if self.myInvestment.leaseTerm.paymentFrequency != self.myPaymentFrequency{
             self.myInvestment.leaseTerm.paymentFrequency = self.myPaymentFrequency
-            self.myInvestment.resetForFrequencyChange()
+            self.myInvestment.resetForFrequencyChange(oldFrequently: paymentFrequencyOnEntry)
         }
         
         self.myInvestment.leaseTerm.endOfMonthRule = self.endOfMonthRule

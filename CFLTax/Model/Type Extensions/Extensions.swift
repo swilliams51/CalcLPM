@@ -116,22 +116,7 @@ extension String {
         }
     }
 }
-extension String {
-    func toFrequency() -> Frequency {
-        switch self {
-        case "Monthly":
-            return .monthly
-        case "Quarterly":
-            return .quarterly
-        case "Semiannual":
-            return .semiannual
-        case "Annual":
-            return .annual
-        default:
-            return .monthly
-        }
-    }
-}
+
 
 extension String {
     func toBool() -> Bool {

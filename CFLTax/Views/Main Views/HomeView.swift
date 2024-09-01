@@ -144,7 +144,11 @@ struct HomeView: View {
         }
         .contentShape(Rectangle())
         .onTapGesture {
-            path.append(25)
+            if myInvestment.yieldCalculationIsValid() == true {
+                path.append(25)
+            } else {
+                print("Calculation of yield is invalid")
+            }
         }
     }
     

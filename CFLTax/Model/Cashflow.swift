@@ -122,6 +122,12 @@ public class Cashflows {
     func XIRR2(guessRate: Decimal, _DayCountMethod: DayCountMethod) -> Decimal {
         var irr: Decimal = guessRate
         var y: Decimal = XNPV(aDiscountRate: irr, aDayCountMethod: _DayCountMethod)
+        let y2 = XNPV(aDiscountRate: 0.00, aDayCountMethod: _DayCountMethod)
+        
+        if y2 < 0.0 {
+            irr = mxbFactor(factor1: irr, value1: y, factor2: 0.0, value2: y2)
+            y = XNPV(aDiscountRate: irr, aDayCountMethod: _DayCountMethod)
+        }
         var iCount: Int = 1
         
         while abs(y) > tolerancePaymentAmounts {
