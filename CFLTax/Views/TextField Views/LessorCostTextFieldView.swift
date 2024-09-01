@@ -149,7 +149,7 @@ extension LessorCostTextFieldView {
     }
     
     func updateForLessorCost() {
-        if isAmountValid(strAmount: myAmount, decLow: 0.0, decHigh: maximumLessorCost.toDecimal(), inclusiveLow: true, inclusiveHigh: true) == false {
+        if isAmountValid(strAmount: myAmount, decLow: minimumLessorCost.toDecimal(), decHigh: maximumLessorCost.toDecimal(), inclusiveLow: true, inclusiveHigh: true) == false {
             self.myAmount = self.amountOnEntry
             alertTitle = alertMaxAmount
             showAlert.toggle()

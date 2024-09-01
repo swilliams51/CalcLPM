@@ -17,6 +17,8 @@ struct ReportsManagerView: View {
         Form{
             leaseRentalsItem
             depreciationScheduleItem
+            taxableIncomeItem
+            taxesPaidItem
             beforeTaxLeaseCashflowsItem
             afterTaxLeaseCashflowsItem
         }
@@ -53,6 +55,33 @@ struct ReportsManagerView: View {
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(22)
+        }
+    }
+    
+    var taxableIncomeItem: some View {
+        HStack {
+            Text("Taxable Income")
+                .font(myFont2)
+            Spacer()
+            Image(systemName: "chevron.right")
+                
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            path.append(33)
+        }
+    }
+    
+    var taxesPaidItem: some View {
+        HStack{
+        Text("Taxes Paid")
+                .font(myFont2)
+            Spacer()
+            Image(systemName: "chevron.right")
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            path.append(34)
         }
     }
     

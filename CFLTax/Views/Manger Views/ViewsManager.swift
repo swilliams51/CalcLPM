@@ -89,6 +89,10 @@ struct ViewsManager: View {
             Text("Preferences")
         case 32:
             Text("About")
+        case 33:
+            Text("Taxable Income Report")
+        case 34:
+            Text("Taxes Paid Report")
         default:
             Text("Hello")
         }
