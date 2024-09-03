@@ -40,6 +40,20 @@ public class AnnualTaxableIncomes: CollCashflows {
         self.addCashflows(myFeeIncomes)
     }
     
+    public func createNetTaxableIncomes(aInvestment: Investment) -> Cashflows {
+        self.createTable(aInvestment: aInvestment)
+        self.netCashflows()
+        
+        let annualTaxableIncome: Cashflows = Cashflows()
+        for x in 0..<items[0].count() {
+            let item: Cashflow = items[0].items[x]
+            annualTaxableIncome.add(item: item)
+        }
+        
+        self.items.removeAll()
+        return annualTaxableIncome
+    }
+    
     public func createPeriodicTaxesPaid_STD(aInvestment: Investment) -> Cashflows {
         self.createTable(aInvestment: aInvestment)
         self.netCashflows()

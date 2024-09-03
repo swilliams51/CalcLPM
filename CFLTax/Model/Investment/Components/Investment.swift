@@ -105,12 +105,18 @@ public class Investment {
     
     public func yieldCalculationIsValid() -> Bool {
         var isValid: Bool = true
-        let tempInvestment: Investment = self.clone()
-        tempInvestment.setAfterTaxCashflows()
-        if tempInvestment.afterTaxCashflows.getTotal() < 0 {
-            isValid = false
-        }
-        tempInvestment.afterTaxCashflows.removeAll()
+//        let tempInvestment: Investment = self.clone()
+//        tempInvestment.setAfterTaxCashflows()
+//        if tempInvestment.afterTaxCashflows.getTotal() < 0 {
+//            isValid = false
+//        }
+//        tempInvestment.afterTaxCashflows.removeAll()
+//        
+//        tempInvestment.setBeforeTaxCashflows()
+//        if tempInvestment.beforeTaxCashflows.getTotal() < 0 {
+//            isValid = false
+//        }
+//        tempInvestment.beforeTaxCashflows.removeAll()
         
         return isValid
     }

@@ -11,6 +11,7 @@ struct ViewsManager: View {
     @Bindable var myInvestment: Investment
     @Bindable var myDepreciationSchedule: DepreciationIncomes
     @Bindable var myRentalSchedule: RentalCashflows
+    @Bindable var myTaxableIncomes: AnnualTaxableIncomes
     @Binding var path: [Int]
     @Binding var isDark: Bool
     @Binding var selectedGroup: Group
@@ -90,9 +91,9 @@ struct ViewsManager: View {
         case 32:
             Text("About")
         case 33:
-            Text("Taxable Income Report")
+            TaxableIncomeView(myInvestment: myInvestment, myTaxableIncomes: myTaxableIncomes, path: $path, isDark: $isDark)
         case 34:
-            Text("Taxes Paid Report")
+            TaxesPaidView(myInvestment: myInvestment, myTaxableIncomes: myTaxableIncomes, path: $path, isDark: $isDark)
         default:
             Text("Hello")
         }
@@ -100,5 +101,5 @@ struct ViewsManager: View {
 }
 
 #Preview {
-    ViewsManager(myInvestment: Investment(), myDepreciationSchedule: DepreciationIncomes(), myRentalSchedule: RentalCashflows(), path: .constant([Int]()), isDark: .constant(false), selectedGroup: .constant(Group()), selectedView: 22)
+    ViewsManager(myInvestment: Investment(), myDepreciationSchedule: DepreciationIncomes(), myRentalSchedule: RentalCashflows(), myTaxableIncomes: AnnualTaxableIncomes(), path: .constant([Int]()), isDark: .constant(false), selectedGroup: .constant(Group()), selectedView: 22)
 }

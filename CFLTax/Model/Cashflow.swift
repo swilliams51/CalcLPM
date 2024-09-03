@@ -121,20 +121,47 @@ public class Cashflows {
     
     func XIRR2(guessRate: Decimal, _DayCountMethod: DayCountMethod) -> Decimal {
         var irr: Decimal = guessRate
-        var y: Decimal = XNPV(aDiscountRate: irr, aDayCountMethod: _DayCountMethod)
-        let y2 = XNPV(aDiscountRate: 0.00, aDayCountMethod: _DayCountMethod)
+        let y2: Decimal = XNPV(aDiscountRate: 0.00, aDayCountMethod: _DayCountMethod)
         
         if y2 < 0.0 {
-            irr = mxbFactor(factor1: irr, value1: y, factor2: 0.0, value2: y2)
-            y = XNPV(aDiscountRate: irr, aDayCountMethod: _DayCountMethod)
+            irr = guessRate * -1.0
+            irr = XIRRForNegative(guessRate: irr, _DayCountMethod: _DayCountMethod)
+        } else {
+            irr = XIRRForPositive(guessRate: irr, _DayCountMethod: _DayCountMethod)
         }
+       
+       return irr
+    }
+    
+    func XIRRForPositive(guessRate: Decimal, _DayCountMethod: DayCountMethod) -> Decimal{
+        var irr: Decimal = guessRate
+        var y: Decimal = XNPV(aDiscountRate: irr, aDayCountMethod: _DayCountMethod)
         var iCount: Int = 1
         
         while abs(y) > tolerancePaymentAmounts {
             if y > 0.0 {
-                irr = incrementRate(x1: irr, y1: y, iCounter: iCount, _DayCountMethod: _DayCountMethod)
+                irr = incrementRateForPositive(x1: irr, y1: y, iCounter: iCount, _DayCountMethod: _DayCountMethod)
             } else {
-                irr = decrementRate(x1: irr, y1: y, iCounter: iCount, _DayCountMethod: _DayCountMethod)
+                irr = decrementRateForPositive(x1: irr, y1: y, iCounter: iCount, _DayCountMethod: _DayCountMethod)
+            }
+            y =  XNPV(aDiscountRate: irr, aDayCountMethod: _DayCountMethod)
+            iCount += 1
+        }
+        
+       return irr
+        
+    }
+    
+    func XIRRForNegative(guessRate: Decimal, _DayCountMethod: DayCountMethod) -> Decimal{
+        var irr: Decimal = guessRate
+        var y: Decimal = XNPV(aDiscountRate: irr, aDayCountMethod: _DayCountMethod)
+        var iCount: Int = 1
+        
+        while abs(y) > tolerancePaymentAmounts {
+            if y > 0.0 {
+                irr = incrementRateForNegative(x1: irr, y1: y, iCounter: iCount, _DayCountMethod: _DayCountMethod)
+            } else {
+                irr = decrementRateForNegative(x1: irr, y1: y, iCounter: iCount, _DayCountMethod: _DayCountMethod)
             }
             y =  XNPV(aDiscountRate: irr, aDayCountMethod: _DayCountMethod)
             iCount += 1
@@ -143,7 +170,7 @@ public class Cashflows {
        return irr
     }
     
-    func incrementRate(x1: Decimal, y1: Decimal, iCounter: Int, _DayCountMethod: DayCountMethod) -> Decimal {
+    func incrementRateForPositive(x1: Decimal, y1: Decimal, iCounter: Int, _DayCountMethod: DayCountMethod) -> Decimal {
         //when NPV > 0.0
         var newX: Decimal = x1
         var newY: Decimal = y1
@@ -157,7 +184,20 @@ public class Cashflows {
         return mxbFactor(factor1: x1, value1: y1, factor2: newX, value2: newY)
     }
     
-    func decrementRate(x1: Decimal, y1: Decimal, iCounter: Int, _DayCountMethod: DayCountMethod) -> Decimal {
+    func incrementRateForNegative(x1: Decimal, y1: Decimal, iCounter: Int, _DayCountMethod: DayCountMethod) ->   Decimal {
+        var newX: Decimal = x1
+        var newY: Decimal = y1
+        let factor: Decimal = power(base: 10.0, exp: iCounter)
+        
+        while newY > 0.0 {
+            newX = newX - newX / factor
+            newY = XNPV(aDiscountRate: newX, aDayCountMethod: _DayCountMethod)
+        }
+        
+        return mxbFactor(factor1: x1, value1: y1, factor2: newX, value2: newY)
+    }
+    
+    func decrementRateForPositive(x1: Decimal, y1: Decimal, iCounter: Int, _DayCountMethod: DayCountMethod) -> Decimal {
         //when NPV < 0.0
         var newX: Decimal = x1
         var newY: Decimal = y1
@@ -165,6 +205,19 @@ public class Cashflows {
         
         while newY < 0.0 {
             newX = newX - newX / factor
+            newY = XNPV(aDiscountRate: newX, aDayCountMethod: _DayCountMethod)
+        }
+        
+        return mxbFactor(factor1: x1, value1: y1, factor2: newX, value2: newY)
+    }
+    
+    func decrementRateForNegative(x1: Decimal, y1: Decimal, iCounter: Int, _DayCountMethod: DayCountMethod) -> Decimal {
+        var newX: Decimal = x1
+        var newY: Decimal = y1
+        let factor: Decimal = power(base: 10.0, exp: iCounter)
+        
+        while newY < 0.0 {
+            newX = newX + newX / factor
             newY = XNPV(aDiscountRate: newX, aDayCountMethod: _DayCountMethod)
         }
         

@@ -52,7 +52,7 @@ struct DepreciationView: View {
             self.myLife = myInvestment.depreciation.life
             self.myConvention = myInvestment.depreciation.convention
             self.myBonus = myInvestment.depreciation.bonusDeprecPercent.toString(decPlaces: 4)
-            self.myITC = myInvestment.depreciation.bonusDeprecPercent.toString()
+            self.myITC = myInvestment.depreciation.investmentTaxCredit.toString(decPlaces: 4)
             self.myBasisReduction = myInvestment.depreciation.basisReduction.toString()
             self.mySalvageValue = myInvestment.depreciation.salvageValue
         }
