@@ -11,7 +11,9 @@ struct FileMenuView: View {
     @Bindable var myInvestment: Investment
     @Binding var path: [Int]
     @Binding var isDark: Bool
-    
+    @Binding var currentFile: String
+    @State private var fm = LocalFileManager()
+    @State private var isShowingFileNameAlert: Bool = false
     
     var body: some View {
         Form {
@@ -66,12 +68,23 @@ struct FileMenuView: View {
             Text("Save")
                 .font(myFont2)
             Spacer()
-            Image(systemName: "chevron.right")
+            Image(systemName: "return")
         }
         .contentShape(Rectangle())
         .onTapGesture {
-            path.append(28)
+            if currentFile == "File is New" {
+                self.isShowingFileNameAlert = true
+            } else {
+                let strInvestmentData: String = myInvestment.writeInvestment()
+                fm.fileSaveAs(strDataFile: strInvestmentData, fileName: currentFile)
+                self.path.removeLast()
+            }
+           
         }
+        .alert(isPresented: $isShowingFileNameAlert) {
+            Alert(title: Text("Invalid File Name Error"), message: Text(invalidFileNameMessage), dismissButton: .default(Text("OK")))
+        }
+        
     }
     
     var saveAsFileItem: some View {
@@ -129,5 +142,8 @@ struct FileMenuView: View {
 }
 
 #Preview {
-    FileMenuView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false))
+    FileMenuView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false), currentFile: .constant("File is New"))
 }
+
+
+let invalidFileNameMessage: String = "Cannot save the file under name - File is New.  Select File Save As and then rename the file."

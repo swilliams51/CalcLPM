@@ -152,14 +152,39 @@ extension Investment {
     }
     
     func resetToDefault() {
-        self.asset = simple2Asset
-        self.leaseTerm = simple2LeaseTerm
-        self.rent = simple2Rent
-        self.depreciation = simpleDepreciation
-        self.taxAssumptions = simpleTaxAssumptions
-        self.economics = simpleEconomics
-        self.fee = simpleFee
-        self.earlyBuyout = eboEx1
+        let arrayInvestment: [String] = sampleFile.components(separatedBy: "*")
+        
+        self.asset = readAsset(arrayAsset:  arrayInvestment[0].components(separatedBy: ","))
+        self.leaseTerm = readLeaseTerm(arrayLeaseTerm: arrayInvestment[1].components(separatedBy: ","))
+        self.rent = readRent(arrayGroups: arrayInvestment[2].components(separatedBy: "|"))
+        self.depreciation = readDepreciation(arrayDepreciation: arrayInvestment[3].components(separatedBy: ","))
+        self.taxAssumptions = readTaxAssumptions(arrayTaxAssumptions: arrayInvestment[4].components(separatedBy: ","))
+        self.economics = readEconomics(arrayEconomics: arrayInvestment[5].components(separatedBy: ","))
+        self.fee = readFee(arrayFee: arrayInvestment[6].components(separatedBy: ","))
+        self.earlyBuyout = readEarlyBuyout(arrayEBO: arrayInvestment[7].components(separatedBy: ","))
+    }
+    
+    func resetToFileData(strFile: String) {
+        let arrayInvestment: [String] = strFile.components(separatedBy: "*")
+        
+        let myAsset: Asset = readAsset(arrayAsset:  arrayInvestment[0].components(separatedBy: ","))
+        let myLeaseTerm: LeaseTerm = readLeaseTerm(arrayLeaseTerm: arrayInvestment[1].components(separatedBy: ","))
+        let myRent: Rent = readRent(arrayGroups: arrayInvestment[2].components(separatedBy: "|"))
+        let myDepreciation: Depreciation = readDepreciation(arrayDepreciation: arrayInvestment[3].components(separatedBy: ","))
+        let myTaxAssumptions: TaxAssumptions = readTaxAssumptions(arrayTaxAssumptions: arrayInvestment[4].components(separatedBy: ","))
+        let myEBO: EarlyBuyout = readEarlyBuyout(arrayEBO: arrayInvestment[5].components(separatedBy: ","))
+        let myFee: Fee = readFee(arrayFee: arrayInvestment[6].components(separatedBy: ","))
+        let myEconomics: Economics = readEconomics(arrayEconomics: arrayInvestment[7].components(separatedBy: ","))
+        
+        self.asset = myAsset
+        self.leaseTerm = myLeaseTerm
+        self.rent = myRent
+        self.depreciation = myDepreciation
+        self.taxAssumptions = myTaxAssumptions
+        self.economics = myEconomics
+        self.fee = myFee
+        self.earlyBuyout = myEBO
+        
     }
     
 }

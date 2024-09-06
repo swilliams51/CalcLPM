@@ -13,11 +13,11 @@ public class Investment {
     var asset: Asset = simple2Asset
     var leaseTerm: LeaseTerm = simple2LeaseTerm
     var rent: Rent = simple2Rent
-    var depreciation: Depreciation = simpleDepreciation
-    var taxAssumptions: TaxAssumptions = simpleTaxAssumptions
-    var economics: Economics = simpleEconomics
-    var fee: Fee = simpleFee
-    var earlyBuyout: EarlyBuyout = eboEx1
+    var depreciation: Depreciation = simple2Depreciation
+    var taxAssumptions: TaxAssumptions = simple2TaxAssumptions
+    var economics: Economics = simple2Economics
+    var fee: Fee = simple2Fee
+    var earlyBuyout: EarlyBuyout = simple2EBO
     var afterTaxCashflows: Cashflows = Cashflows()
     var beforeTaxCashflows: Cashflows = Cashflows()
     var earlyBuyoutExists: Bool = false
@@ -105,18 +105,19 @@ public class Investment {
     
     public func yieldCalculationIsValid() -> Bool {
         var isValid: Bool = true
-//        let tempInvestment: Investment = self.clone()
-//        tempInvestment.setAfterTaxCashflows()
-//        if tempInvestment.afterTaxCashflows.getTotal() < 0 {
-//            isValid = false
-//        }
-//        tempInvestment.afterTaxCashflows.removeAll()
-//        
-//        tempInvestment.setBeforeTaxCashflows()
-//        if tempInvestment.beforeTaxCashflows.getTotal() < 0 {
-//            isValid = false
-//        }
-//        tempInvestment.beforeTaxCashflows.removeAll()
+        let tempInvestment: Investment = self.clone()
+        
+        tempInvestment.setAfterTaxCashflows()
+        if tempInvestment.afterTaxCashflows.getTotal() < 0 {
+            isValid = false
+        }
+        tempInvestment.afterTaxCashflows.removeAll()
+        
+        tempInvestment.setBeforeTaxCashflows()
+        if tempInvestment.beforeTaxCashflows.getTotal() < 0 {
+            isValid = false
+        }
+        tempInvestment.beforeTaxCashflows.removeAll()
         
         return isValid
     }

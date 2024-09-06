@@ -30,23 +30,30 @@ extension Investment {
             yield = yield * (1.0 - self.taxAssumptions.federalTaxRate.toDecimal())
         }
         
-        var factor: Decimal = 1.0
+        var prevFactor: Decimal = 1.0
         var y = tempInvestment.afterTaxCashflows.XNPV(aDiscountRate: yield, aDayCountMethod: self.economics.dayCountMethod)
         var iCount = 1
+//        for x in 0..<tempInvestment.afterTaxCashflows.count() {
+//            print("Date: \(tempInvestment.afterTaxCashflows.items[x].dueDate) Amount: \(tempInvestment.afterTaxCashflows.items[x].amount)")
+//        }
+//        print("End")
         
+        var currFactor = prevFactor
         while abs(y) > tolerancePaymentAmounts {
             if y > 0.0 {
-                factor = decrementFactor_AT(aInvestment: tempInvestment, discountRate: yield,x1: factor, y1: y, iCounter: iCount)
+                currFactor = decrementFactor_AT(aInvestment: tempInvestment, discountRate: yield,x1: prevFactor, y1: y, iCounter: iCount)
             } else {
-                factor = incrementFactor_AT(aInvestment:tempInvestment, discountRate: yield, x1: factor, y1: y, iCounter: iCount)
+                currFactor = incrementFactor_AT(aInvestment:tempInvestment, discountRate: yield, x1: prevFactor, y1: y, iCounter: iCount)
             }
-            y = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: factor, discountRate: yield)
+            y = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: currFactor, discountRate: yield)
+           
             iCount += 1
+            prevFactor = currFactor
         }
         //Then adjust the payments in the actual investment
         for x in 0..<self.rent.groups.count {
             if self.rent.groups[x].locked == false {
-                let newAmount = self.rent.groups[x].amount.toDecimal() * factor
+                let newAmount = self.rent.groups[x].amount.toDecimal() * currFactor
                 self.rent.groups[x].amount = newAmount.toString()
             }
         }
@@ -87,12 +94,19 @@ extension Investment {
         
         for x in 0..<tempInvestment.rent.groups.count {
             if tempInvestment.rent.groups[x].locked == false {
-                let newAmount: Decimal = tempInvestment.rent.groups[x].amount.toDecimal() * aFactor
+                var newAmount: Decimal = tempInvestment.rent.groups[x].amount.toDecimal()
+                newAmount = newAmount * aFactor
                 tempInvestment.rent.groups[x].amount = newAmount.toString()
             }
         }
         
+        
         tempInvestment.setAfterTaxCashflows()
+        for x in 0..<tempInvestment.afterTaxCashflows.count() {
+            print("Date: \(tempInvestment.afterTaxCashflows.items[x].dueDate) Amount: \(tempInvestment.afterTaxCashflows.items[x].amount)")
+        }
+        print("End")
+       
         let myNPV: Decimal = tempInvestment.afterTaxCashflows.XNPV(aDiscountRate: discountRate, aDayCountMethod: self.economics.dayCountMethod)
         
         return myNPV

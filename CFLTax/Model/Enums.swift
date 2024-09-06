@@ -173,7 +173,7 @@ public enum ConventionType {
     public func toString() -> String {
         switch self {
         case .halfYear:
-            return " Half_Year"
+            return "Half_Year"
         case .midMonth:
             return "Mid_Month"
         default:
@@ -197,8 +197,6 @@ extension String {
             return .halfYear
         }
     }
-    
-    
 }
 
 public enum DayCountMethod: Int {
@@ -236,12 +234,12 @@ extension String {
             return .actualThreeSixtyFive
         case "Actual/Actual":
             return .actualActual
-        default :
+        case "Actual/360":
             return .actualThreeSixty
+        default:
+            return .thirtyThreeSixty
         }
     }
-    
-    
 }
 
 

@@ -18,7 +18,7 @@ struct PopoverView: View {
             helpContent
         }
         .frame(width: 300, height: 500)
-        .background(.blue)
+        .background(Color.theme.popOver)
         .cornerRadius(25.0)
         .environment(\.colorScheme, isDark ? .dark : .light)
     }

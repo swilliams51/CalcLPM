@@ -20,11 +20,11 @@ extension Investment {
         let strRent: String = writeRent(aRent: self.rent)
         let strDepreciation: String = writeDepreciation(aDepreciation: self.depreciation)
         let strTaxAssumptions: String = writeTaxAssumptions(aTaxAssumptions: self.taxAssumptions)
-        let strEBO: String = writeEBO(aEBO: self.earlyBuyout)
-        let strFee: String = writeFee(aFee: self.fee)
         let strEconomics: String = writeEconomics(aEconomics: self.economics)
+        let strFee: String = writeFee(aFee: self.fee)
+        let strEBO: String = writeEBO(aEBO: self.earlyBuyout)
         
-        let investmentProperties: Array = [strAsset, strLeaseTerm, strRent, strDepreciation, strTaxAssumptions, strEBO, strFee, strEconomics]
+        let investmentProperties: Array = [strAsset, strLeaseTerm, strRent, strDepreciation, strTaxAssumptions, strEconomics, strFee, strEBO]
         
         return investmentProperties.joined(separator: "*")
     }
@@ -37,9 +37,9 @@ extension Investment {
         let myRent: Rent = readRent(arrayGroups: arrayInvestment[2].components(separatedBy: "|"))
         let myDepreciation: Depreciation = readDepreciation(arrayDepreciation: arrayInvestment[3].components(separatedBy: ","))
         let myTaxAssumptions: TaxAssumptions = readTaxAssumptions(arrayTaxAssumptions: arrayInvestment[4].components(separatedBy: ","))
-        let myEBO: EarlyBuyout = readEarlyBuyout(arrayEBO: arrayInvestment[5].components(separatedBy: ","))
+        let myEconomics: Economics = readEconomics(arrayEconomics: arrayInvestment[5].components(separatedBy: ","))
         let myFee: Fee = readFee(arrayFee: arrayInvestment[6].components(separatedBy: ","))
-        let myEconomics: Economics = readEconomics(arrayEconomics: arrayInvestment[7].components(separatedBy: ","))
+        let myEBO: EarlyBuyout = readEarlyBuyout(arrayEBO: arrayInvestment[7].components(separatedBy: ","))
         
         let myInvestment: Investment = Investment(aAsset: myAsset, aLeaseTerm: myLeaseTerm, aRent: myRent, aDepreciation: myDepreciation, aTaxAssumptions: myTaxAssumptions, aEconomics: myEconomics, aFee: myFee, aEarlyBuyout: myEBO)
         
@@ -53,6 +53,7 @@ extension Investment {
         let strResidualValue: String = aAsset.residualValue
         let strLesseeGuaranty: String = aAsset.lesseeGuarantyAmount
         let strThirdPartyGuaranty: String = aAsset.thirdPartyGuarantyAmount
+        
         let assetProperties: Array = [strName, strCost, strFundingDate, strResidualValue, strLesseeGuaranty, strThirdPartyGuaranty]
         let strAsset = assetProperties.joined(separator: ",")
         
@@ -63,6 +64,7 @@ extension Investment {
         let strBaseCommence = aLeaseTerm.baseCommenceDate.toStringDateShort(yrDigits: 4)
         let strPaymentFrequency: String = aLeaseTerm.paymentFrequency.toString()
         let strEOMRule: String = aLeaseTerm.endOfMonthRule.toString()
+        
         let leaseTermProperties: Array = [strBaseCommence, strPaymentFrequency, strEOMRule]
         let strLeaseTerm = leaseTermProperties.joined(separator: ",")
         
@@ -91,6 +93,7 @@ extension Investment {
         let strType: String = aGroup.paymentType.toString()
         let strIsInterim: String = aGroup.isInterim.toString()
         let strUndeletable: String = aGroup.unDeletable.toString()
+        
         let groupProperties: Array = [strAmount, strEndDate, strLocked, strNoOfPayments, strStartDate, strTiming, strType, strUndeletable, strIsInterim]
         let strGroupProperties = groupProperties.joined(separator: ",")
         
@@ -118,6 +121,7 @@ extension Investment {
         let strFederalTaxRate: String = aTaxAssumptions.federalTaxRate
         let strFiscalMonthEnd: String = aTaxAssumptions.fiscalMonthEnd.rawValue.toString()
         let strDayOfMonthTaxesPaid: String = aTaxAssumptions.dayOfMonPaid.toString()
+        
         let taxAssumptionsProperties: Array = [strFederalTaxRate, strFiscalMonthEnd, strDayOfMonthTaxesPaid]
         let strTaxAssumptionsProperties = taxAssumptionsProperties.joined(separator: ",")
         
@@ -131,6 +135,7 @@ extension Investment {
         let strDayCountMethod: String = aEconomics.dayCountMethod.toString()
         let strDiscountRateForRent: String = aEconomics.discountRateForRent
         let strSinkingFundRate: String = aEconomics.sinkingFundRate
+        
         let economicsProperties: Array = [strYieldMethod, strYieldTarget, strSolveFor, strDayCountMethod, strDiscountRateForRent, strSinkingFundRate]
         let strEconomicsProperties = economicsProperties.joined(separator: ",")
         
@@ -141,6 +146,7 @@ extension Investment {
         let strAmount: String = aFee.amount
         let strFeeType: String = aFee.feeType.toString()
         let strDatePaid: String = aFee.datePaid.toStringDateShort(yrDigits: 4)
+        
         let feeProperties: Array = [strAmount, strFeeType, strDatePaid]
         let strFeeProperties = feeProperties.joined(separator: ",")
         
@@ -151,13 +157,12 @@ extension Investment {
         let strEboAmount: String = aEBO.amount
         let strExerciseDate: String = aEBO.exerciseDate.toStringDateShort(yrDigits: 4)
         let strRentDueIsPaid: String = aEBO.rentDueIsPaid.toString()
+        
         let eboProperties: Array = [strEboAmount, strExerciseDate, strRentDueIsPaid]
         let strEBOProperties = eboProperties.joined(separator: ",")
         
         return strEBOProperties
     }
-    
-    
     
     //Read Investment Components
     public func readAsset(arrayAsset: [String]) -> Asset {

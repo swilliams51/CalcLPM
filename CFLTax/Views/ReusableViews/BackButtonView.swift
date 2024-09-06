@@ -21,7 +21,7 @@ struct BackButtonView: View {
                 Text(buttonName)
             }
         }
-        .tint(.blue)
+        .tint(Color.theme.accent)
         .onAppear{
             if path.count == 1 {
                 buttonName = "Home"

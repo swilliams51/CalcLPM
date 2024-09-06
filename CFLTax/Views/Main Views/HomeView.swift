@@ -12,16 +12,17 @@ struct HomeView: View {
     @State public var path: [Int] = [Int]()
     @State public var isDark: Bool = false
     @State var selectedGroup: Group = Group()
-    @State var  index: Int = 0
+    @State var index: Int = 0
     @State var myDepreciationSchedule: DepreciationIncomes = DepreciationIncomes()
     @State var myRentalSchedule: RentalCashflows = RentalCashflows()
     @State var myTaxableIncomes: AnnualTaxableIncomes = AnnualTaxableIncomes()
+    @State var isShowingYieldErrorAlert: Bool = false
+    @State var currentFile: String = "File is New"
 
-    
     var body: some View {
         NavigationStack (path: $path){
             Form {
-                Section(header: Text("Parameters")) {
+                Section(header: Text("Parameters"), footer: (Text("FileName: \(currentFile)"))) {
                     assetItem
                     LeaseTermItem
                     rentItem
@@ -38,7 +39,7 @@ struct HomeView: View {
             .environment(\.colorScheme, isDark ? .dark : .light)
             .navigationBarTitle("Home")
             .navigationDestination(for: Int.self) { selectedView in
-                ViewsManager(myInvestment: myInvestment, myDepreciationSchedule: myDepreciationSchedule, myRentalSchedule: myRentalSchedule, myTaxableIncomes: myTaxableIncomes, path: $path, isDark: $isDark, selectedGroup: $selectedGroup, selectedView: selectedView)
+                ViewsManager(myInvestment: myInvestment, myDepreciationSchedule: myDepreciationSchedule, myRentalSchedule: myRentalSchedule, myTaxableIncomes: myTaxableIncomes, path: $path, isDark: $isDark, selectedGroup: $selectedGroup, currentFile: $currentFile, selectedView: selectedView)
             }
         }
     }
@@ -145,11 +146,16 @@ struct HomeView: View {
         }
         .contentShape(Rectangle())
         .onTapGesture {
+            print("\(myInvestment.writeInvestment())")
             if myInvestment.yieldCalculationIsValid() == true {
                 path.append(25)
             } else {
+                self.isShowingYieldErrorAlert = true
                 print("Calculation of yield is invalid")
             }
+        }
+        .alert(isPresented: $isShowingYieldErrorAlert) {
+            Alert(title: Text("Yield Calculation Error"), message: Text(yieldCalcMessage), dismissButton: .default(Text("OK")))
         }
     }
     
@@ -173,3 +179,5 @@ struct HomeView: View {
     HomeView(myInvestment: Investment())
 }
 
+
+let yieldCalcMessage = "The current inputs will produce a negative yield. Consequently, the yield calculation is terminated. The sum of the Rents and the Residual Value must be greater than the Lessor Cost."

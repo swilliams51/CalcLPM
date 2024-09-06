@@ -32,7 +32,7 @@ struct FormCancelButton: View {
     
     var body: some View {
         Text (name)
-            .foregroundColor(.blue)
+            .foregroundColor(Color.theme.accent)
             .onTapGesture {
                 cancel()
             }
@@ -46,7 +46,7 @@ struct FormSubmitButton: View {
     
     var body: some View {
         Text(name)
-            .foregroundColor(.blue)
+            .foregroundColor(Color.theme.accent)
             .onTapGesture {
                 done()
             }
