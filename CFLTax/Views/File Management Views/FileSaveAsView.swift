@@ -116,6 +116,7 @@ extension FileSaveAsView {
     func done(){
         let strInvestmentData: String = myInvestment.writeInvestment()
         fm.fileSaveAs(strDataFile: strInvestmentData, fileName: currentFile)
+        self.path.removeLast()
     }
 }
 

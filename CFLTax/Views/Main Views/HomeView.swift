@@ -146,13 +146,18 @@ struct HomeView: View {
         }
         .contentShape(Rectangle())
         .onTapGesture {
-            print("\(myInvestment.writeInvestment())")
-            if myInvestment.yieldCalculationIsValid() == true {
-                path.append(25)
-            } else {
-                self.isShowingYieldErrorAlert = true
-                print("Calculation of yield is invalid")
-            }
+            //print("\(myInvestment.writeInvestment())")
+            self.path.append(25)
+            
+//            if myInvestment.economics.solveFor == .yield {
+//                if myInvestment.yieldCalculationIsValid() == true {
+//                    path.append(25)
+//                } else {
+//                    self.isShowingYieldErrorAlert = true
+//                }
+//            } else {
+//                path.append(25)
+//            }
         }
         .alert(isPresented: $isShowingYieldErrorAlert) {
             Alert(title: Text("Yield Calculation Error"), message: Text(yieldCalcMessage), dismissButton: .default(Text("OK")))

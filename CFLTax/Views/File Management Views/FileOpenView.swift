@@ -133,7 +133,9 @@ extension FileOpenView {
     
     func openFile() {
         self.selectedFile = files[selectedFileIndex]
+        
         let strFileText: String = fm.fileOpen(fileName: selectedFile)
+        
         if self.selectedFile.contains("_tmp") {
             //self.myLease.openAsTemplate(strFile: strFileText)
         } else {

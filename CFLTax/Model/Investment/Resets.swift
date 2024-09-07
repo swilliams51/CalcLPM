@@ -35,6 +35,7 @@ extension Investment {
         if self.rent.groups[0].isInterim {
             self.rent.groups.remove(at: 0)
         }
+        self.fee.datePaid = self.asset.fundingDate
         resetFirstGroup(isInterim: false)
     }
     
@@ -172,9 +173,11 @@ extension Investment {
         let myRent: Rent = readRent(arrayGroups: arrayInvestment[2].components(separatedBy: "|"))
         let myDepreciation: Depreciation = readDepreciation(arrayDepreciation: arrayInvestment[3].components(separatedBy: ","))
         let myTaxAssumptions: TaxAssumptions = readTaxAssumptions(arrayTaxAssumptions: arrayInvestment[4].components(separatedBy: ","))
-        let myEBO: EarlyBuyout = readEarlyBuyout(arrayEBO: arrayInvestment[5].components(separatedBy: ","))
+        let myEconomics: Economics = readEconomics(arrayEconomics: arrayInvestment[5].components(separatedBy: ","))
         let myFee: Fee = readFee(arrayFee: arrayInvestment[6].components(separatedBy: ","))
-        let myEconomics: Economics = readEconomics(arrayEconomics: arrayInvestment[7].components(separatedBy: ","))
+        let myEBO: EarlyBuyout = readEarlyBuyout(arrayEBO: arrayInvestment[7].components(separatedBy: ","))
+        
+        
         
         self.asset = myAsset
         self.leaseTerm = myLeaseTerm

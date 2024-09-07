@@ -153,7 +153,7 @@ extension FedTaxRateTextFieldView {
             showAlert.toggle()
         } else {
             //Amount is Valid
-            self.myInvestment.economics.discountRateForRent = myTaxRate
+            self.myInvestment.taxAssumptions.federalTaxRate = myTaxRate
         }
             
         self.editPercentStarted = false

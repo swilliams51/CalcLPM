@@ -71,7 +71,7 @@ public class AnnualTaxableIncomes: CollCashflows {
             if x == 0 {
                 totalTaxPayable = totalTaxPayable + ITC
             }
-            let numberOfPayments = getRemainingNoOfTaxPmtsInCurrYear_Monthly(aStartDate: dateStart, aFiscalYearEnd: nextFiscalYearEnd)
+            let numberOfPayments = getRemainingNoOfTaxPmtsInCurrYear_Date(aStartDate: dateStart, aFiscalYearEnd: nextFiscalYearEnd, aDayOfMonth: aInvestment.taxAssumptions.dayOfMonPaid)
             let periodicTaxPayment = totalTaxPayable / Decimal(numberOfPayments)
         
             if dateStart > dateTaxPayment {
@@ -129,25 +129,6 @@ public class AnnualTaxableIncomes: CollCashflows {
         return askMonthIsTaxPaymentMonth
     }
     
-    func getRemainingNoOfTaxPmtsInCurrYear_Monthly(aStartDate: Date, aFiscalYearEnd: Date) -> Int {
-        //the minimum value to return is 1
-        let monthsDifference: Int = monthsDiff(start: aStartDate, end: aFiscalYearEnd)
-        var noOfTaxPmts: Int = 1
-        
-        switch monthsDifference {
-        case _ where monthsDifference > 7:
-            noOfTaxPmts = 4
-        case _ where monthsDifference > 5:
-            noOfTaxPmts = 3
-        case _ where monthsDifference > 2:
-            noOfTaxPmts = 2
-        default:
-            noOfTaxPmts = 1
-        }
-        
-        return noOfTaxPmts
-    }
-    
     func getTaxPaymentMonths(aFiscalMonthEnd: Int) -> [Int] {
         let monthOfYearEnd: Int = aFiscalMonthEnd
         var taxPaymentMonths: [Int] = []
@@ -187,11 +168,13 @@ public class AnnualTaxableIncomes: CollCashflows {
         var counter: Int = 0
 
         for x in 0..<myTaxPaymentDates.count {
-            if myTaxPaymentDates[x] > aStartDate {
-                counter += 1
+            if myTaxPaymentDates[x] >= aStartDate {
+                break
             }
+            counter += 1
         }
-        return counter
+        
+        return 4 - counter
     }
     
     func getFirstTaxPaymentDate(aStartDate:Date, aFiscalYearEnd: Date, aDayOfMonth: Int) -> Date {
@@ -200,8 +183,9 @@ public class AnnualTaxableIncomes: CollCashflows {
         var firstDate: Date = myTaxPaymentDates[3]
         
         for x in 0..<myTaxPaymentDates.count {
-            if aStartDate < myTaxPaymentDates[x] {
+            if aStartDate <= myTaxPaymentDates[x] {
                firstDate = myTaxPaymentDates[x]
+                break
             }
         }
             

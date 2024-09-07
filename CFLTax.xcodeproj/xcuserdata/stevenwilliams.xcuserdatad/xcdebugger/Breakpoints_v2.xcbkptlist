@@ -3,4 +3,22 @@
    uuid = "D265A794-E377-4043-85B0-E15A348CF017"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "39C51915-E90F-43D6-B4B5-1B86C20FEC7E"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "CFLTax/Model/Investment/AnnualIncomes/AnnualTaxableIncomes.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "180"
+            endingLineNumber = "180"
+            landmarkName = "getFirstTaxPaymentDate(aStartDate:aFiscalYearEnd:aDayOfMonth:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

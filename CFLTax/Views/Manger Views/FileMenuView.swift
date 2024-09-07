@@ -45,6 +45,7 @@ struct FileMenuView: View {
         }
         .contentShape(Rectangle())
         .onTapGesture {
+            self.currentFile = "File is New"
             self.myInvestment.resetToDefault()
             path.removeLast()
         }
