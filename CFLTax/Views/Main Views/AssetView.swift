@@ -14,6 +14,7 @@ struct AssetView: View {
     
     @State var assetName: String = ""
     @State var fundingDate: Date = Date()
+    @State var fundingDateOnEntry: Date = Date()
     @State var lessorCost: String = "1000.00"
     @State var residualValue: String = "1000.00"
     @State var lesseeGuaranty: String =  "200.00"
@@ -43,6 +44,7 @@ struct AssetView: View {
         .onAppear {
             self.assetName = self.myInvestment.asset.name
             self.fundingDate = self.myInvestment.asset.fundingDate
+            self.fundingDateOnEntry = self.myInvestment.asset.fundingDate
             self.lessorCost = self.myInvestment.asset.lessorCost
             self.residualValue = self.myInvestment.asset.residualValue
             self.lesseeGuaranty = self.myInvestment.asset.lesseeGuarantyAmount
@@ -127,7 +129,9 @@ struct AssetView: View {
         self.myInvestment.asset.lessorCost = lessorCost
         self.myInvestment.asset.residualValue = residualValue
         self.myInvestment.asset.lesseeGuarantyAmount = lesseeGuaranty
-        self.myInvestment.resetForFundingDateChange()
+        if self.fundingDateOnEntry != fundingDate {
+            self.myInvestment.resetForFundingDateChange()
+        }
         path.removeLast()
     }
     
