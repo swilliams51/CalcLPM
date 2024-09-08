@@ -95,7 +95,7 @@ struct YieldTargetTextFieldView: View {
         if editStarted == true {
             return myPercent
         } else {
-            return percentFormatter(percent: myPercent, locale: myLocale, places: 2)
+            return percentFormatter(percent: myPercent, locale: myLocale, places: 4)
         }
     }
 }

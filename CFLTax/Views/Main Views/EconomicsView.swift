@@ -67,7 +67,7 @@ struct EconomicsView: View {
                     self.path.append(17)
                 }
             Spacer()
-            Text("\(percentFormatter(percent:myYieldTarget, locale: myLocale, places: 2))")
+            Text("\(percentFormatter(percent:myYieldTarget, locale: myLocale, places: 3))")
                 .font(myFont2)
                 .onTapGesture {
                     self.path.append(17)
@@ -94,7 +94,7 @@ struct EconomicsView: View {
                     self.path.append(18)
                 }
             Spacer()
-            Text("\(percentFormatter(percent:myDiscountRate, locale: myLocale, places: 2))")
+            Text("\(percentFormatter(percent:myDiscountRate, locale: myLocale, places: 3))")
                 .font(myFont2)
                 .onTapGesture {
                     self.path.append(18)
@@ -119,9 +119,9 @@ struct EconomicsView: View {
     }
     func myDone(){
         self.myInvestment.economics.yieldMethod = myYieldMethod
-        self.myInvestment.economics.yieldTarget = myYieldTarget
+        self.myInvestment.economics.yieldTarget = myYieldTarget.toDecimal().toString(decPlaces: 5)
         self.myInvestment.economics.solveFor = mySolveFor
-        self.myInvestment.economics.discountRateForRent = myDiscountRate
+        self.myInvestment.economics.discountRateForRent = myDiscountRate.toDecimal().toString(decPlaces: 5)
         self.myInvestment.economics.dayCountMethod = myDayCountMethod
         path.removeLast()
     }

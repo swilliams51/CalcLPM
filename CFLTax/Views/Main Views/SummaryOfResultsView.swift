@@ -99,10 +99,10 @@ struct SummaryOfResultsView: View {
             let myTotalIn: Decimal = rentAmount.toDecimal() + residualAmount.toDecimal()
             totalCashIn = myTotalIn.toString(decPlaces: 2)
             
-            self.implicitRate = myInvestment.getImplicitRate().toString(decPlaces: 4)
-            self.discountRate = myInvestment.economics.discountRateForRent.toDecimal().toString(decPlaces: 2)
-            self.presentValue1 = myInvestment.getPVOfRents().toString(decPlaces: 2)
-            self.presentValue2 = myInvestment.getPVOfObligations().toString(decPlaces: 2)
+            self.implicitRate = myInvestment.getImplicitRate().toString(decPlaces: 5)
+            self.discountRate = myInvestment.economics.discountRateForRent.toDecimal().toString(decPlaces: 5)
+            self.presentValue1 = myInvestment.getPVOfRents().toString(decPlaces: 5)
+            self.presentValue2 = myInvestment.getPVOfObligations().toString(decPlaces: 5)
         }
         
         
@@ -251,9 +251,9 @@ extension SummaryOfResultsView {
             let decAmount = amount.toDecimal()
             let decCost = myInvestment.getAssetCost(asCashflow: false)
             let decPercent = decAmount / decCost
-            let strPercent: String = decPercent.toString(decPlaces: 3)
+            let strPercent: String = decPercent.toString(decPlaces: 5)
             
-            return percentFormatter(percent: strPercent, locale: myLocale, places: 2)
+            return percentFormatter(percent: strPercent, locale: myLocale, places: 3)
         } else {
              return amountFormatter(amount: amount, locale: myLocale)
         }
@@ -267,7 +267,7 @@ extension SummaryOfResultsView {
             Text("Implicit Rate:")
                 .font(myFont)
             Spacer()
-            Text("\(percentFormatter(percent: implicitRate, locale: myLocale, places: 2))")
+            Text("\(percentFormatter(percent: implicitRate, locale: myLocale, places: 3))")
                 .font(myFont)
         }.frame(height: frameHeight)
     }
@@ -293,7 +293,7 @@ extension SummaryOfResultsView {
     }
     
     func getDiscountRateText() -> String {
-        let strDiscountRate: String = percentFormatter(percent: discountRate, locale: myLocale, places: 2)
+        let strDiscountRate: String = percentFormatter(percent: discountRate, locale: myLocale, places: 3)
         return strDiscountRate
     }
     
