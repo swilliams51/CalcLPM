@@ -63,6 +63,9 @@ struct FileSaveAsView: View {
                 if editing == true {
                     editNameStarted = true
                 }})
+            .onSubmit {
+                updateForSubmit()
+            }
                 .font(myFont2)
                 .multilineTextAlignment(.trailing)
                 .textFieldStyle(RoundedBorderTextFieldStyle())

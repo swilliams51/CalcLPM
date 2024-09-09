@@ -17,6 +17,7 @@ struct ReportsManagerView: View {
         Form{
             leaseRentalsItem
             depreciationScheduleItem
+            feeAmortizationItem
             taxableIncomeItem
             taxesPaidItem
             beforeTaxLeaseCashflowsItem
@@ -55,6 +56,19 @@ struct ReportsManagerView: View {
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(22)
+        }
+    }
+    
+    var feeAmortizationItem: some View {
+        HStack {
+            Text("Fee Amortization")
+                .font(myFont2)
+            Spacer()
+            Image(systemName: "chevron.right")
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            path.append(28)
         }
     }
     

@@ -76,11 +76,14 @@ struct AssetNameTextFieldView: View {
     var rightSideAmountItem: some View {
         ZStack(alignment: .trailing) {
             TextField("",
-                      text: $myName,
+              text: $myName,
               onEditingChanged: { (editing) in
                 if editing == true {
                     self.editNameStarted = true
             }})
+            .onSubmit {
+                updateForSubmit()
+            }
                 .keyboardType(.default).foregroundColor(.clear)
                 .focused($nameIsFocused)
                 .textFieldStyle(PlainTextFieldStyle())

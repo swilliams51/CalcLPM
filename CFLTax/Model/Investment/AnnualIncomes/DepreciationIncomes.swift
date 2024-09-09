@@ -34,7 +34,6 @@ public class DepreciationIncomes: Cashflows {
         if aDepreciation.method != .StraightLine {
             bonusPercent = aDepreciation.bonusDeprecPercent
             bonusDepreciation = decBasis * bonusPercent
-        
             currentDepreciation = getCurrentYearDepreciation(aBasis: decBasis, year: 0)
             currentDepreciation = currentDepreciation * -1.0
             
@@ -45,7 +44,7 @@ public class DepreciationIncomes: Cashflows {
             currentDeprecBalance = decBasis + runTotalDepreciation
             
             var nextFiscalYearEnd: Date  = firstFiscalYearEnd
-            for x in 1..<intYears {
+            for x in 1...intYears {
                 nextFiscalYearEnd = addNextFiscalYearEnd(aDateIn: nextFiscalYearEnd)
                 if x == intYears {
                     currentDepreciation = currentDeprecBalance * -1.0
@@ -53,7 +52,7 @@ public class DepreciationIncomes: Cashflows {
                     items.append(annualExpense)
                     break
                 } else {
-                    if x >= intLife {
+                    if x == intLife {
                         currentDepreciation = currentDeprecBalance
                     } else {
                         currentDepreciation = getCurrentYearDepreciation(aBasis: currentDeprecBalance, year: x)
@@ -144,14 +143,14 @@ public class DepreciationIncomes: Cashflows {
     
     private func getDepreciationYears(leaseExpiry: Date) -> Int {
         var x: Int = 0
-        var currFiscalYearEnd = firstFiscalYearEnd
+        var currFiscalYearEnd: Date = firstFiscalYearEnd
         
         while leaseExpiry > currFiscalYearEnd {
             x += 1
             currFiscalYearEnd = addNextFiscalYearEnd(aDateIn: currFiscalYearEnd)
         }
         
-        return x + 1
+        return x
     }
     
 }

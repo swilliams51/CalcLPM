@@ -23,9 +23,9 @@ struct LeaseTermView: View {
     var body: some View {
         Form {
             Section (header: Text("Details")) {
-                baseCommenceDateItem
                 paymentFrequencyItem
                 eomRuleItem
+                baseCommenceDateItem
                 baseTermInMonthsItem
             }
             Section(header: Text("Submit Form")) {
@@ -140,7 +140,7 @@ struct LeaseTermView: View {
             maxInterim = 3
         }
 
-        let end: Date = addPeriodsToDate(dateStart: start, payPerYear: myInvestment.leaseTerm.paymentFrequency, noOfPeriods: maxInterim, referDate: start, bolEOMRule: myInvestment.leaseTerm.endOfMonthRule)
+        let end: Date = addPeriodsToDate(dateStart: start, payPerYear: .monthly, noOfPeriods: maxInterim, referDate: start, bolEOMRule: myInvestment.leaseTerm.endOfMonthRule)
 
         return start...end
     }

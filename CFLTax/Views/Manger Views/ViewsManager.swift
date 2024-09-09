@@ -12,6 +12,7 @@ struct ViewsManager: View {
     @Bindable var myDepreciationSchedule: DepreciationIncomes
     @Bindable var myRentalSchedule: RentalCashflows
     @Bindable var myTaxableIncomes: AnnualTaxableIncomes
+    @Bindable var myFeeAmortization: FeeIncomes
     @Binding var path: [Int]
     @Binding var isDark: Bool
     @Binding var selectedGroup: Group
@@ -82,7 +83,7 @@ struct ViewsManager: View {
         case 27:
           FileOpenView(myInvestment: myInvestment, currentFile: $currentFile, path: $path, isDark: $isDark)
         case 28:
-            Text("File Save")
+          FeeExpenseView(myInvestment: myInvestment, myFeeAmortization: myFeeAmortization, path: $path, isDark: $isDark)
         case 29:
             FileSaveAsView(myInvestment: myInvestment, currentFile: $currentFile, path: $path, isDark: $isDark)
         case 30:
@@ -102,5 +103,5 @@ struct ViewsManager: View {
 }
 
 #Preview {
-    ViewsManager(myInvestment: Investment(), myDepreciationSchedule: DepreciationIncomes(), myRentalSchedule: RentalCashflows(), myTaxableIncomes: AnnualTaxableIncomes(), path: .constant([Int]()), isDark: .constant(false), selectedGroup: .constant(Group()), currentFile: .constant("File is New"), selectedView: 22)
+    ViewsManager(myInvestment: Investment(), myDepreciationSchedule: DepreciationIncomes(), myRentalSchedule: RentalCashflows(), myTaxableIncomes: AnnualTaxableIncomes(), myFeeAmortization: FeeIncomes(), path: .constant([Int]()), isDark: .constant(false), selectedGroup: .constant(Group()), currentFile: .constant("File is New"), selectedView: 22)
 }

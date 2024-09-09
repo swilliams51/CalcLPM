@@ -61,42 +61,48 @@ public class AnnualTaxableIncomes: CollCashflows {
         let ITC: Decimal = aInvestment.depreciation.investmentTaxCredit * aInvestment.asset.lessorCost.toDecimal()
         let dateStart = aInvestment.asset.fundingDate
         var nextFiscalYearEnd = getFiscalYearEnd(askDate: dateStart, fiscalMonthEnd: aInvestment.taxAssumptions.fiscalMonthEnd.rawValue)
-        var dateTaxPayment = getFirstTaxPaymentDate(aStartDate: dateStart, aFiscalYearEnd: nextFiscalYearEnd, aDayOfMonth: aInvestment.taxAssumptions.dayOfMonPaid)
+        var dateTaxPayment = getFirstTaxPaymentDate_Month(aStartDate: dateStart, aFiscalYearEnd: nextFiscalYearEnd, aDayOfMonth: aInvestment.taxAssumptions.dayOfMonPaid)
         let taxPaymentMonths: [Int] = getTaxPaymentMonths(aFiscalMonthEnd: aInvestment.taxAssumptions.fiscalMonthEnd.rawValue)
-        var carryForward: Decimal = 0.0
-
+    
         let periodicTaxPayments: Cashflows = Cashflows()
         for x in 0..<items[0].count() {
+            var numberOfPayments: Int = 4
             var totalTaxPayable: Decimal = items[0].items[x].amount.toDecimal() * aInvestment.taxAssumptions.federalTaxRate.toDecimal() * -1.0
-            if x == 0 {
+            if x == 0 { //if First Tax Year
                 totalTaxPayable = totalTaxPayable + ITC
+                numberOfPayments = getNoOfTaxPmtsInFirstYear_Month(aStartDate: dateStart, aFiscalYearEnd: nextFiscalYearEnd)
             }
-            let numberOfPayments = getRemainingNoOfTaxPmtsInCurrYear_Date(aStartDate: dateStart, aFiscalYearEnd: nextFiscalYearEnd, aDayOfMonth: aInvestment.taxAssumptions.dayOfMonPaid)
             let periodicTaxPayment = totalTaxPayable / Decimal(numberOfPayments)
-        
-            if dateStart > dateTaxPayment {
-                let myCashflow = Cashflow(dueDate: dateTaxPayment, amount: "0.00")
-                periodicTaxPayments.add(item: myCashflow)
-                carryForward = totalTaxPayable
-                dateTaxPayment = addOnePeriodToDate(dateStart: dateTaxPayment, payPerYear: .monthly, dateRefer: aInvestment.leaseTerm.baseCommenceDate, bolEOMRule: true)
-            } else {
-                while dateTaxPayment < nextFiscalYearEnd {
-                    let myAmount = periodicTaxPayment + carryForward
-                    if isAskMonthATaxPaymentMonth(aAskDate: dateTaxPayment, aTaxPaymentMonths: taxPaymentMonths) {
-                        let myCashflow = Cashflow(dueDate: dateTaxPayment, amount: myAmount.toString(decPlaces: 4))
-                        periodicTaxPayments.add(item: myCashflow)
-                        if carryForward != 0.0 {
-                            carryForward = 0.0
-                        }
-                    }
-                    dateTaxPayment = addOnePeriodToDate(dateStart: dateTaxPayment, payPerYear: .monthly, dateRefer: aInvestment.leaseTerm.baseCommenceDate, bolEOMRule: true)
+            while dateTaxPayment < nextFiscalYearEnd {
+                if isAskMonthATaxPaymentMonth(aAskDate: dateTaxPayment, aTaxPaymentMonths: taxPaymentMonths) {
+                    let myCashflow = Cashflow(dueDate: dateTaxPayment, amount: periodicTaxPayment.toString(decPlaces: 4))
+                    periodicTaxPayments.add(item: myCashflow)
                 }
+                dateTaxPayment = addOnePeriodToDate(dateStart: dateTaxPayment, payPerYear: .monthly, dateRefer: aInvestment.leaseTerm.baseCommenceDate, bolEOMRule: true)
             }
             nextFiscalYearEnd = addNextFiscalYearEnd(aDateIn: nextFiscalYearEnd)
+            }
+           self.removeAll()
+         
+         return periodicTaxPayments
+    }
+       
+    
+    func isAskDateLater(aDateAsk: Date, compareDate: Date, byMonth: Bool) -> Bool {
+        var isLater: Bool = false
+        if byMonth {
+            let askMonth: Int = getMonthComponent(dateIn: aDateAsk)
+            let compareMonth: Int = getMonthComponent(dateIn: compareDate)
+            if askMonth > compareMonth {
+                isLater = true
+            }
+        } else {
+            if aDateAsk > compareDate {
+                isLater = true
+            }
         }
-       self.removeAll()
         
-        return periodicTaxPayments
+        return isLater
     }
     
     func getTaxPaymentDate(aDateAsk: Date, aDayOfMonth: Int) -> Date {
@@ -114,6 +120,20 @@ public class AnnualTaxableIncomes: CollCashflows {
         
         return taxPaymentDate
     }
+    
+    func isAskDateATaxPmtDate(aAskDate: Date, aTaxPaymentDates: [Date]) -> Bool {
+        var askDateIsTaxPmtDate: Bool = false
+
+        for x in 0..<aTaxPaymentDates.count {
+            if aAskDate == aTaxPaymentDates[x] {
+                askDateIsTaxPmtDate = true
+                break
+            }
+        }
+
+        return askDateIsTaxPmtDate
+    }
+    
     
     func isAskMonthATaxPaymentMonth(aAskDate: Date, aTaxPaymentMonths: [Int]) -> Bool {
         var askMonthIsTaxPaymentMonth: Bool = false
@@ -163,7 +183,7 @@ public class AnnualTaxableIncomes: CollCashflows {
         return taxPaymentMonths
     }
     
-    func getRemainingNoOfTaxPmtsInCurrYear_Date(aStartDate:Date, aFiscalYearEnd: Date, aDayOfMonth: Int) -> Int {
+    func getNoOfTaxPmtsInCurrYear_Date(aStartDate:Date, aFiscalYearEnd: Date, aDayOfMonth: Int) -> Int {
         let myTaxPaymentDates: [Date] = getTaxPaymentDates(aFiscalYearEnd: aFiscalYearEnd, aDayOfMonth: aDayOfMonth)
         var counter: Int = 0
 
@@ -177,7 +197,47 @@ public class AnnualTaxableIncomes: CollCashflows {
         return 4 - counter
     }
     
-    func getFirstTaxPaymentDate(aStartDate:Date, aFiscalYearEnd: Date, aDayOfMonth: Int) -> Date {
+    func getNoOfTaxPmtsInFirstYear_Month(aStartDate: Date, aFiscalYearEnd: Date) -> Int {
+        let myFiscalMonthEnd: Int = getMonthComponent(dateIn: aFiscalYearEnd)
+        let myTaxMonths: [Int] = getTaxPaymentMonths(aFiscalMonthEnd: myFiscalMonthEnd)
+        let startMonth: Int = getMonthComponent(dateIn: aStartDate)
+        var counter: Int = 0
+        
+        for x in 0..<myTaxMonths.count {
+            if myTaxMonths[x] >= startMonth {
+                break
+            }
+            counter += 1
+        }
+        
+        return 4 - counter
+    }
+    
+    func getFirstTaxPaymentDate_Month(aStartDate: Date, aFiscalYearEnd: Date, aDayOfMonth: Int) -> Date {
+        let myTaxMonths: [Int] = getTaxPaymentMonths(aFiscalMonthEnd: getMonthComponent(dateIn: aFiscalYearEnd))
+        let myStartMonth: Int = getMonthComponent(dateIn: aStartDate)
+        var firstMonth: Int = myTaxMonths[0]
+        let firstYear: Int = getYearComponent(dateIn: aStartDate)
+        
+        for x in 0..<myTaxMonths.count {
+            if myTaxMonths[x] >= myStartMonth {
+                firstMonth = myTaxMonths[x]
+                break
+            }
+        }
+        
+        var comps = DateComponents()
+        comps.day = aDayOfMonth
+        comps.month = firstMonth
+        comps.year = firstYear
+        
+        let dateNew = Calendar.current.date(from: comps)!
+        
+        
+        return dateNew
+    }
+    
+    func getFirstTaxPaymentDate(aStartDate: Date, aFiscalYearEnd: Date, aDayOfMonth: Int) -> Date {
         //at a minimum will return the last tax payment date in first fiscal year
         let myTaxPaymentDates: [Date] = getTaxPaymentDates(aFiscalYearEnd: aFiscalYearEnd, aDayOfMonth: aDayOfMonth)
         var firstDate: Date = myTaxPaymentDates[3]
@@ -268,18 +328,6 @@ public class AnnualTaxableIncomes: CollCashflows {
         return paymentDates
     }
         
-    func isAskDateATaxPmtDate(aAskDate: Date, aTaxPaymentDates: [Date]) -> Bool {
-        var askDateIsTaxPmtDate: Bool = false
-
-        for x in 0..<aTaxPaymentDates.count {
-            if aAskDate == aTaxPaymentDates[x] {
-                askDateIsTaxPmtDate = true
-                break
-            }
-        }
-
-        return askDateIsTaxPmtDate
-    }
     
     
     

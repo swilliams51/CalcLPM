@@ -25,9 +25,10 @@ struct AssetView: View {
             Section(header: Text("Details")) {
                 assetNameItem
                 lessorCostItem
-                fundingDateItem
                 residualValueItem
                 lesseeGuarantyItem
+                fundingDateItem
+                
             }
             Section(header: Text("Submit Form")) {
                 SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isDark: $isDark)
