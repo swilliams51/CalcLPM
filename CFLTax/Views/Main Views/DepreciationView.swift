@@ -11,6 +11,7 @@ struct DepreciationView: View {
     @Bindable var myInvestment: Investment
     @Binding var path: [Int]
     @Binding var isDark: Bool
+    @Binding var currentFile: String
     
     
     @State var myMethod: DepreciationType = .MACRS
@@ -27,7 +28,7 @@ struct DepreciationView: View {
     
     var body: some View {
         Form {
-            Section(header: Text("Inputs")) {
+            Section(header: Text("Inputs").font(myFont2), footer:(Text("FileName: \(currentFile)").font(myFont2))) {
                 VStack {
                     depreciationMethod
                     depreciableLife
@@ -160,5 +161,5 @@ struct DepreciationView: View {
 }
 
 #Preview {
-    DepreciationView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false))
+    DepreciationView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false), currentFile: .constant("File is New"))
 }

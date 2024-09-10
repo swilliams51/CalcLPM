@@ -307,6 +307,11 @@ extension String {
         }
     }
 }
+public enum FeeAmortizationMethod {
+    case daily
+    case monthly
+    
+}
 
 public enum Frequency: Int, CaseIterable {
     case monthly = 12

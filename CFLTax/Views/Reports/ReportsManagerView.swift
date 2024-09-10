@@ -12,16 +12,20 @@ struct ReportsManagerView: View {
     @Bindable var myDepreciationSchedule: DepreciationIncomes
     @Binding var path: [Int]
     @Binding var isDark: Bool
+    @Binding var currentFile: String
     
     var body: some View {
         Form{
-            leaseRentalsItem
-            depreciationScheduleItem
-            feeAmortizationItem
-            taxableIncomeItem
-            taxesPaidItem
-            beforeTaxLeaseCashflowsItem
-            afterTaxLeaseCashflowsItem
+            Section(header: Text("Reports"), footer: (Text("FileName: \(currentFile)"))) {
+                leaseRentalsItem
+                depreciationScheduleItem
+                feeAmortizationItem
+                taxableIncomeItem
+                taxesPaidItem
+                beforeTaxLeaseCashflowsItem
+                afterTaxLeaseCashflowsItem
+            }
+            
         }
         .toolbar{
             ToolbarItem(placement: .topBarLeading) {
@@ -128,5 +132,5 @@ struct ReportsManagerView: View {
 }
 
 #Preview {
-    ReportsManagerView(myInvestment: Investment(), myDepreciationSchedule: DepreciationIncomes(), path: .constant([Int]()), isDark: .constant(false))
+    ReportsManagerView(myInvestment: Investment(), myDepreciationSchedule: DepreciationIncomes(), path: .constant([Int]()), isDark: .constant(false), currentFile: .constant("File is New"))
 }

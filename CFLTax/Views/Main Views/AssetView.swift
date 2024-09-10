@@ -11,6 +11,7 @@ struct AssetView: View {
     @Bindable var myInvestment: Investment
     @Binding var path: [Int]
     @Binding var isDark: Bool
+    @Binding var currentFile: String
     
     @State var assetName: String = ""
     @State var fundingDate: Date = Date()
@@ -22,7 +23,7 @@ struct AssetView: View {
     
     var body: some View {
         Form {
-            Section(header: Text("Details")) {
+            Section(header: Text("Details").font(myFont2), footer: (Text("FileName: \(currentFile)").font(myFont2))) {
                 assetNameItem
                 lessorCostItem
                 residualValueItem
@@ -139,5 +140,5 @@ struct AssetView: View {
 }
 
 #Preview {
-    AssetView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false))
+    AssetView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false), currentFile: .constant("File is New"))
 }

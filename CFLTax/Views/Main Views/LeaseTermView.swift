@@ -11,6 +11,7 @@ struct LeaseTermView: View {
     @Bindable var myInvestment: Investment
     @Binding var path: [Int]
     @Binding var isDark: Bool
+    @Binding var currentFile: String
     
     @State var baseCommenceDate: Date = Date()
     @State var myPaymentFrequency: Frequency = .monthly
@@ -22,7 +23,7 @@ struct LeaseTermView: View {
     
     var body: some View {
         Form {
-            Section (header: Text("Details")) {
+            Section (header: Text("Details").font(myFont2), footer: (Text("FileName: \(currentFile)").font(myFont2))) {
                 paymentFrequencyItem
                 eomRuleItem
                 baseCommenceDateItem
@@ -148,7 +149,7 @@ struct LeaseTermView: View {
 }
 
 #Preview {
-    LeaseTermView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false))
+    LeaseTermView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false), currentFile: .constant("File is New"))
 }
 
 

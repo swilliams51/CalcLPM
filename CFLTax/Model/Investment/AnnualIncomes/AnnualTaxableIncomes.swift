@@ -36,7 +36,7 @@ public class AnnualTaxableIncomes: CollCashflows {
         myDepreciationIncomes.createTable(aDepreciation: aInvestment.depreciation, lessorCost: aInvestment.asset.lessorCost, fundingDate: aInvestment.asset.fundingDate, fiscalMonthEnd: aInvestment.taxAssumptions.fiscalMonthEnd.rawValue, leaseExpiry: aInvestment.getLeaseMaturityDate())
         self.addCashflows(myDepreciationIncomes)
         
-        myFeeIncomes.createTable(aFee: aInvestment.fee, aAssetCost: aInvestment.asset.lessorCost, aMaturityDate: aInvestment.getLeaseMaturityDate(), aFiscalMonth: aInvestment.taxAssumptions.fiscalMonthEnd.rawValue)
+        myFeeIncomes.createTable(aFee: aInvestment.fee, aMaturityDate: aInvestment.getLeaseMaturityDate(), aFiscalMonth: aInvestment.taxAssumptions.fiscalMonthEnd.rawValue)
         self.addCashflows(myFeeIncomes)
     }
     

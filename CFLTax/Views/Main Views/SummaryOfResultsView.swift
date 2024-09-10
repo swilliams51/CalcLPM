@@ -11,6 +11,8 @@ struct SummaryOfResultsView: View {
     @Bindable var myInvestment: Investment
     @Binding var path: [Int]
     @Binding var isDark: Bool
+    @Binding var currentFile: String
+    
     //Yields
     @State var myATYield: Decimal = 0.075
     @State var myBTYield: Decimal = 0.075
@@ -39,7 +41,7 @@ struct SummaryOfResultsView: View {
     
     var body: some View {
         Form {
-            Section(header: Text("Profitablity")) {
+            Section(header: Text("Yields"), footer: (Text("FileName: \(currentFile)"))) {
                 afterTaxYieldItem
                 beforeTaxYieldItem
                 preTaxIRRItem
@@ -111,7 +113,7 @@ struct SummaryOfResultsView: View {
 }
 
 #Preview {
-    SummaryOfResultsView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false))
+    SummaryOfResultsView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false), currentFile: .constant("File is New"))
 }
 
 // Yields

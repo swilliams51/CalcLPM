@@ -12,6 +12,7 @@ struct RentView: View {
     @Binding var selectedGroup: Group
     @Binding var path: [Int]
     @Binding var isDark: Bool
+    @Binding var currentFile: String
     
     @State var noOfPayments: Int = 0
     @State var totalRent: String = "0.00"
@@ -19,7 +20,7 @@ struct RentView: View {
     
     var body: some View {
         Form {
-            Section(header: Text("Rent")) {
+            Section(header: Text("Rent").font(myFont2), footer: (Text("FileName: \(currentFile)").font(myFont2))) {
                 ForEach(myInvestment.rent.groups) { group in
                     groupDisplayRow(group: group)
                 }
@@ -65,7 +66,7 @@ struct RentView: View {
 }
 
 #Preview {
-    RentView(myInvestment: Investment(), selectedGroup: .constant(Group()), path: .constant([Int]()), isDark: .constant(false))
+    RentView(myInvestment: Investment(), selectedGroup: .constant(Group()), path: .constant([Int]()), isDark: .constant(false), currentFile: .constant("File is New"))
 }
 
 

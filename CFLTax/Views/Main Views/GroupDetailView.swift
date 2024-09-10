@@ -12,6 +12,8 @@ struct GroupDetailView: View {
     @Binding var selectedGroup: Group
     @Binding var isDark: Bool
     @Binding var path: [Int]
+    @Binding var currentFile: String
+
     @State var index: Int = 0
     @State var amount: String = "10000.00"
     @State private var alertTitle: String = ""
@@ -38,7 +40,7 @@ struct GroupDetailView: View {
     
     var body: some View {
             Form {
-                Section(header: Text(isInterimGroup ? "Interim Rent Details" : "Base Rent Details").font(.footnote)) {
+                Section(header: Text(isInterimGroup ? "Interim Rent Details" : "Base Rent Details").font(myFont2), footer: (Text("FileName: \(currentFile)").font(myFont2))) {
                    groupDetailsSection
                 }
                 Section(header: Text("Submit Form").font(.footnote)){
@@ -64,7 +66,7 @@ struct GroupDetailView: View {
 }
 
 #Preview {
-    GroupDetailView(myInvestment: Investment(), selectedGroup: .constant(Group()), isDark: .constant(false), path: .constant([Int]()))
+    GroupDetailView(myInvestment: Investment(), selectedGroup: .constant(Group()), isDark: .constant(false), path: .constant([Int]()), currentFile: .constant("File is New"))
 }
 
 //View on Appear

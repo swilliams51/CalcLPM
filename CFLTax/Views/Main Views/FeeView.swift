@@ -11,6 +11,7 @@ struct FeeView: View {
     @Bindable var myInvestment: Investment
     @Binding var path: [Int]
     @Binding var isDark: Bool
+    @Binding var currentFile: String
     
     @State var myAmount: String = "2000.00"
     @State var myDatePaid: Date = Date()
@@ -18,7 +19,7 @@ struct FeeView: View {
     
     var body: some View {
         Form{
-            Section(header: Text("Details")) {
+            Section(header: Text("Details").font(myFont2), footer: (Text("FileName: \(currentFile)").font(myFont2))) {
                 feeAmountItem
                 datePaidItem
                 feeTypeItem
@@ -94,5 +95,5 @@ struct FeeView: View {
 }
 
 #Preview {
-    FeeView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false))
+    FeeView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false), currentFile: .constant("Fole is New"))
 }

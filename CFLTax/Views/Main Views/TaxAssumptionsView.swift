@@ -11,6 +11,7 @@ struct TaxAssumptionsView: View {
     @Bindable var myInvestment: Investment
     @Binding var path: [Int]
     @Binding var isDark: Bool
+    @Binding var currentFile: String
     
     @State var myTaxRate: String = "0.21"
     @State var myFiscalMonthEnd: TaxYearEnd = .December
@@ -19,7 +20,7 @@ struct TaxAssumptionsView: View {
     
     var body: some View {
         Form {
-            Section (header: Text("Details")) {
+            Section (header: Text("Details").font(myFont2), footer: (Text("FileName: \(currentFile)").font(myFont2))) {
                 taxRateItem
                 fiscalMonthEndItem
                 dayOfMonthTaxesPaidItem
@@ -98,6 +99,6 @@ struct TaxAssumptionsView: View {
 }
 
 #Preview {
-    TaxAssumptionsView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false))
+    TaxAssumptionsView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false), currentFile: .constant("File is New"))
 }
 

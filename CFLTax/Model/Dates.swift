@@ -293,6 +293,21 @@ public func monthsDiff (start: Date, end: Date) -> Int {
     return months
 }
 
+public func monthsDifference (start: Date, end: Date, inclusive: Bool) -> Int {
+    let adder: Int = inclusive ? 1 : 0
+    let startMonth = getMonthComponent(dateIn: start)
+    let startYear = getYearComponent(dateIn: start)
+    let endMonth = getMonthComponent(dateIn: end)
+    let endYear = getYearComponent(dateIn: end)
+    
+    let monthsDiff = endMonth - startMonth
+    let yearsDiff = endYear - startYear
+    let totalMonths: Int = yearsDiff * 12 + monthsDiff + adder
+    
+    
+    return totalMonths
+}
+
 
 public func dayCount(aDate1: Date, aDate2: Date, aDayCount: DayCountMethod) -> Int {
     var noOfDays: Int

@@ -11,6 +11,7 @@ struct EconomicsView: View {
     @Bindable var myInvestment: Investment
     @Binding var path: [Int]
     @Binding var isDark: Bool
+    @Binding var currentFile: String
     
     @State var myYieldMethod: YieldMethod = .MISF_BT
     @State var myYieldTarget: String = "0.05"
@@ -20,7 +21,7 @@ struct EconomicsView: View {
     
     var body: some View {
         Form{
-            Section(header: Text("Economics")){
+            Section(header: Text("Parameters").font(myFont2), footer: (Text("FileName: \(currentFile)").font(myFont2))){
                 yieldMethodItem
                 yieldTargetItem
                 solveForItem
@@ -28,7 +29,8 @@ struct EconomicsView: View {
                 dayCountMethodItem
             }
             Section(header: Text("Submit Form")){
-                SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isDark: $isDark)            }
+                SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isDark: $isDark)
+            }
             
         }
         .toolbar {
@@ -128,5 +130,5 @@ struct EconomicsView: View {
 }
 
 #Preview {
-    EconomicsView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false))
+    EconomicsView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false), currentFile: .constant("File is New"))
 }
