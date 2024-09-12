@@ -24,6 +24,7 @@ struct ReportsManagerView: View {
                 taxesPaidItem
                 beforeTaxLeaseCashflowsItem
                 afterTaxLeaseCashflowsItem
+                afterTaxEndingBalanceItem
             }
             
         }
@@ -126,6 +127,19 @@ struct ReportsManagerView: View {
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(24)
+        }
+    }
+    
+    var afterTaxEndingBalanceItem: some View {
+        HStack {
+            Text("After-Tax Ending Balances")
+                .font(myFont2)
+            Spacer()
+            Image(systemName: "chevron.right")
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            path.append(35)
         }
     }
 

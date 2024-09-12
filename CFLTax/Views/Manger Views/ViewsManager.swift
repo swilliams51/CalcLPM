@@ -90,6 +90,8 @@ struct ViewsManager: View {
             TaxableIncomeView(myInvestment: myInvestment, myTaxableIncomes: myTaxableIncomes, path: $path, isDark: $isDark)
         case 34:
             TaxesPaidView(myInvestment: myInvestment, myTaxableIncomes: myTaxableIncomes, path: $path, isDark: $isDark)
+      case 35:
+            AfterTaxEndingBalanceView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         default:
             Text("Hello")
         }

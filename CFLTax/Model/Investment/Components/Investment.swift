@@ -93,7 +93,7 @@ public class Investment {
     }
     
     public func getLeaseMaturityDate() -> Date {
-         return addPeriodsToDate(dateStart: leaseTerm.baseCommenceDate, payPerYear: .monthly, noOfPeriods: getBaseTermInMonths(), referDate: leaseTerm.baseCommenceDate, bolEOMRule: false)
+        return addPeriodsToDate(dateStart: leaseTerm.baseCommenceDate, payPerYear: .monthly, noOfPeriods: getBaseTermInMonths(), referDate: leaseTerm.baseCommenceDate, bolEOMRule: self.leaseTerm.endOfMonthRule)
     }
     
     public func clone() -> Investment {

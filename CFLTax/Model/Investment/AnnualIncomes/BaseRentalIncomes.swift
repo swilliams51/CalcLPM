@@ -9,7 +9,10 @@ import Foundation
 
 public class BaseRentalIncomes: Cashflows {
     //This is for Base Rentals only, Interim Rentals handled separately
-    public func createTable(aRent: Rent, aFundingDate: Date,aBaseCommence: Date, aFrequency: Frequency, aFiscalMonthEnd: TaxYearEnd, aLeaseExpiry: Date) {
+    public func createTable(aRent: Rent, aFundingDate: Date,aBaseCommence: Date, aFrequency: Frequency, aFiscalMonthEnd: TaxYearEnd, aLeaseExpiry: Date, aEOMRule: Bool, aDayCountMethod: DayCountMethod) {
+        
+        let eomRule: Bool = aEOMRule
+        let dayCountMethod: DayCountMethod = aDayCountMethod
         var nextFiscalYearEnd: Date = getFiscalYearEnd(askDate: aFundingDate, fiscalMonthEnd: aFiscalMonthEnd.rawValue)
         let finalFiscalYearEnd: Date = getFiscalYearEnd(askDate: aLeaseExpiry, fiscalMonthEnd: aFiscalMonthEnd.rawValue)
         var dateFrom: Date = aRent.groups[0].startDate
@@ -33,7 +36,7 @@ public class BaseRentalIncomes: Cashflows {
                 var y: Int = 0
                 while y < aRent.groups[x].noOfPayments {
                     if aRent.groups[x].timing == .advance { //rents are in advance
-                        let dateFromPlusOne: Date = addOnePeriodToDate(dateStart: dateFrom, payPerYear: aFrequency, dateRefer: dateFrom, bolEOMRule: false)
+                        let dateFromPlusOne: Date = addOnePeriodToDate(dateStart: dateFrom, payPerYear: aFrequency, dateRefer: dateFrom, bolEOMRule: eomRule)
                         if dateFromPlusOne <= nextFiscalYearEnd {
                             fiscalIncome = fiscalIncome + aRent.groups[x].amount.toDecimal()
                         } else {
@@ -43,22 +46,20 @@ public class BaseRentalIncomes: Cashflows {
                             fiscalIncome = 0
                         }
                     } else {
-                        let dateFromPlusOne: Date = addOnePeriodToDate(dateStart: dateFrom, payPerYear: aFrequency, dateRefer: dateFrom, bolEOMRule: false)
+                        let dateFromPlusOne: Date = addOnePeriodToDate(dateStart: dateFrom, payPerYear: aFrequency, dateRefer: dateFrom, bolEOMRule: eomRule)
                         if dateFromPlusOne <= nextFiscalYearEnd {
                             fiscalIncome = fiscalIncome + aRent.groups[x].amount.toDecimal()
                         } else if dateFrom <= nextFiscalYearEnd {
-                            let proRataRent:Decimal = getProRataRent(dateStart: dateFrom, dateEnd: nextFiscalYearEnd, rentAmount: aRent.groups[x].amount.toDecimal(), aFrequency: aFrequency, baseCommence: aBaseCommence)
-                            //print("\(proRataRent)")
-                            fiscalIncome = fiscalIncome + proRataRent
+                            let proRataRent:Decimal = getProRataRent(dateStart: dateFrom, dateEnd: nextFiscalYearEnd, rentAmount: aRent.groups[x].amount.toDecimal(), aFrequency: aFrequency, baseCommence: aBaseCommence, aEOMRule: eomRule, aDayCountMethod: dayCountMethod)
                             
+                            fiscalIncome = fiscalIncome + proRataRent
                             addToRentalIncomes(aFiscalDate: nextFiscalYearEnd, aFiscalAmount: fiscalIncome.toString(decPlaces: 10) )
                             let proRataStart: Decimal = abs(aRent.groups[x].amount.toDecimal() - proRataRent)
                             nextFiscalYearEnd = addNextFiscalYearEnd(aDateIn: nextFiscalYearEnd)
                             fiscalIncome = proRataStart
                         }
                     }
-                    dateFrom = addOnePeriodToDate(dateStart: dateFrom, payPerYear: aFrequency, dateRefer: dateFrom, bolEOMRule: false)
-                    //dateTo = addOnePeriodToDate(dateStart: dateTo, payPerYear: aFrequency, dateRefer: dateTo, bolEOMRule: false)
+                    dateFrom = addOnePeriodToDate(dateStart: dateFrom, payPerYear: aFrequency, dateRefer: dateFrom, bolEOMRule: eomRule)
                     y += 1
                 }
             }
@@ -72,10 +73,12 @@ public class BaseRentalIncomes: Cashflows {
         items.append(rentIncome)
     }
     
-    private func getProRataRent(dateStart: Date, dateEnd: Date, rentAmount: Decimal, aFrequency: Frequency, baseCommence: Date) -> Decimal {
-        let daysInPeriod = dayCount(aDate1: dateStart, aDate2: addOnePeriodToDate(dateStart: dateStart, payPerYear: aFrequency, dateRefer: baseCommence, bolEOMRule: false), aDayCount: .actualActual)
-        let daysInAllocatedPeriod = dayCount(aDate1: dateStart, aDate2: dateEnd, aDayCount: .actualActual)
-        let ratio: Decimal = Decimal(daysInAllocatedPeriod) / Decimal(daysInPeriod)
+    private func getProRataRent(dateStart: Date, dateEnd: Date, rentAmount: Decimal, aFrequency: Frequency, baseCommence: Date, aEOMRule: Bool, aDayCountMethod: DayCountMethod) -> Decimal {
+        
+        let dateEndFullPeriod: Date = addOnePeriodToDate(dateStart: dateStart, payPerYear: aFrequency, dateRefer: baseCommence, bolEOMRule: aEOMRule)
+        let daysInFullPeriod = dayCount(aDate1: dateStart, aDate2: dateEndFullPeriod, aDayCount: aDayCountMethod)
+        let daysInPartialPeriod = dayCount(aDate1: dateStart, aDate2: dateEnd, aDayCount: .actualActual)
+        let ratio: Decimal = Decimal(daysInPartialPeriod) / Decimal(daysInFullPeriod)
         let proRataRent: Decimal = rentAmount * ratio
         
         

@@ -225,15 +225,20 @@ public class Cashflows {
     }
     
     
-    func XNPV (aDiscountRate: Decimal, aDayCountMethod: DayCountMethod) -> Decimal {
+    func XNPV (aDiscountRate: Decimal, aDayCountMethod: DayCountMethod, aSinkingFundRate: Decimal = 0.0) -> Decimal {
         var tempSum = items[0].amount.toDecimal()
+        
         if items.count > 1 {
             var prevPVFactor: Decimal = 1.0
             var x = 1
             while x < items.count {
                 let dateStart = items[x - 1].dueDate
                 let dateEnd = items[x].dueDate
-                let aDailyRate: Decimal = dailyRate(iRate: aDiscountRate, aDate1: dateStart, aDate2: dateEnd, aDayCountMethod: aDayCountMethod)
+                var discountRate: Decimal = aDiscountRate
+                if tempSum > 0.0 {
+                    discountRate = aSinkingFundRate
+                }
+                let aDailyRate: Decimal = dailyRate(iRate: discountRate, aDate1: dateStart, aDate2: dateEnd, aDayCountMethod: aDayCountMethod)
                 let aDayCount = dayCount(aDate1: dateStart, aDate2: dateEnd, aDayCount: aDayCountMethod)
                 let currPVFactor: Decimal = prevPVFactor / ( 1.0 + aDailyRate * Decimal(aDayCount))
                 let pvAmount: Decimal = currPVFactor * items[x].amount.toDecimal()

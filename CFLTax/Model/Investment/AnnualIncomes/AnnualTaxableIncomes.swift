@@ -27,7 +27,7 @@ public class AnnualTaxableIncomes: CollCashflows {
         myInterimRentalIncomes.createTable(aRent: aInvestment.rent, aFundingDate: aInvestment.asset.fundingDate, aFrequency: aInvestment.leaseTerm.paymentFrequency, aFiscalMonthEnd: aInvestment.taxAssumptions.fiscalMonthEnd, aLeaseExpiry: aInvestment.getLeaseMaturityDate())
         self.addCashflows(myInterimRentalIncomes)
         
-        myBaseRentalIncomes.createTable(aRent: aInvestment.rent, aFundingDate: aInvestment.asset.fundingDate, aBaseCommence: aInvestment.leaseTerm.baseCommenceDate, aFrequency: aInvestment.leaseTerm.paymentFrequency, aFiscalMonthEnd: aInvestment.taxAssumptions.fiscalMonthEnd, aLeaseExpiry: aInvestment.getLeaseMaturityDate())
+        myBaseRentalIncomes.createTable(aRent: aInvestment.rent, aFundingDate: aInvestment.asset.fundingDate, aBaseCommence: aInvestment.leaseTerm.baseCommenceDate, aFrequency: aInvestment.leaseTerm.paymentFrequency, aFiscalMonthEnd: aInvestment.taxAssumptions.fiscalMonthEnd, aLeaseExpiry: aInvestment.getLeaseMaturityDate(), aEOMRule: aInvestment.leaseTerm.endOfMonthRule, aDayCountMethod: aInvestment.economics.dayCountMethod)
         self.addCashflows(myBaseRentalIncomes)
         
         myResidualIncomes.createTable(myAsset: aInvestment.asset, aMaturityDate: aInvestment.getLeaseMaturityDate(), aFiscalMonth: aInvestment.taxAssumptions.fiscalMonthEnd.rawValue)
@@ -78,7 +78,7 @@ public class AnnualTaxableIncomes: CollCashflows {
                     let myCashflow = Cashflow(dueDate: dateTaxPayment, amount: periodicTaxPayment.toString(decPlaces: 4))
                     periodicTaxPayments.add(item: myCashflow)
                 }
-                dateTaxPayment = addOnePeriodToDate(dateStart: dateTaxPayment, payPerYear: .monthly, dateRefer: aInvestment.leaseTerm.baseCommenceDate, bolEOMRule: true)
+                dateTaxPayment = addOnePeriodToDate(dateStart: dateTaxPayment, payPerYear: .monthly, dateRefer: aInvestment.leaseTerm.baseCommenceDate, bolEOMRule: aInvestment.leaseTerm.endOfMonthRule)
             }
             nextFiscalYearEnd = addNextFiscalYearEnd(aDateIn: nextFiscalYearEnd)
             }
@@ -92,6 +92,7 @@ public class AnnualTaxableIncomes: CollCashflows {
         self.createTable(aInvestment: aInvestment)
         self.netCashflows()  //Taxable income by fiscal year
         
+        let eomRule: Bool = aInvestment.leaseTerm.endOfMonthRule
         let ITC: Decimal = aInvestment.depreciation.investmentTaxCredit * aInvestment.asset.lessorCost.toDecimal()
         let dateStart = aInvestment.asset.fundingDate
         let referDate: Date = aInvestment.leaseTerm.baseCommenceDate
@@ -110,7 +111,7 @@ public class AnnualTaxableIncomes: CollCashflows {
             if x == items[0].count() - 1 { // if Last Tax Year
                 let annualTaxPaymentUnplanned: Decimal = items[0].items[x].amount.toDecimal() * aInvestment.taxAssumptions.federalTaxRate.toDecimal() * -1.0
                 let annualTaxPaymentPlanned: Decimal = plannedIncome.toDecimal() * aInvestment.taxAssumptions.federalTaxRate.toDecimal() * -1.0
-                let myTerminationTaxPayments: Cashflows = periodicTaxPaymentsForTermination(totalTaxPaymentUnplanned: annualTaxPaymentUnplanned, totalTaxPaymentPlanned: annualTaxPaymentPlanned, unPlannedDate: unplannedDate, dateTaxPayment: dateTaxPayment, nextFiscalDate: nextFiscalYearEnd, taxPayMonths: taxPaymentMonths, referDate: referDate)
+                let myTerminationTaxPayments: Cashflows = periodicTaxPaymentsForTermination(totalTaxPaymentUnplanned: annualTaxPaymentUnplanned, totalTaxPaymentPlanned: annualTaxPaymentPlanned, unPlannedDate: unplannedDate, dateTaxPayment: dateTaxPayment, nextFiscalDate: nextFiscalYearEnd, taxPayMonths: taxPaymentMonths, referDate: referDate, aEOMRule: eomRule)
                 for x in 0..<myTerminationTaxPayments.items.count {
                     let myCashflow = Cashflow(dueDate: myTerminationTaxPayments.items[x].dueDate, amount: myTerminationTaxPayments.items[x].amount)
                     periodicTaxPayments.add(item: myCashflow)
@@ -123,7 +124,7 @@ public class AnnualTaxableIncomes: CollCashflows {
                     let myCashflow = Cashflow(dueDate: dateTaxPayment, amount: periodicTaxPayment.toString(decPlaces: 4))
                     periodicTaxPayments.add(item: myCashflow)
                 }
-                dateTaxPayment = addOnePeriodToDate(dateStart: dateTaxPayment, payPerYear: .monthly, dateRefer: referDate, bolEOMRule: true)
+                dateTaxPayment = addOnePeriodToDate(dateStart: dateTaxPayment, payPerYear: .monthly, dateRefer: referDate, bolEOMRule: eomRule)
             }
             nextFiscalYearEnd = addNextFiscalYearEnd(aDateIn: nextFiscalYearEnd)
         }
@@ -133,7 +134,7 @@ public class AnnualTaxableIncomes: CollCashflows {
     }
     
     
-    private func periodicTaxPaymentsForTermination(totalTaxPaymentUnplanned: Decimal, totalTaxPaymentPlanned: Decimal, unPlannedDate: Date, dateTaxPayment: Date, nextFiscalDate: Date, taxPayMonths: [Int], referDate: Date) -> Cashflows {
+    private func periodicTaxPaymentsForTermination(totalTaxPaymentUnplanned: Decimal, totalTaxPaymentPlanned: Decimal, unPlannedDate: Date, dateTaxPayment: Date, nextFiscalDate: Date, taxPayMonths: [Int], referDate: Date, aEOMRule: Bool) -> Cashflows {
         let taxPaymentMonths: [Int] = taxPayMonths
         let periodicTaxPaymentPlanned: Decimal = totalTaxPaymentPlanned / 4.0
         let remainingNoOfTaxPaymentsAfterTermination: Int = getRemainNoOfTaxPmtsInYear_Month(aStartDate: unPlannedDate, aFiscalYearEnd: nextFiscalDate)
@@ -152,8 +153,9 @@ public class AnnualTaxableIncomes: CollCashflows {
                 }
                 let myCashflow = Cashflow(dueDate: dateStart, amount: totalPeriodicTaxPayment.toString(decPlaces: 4))
                 taxPaymentsForTermination.items.append(myCashflow)
+                x += 1
             }
-            dateStart = addOnePeriodToDate(dateStart: dateStart, payPerYear: .monthly, dateRefer: referDate, bolEOMRule: false)
+            dateStart = addOnePeriodToDate(dateStart: dateStart, payPerYear: .monthly, dateRefer: referDate, bolEOMRule: aEOMRule)
         }
         
         return taxPaymentsForTermination

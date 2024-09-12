@@ -47,7 +47,7 @@ struct RentScheduleView: View {
             if myRentalSchedule.items.count > 0 {
                 myRentalSchedule.items.removeAll()
             }
-            myRentalSchedule.createTable(aRent: myInvestment.rent, aLeaseTerm: myInvestment.leaseTerm, aAsset: myInvestment.asset, eomRule: false)
+            myRentalSchedule.createTable(aRent: myInvestment.rent, aLeaseTerm: myInvestment.leaseTerm, aAsset: myInvestment.asset, eomRule: myInvestment.leaseTerm.endOfMonthRule)
         }
     }
 }

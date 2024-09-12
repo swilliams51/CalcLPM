@@ -27,7 +27,7 @@ public class PeriodicLeaseCashflows: CollCashflows {
             myAssetCashflows.createTable_Lessor(aInvestment: aInvestment,aLeaseTemplate: myLeaseTemplate)
         }
         self.addCashflows(myAssetCashflows)
-        myRentalCashflows.createTable(aRent: aInvestment.rent, aLeaseTerm: aInvestment.leaseTerm, aAsset: aInvestment.asset, eomRule: false)
+        myRentalCashflows.createTable(aRent: aInvestment.rent, aLeaseTerm: aInvestment.leaseTerm, aAsset: aInvestment.asset, eomRule: aInvestment.leaseTerm.endOfMonthRule)
         self.addCashflows(myRentalCashflows)
         myResidualCashflows.createTable(aInvestment: aInvestment, aLeaseTemplate: myLeaseTemplate)
         self.addCashflows(myResidualCashflows)
@@ -56,11 +56,11 @@ public class PeriodicLeaseCashflows: CollCashflows {
             myLeaseTemplate.add(item: myCashflow)
         }
         
-        var nextLeaseDate: Date = addOnePeriodToDate(dateStart: aInvestment.leaseTerm.baseCommenceDate, payPerYear: aInvestment.leaseTerm.paymentFrequency, dateRefer: aInvestment.leaseTerm.baseCommenceDate, bolEOMRule: true)
+        var nextLeaseDate: Date = addOnePeriodToDate(dateStart: aInvestment.leaseTerm.baseCommenceDate, payPerYear: aInvestment.leaseTerm.paymentFrequency, dateRefer: aInvestment.leaseTerm.baseCommenceDate, bolEOMRule: aInvestment.leaseTerm.endOfMonthRule)
         while nextLeaseDate <= aInvestment.getLeaseMaturityDate() {
             let myCashflow: Cashflow = Cashflow(dueDate: nextLeaseDate, amount: "0.0")
             myLeaseTemplate.add(item: myCashflow)
-            nextLeaseDate = addOnePeriodToDate(dateStart: nextLeaseDate, payPerYear: aInvestment.leaseTerm.paymentFrequency, dateRefer: aInvestment.leaseTerm.baseCommenceDate, bolEOMRule: false)
+            nextLeaseDate = addOnePeriodToDate(dateStart: nextLeaseDate, payPerYear: aInvestment.leaseTerm.paymentFrequency, dateRefer: aInvestment.leaseTerm.baseCommenceDate, bolEOMRule: aInvestment.leaseTerm.endOfMonthRule)
         }
         
         

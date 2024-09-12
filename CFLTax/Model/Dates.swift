@@ -145,7 +145,7 @@ public func getTheDay (referDay: Int, startDay: Int, endMonth: Int, endYear: Int
     }
     
     if (bolEOM == false && bolReferIsLDM == true) {
-        return min(startDay, lastDayOfMonth(iMonth: endMonth, iYear: endYear))
+        return min(referDay, lastDayOfMonth(iMonth: endMonth, iYear: endYear))
     }
     
     if referDay > startDay {
