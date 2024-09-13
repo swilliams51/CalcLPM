@@ -121,7 +121,7 @@ public class Cashflows {
     
     func XIRR2(guessRate: Decimal, _DayCountMethod: DayCountMethod) -> Decimal {
         var irr: Decimal = guessRate
-        let y2: Decimal = XNPV(aDiscountRate: 0.00, aDayCountMethod: _DayCountMethod)
+        let y2: Decimal = ModXNPV(aDiscountRate: 0.00, aDayCountMethod: _DayCountMethod)
         
         if y2 < 0.0 {
             irr = guessRate * -1.0
@@ -135,7 +135,7 @@ public class Cashflows {
     
     func XIRRForPositive(guessRate: Decimal, _DayCountMethod: DayCountMethod) -> Decimal{
         var irr: Decimal = guessRate
-        var y: Decimal = XNPV(aDiscountRate: irr, aDayCountMethod: _DayCountMethod)
+        var y: Decimal = ModXNPV(aDiscountRate: irr, aDayCountMethod: _DayCountMethod)
         var iCount: Int = 1
         
         while abs(y) > tolerancePaymentAmounts {
@@ -144,7 +144,7 @@ public class Cashflows {
             } else {
                 irr = decrementRateForPositive(x1: irr, y1: y, iCounter: iCount, _DayCountMethod: _DayCountMethod)
             }
-            y =  XNPV(aDiscountRate: irr, aDayCountMethod: _DayCountMethod)
+            y =  ModXNPV(aDiscountRate: irr, aDayCountMethod: _DayCountMethod)
             iCount += 1
         }
         
@@ -154,7 +154,7 @@ public class Cashflows {
     
     func XIRRForNegative(guessRate: Decimal, _DayCountMethod: DayCountMethod) -> Decimal{
         var irr: Decimal = guessRate
-        var y: Decimal = XNPV(aDiscountRate: irr, aDayCountMethod: _DayCountMethod)
+        var y: Decimal = ModXNPV(aDiscountRate: irr, aDayCountMethod: _DayCountMethod)
         var iCount: Int = 1
         
         while abs(y) > tolerancePaymentAmounts {
@@ -163,7 +163,7 @@ public class Cashflows {
             } else {
                 irr = decrementRateForNegative(x1: irr, y1: y, iCounter: iCount, _DayCountMethod: _DayCountMethod)
             }
-            y =  XNPV(aDiscountRate: irr, aDayCountMethod: _DayCountMethod)
+            y =  ModXNPV(aDiscountRate: irr, aDayCountMethod: _DayCountMethod)
             iCount += 1
         }
         
@@ -178,7 +178,7 @@ public class Cashflows {
         
         while newY > 0.0 {
             newX = newX + newX / factor
-            newY = XNPV(aDiscountRate: newX, aDayCountMethod: _DayCountMethod)
+            newY = ModXNPV(aDiscountRate: newX, aDayCountMethod: _DayCountMethod)
         }
         
         return mxbFactor(factor1: x1, value1: y1, factor2: newX, value2: newY)
@@ -191,7 +191,7 @@ public class Cashflows {
         
         while newY > 0.0 {
             newX = newX - newX / factor
-            newY = XNPV(aDiscountRate: newX, aDayCountMethod: _DayCountMethod)
+            newY = ModXNPV(aDiscountRate: newX, aDayCountMethod: _DayCountMethod)
         }
         
         return mxbFactor(factor1: x1, value1: y1, factor2: newX, value2: newY)
@@ -205,7 +205,7 @@ public class Cashflows {
         
         while newY < 0.0 {
             newX = newX - newX / factor
-            newY = XNPV(aDiscountRate: newX, aDayCountMethod: _DayCountMethod)
+            newY = ModXNPV(aDiscountRate: newX, aDayCountMethod: _DayCountMethod)
         }
         
         return mxbFactor(factor1: x1, value1: y1, factor2: newX, value2: newY)
@@ -218,14 +218,37 @@ public class Cashflows {
         
         while newY < 0.0 {
             newX = newX + newX / factor
-            newY = XNPV(aDiscountRate: newX, aDayCountMethod: _DayCountMethod)
+            newY = ModXNPV(aDiscountRate: newX, aDayCountMethod: _DayCountMethod)
         }
         
         return mxbFactor(factor1: x1, value1: y1, factor2: newX, value2: newY)
     }
     
     
-    func XNPV (aDiscountRate: Decimal, aDayCountMethod: DayCountMethod, aSinkingFundRate: Decimal = 0.0) -> Decimal {
+    func XNPV(aDiscountRate: Decimal, aDayCountMethod: DayCountMethod) -> Decimal {
+        var tempSum = items[0].amount.toDecimal()
+        
+        if items.count > 1 {
+            var prevPVFactor: Decimal = 1.0
+            var x = 1
+            while x < items.count {
+                let dateStart = items[x - 1].dueDate
+                let dateEnd = items[x].dueDate
+                let discountRate: Decimal = aDiscountRate
+                let aDailyRate: Decimal = dailyRate(iRate: discountRate, aDate1: dateStart, aDate2: dateEnd, aDayCountMethod: aDayCountMethod)
+                let aDayCount = dayCount(aDate1: dateStart, aDate2: dateEnd, aDayCount: aDayCountMethod)
+                let currPVFactor: Decimal = prevPVFactor / ( 1.0 + aDailyRate * Decimal(aDayCount))
+                let pvAmount: Decimal = currPVFactor * items[x].amount.toDecimal()
+                tempSum = tempSum + pvAmount
+                prevPVFactor = currPVFactor
+                x = x + 1
+            }
+        }
+        
+        return tempSum
+    }
+    
+    func ModXNPV (aDiscountRate: Decimal, aDayCountMethod: DayCountMethod, aSinkingFundRate: Decimal = 0.0) -> Decimal {
         var tempSum = items[0].amount.toDecimal()
         
         if items.count > 1 {

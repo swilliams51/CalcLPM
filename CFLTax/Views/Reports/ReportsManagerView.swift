@@ -24,7 +24,7 @@ struct ReportsManagerView: View {
                 taxesPaidItem
                 beforeTaxLeaseCashflowsItem
                 afterTaxLeaseCashflowsItem
-                afterTaxEndingBalanceItem
+                investmentAmortizationItem
             }
             
         }
@@ -130,9 +130,9 @@ struct ReportsManagerView: View {
         }
     }
     
-    var afterTaxEndingBalanceItem: some View {
+    var investmentAmortizationItem: some View {
         HStack {
-            Text("After-Tax Ending Balances")
+            Text("Investment Amortization")
                 .font(myFont2)
             Spacer()
             Image(systemName: "chevron.right")

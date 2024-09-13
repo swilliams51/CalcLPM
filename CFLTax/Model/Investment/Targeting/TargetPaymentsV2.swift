@@ -31,7 +31,7 @@ extension Investment {
         }
         
         var prevFactor: Decimal = 1.0
-        var y = tempInvestment.afterTaxCashflows.XNPV(aDiscountRate: yield, aDayCountMethod: self.economics.dayCountMethod)
+        var y = tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: yield, aDayCountMethod: self.economics.dayCountMethod)
         var iCount = 1
 //        for x in 0..<tempInvestment.afterTaxCashflows.count() {
 //            print("Date: \(tempInvestment.afterTaxCashflows.items[x].dueDate) Amount: \(tempInvestment.afterTaxCashflows.items[x].amount)")
@@ -107,7 +107,7 @@ extension Investment {
         }
         print("End")
        
-        let myNPV: Decimal = tempInvestment.afterTaxCashflows.XNPV(aDiscountRate: discountRate, aDayCountMethod: self.economics.dayCountMethod)
+        let myNPV: Decimal = tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: discountRate, aDayCountMethod: self.economics.dayCountMethod)
         
         return myNPV
     }
@@ -119,7 +119,7 @@ extension Investment {
         let yield = aTargetYield
         
         var factor: Decimal = 1.0
-        var y = tempInvestment.beforeTaxCashflows.XNPV(aDiscountRate: yield, aDayCountMethod: self.economics.dayCountMethod)
+        var y = tempInvestment.beforeTaxCashflows.ModXNPV(aDiscountRate: yield, aDayCountMethod: self.economics.dayCountMethod)
         var iCount = 1
         
         while abs(y) > tolerancePaymentAmounts {
@@ -181,7 +181,7 @@ extension Investment {
         }
         
         tempInvestment.setBeforeTaxCashflows()
-        let myNPV: Decimal = tempInvestment.beforeTaxCashflows.XNPV(aDiscountRate: discountRate, aDayCountMethod: self.economics.dayCountMethod)
+        let myNPV: Decimal = tempInvestment.beforeTaxCashflows.ModXNPV(aDiscountRate: discountRate, aDayCountMethod: self.economics.dayCountMethod)
         
         return myNPV
     }

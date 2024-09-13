@@ -10,73 +10,70 @@ import Foundation
 
 public struct Amortization: Identifiable {
     public let id = UUID()
-    let beginDate: Date
-    let balance: Decimal
-    let days: Int
-    let interest: Decimal
-    let principal: Decimal
+    public let dueDate: Date
+    public let endBalance: Decimal
+    public let interest: Decimal
+    public let cashflow: Decimal
+    public let principal: Decimal
     
-    init(beginDate: Date, balance: Decimal, days: Int, interest: Decimal, principal: Decimal) {
-        self.beginDate = beginDate
-        self.balance = balance
-        self.days = days
+    public init(dueDate: Date, endBalance: Decimal, interest: Decimal, cashflow: Decimal, principal: Decimal) {
+        self.dueDate = dueDate
+        self.endBalance = endBalance
         self.interest = interest
+        self.cashflow = cashflow
         self.principal = principal
     }
 }
 
-public struct Amortizations {
+@Observable
+public class Amortizations {
     public var items: [Amortization]
     
     public init () {
         self.items = [Amortization]()
     }
     
-    public mutating func createAmortizations (investCashflows: Cashflows, interestRate: Decimal, dayCountMethod: DayCountMethod) {
-        var investmentFound: Bool = false
-        let startDate = investCashflows.items[0].dueDate
-        var startBalance: Decimal = investCashflows.items[0].amount.toDecimal()
-        if investCashflows.items[0].amount.toDecimal() < 0.0 {
-            investmentFound = true
-        }
-        startBalance = startBalance * -1.0
+    public func createAmortizations (investCashflows: Cashflows, interestRate: Decimal, dayCountMethod: DayCountMethod) {
+        // handle initial cashflow
+        var currentDate = investCashflows.items[0].dueDate
+        var cf: Decimal = investCashflows.items[0].amount.toDecimal()
+        var accruedInterest: Decimal = 0.0
+        var principalPaid: Decimal = cf - accruedInterest
+        var endingBalance: Decimal = 0.0 - principalPaid
         
-        let startDays: Int = 0
-        let startInterest: Decimal = 0.0
-        let startPrincipal: Decimal = 0.0
-        
-        let startAmortization:Amortization = Amortization(beginDate: startDate, balance: startBalance, days: startDays, interest: startInterest, principal: startPrincipal)
+        let startAmortization:Amortization = Amortization(dueDate: currentDate, endBalance: endingBalance, interest: accruedInterest, cashflow: cf, principal: principalPaid)
         self.items.append(startAmortization)
         
+        //handle remaining cashflows
         for x in 1..<investCashflows.items.count {
-            var cashflow: Decimal = investCashflows.items[x].amount.toDecimal()
-            if investmentFound == false {
-                if cashflow < 0.0 {
-                    cashflow = cashflow * -1.0
-                    investmentFound = true
-                }
-            }
-            let currentDate: Date = investCashflows.items[x].dueDate
-            let currentBalance: Decimal = items[x - 1].balance
-            let days: Int = dayCount(aDate1: items[x - 1].beginDate, aDate2: currentDate, aDayCount: dayCountMethod)
-            let daysInYear = daysInYear(aDate1: startDate, aDate2: currentDate, aDayCountMethod: dayCountMethod)
-            let interest: Decimal = currentBalance * interestRate * Decimal(days) / Decimal(daysInYear)
-           
-            let principal: Decimal = cashflow - interest
-            var endBalance: Decimal = currentBalance - principal
-            if currentBalance < 0.0 {
-                endBalance = principal + currentBalance
-            }
+            currentDate = investCashflows.items[x].dueDate
+            cf = investCashflows.items[x].amount.toDecimal()
             
-            let currentAmortization: Amortization = Amortization(beginDate: currentDate, balance: endBalance, days: days, interest: interest, principal: principal)
+            if self.items[x - 1].endBalance < 0.0 { //amortization in sinking fund phase
+                accruedInterest = 0.0
+            } else {
+                accruedInterest = periodicInterest(currentBalance: self.items[x - 1].endBalance, startDate: self.items[x - 1].dueDate, endDate: currentDate, interestRate: interestRate, aDayCount: dayCountMethod)
+            }
+            principalPaid = cf - accruedInterest
+            endingBalance = self.items[x - 1].endBalance - principalPaid
+            
+            let currentAmortization: Amortization = Amortization(dueDate: currentDate, endBalance: endingBalance, interest: accruedInterest, cashflow: cf, principal: principalPaid)
             items.append(currentAmortization)
         }
         
     }
+    
+    public func periodicInterest(currentBalance: Decimal, startDate: Date, endDate: Date, interestRate: Decimal, aDayCount: DayCountMethod) -> Decimal {
+        let days: Int = dayCount(aDate1: startDate, aDate2: endDate, aDayCount: aDayCount)
+        let daysInYear = daysInYear(aDate1: startDate, aDate2: endDate, aDayCountMethod: aDayCount)
+        let interest: Decimal = currentBalance * interestRate * Decimal(days) / Decimal(daysInYear)
+        
+        return interest
+    }
   
     
     public func getEndingBalance() -> Decimal {
-        return items.last!.balance
+        return items.last!.endBalance
     }
     
     public func getTotalPrincipalPaid() -> Decimal {

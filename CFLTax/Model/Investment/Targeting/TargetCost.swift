@@ -31,7 +31,7 @@ extension Investment{
         }
        //2. Get NPV for y1, x = current asset cost
         tempInvestment.setAfterTaxCashflows()
-        let y1: Decimal = tempInvestment.afterTaxCashflows.XNPV(aDiscountRate: yield, aDayCountMethod: self.economics.dayCountMethod)
+        let y1: Decimal = tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: yield, aDayCountMethod: self.economics.dayCountMethod)
         tempInvestment.afterTaxCashflows.items.removeAll()
         
         //3a. Set x2 = 50.0% of Asset Cost
@@ -40,7 +40,7 @@ extension Investment{
         
         //4. Calculate y2, then use mxbFactor function to calculate final fee
         tempInvestment.setAfterTaxCashflows()
-        let y2: Decimal = tempInvestment.afterTaxCashflows.XNPV(aDiscountRate: yield, aDayCountMethod: self.economics.dayCountMethod)
+        let y2: Decimal = tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: yield, aDayCountMethod: self.economics.dayCountMethod)
         var newAmount = mxbFactor(factor1: x1, value1: y1, factor2: x2, value2: y2)
 
         if newAmount < 0.0 {
@@ -58,7 +58,7 @@ extension Investment{
 
        //2. Get NPV for y1, x = current asset cost
         tempInvestment.setBeforeTaxCashflows()
-        let y1: Decimal = tempInvestment.beforeTaxCashflows.XNPV(aDiscountRate: aTargetYield, aDayCountMethod: self.economics.dayCountMethod)
+        let y1: Decimal = tempInvestment.beforeTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: self.economics.dayCountMethod)
         tempInvestment.beforeTaxCashflows.items.removeAll()
         
         //3a. Set x2 = 50.0% of Asset Cost
@@ -67,7 +67,7 @@ extension Investment{
         
         //4. Calculate y2, then use mxbFactor function to calculate final fee
         tempInvestment.setBeforeTaxCashflows()
-        let y2: Decimal = tempInvestment.beforeTaxCashflows.XNPV(aDiscountRate: aTargetYield, aDayCountMethod: self.economics.dayCountMethod)
+        let y2: Decimal = tempInvestment.beforeTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: self.economics.dayCountMethod)
         var newAmount = mxbFactor(factor1: x1, value1: y1, factor2: x2, value2: y2)
         
         if newAmount < 0.0 {

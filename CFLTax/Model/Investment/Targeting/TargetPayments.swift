@@ -32,7 +32,7 @@ extension Investment {
             yield = yield * (1.0 - self.taxAssumptions.federalTaxRate.toDecimal())
         }
         
-        let initialNPV: Decimal = tempInvestment.afterTaxCashflows.XNPV(aDiscountRate: yield, aDayCountMethod: self.economics.dayCountMethod)
+        let initialNPV: Decimal = tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: yield, aDayCountMethod: self.economics.dayCountMethod)
         if abs(initialNPV) > tolerancePaymentAmounts {
             var x1: Decimal = 1.0
             var x2 = getInitialSecondGuess_MISF(aInvestment: tempInvestment, aTargetYield: yield, aFactor: x1)
@@ -63,7 +63,7 @@ extension Investment {
     private func getInitialSecondGuess_MISF(aInvestment: Investment, aTargetYield: Decimal, aFactor: Decimal) -> Decimal {
         let tempInvestment: Investment = aInvestment.clone()
         tempInvestment.setAfterTaxCashflows()
-        var myPV = tempInvestment.afterTaxCashflows.XNPV(aDiscountRate: aTargetYield, aDayCountMethod: aInvestment.economics.dayCountMethod)
+        var myPV = tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: aInvestment.economics.dayCountMethod)
         var myFactor: Decimal = aFactor
         
         if myPV > 0.0 {
@@ -92,7 +92,7 @@ extension Investment {
          }
          
         tempInvestment.setAfterTaxCashflows()
-         let myNPV: Decimal = tempInvestment.afterTaxCashflows.XNPV(aDiscountRate: aYield, aDayCountMethod: aInvestment.economics.dayCountMethod)
+         let myNPV: Decimal = tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: aYield, aDayCountMethod: aInvestment.economics.dayCountMethod)
          
          return myNPV
     }
@@ -114,7 +114,7 @@ extension Investment {
         let tempInvestment: Investment = self.clone()
         tempInvestment.setBeforeTaxCashflows()
       
-        let initialNPV: Decimal = tempInvestment.beforeTaxCashflows.XNPV(aDiscountRate: aTargetYield, aDayCountMethod: self.economics.dayCountMethod)
+        let initialNPV: Decimal = tempInvestment.beforeTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: self.economics.dayCountMethod)
         if abs(initialNPV) > tolerancePaymentAmounts {
             var x1: Decimal = 1.0
             var x2 = getInitialSecondGuess_IRR(aInvestment: tempInvestment, aTargetYield: aTargetYield, aFactor: x1)
@@ -145,7 +145,7 @@ extension Investment {
     private func getInitialSecondGuess_IRR(aInvestment: Investment, aTargetYield: Decimal, aFactor: Decimal) -> Decimal {
         let tempInvestment: Investment = aInvestment.clone()
         tempInvestment.setBeforeTaxCashflows()
-        var myPV = tempInvestment.beforeTaxCashflows.XNPV(aDiscountRate: aTargetYield, aDayCountMethod: aInvestment.economics.dayCountMethod)
+        var myPV = tempInvestment.beforeTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: aInvestment.economics.dayCountMethod)
         var myFactor: Decimal = aFactor
         
         if myPV > 0.0 {
@@ -174,7 +174,7 @@ extension Investment {
         }
         
        tempInvestment.setBeforeTaxCashflows()
-        let myNPV: Decimal = tempInvestment.beforeTaxCashflows.XNPV(aDiscountRate: aYield, aDayCountMethod: aInvestment.economics.dayCountMethod)
+        let myNPV: Decimal = tempInvestment.beforeTaxCashflows.ModXNPV(aDiscountRate: aYield, aDayCountMethod: aInvestment.economics.dayCountMethod)
         
         return myNPV
     }
