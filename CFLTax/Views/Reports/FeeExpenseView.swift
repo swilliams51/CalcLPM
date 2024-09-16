@@ -46,7 +46,7 @@ struct FeeExpenseView: View {
            if myFeeAmortization.items.count > 0 {
                myFeeAmortization.items.removeAll()
            }
-           myFeeAmortization.createTable(aFee: myInvestment.fee, aMaturityDate: myInvestment.getLeaseMaturityDate(), aFiscalMonth: myInvestment.taxAssumptions.fiscalMonthEnd.rawValue)
+           myFeeAmortization.createTable(aInvestment: myInvestment)
        }
     }
 }

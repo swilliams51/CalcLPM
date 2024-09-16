@@ -9,7 +9,7 @@ import Foundation
 
 @Observable
 public class PeriodicLeaseCashflows: CollCashflows {
-    var myLeaseTemplate: Cashflows = Cashflows()
+    public var myLeaseTemplate: Cashflows = Cashflows()
     var myAssetCashflows: AssetCashflows = AssetCashflows()
     var myRentalCashflows: RentalCashflows = RentalCashflows()
     var myResidualCashflows: ResidualCashflows = ResidualCashflows()
@@ -47,7 +47,7 @@ public class PeriodicLeaseCashflows: CollCashflows {
         return myLeaseCashflows
     }
     
-    func createLeaseTemplate(aInvestment: Investment) {
+    public func createLeaseTemplate(aInvestment: Investment) {
         let myCashflow: Cashflow = Cashflow(dueDate: aInvestment.asset.fundingDate, amount: "0.0")
         myLeaseTemplate.add(item: myCashflow)
         
@@ -63,7 +63,7 @@ public class PeriodicLeaseCashflows: CollCashflows {
             nextLeaseDate = addOnePeriodToDate(dateStart: nextLeaseDate, payPerYear: aInvestment.leaseTerm.paymentFrequency, dateRefer: aInvestment.leaseTerm.baseCommenceDate, bolEOMRule: aInvestment.leaseTerm.endOfMonthRule)
         }
         
-        
     }
+    
     
 }

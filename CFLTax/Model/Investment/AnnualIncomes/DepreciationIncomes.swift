@@ -23,11 +23,17 @@ public class DepreciationIncomes: Cashflows {
     private var bonusDepreciation: Decimal = 0.0
     private var decConvention: Decimal = 0.5
     
-    public func createTable(aDepreciation: Depreciation, lessorCost: String, fundingDate: Date, fiscalMonthEnd: Int, leaseExpiry: Date) {
+    public func createTable(aInvestment: Investment) {
+        
+        let aDepreciation: Depreciation = aInvestment.depreciation
+        let lessorCost = aInvestment.asset.lessorCost
+        let fundingDate = aInvestment.asset.fundingDate
+        let aFiscalMonthEnd = aInvestment.taxAssumptions.fiscalMonthEnd.rawValue
+        let leaseExpiry: Date = aInvestment.getLeaseMaturityDate()
         runTotalDepreciation = 0.0
         intLife = aDepreciation.life
         decBasis = getAdjustedBasis(aUnadjustedBasis: lessorCost.toDecimal(), basisReductionFactor: aDepreciation.basisReduction, percentITC: aDepreciation.investmentTaxCredit)
-        firstFiscalYearEnd = getFiscalYearEnd(askDate: fundingDate, fiscalMonthEnd: fiscalMonthEnd)
+        firstFiscalYearEnd = getFiscalYearEnd(askDate: fundingDate, fiscalMonthEnd: aFiscalMonthEnd)
         intYears = getDepreciationYears(leaseExpiry: leaseExpiry)
         decMethod = getMethodFactor(aDepreciationType: aDepreciation.method)
         

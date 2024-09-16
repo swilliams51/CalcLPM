@@ -46,7 +46,7 @@ struct DepreciationScheduleView: View {
             if myDepreciationSchedule.items.count > 0 {
                 myDepreciationSchedule.items.removeAll()
             }
-            myDepreciationSchedule.createTable(aDepreciation: myInvestment.depreciation, lessorCost: myInvestment.asset.lessorCost, fundingDate: myInvestment.asset.fundingDate,  fiscalMonthEnd: myInvestment.taxAssumptions.fiscalMonthEnd.rawValue, leaseExpiry: myInvestment.getLeaseMaturityDate())
+            myDepreciationSchedule.createTable(aInvestment: myInvestment)
         }
     }
 }

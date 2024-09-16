@@ -23,7 +23,6 @@ public struct Rent {
         self.groups.append(groupToAdd)
     }
     
-    
     public func getNumberOfPaymentsForNewGroup(aGroup: Group, aFrequency: Frequency, eomRule: Bool, referDate: Date) -> Int {
         var numberOfPayments: Int = aGroup.noOfPayments
         let maxRemaining: Int = self.getMaxRemainNumberPayments(maxBaseTerm: maxBaseTerm, freq: aFrequency, eom: eomRule, aRefer: referDate)

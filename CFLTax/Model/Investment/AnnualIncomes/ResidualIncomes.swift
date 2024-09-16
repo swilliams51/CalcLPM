@@ -10,8 +10,12 @@ import Foundation
 @Observable
 public class ResidualIncomes: Cashflows {
     
-    public func createTable(myAsset: Asset, aMaturityDate: Date, aFiscalMonth: Int) {
-        var currentFiscalDate = getFiscalYearEnd(askDate: myAsset.fundingDate, fiscalMonthEnd: aFiscalMonth)
+    public func createTable(aInvestment: Investment) {
+        
+        let myAsset = aInvestment.asset
+        let aMaturityDate: Date = aInvestment.getLeaseMaturityDate()
+        let aFiscalMonthEnd: Int = aInvestment.taxAssumptions.fiscalMonthEnd.rawValue
+        var currentFiscalDate = getFiscalYearEnd(askDate: myAsset.fundingDate, fiscalMonthEnd: aFiscalMonthEnd)
         
         while currentFiscalDate <= aMaturityDate {
             let residualIncomeAmount = Cashflow(dueDate: currentFiscalDate, amount: "0.00")

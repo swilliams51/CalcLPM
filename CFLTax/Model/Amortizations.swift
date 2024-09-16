@@ -29,17 +29,23 @@ public struct Amortization: Identifiable {
 public class Amortizations {
     public var items: [Amortization]
     
+    public var totalInterest: Decimal = 0.0
+    public var totalCashflow: Decimal = 0.0
+    
     public init () {
         self.items = [Amortization]()
     }
     
     public func createAmortizations (investCashflows: Cashflows, interestRate: Decimal, dayCountMethod: DayCountMethod) {
         // handle initial cashflow
+        var runTotalInterest: Decimal = 0.0
+        var runTotalCashflow: Decimal = 0.0
         var currentDate = investCashflows.items[0].dueDate
         var cf: Decimal = investCashflows.items[0].amount.toDecimal()
         var accruedInterest: Decimal = 0.0
         var principalPaid: Decimal = cf - accruedInterest
         var endingBalance: Decimal = 0.0 - principalPaid
+        runTotalCashflow = runTotalCashflow + cf
         
         let startAmortization:Amortization = Amortization(dueDate: currentDate, endBalance: endingBalance, interest: accruedInterest, cashflow: cf, principal: principalPaid)
         self.items.append(startAmortization)
@@ -48,18 +54,23 @@ public class Amortizations {
         for x in 1..<investCashflows.items.count {
             currentDate = investCashflows.items[x].dueDate
             cf = investCashflows.items[x].amount.toDecimal()
-            
+            runTotalCashflow = runTotalCashflow + cf
             if self.items[x - 1].endBalance < 0.0 { //amortization in sinking fund phase
                 accruedInterest = 0.0
             } else {
                 accruedInterest = periodicInterest(currentBalance: self.items[x - 1].endBalance, startDate: self.items[x - 1].dueDate, endDate: currentDate, interestRate: interestRate, aDayCount: dayCountMethod)
             }
+            runTotalInterest = runTotalInterest + accruedInterest
+            
             principalPaid = cf - accruedInterest
             endingBalance = self.items[x - 1].endBalance - principalPaid
             
             let currentAmortization: Amortization = Amortization(dueDate: currentDate, endBalance: endingBalance, interest: accruedInterest, cashflow: cf, principal: principalPaid)
             items.append(currentAmortization)
         }
+        
+        totalInterest = runTotalInterest
+        totalCashflow = runTotalCashflow
         
     }
     
@@ -72,29 +83,4 @@ public class Amortizations {
     }
   
     
-    public func getEndingBalance() -> Decimal {
-        return items.last!.endBalance
-    }
-    
-    public func getTotalPrincipalPaid() -> Decimal {
-        var runTotal: Decimal = 0.0
-        
-        for x in 1..<items.count {
-            let principal: Decimal = items[x].principal
-            runTotal = runTotal + principal
-        }
-        
-        return runTotal
-    }
-    
-    public func getTotalInterest() -> Decimal {
-        var runTotal: Decimal = 0.0
-        
-        for x in 1..<items.count {
-            let interest: Decimal = items[x].interest
-            runTotal = runTotal + interest
-        }
-        
-        return runTotal
-    }
 }

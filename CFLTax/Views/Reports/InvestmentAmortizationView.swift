@@ -16,13 +16,15 @@ struct InvestmentAmortizationView: View {
     
     var body: some View {
         Form {
-            Section(header: Text("MISF_AT: \(yieldFormatted())").font(myFont)) {
+            Section(header: Text("MISF_AT: \(yieldFormatted()), Lessor Cost: 1.00")
+                .font(myFont)) {
                 ScrollView {
                     Grid (alignment: .leading, horizontalSpacing: 23, verticalSpacing: 10) {
                         amortHeaderGridRow
                         ForEach(myAmortizations.items) { item in
                             amortGridRow(item: item)
                         }
+                        amortTotalsGridRow
                     }
                 }
             }
@@ -63,6 +65,16 @@ struct InvestmentAmortizationView: View {
         .font(myFont)
     }
     
+    var amortTotalsGridRow: some View {
+        GridRow{
+            Text("Totals")
+            Text("\(expressedAsFactor(amount: myAmortizations.totalCashflow))")
+            Text("\(expressedAsFactor(amount: myAmortizations.totalInterest))")
+            
+            Text("")
+        }.font(myFont)
+    }
+    
     func expressedAsFactor(amount: Decimal) -> String {
         let denominator = myInvestment.asset.lessorCost.toDecimal()
         let factor = amount / denominator
@@ -72,7 +84,7 @@ struct InvestmentAmortizationView: View {
     }
 
     func yieldFormatted() -> String {
-        let yield = myInvestment.getMISF_AT_Yield().toString(decPlaces: 3)
+        let yield = myInvestment.getMISF_AT_Yield().toString(decPlaces: 6)
         let strYield = percentFormatter(percent: yield, locale: myLocale, places: 3)
         
         return strYield

@@ -9,7 +9,6 @@ import Foundation
 
 @Observable
 public class FeeIncomes: Cashflows {
-    
     public var currentFiscalDate: Date = Date()
     public var daysInLease: Int = 0
     public var perDiemFee: Decimal = 0.0
@@ -19,9 +18,13 @@ public class FeeIncomes: Cashflows {
     public var perMonthlyFee: Decimal = 0.0
     private var places: Int = 6
 
-    
-    public func createTable (aFee: Fee, aMaturityDate: Date, aFiscalMonth:Int) {
-        if feeAmortMethod == .daily {
+    public func createTable (aInvestment: Investment) {
+        let aFee: Fee = aInvestment.fee
+        let aMaturityDate: Date = aInvestment.getLeaseMaturityDate()
+        let aFiscalMonth: Int = aInvestment.taxAssumptions.fiscalMonthEnd.rawValue
+        let aFeeAmortMethod = aFee.amortizationMethod
+        
+        if aFeeAmortMethod == .daily {
             createTable_Daily(aFee: aFee, aMaturityDate: aMaturityDate, aFiscalMonth: aFiscalMonth)
         } else {
             createTable_Monthly(aFee: aFee, aMaturityDate: aMaturityDate, aFiscalMonth: aFiscalMonth)

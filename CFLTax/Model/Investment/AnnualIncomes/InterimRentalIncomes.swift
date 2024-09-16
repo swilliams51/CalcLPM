@@ -10,9 +10,15 @@ import Foundation
 
 @Observable
 public class InterimRentalIncomes: Cashflows {
-  
     
-    public func createTable(aRent: Rent, aFundingDate: Date, aFrequency: Frequency, aFiscalMonthEnd: TaxYearEnd, aLeaseExpiry: Date) {
+    public func createTable(aInvestment: Investment) {
+        
+        
+        let aRent: Rent = aInvestment.rent
+        let aFundingDate: Date = aInvestment.asset.fundingDate
+        let aFrequency: Frequency = aInvestment.leaseTerm.paymentFrequency
+        let aFiscalMonthEnd: TaxYearEnd = aInvestment.taxAssumptions.fiscalMonthEnd
+        let aLeaseExpiry: Date = aInvestment.getLeaseMaturityDate()
         var nextFiscalYearEnd: Date = getFiscalYearEnd(askDate: aFundingDate, fiscalMonthEnd: aFiscalMonthEnd.rawValue)
         let finalFiscalYearEnd: Date = getFiscalYearEnd(askDate: aLeaseExpiry, fiscalMonthEnd: aFiscalMonthEnd.rawValue)
         let dateStart: Date = aRent.groups[0].startDate

@@ -23,20 +23,19 @@ public class AnnualTaxableIncomes: CollCashflows {
         self.myDepreciationIncomes.removeAll()
         self.myFeeIncomes.removeAll()
         
-        
-        myInterimRentalIncomes.createTable(aRent: aInvestment.rent, aFundingDate: aInvestment.asset.fundingDate, aFrequency: aInvestment.leaseTerm.paymentFrequency, aFiscalMonthEnd: aInvestment.taxAssumptions.fiscalMonthEnd, aLeaseExpiry: aInvestment.getLeaseMaturityDate())
+        myInterimRentalIncomes.createTable(aInvestment: aInvestment)
         self.addCashflows(myInterimRentalIncomes)
         
-        myBaseRentalIncomes.createTable(aRent: aInvestment.rent, aFundingDate: aInvestment.asset.fundingDate, aBaseCommence: aInvestment.leaseTerm.baseCommenceDate, aFrequency: aInvestment.leaseTerm.paymentFrequency, aFiscalMonthEnd: aInvestment.taxAssumptions.fiscalMonthEnd, aLeaseExpiry: aInvestment.getLeaseMaturityDate(), aEOMRule: aInvestment.leaseTerm.endOfMonthRule, aDayCountMethod: aInvestment.economics.dayCountMethod)
+        myBaseRentalIncomes.createTable(aInvestment: aInvestment)
         self.addCashflows(myBaseRentalIncomes)
         
-        myResidualIncomes.createTable(myAsset: aInvestment.asset, aMaturityDate: aInvestment.getLeaseMaturityDate(), aFiscalMonth: aInvestment.taxAssumptions.fiscalMonthEnd.rawValue)
+        myResidualIncomes.createTable(aInvestment: aInvestment)
         self.addCashflows(myResidualIncomes)
         
-        myDepreciationIncomes.createTable(aDepreciation: aInvestment.depreciation, lessorCost: aInvestment.asset.lessorCost, fundingDate: aInvestment.asset.fundingDate, fiscalMonthEnd: aInvestment.taxAssumptions.fiscalMonthEnd.rawValue, leaseExpiry: aInvestment.getLeaseMaturityDate())
+        myDepreciationIncomes.createTable(aInvestment: aInvestment)
         self.addCashflows(myDepreciationIncomes)
         
-        myFeeIncomes.createTable(aFee: aInvestment.fee, aMaturityDate: aInvestment.getLeaseMaturityDate(), aFiscalMonth: aInvestment.taxAssumptions.fiscalMonthEnd.rawValue)
+        myFeeIncomes.createTable(aInvestment: aInvestment)
         self.addCashflows(myFeeIncomes)
     }
     
