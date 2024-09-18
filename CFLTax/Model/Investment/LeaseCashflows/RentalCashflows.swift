@@ -11,7 +11,11 @@ import Foundation
 @Observable
 public class RentalCashflows: Cashflows {
     
-    public func createTable(aRent: Rent, aLeaseTerm: LeaseTerm, aAsset: Asset, eomRule: Bool) {
+    public func createTable(aInvestment: Investment) {
+        let aRent: Rent = aInvestment.rent
+        let aLeaseTerm: LeaseTerm = aInvestment.leaseTerm
+        let aAsset: Asset = aInvestment.asset
+        let eomRule: Bool = aInvestment.leaseTerm.endOfMonthRule
         var dateStart: Date = aLeaseTerm.baseCommenceDate
         var counter: Int = 0
         var rentAmount: String = "0.00"
@@ -51,8 +55,8 @@ public class RentalCashflows: Cashflows {
             while y < aRent.groups[x].noOfPayments {
                 if aRent.groups[x].timing == .advance {
                     //base rent in advance
-                    let myCF = Cashflow(dueDate: dateStart, amount: aRent.groups[x].amount)
-                    self.items.append(myCF)
+                    let myStartCF = Cashflow(dueDate: dateStart, amount: aRent.groups[x].amount)
+                    self.items.append(myStartCF)
                     dateStart = addOnePeriodToDate(dateStart: dateStart, payPerYear: aLeaseTerm.paymentFrequency, dateRefer: aLeaseTerm.baseCommenceDate, bolEOMRule: eomRule)
                     let myEndCF = Cashflow(dueDate: dateStart, amount: "0.00")
                     self.items.append(myEndCF)
@@ -61,14 +65,17 @@ public class RentalCashflows: Cashflows {
                     let myStartCF = Cashflow(dueDate: dateStart, amount: "0.00")
                     self.items.append(myStartCF)
                     dateStart = addOnePeriodToDate(dateStart: dateStart, payPerYear: aLeaseTerm.paymentFrequency, dateRefer: aLeaseTerm.baseCommenceDate, bolEOMRule: eomRule)
-                    let myCf = Cashflow(dueDate: dateStart, amount: aRent.groups[x].amount)
-                    items.append(myCf)
+                    let myEndCf = Cashflow(dueDate: dateStart, amount: aRent.groups[x].amount)
+                    items.append(myEndCf)
                 }
                 y += 1
             }
         }
         
         self.consolidateCashflows()
-        
     }
+    
+    
+    
+    
 }

@@ -13,7 +13,7 @@ public class PeriodicDepreciableBalances: Cashflows {
     var myDepreciationIncomes: DepreciationIncomes = DepreciationIncomes()
     var myFeeIncomes: FeeIncomes = FeeIncomes()
     
-    public func createTable(aInvestment: Investment, aLeaseTemplate: Cashflows) {
+    public func createTable(aInvestment: Investment, aLeaseTemplate: LeaseTemplateCashflows) {
         myDepreciationIncomes.createTable(aInvestment: aInvestment)
         myFeeIncomes.createTable(aInvestment: aInvestment)
         

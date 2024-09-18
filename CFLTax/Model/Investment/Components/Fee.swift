@@ -12,12 +12,11 @@ public struct Fee {
     public var amount: String
     public var feeType: FeeType
     public var datePaid: Date
-    public var amortizationMethod: FeeAmortizationMethod = .monthly
+    public var amortizationMethod: FeeAmortizationMethod = .daily
     
     init(amount: String, feeType: FeeType = .expense, datePaid: Date = Date()) {
         self.amount = amount
         self.datePaid = datePaid
         self.feeType = feeType
-        
     }
 }

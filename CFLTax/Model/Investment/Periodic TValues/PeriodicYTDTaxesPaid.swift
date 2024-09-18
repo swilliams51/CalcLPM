@@ -12,7 +12,7 @@ public class PeriodicYTDTaxesPaid: Cashflows {
     
     var myTaxableIncomes: AnnualTaxableIncomes = AnnualTaxableIncomes()
     
-    public func createTable(aInvestment: Investment, aLeaseTemplate: Cashflows) {
+    public func createTable(aInvestment: Investment, aLeaseTemplate: LeaseTemplateCashflows) {
         let myPeriodicTaxesPaid: Cashflows = myTaxableIncomes.createPeriodicTaxesPaid_STD(aInvestment: aInvestment)
         let myCombinedCashflows = CollCashflows()
         myCombinedCashflows.addCashflows(aLeaseTemplate)

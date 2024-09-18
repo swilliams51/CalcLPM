@@ -37,6 +37,19 @@ public struct Rent {
         return numberOfPayments
     }
     
+    public func hasAdvanceRentals() -> Bool {
+        var bolAdvanceRentals: Bool = false
+        
+        for x in 0..<groups.count {
+            if groups[x].timing == .advance {
+                bolAdvanceRentals = true
+                break
+            }
+        }
+        
+        return bolAdvanceRentals
+    }
+    
     public func interimExists() -> Bool {
         if groups.count > 0 {
             if groups[0].isInterim == true {

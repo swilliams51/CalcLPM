@@ -13,7 +13,6 @@ public class InterimRentalIncomes: Cashflows {
     
     public func createTable(aInvestment: Investment) {
         
-        
         let aRent: Rent = aInvestment.rent
         let aFundingDate: Date = aInvestment.asset.fundingDate
         let aFrequency: Frequency = aInvestment.leaseTerm.paymentFrequency

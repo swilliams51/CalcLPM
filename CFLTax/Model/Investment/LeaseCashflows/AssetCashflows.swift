@@ -11,7 +11,7 @@ import Foundation
 @Observable
 public class AssetCashflows: Cashflows {
     
-    public func createTable_Lessor(aInvestment: Investment, aLeaseTemplate: Cashflows) {
+    public func createTable_Lessor(aInvestment: Investment, aLeaseTemplate: LeaseTemplateCashflows) {
         //if lessee perspective is true then the fee amount is excluded from the asset cost
         let amount: Decimal = aInvestment.getAssetCost(asCashflow: true)
         let feeAmount: Decimal = aInvestment.getFeeAmount()
@@ -25,7 +25,7 @@ public class AssetCashflows: Cashflows {
         }
     }
     
-    public func createTable_Lessee(aInvestment: Investment, aLeaseTemplate: Cashflows) {
+    public func createTable_Lessee(aInvestment: Investment, aLeaseTemplate: LeaseTemplateCashflows) {
         let amount: Decimal = aInvestment.getAssetCost(asCashflow: true)
         let myCashflow: Cashflow = Cashflow(dueDate: aInvestment.asset.fundingDate, amount: amount.toString(decPlaces: 4))
         items.append(myCashflow)

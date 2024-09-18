@@ -10,7 +10,7 @@ import Foundation
 
 @Observable
 public class TerminationValues: CollCashflows {
-    var myLeaseTemplate: Cashflows = Cashflows()
+    var myLeaseTemplate: LeaseTemplateCashflows = LeaseTemplateCashflows()
     var myInvestmentBalances: PeriodicInvestmentBalances = PeriodicInvestmentBalances()
     var myDepreciableBalances: PeriodicDepreciableBalances = PeriodicDepreciableBalances()
     var myYTDIncomes: PeriodicYTDIncomes = PeriodicYTDIncomes()
@@ -22,7 +22,10 @@ public class TerminationValues: CollCashflows {
     public func createTable(aInvestment: Investment) -> Cashflows {
         // AfterTaxTValue = IBAL - DepreciableBasis * FedTaxRate + (IncomeYTD - AdvanceRent) * FedTaxRate - TaxesPaidTYD + ITC Recaptured
         // TV = AfterTaxTValue / (1.0 - FedTaxRate)
-        createLeaseTemplate(aInvestment: aInvestment)
+        
+        
+        myLeaseTemplate.createTemplate(aInvestment: aInvestment)
+        
         
         
         

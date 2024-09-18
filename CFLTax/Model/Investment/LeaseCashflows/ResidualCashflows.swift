@@ -10,7 +10,7 @@ import Foundation
 @Observable
 public class ResidualCashflows: Cashflows {
     
-    public func createTable(aInvestment: Investment, aLeaseTemplate: Cashflows) {
+    public func createTable(aInvestment: Investment, aLeaseTemplate: LeaseTemplateCashflows) {
         for x in 0..<aLeaseTemplate.count() - 1 {
             let myCashflow = aLeaseTemplate.items[x]
             items.append(myCashflow)

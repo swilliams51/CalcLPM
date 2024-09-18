@@ -9,25 +9,26 @@ import Foundation
 
 @Observable
 public class PeriodicLeaseCashflows: CollCashflows {
-    public var myLeaseTemplate: Cashflows = Cashflows()
+    public var myLeaseTemplate: LeaseTemplateCashflows = LeaseTemplateCashflows()
     var myAssetCashflows: AssetCashflows = AssetCashflows()
     var myRentalCashflows: RentalCashflows = RentalCashflows()
     var myResidualCashflows: ResidualCashflows = ResidualCashflows()
     
     public func createTable(aInvestment: Investment, lesseePerspective: Bool) {
+        self.myLeaseTemplate.removeAll()
         self.myAssetCashflows.removeAll()
         self.myRentalCashflows.removeAll()
         self.myResidualCashflows.removeAll()
         self.myLeaseTemplate.removeAll()
         
-        createLeaseTemplate(aInvestment: aInvestment)
+        myLeaseTemplate.createTemplate(aInvestment: aInvestment)
         if lesseePerspective {
             myAssetCashflows.createTable_Lessee(aInvestment: aInvestment, aLeaseTemplate: myLeaseTemplate)
         } else {
             myAssetCashflows.createTable_Lessor(aInvestment: aInvestment,aLeaseTemplate: myLeaseTemplate)
         }
         self.addCashflows(myAssetCashflows)
-        myRentalCashflows.createTable(aRent: aInvestment.rent, aLeaseTerm: aInvestment.leaseTerm, aAsset: aInvestment.asset, eomRule: aInvestment.leaseTerm.endOfMonthRule)
+        myRentalCashflows.createTable(aInvestment: aInvestment)
         self.addCashflows(myRentalCashflows)
         myResidualCashflows.createTable(aInvestment: aInvestment, aLeaseTemplate: myLeaseTemplate)
         self.addCashflows(myResidualCashflows)
@@ -47,23 +48,7 @@ public class PeriodicLeaseCashflows: CollCashflows {
         return myLeaseCashflows
     }
     
-    public func createLeaseTemplate(aInvestment: Investment) {
-        let myCashflow: Cashflow = Cashflow(dueDate: aInvestment.asset.fundingDate, amount: "0.0")
-        myLeaseTemplate.add(item: myCashflow)
-        
-        if aInvestment.leaseTerm.baseCommenceDate !=  aInvestment.asset.fundingDate {
-            let myCashflow: Cashflow = Cashflow(dueDate: aInvestment.leaseTerm.baseCommenceDate, amount: "0.0")
-            myLeaseTemplate.add(item: myCashflow)
-        }
-        
-        var nextLeaseDate: Date = addOnePeriodToDate(dateStart: aInvestment.leaseTerm.baseCommenceDate, payPerYear: aInvestment.leaseTerm.paymentFrequency, dateRefer: aInvestment.leaseTerm.baseCommenceDate, bolEOMRule: aInvestment.leaseTerm.endOfMonthRule)
-        while nextLeaseDate <= aInvestment.getLeaseMaturityDate() {
-            let myCashflow: Cashflow = Cashflow(dueDate: nextLeaseDate, amount: "0.0")
-            myLeaseTemplate.add(item: myCashflow)
-            nextLeaseDate = addOnePeriodToDate(dateStart: nextLeaseDate, payPerYear: aInvestment.leaseTerm.paymentFrequency, dateRefer: aInvestment.leaseTerm.baseCommenceDate, bolEOMRule: aInvestment.leaseTerm.endOfMonthRule)
-        }
-        
-    }
+  
     
     
 }
