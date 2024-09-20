@@ -267,6 +267,27 @@ public class Investment {
         return pvOfObligations
     }
     
+    public func createLeaseTemplate() -> Cashflows {
+        let myCashflows: Cashflows = Cashflows()
+        
+        let myCashflow: Cashflow = Cashflow(dueDate: self.asset.fundingDate, amount: "0.0")
+        myCashflows.add(item: myCashflow)
+        
+        if self.leaseTerm.baseCommenceDate !=  self.asset.fundingDate {
+            let myCashflow: Cashflow = Cashflow(dueDate: self.leaseTerm.baseCommenceDate, amount: "0.0")
+            myCashflows.add(item: myCashflow)
+        }
+        
+        var nextLeaseDate: Date = addOnePeriodToDate(dateStart: self.leaseTerm.baseCommenceDate, payPerYear: self.leaseTerm.paymentFrequency, dateRefer: self.leaseTerm.baseCommenceDate, bolEOMRule: self.leaseTerm.endOfMonthRule)
+        while nextLeaseDate <= self.getLeaseMaturityDate() {
+            let myCashflow: Cashflow = Cashflow(dueDate: nextLeaseDate, amount: "0.0")
+            myCashflows.add(item: myCashflow)
+            nextLeaseDate = addOnePeriodToDate(dateStart: nextLeaseDate, payPerYear: self.leaseTerm.paymentFrequency, dateRefer: self.leaseTerm.baseCommenceDate, bolEOMRule: self.leaseTerm.endOfMonthRule)
+        }
+        
+        return myCashflows
+    }
+    
 }
 
     

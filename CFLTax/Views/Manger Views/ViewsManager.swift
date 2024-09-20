@@ -90,8 +90,22 @@ struct ViewsManager: View {
             TaxableIncomeView(myInvestment: myInvestment, myTaxableIncomes: myTaxableIncomes, path: $path, isDark: $isDark)
         case 34:
             TaxesPaidView(myInvestment: myInvestment, myTaxableIncomes: myTaxableIncomes, path: $path, isDark: $isDark)
-      case 35:
+        case 35:
             InvestmentAmortizationView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+        case 36:
+          TerminationViewsManager(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
+        case 37:
+          InvestmentBalancesView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+        case 38:
+            DepreciationBalancesView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+        case 39:
+            YTDIncomesView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+        case 40:
+            YTDTaxesPaidView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+        case 41:
+            AdvanceRentsView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+      case 42:
+            TerminationValuesView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         default:
             Text("Hello")
         }
@@ -99,5 +113,5 @@ struct ViewsManager: View {
 }
 
 #Preview {
-    ViewsManager(myInvestment: Investment(), myDepreciationSchedule: DepreciationIncomes(), myRentalSchedule: RentalCashflows(), myTaxableIncomes: AnnualTaxableIncomes(), myFeeAmortization: FeeIncomes(), path: .constant([Int]()), isDark: .constant(false), selectedGroup: .constant(Group()), currentFile: .constant("File is New"), selectedView: 22)
+    ViewsManager(myInvestment: Investment(), myDepreciationSchedule: DepreciationIncomes(), myRentalSchedule: RentalCashflows(), myTaxableIncomes: AnnualTaxableIncomes(), myFeeAmortization: FeeIncomes(), path: .constant([Int]()), isDark: .constant(false), selectedGroup: .constant(Group()), currentFile: .constant("File is New"), selectedView: 36)
 }

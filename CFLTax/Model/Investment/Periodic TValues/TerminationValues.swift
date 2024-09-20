@@ -9,7 +9,7 @@ import Foundation
 
 
 @Observable
-public class TerminationValues: CollCashflows {
+public class TerminationValues: Cashflows {
     var myLeaseTemplate: LeaseTemplateCashflows = LeaseTemplateCashflows()
     var myInvestmentBalances: PeriodicInvestmentBalances = PeriodicInvestmentBalances()
     var myDepreciableBalances: PeriodicDepreciableBalances = PeriodicDepreciableBalances()
@@ -17,43 +17,60 @@ public class TerminationValues: CollCashflows {
     var myAdvanceRents: PeriodicAdvanceRents = PeriodicAdvanceRents()
     var myYTDTaxesPaid: PeriodicYTDTaxesPaid = PeriodicYTDTaxesPaid()
     var myITCRecaptured: PeriodicITCRecaptured = PeriodicITCRecaptured()
+    var myFederalTaxRate: Decimal = 0.15
+    let myPeriodicValues: CollCashflows = CollCashflows()
     
-    
-    public func createTable(aInvestment: Investment) -> Cashflows {
-        // AfterTaxTValue = IBAL - DepreciableBasis * FedTaxRate + (IncomeYTD - AdvanceRent) * FedTaxRate - TaxesPaidTYD + ITC Recaptured
+    public func createTable(aInvestment: Investment) {
+        // AfterTaxTValue = IBAL + DepreciableBasis * FedTaxRate + (IncomeYTD - AdvanceRent) * FedTaxRate - TaxesPaidTYD + ITC Recaptured
         // TV = AfterTaxTValue / (1.0 - FedTaxRate)
+        myFederalTaxRate = aInvestment.taxAssumptions.federalTaxRate.toDecimal()
+        
+        myInvestmentBalances.removeAll()
+        myDepreciableBalances.removeAll()
+        myYTDIncomes.removeAll()
+        myYTDTaxesPaid.removeAll()
+        myAdvanceRents.removeAll()
         
         
-        myLeaseTemplate.createTemplate(aInvestment: aInvestment)
-        
-        
-        
-        
-        let myCashflows = Cashflows()
-        return myCashflows
+        myInvestmentBalances.createInvestmentBalances(aInvestment: aInvestment)
+        myPeriodicValues.items.append(myInvestmentBalances)
+        myDepreciableBalances.createTable(aInvestment: aInvestment)
+        myPeriodicValues.items.append(myDepreciableBalances)
+        myYTDIncomes.createTable(aInvestment: aInvestment)
+        myPeriodicValues.items.append(myYTDIncomes)
+        myYTDTaxesPaid.createTable(aInvestment: aInvestment)
+        myPeriodicValues.items.append(myYTDTaxesPaid)
+        myAdvanceRents.createTable(aInvestment: aInvestment)
+        myPeriodicValues.items.append(myAdvanceRents)
     }
     
-    public func createTerminationValue(aInvestment: Investment) -> Cashflows {
+    public func createTerminationValues(aInvestment: Investment) {
         self.createTable(aInvestment: aInvestment)
-        //items[0] - Lease Template, items[1] - InvestmentBalances, items[2] - Depreciable Balances, items[3] - YTDIncomes
-        //items[4] - Advance Rents, items[5] - YTDTaxesPaid, items[6] - ITCRecaptured
+        
+        for x in 0..<myPeriodicValues.items[0].items.count {
+            let asOfDate: Date = myPeriodicValues.items[0].items[x].dueDate
+            let investmentBalance: Decimal = myPeriodicValues.items[0].items[x].amount.toDecimal()
+            let deprecBalance: Decimal = myPeriodicValues.items[1].items[x].amount.toDecimal()
+            let incomeYTD: Decimal = myPeriodicValues.items[2].items[x].amount.toDecimal()
+            let taxYTD: Decimal = myPeriodicValues.items[3].items[x].amount.toDecimal()
+            let tValue: Decimal = terminationValue(iBalance: investmentBalance, dBalance: deprecBalance, income: incomeYTD, taxPaid: taxYTD)
+            let myTV: Cashflow = Cashflow(dueDate: asOfDate, amount: tValue.toString(decPlaces: 4))
+            self.items.append(myTV)
+        }
+        
     }
     
-    public func createLeaseTemplate(aInvestment: Investment) {
-        let myCashflow: Cashflow = Cashflow(dueDate: aInvestment.asset.fundingDate, amount: "0.0")
-        myLeaseTemplate.add(item: myCashflow)
+    private func terminationValue(iBalance: Decimal, dBalance: Decimal, income: Decimal, taxPaid: Decimal) -> Decimal {
+        let taxOnGain: Decimal = dBalance * myFederalTaxRate
+        let taxOnIncome: Decimal = income * myFederalTaxRate
+        let afterTaxTV: Decimal = iBalance - taxOnGain + taxOnIncome - taxPaid
+        let preTaxTV: Decimal = afterTaxTV / (1 - myFederalTaxRate)
         
-        if aInvestment.leaseTerm.baseCommenceDate !=  aInvestment.asset.fundingDate {
-            let myCashflow: Cashflow = Cashflow(dueDate: aInvestment.leaseTerm.baseCommenceDate, amount: "0.0")
-            myLeaseTemplate.add(item: myCashflow)
-        }
-        
-        var nextLeaseDate: Date = addOnePeriodToDate(dateStart: aInvestment.leaseTerm.baseCommenceDate, payPerYear: aInvestment.leaseTerm.paymentFrequency, dateRefer: aInvestment.leaseTerm.baseCommenceDate, bolEOMRule: aInvestment.leaseTerm.endOfMonthRule)
-        while nextLeaseDate <= aInvestment.getLeaseMaturityDate() {
-            let myCashflow: Cashflow = Cashflow(dueDate: nextLeaseDate, amount: "0.0")
-            myLeaseTemplate.add(item: myCashflow)
-            nextLeaseDate = addOnePeriodToDate(dateStart: nextLeaseDate, payPerYear: aInvestment.leaseTerm.paymentFrequency, dateRefer: aInvestment.leaseTerm.baseCommenceDate, bolEOMRule: aInvestment.leaseTerm.endOfMonthRule)
-        }
+        return preTaxTV
     }
+    
+    
+    
+   
     
 }

@@ -22,6 +22,7 @@ struct FileMenuView: View {
             saveFileItem
             saveAsFileItem
             reportsItem
+            terminationsItem
             preferencesItem
             aboutItem
         }
@@ -111,6 +112,19 @@ struct FileMenuView: View {
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(30)
+        }
+    }
+    
+    var terminationsItem: some View {
+        HStack {
+            Text("Termination Reports")
+                .font(myFont2)
+            Spacer()
+            Image(systemName: "chevron.right")
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            path.append(36)
         }
     }
     

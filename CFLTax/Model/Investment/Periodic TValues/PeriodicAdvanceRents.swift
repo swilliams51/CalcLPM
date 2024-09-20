@@ -10,7 +10,8 @@ import Foundation
 @Observable
 public class PeriodicAdvanceRents: Cashflows {
     
-    public func createTable(aInvestment: Investment, aLeaseTemplate: Cashflows) {
+    public func createTable(aInvestment: Investment) {
+        
         let aRent: Rent = aInvestment.rent
         let aLeaseTerm: LeaseTerm = aInvestment.leaseTerm
         let aAsset: Asset = aInvestment.asset
