@@ -68,7 +68,6 @@ struct SummaryOfResultsView: View {
             ToolbarItem(placement: .topBarLeading) {
                 BackButtonView(path: $path, isDark: $isDark)
             }
-            
             ToolbarItem(placement: .topBarTrailing){
                 Button(action: {
                     viewAsPercentOfCost.toggle()

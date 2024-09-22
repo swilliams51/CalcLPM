@@ -22,9 +22,8 @@ public class FeeIncomes: Cashflows {
         let aFee: Fee = aInvestment.fee
         let aMaturityDate: Date = aInvestment.getLeaseMaturityDate()
         let aFiscalMonth: Int = aInvestment.taxAssumptions.fiscalMonthEnd.rawValue
-        let aFeeAmortMethod = aFee.amortizationMethod
         
-        if aFeeAmortMethod == .daily {
+        if feeAmortizationMethod == .daily {
             createTable_Daily(aFee: aFee, aMaturityDate: aMaturityDate, aFiscalMonth: aFiscalMonth)
         } else {
             createTable_Monthly(aFee: aFee, aMaturityDate: aMaturityDate, aFiscalMonth: aFiscalMonth)

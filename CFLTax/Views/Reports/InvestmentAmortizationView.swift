@@ -29,7 +29,6 @@ struct InvestmentAmortizationView: View {
                 }
             }
         }
-        
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 BackButtonView(path: $path, isDark: $isDark)
