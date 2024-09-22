@@ -138,7 +138,7 @@ public class PeriodicYTDIncomes: Cashflows {
                 baseRentCF.items.append(Cashflow(dueDate: myCfDueDate, amount: ytdIncome.toString()))
                 dateFrom = addOnePeriodToDate(dateStart: dateFrom, payPerYear: myFreq, dateRefer: dateRef, bolEOMRule: myEOMRule)
                 dateTo = addOnePeriodToDate(dateStart: dateTo, payPerYear: myFreq, dateRefer: dateRef, bolEOMRule: myEOMRule)
-                if aRent.groups[x].timing == .advance && y == aRent.groups.count {
+                if aRent.groups[x].timing == .advance && y == aRent.groups[x].noOfPayments {
                     myCfDueDate = dateTo
                     ytdIncome = ytdIncome + 0.00
                     baseRentCF.items.append(Cashflow(dueDate: myCfDueDate, amount: ytdIncome.toString()))
