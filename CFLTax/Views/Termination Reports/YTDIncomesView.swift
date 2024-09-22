@@ -40,7 +40,7 @@ struct YTDIncomesView: View {
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        .navigationTitle("YRD Incomes")
+        .navigationTitle("YTD Incomes")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .onAppear {

@@ -33,15 +33,15 @@ public class TerminationValues: Cashflows {
         
         
         myInvestmentBalances.createInvestmentBalances(aInvestment: aInvestment)
-        myPeriodicValues.items.append(myInvestmentBalances)
+            myPeriodicValues.items.append(myInvestmentBalances)
         myDepreciableBalances.createTable(aInvestment: aInvestment)
-        myPeriodicValues.items.append(myDepreciableBalances)
+            myPeriodicValues.items.append(myDepreciableBalances)
         myYTDIncomes.createTable(aInvestment: aInvestment)
-        myPeriodicValues.items.append(myYTDIncomes)
+            myPeriodicValues.items.append(myYTDIncomes)
         myYTDTaxesPaid.createTable(aInvestment: aInvestment)
-        myPeriodicValues.items.append(myYTDTaxesPaid)
+            myPeriodicValues.items.append(myYTDTaxesPaid)
         myAdvanceRents.createTable(aInvestment: aInvestment)
-        myPeriodicValues.items.append(myAdvanceRents)
+            myPeriodicValues.items.append(myAdvanceRents)
     }
     
     public func createTerminationValues(aInvestment: Investment) {
@@ -63,8 +63,8 @@ public class TerminationValues: Cashflows {
     private func terminationValue(iBalance: Decimal, dBalance: Decimal, income: Decimal, taxPaid: Decimal) -> Decimal {
         let taxOnGain: Decimal = dBalance * myFederalTaxRate
         let taxOnIncome: Decimal = income * myFederalTaxRate
-        let afterTaxTV: Decimal = iBalance - taxOnGain + taxOnIncome - taxPaid
-        let preTaxTV: Decimal = afterTaxTV / (1 - myFederalTaxRate)
+        let netTaxDue: Decimal = iBalance - taxOnIncome - taxOnGain + taxPaid
+        let preTaxTV: Decimal = netTaxDue / (1 - myFederalTaxRate)
         
         return preTaxTV
     }

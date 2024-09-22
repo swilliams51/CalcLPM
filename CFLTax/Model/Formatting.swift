@@ -50,7 +50,7 @@ func decimalFormatter (decimal: String, locale: Locale, places: Int = 3) -> Stri
 func dateFormatter (dateIn: Date, locale: Locale) -> String {
     let dFormatter = DateFormatter()
     dFormatter.locale = locale
-    dFormatter.setLocalizedDateFormatFromTemplate("dd MM YY")
+    dFormatter.setLocalizedDateFormatFromTemplate("dd MM yy")
     
     return dFormatter.string(from: dateIn)
 }

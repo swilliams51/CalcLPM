@@ -22,7 +22,16 @@ extension Investment {
             if self.leaseTerm.baseCommenceDate == self.asset.fundingDate {
                 resetFirstGroup(isInterim: false)
             } else {
-                let newGroup = Group(amount: "CALCULATED", endDate: self.leaseTerm.baseCommenceDate, locked: true, noOfPayments: 1, startDate: self.asset.fundingDate, timing: TimingType.arrears, paymentType: .dailyEquivNext, isInterim: true, unDeletable: true)
+                let myAmount: String = "CALCULATED"
+                let myEnd: Date = self.leaseTerm.baseCommenceDate
+                let myLocked: Bool = true
+                let myNoOfPayments: Int = 1
+                let myStart: Date = self.asset.fundingDate
+                let myTiming: TimingType = .arrears
+                let myPaymentType: PaymentType = .dailyEquivNext
+                let myIsInterim: Bool = true
+                let myUnDeletable: Bool = true
+                let newGroup = Group(amount: myAmount, endDate: myEnd, locked: myLocked, noOfPayments: myNoOfPayments, startDate: myStart, timing: myTiming, paymentType: myPaymentType, isInterim: myIsInterim, unDeletable: myUnDeletable)
                 self.rent.groups.insert(newGroup, at: 0)
                 resetFirstGroup(isInterim: true)
             }

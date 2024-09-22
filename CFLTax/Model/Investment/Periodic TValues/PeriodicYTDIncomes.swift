@@ -19,6 +19,10 @@ public class PeriodicYTDIncomes: Cashflows {
     var myFiscalYearEnd: Date = Date()
     var myEOMRule: Bool = false
     
+    var ytdIncome: Decimal = 0.0
+    var interimRentCF: Cashflows = Cashflows()
+    var baseRentCF: Cashflows = Cashflows()
+    
     public func createTable(aInvestment: Investment) {
         myDayCountMethod = aInvestment.economics.dayCountMethod
         myFreq = aInvestment.leaseTerm.paymentFrequency
@@ -33,30 +37,43 @@ public class PeriodicYTDIncomes: Cashflows {
             start = 1
         }
         createYTDBaseRents(aRent: aInvestment.rent, baseStart: start)
+        let myCombinedRents: CollCashflows = CollCashflows()
+        myCombinedRents.addCashflows(interimRentCF)
+        myCombinedRents.addCashflows(baseRentCF)
+        myCombinedRents.netCashflows()
+        
+        for x in 0..<myCombinedRents.items[0].items.count {
+            self.items.append(myCombinedRents.items[0].items[x])
+        }
     }
     
     private func createYTDInterimRents(aInterimRent: Group) {
         var cfAmount: Decimal = 0.0
-        var cfDueDate: Date = aInterimRent.endDate
         
         if myBaseCommencementDate > myFiscalYearEnd {
             if aInterimRent.timing == .advance {
                 cfAmount = aInterimRent.amount.toDecimal()
-                cfDueDate = myFundingDate
+                interimRentCF.items.append(Cashflow(dueDate: aInterimRent.startDate, amount: cfAmount.toString(decPlaces: 4)))
+                interimRentCF.items.append(Cashflow(dueDate: aInterimRent.endDate, amount: "0.00"))
             } else {
-                let daysInInterim: Int = dayCount(aDate1: myFundingDate, aDate2: aInterimRent.endDate, aDayCount: myDayCountMethod)
-                cfAmount = proRatedInterimRent(dateFiscal: myFundingDate, dateEnd: aInterimRent.endDate, interim: aInterimRent.amount.toDecimal(), daysInInterim: daysInInterim)
-                cfDueDate = myBaseCommencementDate
+                self.items.append(Cashflow(dueDate: aInterimRent.startDate, amount: "0.00"))
+                let daysInInterim: Int = dayCount(aDate1: aInterimRent.startDate, aDate2: aInterimRent.endDate, aDayCount: myDayCountMethod)
+                let dateStart: Date = Calendar.current.date(byAdding: .day, value: 1, to: myFiscalYearEnd)!
+                cfAmount = proRatedInterimRent(dateFiscal: dateStart, dateEnd: aInterimRent.endDate, interim: aInterimRent.amount.toDecimal(), daysInInterim: daysInInterim)
+                interimRentCF.items.append(Cashflow(dueDate: aInterimRent.endDate, amount: cfAmount.toString(decPlaces: 4)))
+                ytdIncome = cfAmount
             }
         } else {
-            cfAmount = aInterimRent.amount.toDecimal()
+            ytdIncome = aInterimRent.amount.toDecimal()
             if aInterimRent.timing == .advance {
-                cfDueDate = myFundingDate
+                interimRentCF.items.append(Cashflow(dueDate: aInterimRent.startDate, amount: ytdIncome.toString(decPlaces: 4)))
+                interimRentCF.items.append(Cashflow(dueDate: aInterimRent.endDate, amount: "0.00"))
             } else {
-                cfDueDate = myBaseCommencementDate
+                interimRentCF.items.append(Cashflow(dueDate: aInterimRent.startDate, amount: "0.00"))
+                interimRentCF.items.append(Cashflow(dueDate: aInterimRent.endDate, amount: ytdIncome.toString(decPlaces: 4)))
             }
         }
-        self.items.append(Cashflow(dueDate: cfDueDate, amount: cfAmount.toString(decPlaces: 4)))
+       
     }
     
     private func proRatedInterimRent(dateFiscal: Date, dateEnd: Date, interim: Decimal, daysInInterim: Int) -> Decimal {
@@ -74,9 +91,7 @@ public class PeriodicYTDIncomes: Cashflows {
         var dateFrom: Date = myBaseCommencementDate
         var dateTo: Date = addOnePeriodToDate(dateStart: dateFrom, payPerYear: myFreq, dateRefer: dateRef, bolEOMRule: myEOMRule)
         var dateFiscal: Date = myFiscalYearEnd
-        var decYTDIncome: Decimal = 0
         var myCfDueDate: Date = dateFrom
-        var myCFAmount: String = "0.0"
         
         if myBaseCommencementDate > myFiscalYearEnd {
             dateFiscal = addNextFiscalYearEnd(aDateIn: myFiscalYearEnd)
@@ -87,28 +102,26 @@ public class PeriodicYTDIncomes: Cashflows {
             while y < aRent.groups[x].noOfPayments {
                 if aRent.groups[x].timing == .advance {  //Rents are in advance
                     if dateFrom <= dateFiscal {
-                        decYTDIncome = decYTDIncome + aRent.groups[x].amount.toDecimal()
+                        ytdIncome = ytdIncome + aRent.groups[x].amount.toDecimal()
                     } else {
                         dateFiscal = addNextFiscalYearEnd(aDateIn: dateFiscal)
-                        decYTDIncome = aRent.groups[x].amount.toDecimal()
+                        ytdIncome = aRent.groups[x].amount.toDecimal()
                     }
                     myCfDueDate = dateFrom
-                    myCFAmount = decYTDIncome.toString()
                 } else {  //Rents are in arrears
                     if y == 0 {
-                        self.items.append(Cashflow(dueDate: dateFrom, amount: "0.00"))
+                        baseRentCF.items.append(Cashflow(dueDate: dateFrom, amount: "0.00"))
                     }
                     if dateTo <= dateFiscal {
-                        decYTDIncome = decYTDIncome + aRent.groups[x].amount.toDecimal()
+                        ytdIncome = ytdIncome + aRent.groups[x].amount.toDecimal()
                     } else if dateFrom < dateFiscal {
                         let proRatedRent: Decimal = proRatedBaseRent(dateFiscal: dateFiscal, dateEnd: dateTo, base: aRent.groups[x].amount.toDecimal())
-                        decYTDIncome = proRatedRent
+                        ytdIncome = proRatedRent
                         dateFiscal = addNextFiscalYearEnd(aDateIn: dateFiscal)
                     }
                     myCfDueDate = dateTo
-                    myCFAmount = decYTDIncome.toString()
                 }
-                self.items.append(Cashflow(dueDate: myCfDueDate, amount: myCFAmount))
+                baseRentCF.items.append(Cashflow(dueDate: myCfDueDate, amount: ytdIncome.toString()))
                 dateFrom = addOnePeriodToDate(dateStart: dateFrom, payPerYear: myFreq, dateRefer: dateRef, bolEOMRule: myEOMRule)
                 dateTo = addOnePeriodToDate(dateStart: dateTo, payPerYear: myFreq, dateRefer: dateRef, bolEOMRule: myEOMRule)
                 y += 1
@@ -125,6 +138,7 @@ public class PeriodicYTDIncomes: Cashflows {
         
         return proRatedRent
     }
+   
         
 }
 

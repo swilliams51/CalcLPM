@@ -18,6 +18,7 @@ public class PeriodicDepreciableBalances: Cashflows {
         myFeeIncomes.createTable(aInvestment: aInvestment)
         
         let aLeaseTemplate: Cashflows  = aInvestment.createLeaseTemplate()
+        let myLeaseTemplate: Cashflows = aLeaseTemplate.clone()
         let myCombinedCashflows: CollCashflows = CollCashflows()
         myCombinedCashflows.addCashflows(myDepreciationIncomes)
         myCombinedCashflows.addCashflows(myFeeIncomes)
@@ -27,15 +28,15 @@ public class PeriodicDepreciableBalances: Cashflows {
         var y: Int = 0
         var periodicBalance: Decimal = 0.0
         
-        for x in 0..<aLeaseTemplate.count() {
-            if getYearComponent(dateIn: aLeaseTemplate.items[x].dueDate) == getYearComponent(dateIn: myCombinedCashflows.items[0].items[y].dueDate) {
+        for x in 0..<myLeaseTemplate.count() {
+            if getYearComponent(dateIn: myLeaseTemplate.items[x].dueDate) == getYearComponent(dateIn: myCombinedCashflows.items[0].items[y].dueDate) {
                 periodicBalance = remainingBalance
             } else {
                 remainingBalance = remainingBalance - myCombinedCashflows.items[0].items[y].amount.toDecimal() * -1.0
                 periodicBalance = remainingBalance
                 y += 1
             }
-            let periodicDueDate: Date = aLeaseTemplate.items[x].dueDate
+            let periodicDueDate: Date = myLeaseTemplate.items[x].dueDate
             let periodicDepreciation: Cashflow = Cashflow(dueDate: periodicDueDate, amount: periodicBalance.toString(decPlaces: 4))
             self.items.append(periodicDepreciation)
         }

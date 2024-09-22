@@ -40,7 +40,7 @@ struct YTDTaxesPaidView: View {
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        .navigationTitle("Taxes Paid")
+        .navigationTitle("YTD Taxes Paid")
         .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .onAppear {

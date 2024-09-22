@@ -29,9 +29,6 @@ public class PeriodicYTDTaxesPaid: Cashflows {
         var x = 0
         
         while x < myCombinedCashflows.items[0].items.count {
-            if x == myCombinedCashflows.items[0].items.count - 1 {
-                break
-            }
             if myCombinedCashflows.items[0].items[x].dueDate <= nextFiscalYearEnd {
                 ytdTotal += myCombinedCashflows.items[0].items[x].amount.toDecimal()
                 let periodicYTDTaxesPaid: Cashflow = Cashflow(dueDate: myCombinedCashflows.items[0].items[x].dueDate, amount: ytdTotal.toString(decPlaces: 4))
