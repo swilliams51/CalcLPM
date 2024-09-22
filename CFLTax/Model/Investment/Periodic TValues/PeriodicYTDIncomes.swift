@@ -37,14 +37,28 @@ public class PeriodicYTDIncomes: Cashflows {
             start = 1
         }
         createYTDBaseRents(aRent: aInvestment.rent, baseStart: start)
-        let myCombinedRents: CollCashflows = CollCashflows()
-        myCombinedRents.addCashflows(interimRentCF)
-        myCombinedRents.addCashflows(baseRentCF)
-        myCombinedRents.netCashflows()
         
-        for x in 0..<myCombinedRents.items[0].items.count {
-            self.items.append(myCombinedRents.items[0].items[x])
+        if interimRentCF.items.count > 0 {
+            let myCombinedRents: CollCashflows = CollCashflows()
+            myCombinedRents.addCashflows(interimRentCF)
+            myCombinedRents.addCashflows(baseRentCF)
+            myCombinedRents.netCashflows()
+            
+            for x in 0..<myCombinedRents.items[0].items.count {
+                let myDate: Date = myCombinedRents.items[0].items[x].dueDate
+                let myAmount: String = myCombinedRents.items[0].items[x].amount
+                let myCashflow: Cashflow = Cashflow(dueDate: myDate, amount: myAmount)
+                self.items.append(myCashflow)
+            }
+        } else {
+            for x in 0..<baseRentCF.items.count {
+                let myDate: Date = baseRentCF.items[x].dueDate
+                let myAmount: String = baseRentCF.items[x].amount
+                let myCashflow: Cashflow = Cashflow(dueDate: myDate, amount: myAmount)
+                self.items.append(myCashflow)
+            }
         }
+       
     }
     
     private func createYTDInterimRents(aInterimRent: Group) {
@@ -99,7 +113,7 @@ public class PeriodicYTDIncomes: Cashflows {
         
         for x in baseStart..<aRent.groups.count {
             var y = 0
-            while y < aRent.groups[x].noOfPayments {
+            while y <= aRent.groups[x].noOfPayments {
                 if aRent.groups[x].timing == .advance {  //Rents are in advance
                     if dateFrom <= dateFiscal {
                         ytdIncome = ytdIncome + aRent.groups[x].amount.toDecimal()
