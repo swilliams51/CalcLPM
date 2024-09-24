@@ -15,25 +15,35 @@ struct DepreciationView: View {
     
     
     @State var myMethod: DepreciationType = .MACRS
-    @State var myLife: Int = 3
+    @State var macrsMode: Bool = true
+    @State var myLife: Double = 3.0
+    @State private var rangeOfYears: ClosedRange<Double> = 3.0...20.0
     @State var myConvention: ConventionType = .halfYear
     @State var myBonus: String = "0.0"
     @State var myITC: String = "0.0"
     @State var myBasisReduction: String = "0.0"
     @State var mySalvageValue: String = "0.0"
     
-    var intLife_MACRS: [Int] = [3, 5, 7, 10, 15, 20]
-    var intLife_SL: [Int] = [3,4,5,6,7,8,9,10,11,12,13,14,15]
+    var dblLife_MACRS: [Double] = [3, 5, 7, 10, 15, 20]
     var decBonus: [Decimal] = [0.0, 0.5, 1.0]
     
     var body: some View {
         Form {
             Section(header: Text("Inputs").font(myFont2), footer:(Text("FileName: \(currentFile)").font(myFont2))) {
                 VStack {
+                    depreciableBasisItem
                     depreciationMethod
-                    depreciableLife
+                    if myMethod == .MACRS {
+                        depreciableLife
+                    } else {
+                        lifeInYearsItem
+                    }
                     depreciationConvention
-                    bonusDepreciation
+                    if myMethod == .MACRS {
+                        bonusDepreciation
+                    } else {
+                        salvageValue
+                    }
                 }
             }
             Section(header: Text("Submit Form")) {
@@ -50,22 +60,42 @@ struct DepreciationView: View {
         .navigationBarBackButtonHidden(true)
         .onAppear{
             self.myMethod = myInvestment.depreciation.method
-            self.myLife = myInvestment.depreciation.life
+            self.myLife = myInvestment.depreciation.life.toDouble()
             self.myConvention = myInvestment.depreciation.convention
             self.myBonus = myInvestment.depreciation.bonusDeprecPercent.toString(decPlaces: 4)
             self.myITC = myInvestment.depreciation.investmentTaxCredit.toString(decPlaces: 4)
             self.myBasisReduction = myInvestment.depreciation.basisReduction.toString()
             self.mySalvageValue = myInvestment.depreciation.salvageValue
         }
-        
     }
+    
+    var depreciableBasisItem: some View {
+        HStack {
+            Text("Basis:")
+                .font(myFont2)
+            Spacer()
+            Text("\(amountFormatter(amount: myInvestment.asset.lessorCost, locale: myLocale))")
+                .font(myFont2)
+        }
+    }
+    
     var depreciationMethod: some View {
         HStack {
             Text("Method:")
                 .font(myFont2)
             Picker(selection: $myMethod, label: Text("")) {
-                ForEach(DepreciationType.macrs, id: \.self) { item in
+                ForEach(DepreciationType.allTypes, id: \.self) { item in
                     Text(item.toString())
+                }
+                .onChange(of: myMethod) { oldValue, newValue in
+                    if newValue == .MACRS {
+                        macrsMode = true
+                    } else {
+                        macrsMode = false
+                        
+                    }
+                    myInvestment.depreciation.method = newValue
+                    myInvestment.hasChanged = true
                 }
             }
         }
@@ -76,7 +106,7 @@ struct DepreciationView: View {
             Text("Life (in years):")
                 .font(myFont2)
             Picker(selection: $myLife, label: Text("")) {
-                ForEach(intLife_MACRS, id: \.self) { item in
+                ForEach(dblLife_MACRS, id: \.self) { item in
                     Text(item.toString())
                         .font(myFont2)
                 }
@@ -86,7 +116,7 @@ struct DepreciationView: View {
     
     var depreciationConvention: some View {
         HStack {
-            Text("Convention:")
+            Text("1st Yr Convention:")
                 .font(myFont2)
             Picker(selection: $myConvention, label: Text("")) {
                 ForEach(ConventionType.allCases, id: \.self) { item in
@@ -100,47 +130,40 @@ struct DepreciationView: View {
     
     var bonusDepreciation: some View {
         HStack {
-            Text("Bonus:")
-                .font(myFont2)
-                .onTapGesture {
-                    self.path.append(16)
-                }
+            HStack {
+                Text("Bonus:")
+                    .font(myFont2)
+                Image(systemName:"return")
+            }
             Spacer()
             Text("\(percentFormatter(percent: myBonus, locale: myLocale, places: 2))")
                 .font(myFont2)
-                .onTapGesture {
-                    self.path.append(16)
-                }
+        }
+        .contentShape(Rectangle())
+        .disabled(macrsMode ? false : true)
+        .onTapGesture {
+            self.path.append(16)
         }
         .padding(.bottom, 5)
     }
-
-
-    var investmentTaxCredit: some View {
-        HStack {
-            Text("ITC:")
-            Spacer()
-            Text("\(percentFormatter(percent: myITC, locale: myLocale))")
-        }
-        .padding(.bottom, 10)
-    }
-
-    var basisReduction: some View {
-        HStack {
-            Text("Basis Reduction:")
-            Spacer()
-            Text("\(percentFormatter(percent: myBasisReduction, locale: myLocale))")
-        }
-        .padding(.top, 10)
-    }
-
+    
     var salvageValue: some View {
         HStack {
-            Text("Salvage Value")
+            HStack {
+                Text("Salvage Value:")
+                    .font(myFont2)
+                Image(systemName: "return")
+            }
             Spacer()
             Text("\(amountFormatter(amount: mySalvageValue, locale: myLocale))")
+                .font(myFont2)
         }
-        .padding(.top,10)
+        .contentShape(Rectangle())
+        .disabled(macrsMode ? true : false)
+        .onTapGesture {
+            self.path.append(20)
+        }
+        .padding(.top, 10)
     }
     
     func myCancel() {
@@ -152,9 +175,9 @@ struct DepreciationView: View {
             self.myInvestment.hasChanged = true
             self.myInvestment.depreciation.method = myMethod
         }
-        if self.myLife != self.myInvestment.depreciation.life {
+        if self.myLife != self.myInvestment.depreciation.life.toDouble() {
             self.myInvestment.hasChanged = true
-            self.myInvestment.depreciation.life = myLife
+            self.myInvestment.depreciation.life = myLife.toInteger()
         }
         if self.myConvention != self.myInvestment.depreciation.convention {
             self.myInvestment.hasChanged = true
@@ -182,4 +205,56 @@ struct DepreciationView: View {
 
 #Preview {
     DepreciationView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false), currentFile: .constant("File is New"))
+}
+
+
+extension DepreciationView {
+    var investmentTaxCredit: some View {
+        HStack {
+            Text("ITC:")
+            Spacer()
+            Text("\(percentFormatter(percent: myITC, locale: myLocale))")
+        }
+        .padding(.bottom, 10)
+    }
+
+    var basisReduction: some View {
+        HStack {
+            Text("Basis Reduction:")
+            Spacer()
+            Text("\(percentFormatter(percent: myBasisReduction, locale: myLocale))")
+        }
+        .padding(.top, 10)
+    }
+    
+    var lifeInYearsItem: some View {
+        VStack {
+            HStack {
+                Text("Life in Years:")
+                    .font(myFont2)
+                Spacer()
+                Text("\(myLife.toString())")
+                    .font(myFont2)
+            }
+            Slider(value: $myLife, in: 3...20, step: 1) {
+
+            }
+            .accentColor(ColorTheme().accent)
+            .onChange(of: myLife) { oldValue, newValue in
+                //self.selectedGroup.noOfPayments = newValue.toInteger()
+            }
+            HStack {
+                Spacer()
+                Stepper("", value: $myLife, in: rangeOfYears, step: 1, onEditingChanged: { _ in
+                   
+                }).labelsHidden()
+                .transformEffect(.init(scaleX: 1.0, y: 0.9))
+            }
+        }
+            
+    }
+   
+  
+    
+    
 }

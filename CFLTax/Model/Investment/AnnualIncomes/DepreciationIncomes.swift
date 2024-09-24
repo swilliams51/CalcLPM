@@ -22,6 +22,7 @@ public class DepreciationIncomes: Cashflows {
     private var bonusPercent: Decimal = 0.0
     private var bonusDepreciation: Decimal = 0.0
     private var decConvention: Decimal = 0.5
+    private var myConvention: ConventionType = .halfYear
     
     public func createTable(aInvestment: Investment) {
         
@@ -30,6 +31,8 @@ public class DepreciationIncomes: Cashflows {
         let fundingDate = aInvestment.asset.fundingDate
         let aFiscalMonthEnd = aInvestment.taxAssumptions.fiscalMonthEnd.rawValue
         let leaseExpiry: Date = aInvestment.getLeaseMaturityDate()
+        
+        myConvention = aInvestment.depreciation.convention
         runTotalDepreciation = 0.0
         intLife = aDepreciation.life
         decBasis = getAdjustedBasis(aUnadjustedBasis: lessorCost.toDecimal(), basisReductionFactor: aDepreciation.basisReduction, percentITC: aDepreciation.investmentTaxCredit)
@@ -84,19 +87,12 @@ public class DepreciationIncomes: Cashflows {
             var nextFiscalYearEnd: Date = firstFiscalYearEnd
             for x in 1..<intYears {
                 nextFiscalYearEnd = addNextFiscalYearEnd(aDateIn: nextFiscalYearEnd)
-                if x == intYears {
-                    currentDepreciation = currentDeprecBalance * -1.0 - decSalvageValue
+                if x >= intLife {
+                    currentDepreciation = currentDeprecBalance * -1.0
                     let annualExpense: Cashflow = Cashflow(dueDate: nextFiscalYearEnd, amount: currentDepreciation.toString(decPlaces: 10))
                     items.append(annualExpense)
-                    break
-                } else {
-                    if x >= intLife {
-                        currentDepreciation = currentDeprecBalance - decSalvageValue
-                    } else {
-                        currentDepreciation = depreciationSL
-                    }
                 }
-                currentDepreciation = currentDepreciation * -1.0
+                currentDepreciation = depreciationSL * -1.0
                 let annualExpense = Cashflow(dueDate: nextFiscalYearEnd, amount: currentDepreciation.toString(decPlaces: 10))
                 items.append(annualExpense)
                 runTotalDepreciation = runTotalDepreciation + currentDepreciation
@@ -157,6 +153,62 @@ public class DepreciationIncomes: Cashflows {
         }
         
         return x
+    }
+    
+    public func setConvention(aFiscalYearEnd: Date, dateInService: Date) {
+        var conventionFactor: Decimal = 1.0
+        
+        switch myConvention {
+        case .halfYear:
+            conventionFactor = 0.5
+        case .midMonth:
+            conventionFactor = getMidQuarterFactor(dateFiscal: aFiscalYearEnd, inService: dateInService)
+        case .midQuarter:
+            conventionFactor = getMidMonthFactor(dateFiscal: aFiscalYearEnd, inService: dateInService)
+        }
+        
+        decConvention = conventionFactor
+    }
+    
+    private func getMidQuarterFactor(dateFiscal: Date, inService: Date) -> Decimal {
+        let inFiscalQuarter: Int = getQuarterInService(dateFiscal: dateFiscal, inService: inService)
+
+        return Decimal(inFiscalQuarter) * 0.25 + 0.125
+    }
+    
+    private func getQuarterInService(dateFiscal: Date, inService: Date) -> Int {
+        var intDiff = 0
+        var decDiff: Decimal = 0.0
+        var monthFiscal: Int = getMonthComponent(dateIn: dateFiscal)
+        var monthInService: Int = getMonthComponent(dateIn: inService)
+        
+        if monthInService > monthFiscal {
+             intDiff = monthInService - monthFiscal
+        } else {
+            intDiff = monthFiscal - monthInService + 12
+        }
+        
+        decDiff = Decimal(intDiff) / 3.0 + 0.375
+        return decDiff.toInteger()
+    }
+    
+    private func getMidMonthFactor (dateFiscal: Date, inService: Date) -> Decimal {
+        let inFiscalMonth: Int = getMonthComponent(dateIn: dateFiscal)
+        return Decimal(getMonthInService(dateFiscal: dateFiscal, inService: inService)) - 0.50
+    }
+    
+    private func getMonthInService(dateFiscal: Date, inService: Date) -> Int {
+        var intDiff = 0
+        var monthFiscal: Int = getMonthComponent(dateIn: dateFiscal)
+        var monthInService: Int = getMonthComponent(dateIn: inService)
+        
+        if monthInService > monthFiscal {
+            intDiff = monthInService - monthFiscal
+        } else {
+            intDiff = monthFiscal - monthInService + 12
+        }
+        
+        return intDiff
     }
     
 }

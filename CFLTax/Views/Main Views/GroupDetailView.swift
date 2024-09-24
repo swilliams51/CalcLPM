@@ -146,7 +146,7 @@ extension GroupDetailView {
                    
                 }).labelsHidden()
                 .transformEffect(.init(scaleX: 1.0, y: 0.9))
-            .disabled(sliderIsLocked)
+                .disabled(sliderIsLocked)
             }
         }
             
@@ -258,7 +258,7 @@ extension GroupDetailView {
     
     func submitForm() {
         
-        if self.selectedGroup.paymentType == self.myInvestment.rent.groups[index].paymentType {
+        if self.selectedGroup.paymentType != self.myInvestment.rent.groups[index].paymentType {
             self.myInvestment.hasChanged = true
             self.myInvestment.rent.groups[index].paymentType = selectedGroup.paymentType
         }

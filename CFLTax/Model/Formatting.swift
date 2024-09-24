@@ -10,14 +10,14 @@ import Foundation
 
 
 
-func amountFormatter(amount: String, locale: Locale) -> String {
+func amountFormatter(amount: String, locale: Locale, places: Int = 2) -> String {
     let decAmount: Decimal = amount.toDecimal()
     let amtFormatter = NumberFormatter()
     amtFormatter.numberStyle = .currency
     amtFormatter.usesGroupingSeparator = true
     amtFormatter.currencySymbol = ""
-    amtFormatter.maximumFractionDigits = 2
-    amtFormatter.minimumFractionDigits = 2
+    amtFormatter.maximumFractionDigits = places
+    amtFormatter.minimumFractionDigits = places
     amtFormatter.locale = locale
     
     let amountReturned: String = amtFormatter.string(for: decAmount) ?? "0.00"

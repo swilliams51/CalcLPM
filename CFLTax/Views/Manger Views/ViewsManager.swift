@@ -61,7 +61,7 @@ struct ViewsManager: View {
         case 19:
             FeeAmountTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         case 20:
-            Text("Early Buyout Option Text Field")
+            SalvageValueTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         case 21:
           RentScheduleView(myInvestment: myInvestment, myRentalSchedule: myRentalSchedule, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 22:

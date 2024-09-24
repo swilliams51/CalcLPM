@@ -54,7 +54,6 @@ struct SummaryOfResultsView: View {
                 residualAmountItem
                 btProfitItem
                 taxesPaidItem
-                itcItem
                 atProfitItem
             }
             

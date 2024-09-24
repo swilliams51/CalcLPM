@@ -33,7 +33,12 @@ extension Double {
     }
 }
 
-
+extension Double {
+    public func toString() -> String {
+        let decimalOf = Decimal(self)
+        return decimalOf.toString(decPlaces: 0)
+    }
+}
 extension Int {
     public func toDouble() -> Double {
         return Double(self)
