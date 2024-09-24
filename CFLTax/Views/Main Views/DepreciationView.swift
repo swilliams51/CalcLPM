@@ -148,14 +148,34 @@ struct DepreciationView: View {
     }
     
     func myDone() {
-        self.myInvestment.depreciation.method = myMethod
-        self.myInvestment.depreciation.life = myLife
-        self.myInvestment.depreciation.convention = myConvention
-        self.myInvestment.depreciation.bonusDeprecPercent = myBonus.toDecimal()
-        self.myInvestment.depreciation.investmentTaxCredit = myITC.toDecimal()
-        self.myInvestment.depreciation.basisReduction = myBasisReduction.toDecimal()
-        self.myInvestment.depreciation.salvageValue = mySalvageValue
-        
+        if self.myMethod != self.myInvestment.depreciation.method {
+            self.myInvestment.hasChanged = true
+            self.myInvestment.depreciation.method = myMethod
+        }
+        if self.myLife != self.myInvestment.depreciation.life {
+            self.myInvestment.hasChanged = true
+            self.myInvestment.depreciation.life = myLife
+        }
+        if self.myConvention != self.myInvestment.depreciation.convention {
+            self.myInvestment.hasChanged = true
+            self.myInvestment.depreciation.convention = myConvention
+        }
+        if self.myBonus.toDecimal() != self.myInvestment.depreciation.bonusDeprecPercent {
+            self.myInvestment.hasChanged = true
+            self.myInvestment.depreciation.bonusDeprecPercent = myBonus.toDecimal()
+        }
+        if self.myInvestment.depreciation.investmentTaxCredit != myITC.toDecimal() {
+            self.myInvestment.hasChanged = true
+            self.myInvestment.depreciation.investmentTaxCredit = myITC.toDecimal()
+        }
+        if self.myBasisReduction.toDecimal() != self.myInvestment.depreciation.basisReduction {
+            self.myInvestment.hasChanged = true
+            self.myInvestment.depreciation.basisReduction = myBasisReduction.toDecimal()
+        }
+        if self.mySalvageValue != self.myInvestment.depreciation.salvageValue {
+            self.myInvestment.hasChanged = true
+            self.myInvestment.depreciation.salvageValue = mySalvageValue
+        }
         self.path.removeLast()
     }
 }

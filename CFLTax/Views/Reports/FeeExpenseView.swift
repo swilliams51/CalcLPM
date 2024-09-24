@@ -12,10 +12,11 @@ struct FeeExpenseView: View {
     @Bindable var myFeeAmortization: FeeIncomes
     @Binding var path: [Int]
     @Binding var isDark: Bool
+    @Binding var currentFile: String
     
     var body: some View {
        Form {
-           Section(header: Text("Schedule")) {
+           Section(header: Text("\(currentFile)")) {
                ForEach(myFeeAmortization.items) { item in
                    HStack {
                        Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
@@ -53,5 +54,5 @@ struct FeeExpenseView: View {
 
 
 #Preview {
-    FeeExpenseView(myInvestment: Investment(), myFeeAmortization: FeeIncomes(), path: .constant([Int]()), isDark: .constant(false))
+    FeeExpenseView(myInvestment: Investment(), myFeeAmortization: FeeIncomes(), path: .constant([Int]()), isDark: .constant(false), currentFile: .constant("File is New"))
 }

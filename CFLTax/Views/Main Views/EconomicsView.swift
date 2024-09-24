@@ -119,11 +119,23 @@ struct EconomicsView: View {
     func myCancel(){
         path.removeLast()
     }
-    func myDone(){
-        self.myInvestment.economics.yieldMethod = myYieldMethod
-        self.myInvestment.economics.yieldTarget = myYieldTarget.toDecimal().toString(decPlaces: 5)
-        self.myInvestment.economics.solveFor = mySolveFor
+    func myDone() {
+        if self.myYieldMethod != self.myInvestment.economics.yieldMethod {
+            self.myInvestment.hasChanged = true
+            self.myInvestment.economics.yieldMethod = myYieldMethod
+        }
+        
+        
+        self.myInvestment.economics.yieldTarget = myYieldTarget
+        
+        if self.mySolveFor != self.myInvestment.economics.solveFor {
+            self.myInvestment.hasChanged = true
+            self.myInvestment.economics.solveFor = mySolveFor
+        }
+        
         self.myInvestment.economics.discountRateForRent = myDiscountRate.toDecimal().toString(decPlaces: 5)
+        
+        
         self.myInvestment.economics.dayCountMethod = myDayCountMethod
         path.removeLast()
     }

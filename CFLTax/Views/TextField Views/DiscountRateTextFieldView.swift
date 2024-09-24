@@ -154,6 +154,9 @@ extension DiscountRateTextFieldView {
             showAlert.toggle()
         } else {
             //Amount is Valid
+            if self.myPercent != self.percentOnEntry {
+                self.myInvestment.hasChanged = true
+            }
             self.myInvestment.economics.discountRateForRent = myPercent
         }
             

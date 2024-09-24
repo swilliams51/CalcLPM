@@ -16,7 +16,7 @@ struct ReportsManagerView: View {
     
     var body: some View {
         Form{
-            Section(header: Text("Reports"), footer: (Text("FileName: \(currentFile)"))) {
+            Section(header: Text("Reports"), footer: (Text("FileName: \(currentFile)").font(myFont2))) {
                 leaseRentalsItem
                 depreciationScheduleItem
                 feeAmortizationItem

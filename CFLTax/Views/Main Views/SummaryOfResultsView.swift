@@ -63,7 +63,8 @@ struct SummaryOfResultsView: View {
                 presentValueItem
                 presentValue2Item
             }
-        }.environment(\.defaultMinListRowHeight, lineHeight)
+        }
+        .environment(\.defaultMinListRowHeight, lineHeight)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 BackButtonView(path: $path, isDark: $isDark)
@@ -82,6 +83,7 @@ struct SummaryOfResultsView: View {
         .navigationBarBackButtonHidden(true)
         .onAppear{
             myInvestment.calculate()
+            myInvestment.hasChanged = false
             myATYield = myInvestment.getMISF_AT_Yield()
             myBTYield = myInvestment.getMISF_BT_Yield()
             myIRRPTCF = myInvestment.getIRR_PTCF()

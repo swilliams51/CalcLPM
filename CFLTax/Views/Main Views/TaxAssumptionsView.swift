@@ -92,8 +92,17 @@ struct TaxAssumptionsView: View {
     
     private func myDone() {
         self.myInvestment.taxAssumptions.federalTaxRate = myTaxRate
-        self.myInvestment.taxAssumptions.fiscalMonthEnd = myFiscalMonthEnd
-        self.myInvestment.taxAssumptions.dayOfMonPaid = myDayOfMonPaid
+        
+        if self.myFiscalMonthEnd != myInvestment.taxAssumptions.fiscalMonthEnd {
+            self.myInvestment.hasChanged = true
+            self.myInvestment.taxAssumptions.fiscalMonthEnd = myFiscalMonthEnd
+        }
+        
+        if self.myDayOfMonPaid != myInvestment.taxAssumptions.dayOfMonPaid {
+            self.myInvestment.hasChanged = true
+            self.myInvestment.taxAssumptions.dayOfMonPaid = myDayOfMonPaid
+        }
+        
         path.removeLast()
     }
 }

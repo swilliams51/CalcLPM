@@ -153,6 +153,9 @@ extension FedTaxRateTextFieldView {
             showAlert.toggle()
         } else {
             //Amount is Valid
+            if self.myTaxRate != self.percentOnEntry {
+                self.myInvestment.hasChanged = true
+            }
             self.myInvestment.taxAssumptions.federalTaxRate = myTaxRate
         }
             

@@ -166,6 +166,11 @@ extension FeeAmountTextFieldView {
             } else {
                 self.myInvestment.feeExists = false
             }
+            
+            if self.myAmount != self.amountOnEntry {
+                self.myInvestment.hasChanged = true
+            }
+            
             self.myInvestment.fee.amount = myAmount
         }
             

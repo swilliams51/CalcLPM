@@ -152,9 +152,11 @@ extension YieldTargetTextFieldView {
             showAlert.toggle()
         } else {
             //Amount is Valid
+            if myInvestment.economics.yieldTarget != self.percentOnEntry {
+                self.myInvestment.hasChanged = true
+            }
             self.myInvestment.economics.yieldTarget = myPercent
         }
-            
         self.editPercentStarted = false
     }
     

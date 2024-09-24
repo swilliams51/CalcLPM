@@ -88,8 +88,14 @@ struct FeeView: View {
     }
     func myDone() {
         self.myInvestment.fee.amount = myAmount
+        
         self.myInvestment.fee.datePaid = myDatePaid
-        self.myInvestment.fee.feeType = myFeeType
+    
+        if self.myFeeType != self.myInvestment.fee.feeType {
+            self.myInvestment.hasChanged = true
+            self.myInvestment.fee.feeType = myFeeType
+        }
+        
         path.removeLast()
     }
 }

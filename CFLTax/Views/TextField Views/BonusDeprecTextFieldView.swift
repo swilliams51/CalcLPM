@@ -153,6 +153,9 @@ extension BonusDeprecTextFieldView {
             showAlert.toggle()
         } else {
             //Amount is Valid
+            if myPercent != self.percentOnEntry {
+                self.myInvestment.hasChanged = true
+            }
             self.myInvestment.depreciation.bonusDeprecPercent = myPercent.toDecimal()
         }
             

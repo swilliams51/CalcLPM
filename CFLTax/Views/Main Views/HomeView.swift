@@ -147,18 +147,8 @@ struct HomeView: View {
         }
         .contentShape(Rectangle())
         .onTapGesture {
-            //print("\(myInvestment.writeInvestment())")
             self.path.append(25)
             
-//            if myInvestment.economics.solveFor == .yield {
-//                if myInvestment.yieldCalculationIsValid() == true {
-//                    path.append(25)
-//                } else {
-//                    self.isShowingYieldErrorAlert = true
-//                }
-//            } else {
-//                path.append(25)
-//            }
         }
         .alert(isPresented: $isShowingYieldErrorAlert) {
             Alert(title: Text("Yield Calculation Error"), message: Text(yieldCalcMessage), dismissButton: .default(Text("OK")))
@@ -169,13 +159,16 @@ struct HomeView: View {
         HStack{
             Text("File Menu")
                 .font(myFont2)
+                .foregroundColor(myInvestment.hasChanged ? .gray : .black)
             Spacer()
             Image(systemName: "chevron.right")
+                .foregroundColor(myInvestment.hasChanged ? .gray : .black)
         }
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(26)
         }
+        .disabled(myInvestment.hasChanged ? true : false)
     }
     
 }

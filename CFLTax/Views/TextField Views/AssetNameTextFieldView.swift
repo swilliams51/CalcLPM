@@ -148,6 +148,9 @@ extension AssetNameTextFieldView {
             alertTitle = alertName
             showAlert.toggle()
         } else {
+            if myName != self.nameOnEntry {
+                self.myInvestment.hasChanged = true
+            }
             self.myInvestment.asset.name = myName
         }
             

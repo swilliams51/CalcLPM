@@ -22,6 +22,7 @@ public class Investment {
     var beforeTaxCashflows: Cashflows = Cashflows()
     var earlyBuyoutExists: Bool = false
     var feeExists: Bool = false
+    var hasChanged: Bool = false
     
    public init() {
         self.asset = asset
@@ -62,6 +63,8 @@ public class Investment {
         self.setEBO()
         self.setFee()
     }
+    
+    
     
     public func setEBO() {
         if earlyBuyout.amount.toDecimal() != 0.0 {

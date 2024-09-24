@@ -175,6 +175,9 @@ extension PaymentAmountTextFieldView {
             if selectedGroup.amount.toDecimal() == 0.00 {
                 selectedGroup.locked = true
             }
+            if selectedGroup.amount != self.paymentOnEntry {
+                self.myInvestment.hasChanged = true
+            }
         }
             
         self.editPaymentAmountStarted = false

@@ -123,7 +123,7 @@ public class PeriodicYTDIncomes: Cashflows {
                     }
                     myCfDueDate = dateFrom
                 } else {  //Rents are in arrears
-                    if y == 0 {
+                    if y == 1 {
                         baseRentCF.items.append(Cashflow(dueDate: dateFrom, amount: "0.00"))
                     }
                     if dateTo <= dateFiscal {
@@ -138,10 +138,12 @@ public class PeriodicYTDIncomes: Cashflows {
                 baseRentCF.items.append(Cashflow(dueDate: myCfDueDate, amount: ytdIncome.toString()))
                 dateFrom = addOnePeriodToDate(dateStart: dateFrom, payPerYear: myFreq, dateRefer: dateRef, bolEOMRule: myEOMRule)
                 dateTo = addOnePeriodToDate(dateStart: dateTo, payPerYear: myFreq, dateRefer: dateRef, bolEOMRule: myEOMRule)
-                if aRent.groups[x].timing == .advance && y == aRent.groups[x].noOfPayments {
-                    myCfDueDate = dateTo
-                    ytdIncome = ytdIncome + 0.00
-                    baseRentCF.items.append(Cashflow(dueDate: myCfDueDate, amount: ytdIncome.toString()))
+                if x == aRent.groups.count - 1 {
+                    if aRent.groups[x].timing == .advance && y == aRent.groups[x].noOfPayments {
+                        myCfDueDate = dateTo
+                        ytdIncome = ytdIncome + 0.00
+                        baseRentCF.items.append(Cashflow(dueDate: myCfDueDate, amount: ytdIncome.toString()))
+                    }
                 }
                 y += 1
             }

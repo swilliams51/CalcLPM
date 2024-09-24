@@ -11,13 +11,14 @@ struct TerminationValuesView: View {
     @Bindable var myInvestment: Investment
     @Binding var path: [Int]
     @Binding var isDark: Bool
+    @Binding var currentFile: String
     
     @State var myTValues: TerminationValues = TerminationValues()
     @State var viewAsPercentOfCost: Bool = false
     
     var body: some View {
         Form {
-            Section(header: Text("Par Value TVs")) {
+            Section(header: Text("\(currentFile)")) {
                 ForEach(myTValues.items) { item in
                     HStack {
                         Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
@@ -68,5 +69,5 @@ struct TerminationValuesView: View {
 }
 
 #Preview {
-    TerminationValuesView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false))
+    TerminationValuesView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false), currentFile: .constant("File is New"))
 }

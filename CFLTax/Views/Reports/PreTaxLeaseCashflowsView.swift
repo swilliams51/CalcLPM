@@ -11,10 +11,11 @@ struct PreTaxLeaseCashflowsView: View {
     @Bindable var myInvestment: Investment
     @Binding var path: [Int]
     @Binding var isDark: Bool
+    @Binding var currentFile: String
     
     var body: some View {
         Form{
-            Section(header: Text("Schedule")) {
+            Section(header: Text("\(currentFile)")) {
                 if myInvestment.beforeTaxCashflows.count() == 0 {
                     VStack{
                         Text("No Cashflows")
@@ -61,5 +62,5 @@ struct PreTaxLeaseCashflowsView: View {
 
 
 #Preview {
-    PreTaxLeaseCashflowsView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false))
+    PreTaxLeaseCashflowsView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false), currentFile: .constant("File is New"))
 }

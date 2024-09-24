@@ -11,15 +11,17 @@ struct InvestmentAmortizationView: View {
     @Bindable var myInvestment: Investment
     @Binding var path: [Int]
     @Binding var isDark: Bool
+    @Binding var currentFile: String
     
     @State var myAmortizations: Amortizations = Amortizations()
     
     var body: some View {
         Form {
-            Section(header: Text("MISF_AT: \(yieldFormatted()), Lessor Cost: 1.00")
+            Section(header: Text("\(currentFile)")
                 .font(myFont)) {
                 ScrollView {
-                    Grid (alignment: .leading, horizontalSpacing: 23, verticalSpacing: 10) {
+                    Grid (alignment: .trailing, horizontalSpacing: 23, verticalSpacing: 10) {
+                        rateAndCostGridRow
                         amortHeaderGridRow
                         ForEach(myAmortizations.items) { item in
                             amortGridRow(item: item)
@@ -44,13 +46,25 @@ struct InvestmentAmortizationView: View {
         }
     }
     
+    var rateAndCostGridRow: some View {
+        GridRow {
+            Text("MISF AT:")
+            Text("\(yieldFormatted())")
+            Text("Cost:")
+            Text("1.00")
+        }
+        .font(myFont)
+    }
+    
     var amortHeaderGridRow: some View {
         GridRow {
             Text("Date")
             Text("Cashflow")
             Text("Interest")
             Text("Balance")
-        } .font(myFont)
+        }
+        .font(myFont)
+        .bold()
     }
     
     @ViewBuilder func amortGridRow(item: Amortization) -> some View {
@@ -92,5 +106,5 @@ struct InvestmentAmortizationView: View {
 }
 
 #Preview {
-    InvestmentAmortizationView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false))
+    InvestmentAmortizationView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false), currentFile: .constant("File is New"))
 }

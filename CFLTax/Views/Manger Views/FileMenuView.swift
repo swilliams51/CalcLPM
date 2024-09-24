@@ -17,14 +17,16 @@ struct FileMenuView: View {
     
     var body: some View {
         Form {
-            newFileItem
-            openFileItem
-            saveFileItem
-            saveAsFileItem
-            reportsItem
-            terminationsItem
-            preferencesItem
-            aboutItem
+            Section(footer: Text(" File Name: \(currentFile)").font(myFont2)) {
+                newFileItem
+                openFileItem
+                saveFileItem
+                saveAsFileItem
+                reportsItem
+                terminationsItem
+                preferencesItem
+                aboutItem
+            }
         }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {

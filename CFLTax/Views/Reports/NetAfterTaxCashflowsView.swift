@@ -11,10 +11,11 @@ struct NetAfterTaxCashflowsView: View {
     @Bindable var myInvestment: Investment
     @Binding var path: [Int]
     @Binding var isDark: Bool
+    @Binding var currentFile: String
     
     var body: some View {
         Form {
-            Section(header: Text("Schedule")) {
+            Section(header: Text("\(currentFile)")) {
                 if myInvestment.afterTaxCashflows.items.count == 0 {
                     VStack {
                         Text("No Cashflows")
@@ -64,5 +65,5 @@ struct NetAfterTaxCashflowsView: View {
 
 
 #Preview {
-    NetAfterTaxCashflowsView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false))
+    NetAfterTaxCashflowsView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false), currentFile: .constant("File is New"))
 }

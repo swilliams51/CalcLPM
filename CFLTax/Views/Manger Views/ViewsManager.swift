@@ -63,13 +63,13 @@ struct ViewsManager: View {
         case 20:
             Text("Early Buyout Option Text Field")
         case 21:
-            RentScheduleView(myInvestment: myInvestment, myRentalSchedule: myRentalSchedule, path: $path, isDark: $isDark)
+          RentScheduleView(myInvestment: myInvestment, myRentalSchedule: myRentalSchedule, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 22:
-            DepreciationScheduleView(myInvestment: myInvestment, myDepreciationSchedule: myDepreciationSchedule, path: $path, isDark: $isDark)
+          DepreciationScheduleView(myInvestment: myInvestment, myDepreciationSchedule: myDepreciationSchedule, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 23:
-            PreTaxLeaseCashflowsView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+          PreTaxLeaseCashflowsView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 24:
-            NetAfterTaxCashflowsView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+          NetAfterTaxCashflowsView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 25:
             SummaryOfResultsView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 26:
@@ -77,35 +77,35 @@ struct ViewsManager: View {
         case 27:
             FileOpenView(myInvestment: myInvestment, currentFile: $currentFile, path: $path, isDark: $isDark)
         case 28:
-            FeeExpenseView(myInvestment: myInvestment, myFeeAmortization: myFeeAmortization, path: $path, isDark: $isDark)
+            FeeExpenseView(myInvestment: myInvestment, myFeeAmortization: myFeeAmortization, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 29:
             FileSaveAsView(myInvestment: myInvestment, currentFile: $currentFile, path: $path, isDark: $isDark)
         case 30:
-          ReportsManagerView(myInvestment: myInvestment, myDepreciationSchedule: myDepreciationSchedule, path: $path, isDark: $isDark, currentFile: $currentFile)
+            ReportsManagerView(myInvestment: myInvestment, myDepreciationSchedule: myDepreciationSchedule, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 31:
             Text("Preferences")
         case 32:
             Text("About")
         case 33:
-            TaxableIncomeView(myInvestment: myInvestment, myTaxableIncomes: myTaxableIncomes, path: $path, isDark: $isDark)
+          TaxableIncomeView(myInvestment: myInvestment, myTaxableIncomes: myTaxableIncomes, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 34:
-            TaxesPaidView(myInvestment: myInvestment, myTaxableIncomes: myTaxableIncomes, path: $path, isDark: $isDark)
+          TaxesPaidView(myInvestment: myInvestment, myTaxableIncomes: myTaxableIncomes, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 35:
-            InvestmentAmortizationView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+          InvestmentAmortizationView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 36:
-          TerminationViewsManager(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
+            TerminationViewsManager(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 37:
-          InvestmentBalancesView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+            InvestmentBalancesView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 38:
-            DepreciationBalancesView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+            DepreciationBalancesView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 39:
-            YTDIncomesView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+            YTDIncomesView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 40:
-            YTDTaxesPaidView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+            YTDTaxesPaidView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 41:
-            AdvanceRentsView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+            AdvanceRentsView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
       case 42:
-            TerminationValuesView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+            TerminationValuesView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
         default:
             Text("Hello")
         }

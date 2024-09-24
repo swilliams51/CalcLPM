@@ -155,6 +155,9 @@ extension LessorCostTextFieldView {
             showAlert.toggle()
         } else {
             //Amount is Valid
+            if myAmount != self.amountOnEntry {
+                self.myInvestment.hasChanged = true
+            }
             self.myInvestment.asset.lessorCost = myAmount
         }
             

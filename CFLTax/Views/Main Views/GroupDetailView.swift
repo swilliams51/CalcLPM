@@ -257,11 +257,29 @@ extension GroupDetailView {
         }
     
     func submitForm() {
+        
+        if self.selectedGroup.paymentType == self.myInvestment.rent.groups[index].paymentType {
+            self.myInvestment.hasChanged = true
+            self.myInvestment.rent.groups[index].paymentType = selectedGroup.paymentType
+        }
+        
+        if self.selectedGroup.noOfPayments != self.myInvestment.rent.groups[index].noOfPayments {
+            self.myInvestment.hasChanged = true
+            self.myInvestment.rent.groups[index].noOfPayments = self.selectedGroup.noOfPayments
+        }
+       
+        if self.selectedGroup.timing != self.myInvestment.rent.groups[index].timing {
+            self.myInvestment.hasChanged = true
+            self.myInvestment.rent.groups[index].timing = selectedGroup.timing
+        }
+        
         self.myInvestment.rent.groups[index].amount = self.selectedGroup.amount
-        self.myInvestment.rent.groups[index].locked = self.selectedGroup.locked
-        self.myInvestment.rent.groups[index].noOfPayments = self.selectedGroup.noOfPayments
-        self.myInvestment.rent.groups[index].timing = selectedGroup.timing
-        self.myInvestment.rent.groups[index].paymentType = selectedGroup.paymentType
+        
+        if self.selectedGroup.locked != self.myInvestment.rent.groups[index].locked {
+            self.myInvestment.hasChanged = true
+            self.myInvestment.rent.groups[index].locked = self.selectedGroup.locked
+        }
+       
         self.myInvestment.resetFirstGroup(isInterim: self.myInvestment.rent.interimExists())
         
         self.path.removeLast()

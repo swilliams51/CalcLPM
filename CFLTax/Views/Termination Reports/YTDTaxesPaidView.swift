@@ -11,12 +11,13 @@ struct YTDTaxesPaidView: View {
     @Bindable var myInvestment: Investment
     @Binding var path: [Int]
     @Binding var isDark: Bool
+    @Binding var currentFile: String
     
     @State var myPeriodicTaxesPaid: PeriodicYTDTaxesPaid = PeriodicYTDTaxesPaid()
   
     var body: some View {
         Form {
-            Section(header: Text("Periodic Taxes Paid")) {
+            Section(header: Text("\(currentFile)")) {
                 ForEach(myPeriodicTaxesPaid.items) { item in
                     HStack {
                         Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
@@ -54,5 +55,5 @@ struct YTDTaxesPaidView: View {
 }
 
 #Preview {
-    YTDTaxesPaidView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false))
+    YTDTaxesPaidView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false), currentFile: .constant("Fiel is New"))
 }

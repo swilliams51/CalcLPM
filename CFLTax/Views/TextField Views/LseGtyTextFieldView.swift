@@ -158,6 +158,9 @@ extension LseGtyTextFieldView {
             showAlert.toggle()
         } else {
             //Amount is Valid
+            if self.myAmount != self.amountOnEntry {
+                self.myInvestment.hasChanged = true
+            }
             if self.myAmount.toDecimal() > 0.00 && self.myAmount.toDecimal() <= 1.0 {
                 self.myAmount = percentToAmount(percent:  myAmount)
             }

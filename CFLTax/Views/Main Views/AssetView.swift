@@ -15,11 +15,10 @@ struct AssetView: View {
     
     @State var assetName: String = ""
     @State var fundingDate: Date = Date()
-    @State var fundingDateOnEntry: Date = Date()
+    @State var fundingDateHasChanged: Bool = false
     @State var lessorCost: String = "1000.00"
     @State var residualValue: String = "1000.00"
     @State var lesseeGuaranty: String =  "200.00"
-    
     
     var body: some View {
         Form {
@@ -46,7 +45,6 @@ struct AssetView: View {
         .onAppear {
             self.assetName = self.myInvestment.asset.name
             self.fundingDate = self.myInvestment.asset.fundingDate
-            self.fundingDateOnEntry = self.myInvestment.asset.fundingDate
             self.lessorCost = self.myInvestment.asset.lessorCost
             self.residualValue = self.myInvestment.asset.residualValue
             self.lesseeGuaranty = self.myInvestment.asset.lesseeGuarantyAmount
@@ -76,7 +74,7 @@ struct AssetView: View {
                 .transformEffect(.init(scaleX: 1.0, y: 0.9))
                 .environment(\.locale, myLocale)
                 .onChange(of: fundingDate) { oldValue, newValue in
-                    self.myInvestment.resetForFundingDateChange()
+                    //self.myInvestment.resetForFundingDateChange()
                 }
         }
     }
@@ -89,7 +87,6 @@ struct AssetView: View {
             Text("\(amountFormatter(amount: lessorCost, locale: myLocale))")
                 .font(myFont2)
                 .onTapGesture {
-                    //self.component = [0,0]
                     path.append(9)
                 }
         }
@@ -126,14 +123,21 @@ struct AssetView: View {
     }
     
     private func myDone() {
+
         self.myInvestment.asset.name = assetName
+        
+        if fundingDate != myInvestment.asset.fundingDate {
+            self.fundingDateHasChanged = true
+        }
         self.myInvestment.asset.fundingDate = fundingDate
         self.myInvestment.asset.lessorCost = lessorCost
         self.myInvestment.asset.residualValue = residualValue
         self.myInvestment.asset.lesseeGuarantyAmount = lesseeGuaranty
-        if self.fundingDateOnEntry != fundingDate {
+        if self.fundingDateHasChanged == true {
+            self.myInvestment.hasChanged = true
             self.myInvestment.resetForFundingDateChange()
         }
+       
         path.removeLast()
     }
     
@@ -142,3 +146,5 @@ struct AssetView: View {
 #Preview {
     AssetView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false), currentFile: .constant("File is New"))
 }
+
+
