@@ -262,6 +262,7 @@ public enum DepreciationType {
         }
     }
     
+    static let twoTypes: [DepreciationType] = [.MACRS, .StraightLine]
     static let allTypes: [DepreciationType] = [.MACRS, .One_Fifty_DB, .One_Seventy_Five_DB, .StraightLine]
     static let macrs: [DepreciationType] = [.MACRS]
 }
@@ -437,75 +438,3 @@ public enum TimingType {
 
 
 
-
-public func getMethodFactor(aDepreciationType: DepreciationType) -> Decimal {
-    switch aDepreciationType {
-    case .MACRS:
-        return 2.0
-    case .One_Fifty_DB:
-        return 1.5
-    case .One_Seventy_Five_DB:
-        return 1.75
-    default:
-        return 1.0
-    }
-}
-
-public func getConventionFactor(aConvention: ConventionType, dateFiscalYearEnd: Date, inServiceDate: Date) -> Decimal{
-    var returnFactor: Decimal = 1.0
-    
-    switch aConvention {
-    case .halfYear:
-        returnFactor = 0.5
-    case .midMonth:
-        returnFactor = getMidMonthFactor(dateFiscalYearEnd: dateFiscalYearEnd, inServiceDate: inServiceDate)
-    case .midQuarter:
-        returnFactor = getMidQuarterFactor(dateFiscalYearEnd: dateFiscalYearEnd, inServiceDate: inServiceDate)
-    }
-    
-    return returnFactor
-}
-
-
-public func getMidMonthFactor(dateFiscalYearEnd: Date, inServiceDate: Date) -> Decimal {
-    let monthInService: Int = getMonthInService(dateFiscalYearEnd: dateFiscalYearEnd, inServiceDate: inServiceDate)
-    let myFactor: Decimal = 1.0 - (Decimal(monthInService) / 12.0)
-    
-    return myFactor
-}
-
-private func getMonthInService(dateFiscalYearEnd: Date, inServiceDate: Date) -> Int {
-    var diffA: Int = 0
-    let fiscalMonth: Int = getMonthComponent(dateIn: dateFiscalYearEnd)
-    let inServiceMonth: Int = getMonthComponent(dateIn: inServiceDate)
-    
-    if inServiceMonth > fiscalMonth{
-        diffA = inServiceMonth - fiscalMonth
-    } else {
-        diffA = inServiceMonth - fiscalMonth + 12
-    }
-    
-    return diffA
-}
-
-private func getMidQuarterFactor(dateFiscalYearEnd: Date, inServiceDate: Date) -> Decimal {
-    let fiscalQuarter: Int = getQuarterInService(dateFiscalYearEnd: dateFiscalYearEnd, inServeDate: inServiceDate)
-    
-    return Decimal(4 - fiscalQuarter) * 0.25 + 0.125
-}
-
-private func getQuarterInService(dateFiscalYearEnd: Date, inServeDate: Date) -> Int {
-    var diffA: Int = 0
-    let fiscalMonth: Int = getMonthComponent(dateIn: dateFiscalYearEnd)
-    let inServiceMonth: Int = getMonthComponent(dateIn: inServeDate)
-    
-    if inServiceMonth > fiscalMonth{
-        diffA = inServiceMonth - fiscalMonth
-    } else {
-        diffA = inServiceMonth - fiscalMonth + 12
-    }
-    let diffB: Decimal = Decimal(diffA) / 3 + 0.375
-    
-    return diffB.toInteger()
-    
-}

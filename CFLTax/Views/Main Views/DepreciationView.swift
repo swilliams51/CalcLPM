@@ -33,16 +33,10 @@ struct DepreciationView: View {
                 VStack {
                     depreciableBasisItem
                     depreciationMethod
-                    if myMethod == .MACRS {
-                        depreciableLife
+                    if macrsMode {
+                        macrsViewItem
                     } else {
-                        lifeInYearsItem
-                    }
-                    depreciationConvention
-                    if myMethod == .MACRS {
-                        bonusDepreciation
-                    } else {
-                        salvageValue
+                        straightLineViewItem
                     }
                 }
             }
@@ -69,6 +63,23 @@ struct DepreciationView: View {
         }
     }
     
+    var macrsViewItem: some View {
+        VStack {
+            depreciableLife
+            depreciationConvention
+            bonusDepreciation
+        }
+        
+    }
+    
+    var straightLineViewItem: some View {
+        VStack{
+            lifeInYearsItem
+            depreciationConvention
+            salvageValue
+        }
+    }
+    
     var depreciableBasisItem: some View {
         HStack {
             Text("Basis:")
@@ -84,7 +95,7 @@ struct DepreciationView: View {
             Text("Method:")
                 .font(myFont2)
             Picker(selection: $myMethod, label: Text("")) {
-                ForEach(DepreciationType.allTypes, id: \.self) { item in
+                ForEach(DepreciationType.twoTypes, id: \.self) { item in
                     Text(item.toString())
                 }
                 .onChange(of: myMethod) { oldValue, newValue in

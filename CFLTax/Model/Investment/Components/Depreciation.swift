@@ -28,7 +28,17 @@ public struct Depreciation {
         self.investmentTaxCredit = investmentTaxCredit
         self.salvageValue = salvageValue
         self.vestingPeriod = vestingPeriod
-            
+    }
+    
+    init() {
+        self.basisReduction = 0.0
+        self.bonusDeprecPercent = 0.0
+        self.convention = .halfYear
+        self.life = 5
+        self.method = .MACRS
+        self.investmentTaxCredit = 0.0
+        self.salvageValue = "0.0"
+        self.vestingPeriod = 0
     }
     
 }
