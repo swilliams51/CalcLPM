@@ -41,7 +41,7 @@ struct SummaryOfResultsView: View {
     
     var body: some View {
         Form {
-            Section(header: Text("Yields"), footer: (Text("FileName: \(currentFile)"))) {
+            Section(header: Text("Yields"), footer: (Text("File Name: \(currentFile)"))) {
                 afterTaxYieldItem
                 beforeTaxYieldItem
                 preTaxIRRItem
@@ -217,7 +217,7 @@ extension SummaryOfResultsView {
     
     var taxesPaidItem: some View {
         HStack{
-            Text("Taxes Paid:")
+            Text("Taxes:")
                 .font(myFont)
             Spacer()
             Text("\(getFormattedValue(amount: taxesPaid))")

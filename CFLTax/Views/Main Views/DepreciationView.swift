@@ -54,6 +54,11 @@ struct DepreciationView: View {
         .navigationBarBackButtonHidden(true)
         .onAppear{
             self.myMethod = myInvestment.depreciation.method
+            if self.myMethod == .MACRS {
+                macrsMode = true
+            } else {
+                macrsMode = false
+            }
             self.myLife = myInvestment.depreciation.life.toDouble()
             self.myConvention = myInvestment.depreciation.convention
             self.myBonus = myInvestment.depreciation.bonusDeprecPercent.toString(decPlaces: 4)

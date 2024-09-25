@@ -23,7 +23,7 @@ struct HomeView: View {
     var body: some View {
         NavigationStack (path: $path){
             Form {
-                Section(header: Text("Parameters"), footer: (Text("FileName: \(currentFile)"))) {
+                Section(header: Text("Parameters"), footer: (Text("File Name: \(currentFile)"))) {
                     assetItem
                     LeaseTermItem
                     rentItem
