@@ -28,7 +28,7 @@ public class DepreciationIncomes: Cashflows {
     var lessorCost: String = "0.0"
     var myConventionType: ConventionType = .halfYear
     var runTotalDepreciation: Decimal = 0.0
-   
+    
     public func createTable(aInvestment: Investment) {
         aDepreciation = aInvestment.depreciation
         lessorCost = aInvestment.asset.lessorCost
@@ -50,7 +50,7 @@ public class DepreciationIncomes: Cashflows {
             createTable_SL()
         }
     }
-
+    
     func createTable_MACRS () {
         bonusDepreciationAsPercent = aDepreciation.bonusDeprecPercent
         bonusDepreciation = decBasis * bonusDepreciationAsPercent
@@ -122,7 +122,20 @@ public class DepreciationIncomes: Cashflows {
                 runTotalDepreciation = runTotalDepreciation + currentDeprecExpense
                 currentDeprecBalance = decBasis + runTotalDepreciation
             }
-           
+            
+        }
+    }
+    
+    func getMethodFactor(aDepreciationType: DepreciationType) -> Decimal {
+        switch aDepreciationType {
+        case .MACRS:
+            return 2.0
+        case .One_Fifty_DB:
+            return 1.5
+        case .One_Seventy_Five_DB:
+            return 1.75
+        default:
+            return 1.0
         }
     }
     
@@ -139,7 +152,7 @@ public class DepreciationIncomes: Cashflows {
         var curDeprec_Applied: Decimal = 0.0
         
         if year == 0 {
-           curDeprec_Applied = getFirstYearDeprecExpense(aBasis: aBasis, decFactor: deprecFactor)
+            curDeprec_Applied = getFirstYearDeprecExpense(aBasis: aBasis, decFactor: deprecFactor)
         } else {
             curDeprec_Applied = max(curDeprec_DB, curDeprec_SL)
         }
@@ -197,7 +210,7 @@ public class DepreciationIncomes: Cashflows {
     
     func getMidQuarterFactor(dateFiscal: Date, inService: Date) -> Decimal {
         let intFiscalQuarter: Int = getQuarterInService(dateFiscal: dateFiscal, inService: inService)
-
+        
         return Decimal(4 - intFiscalQuarter) * 0.25 + 0.125
     }
     
@@ -208,7 +221,7 @@ public class DepreciationIncomes: Cashflows {
         let monthInService: Int = getMonthComponent(dateIn: inService)
         
         if monthInService > monthFiscal {
-             intDiff = monthInService - monthFiscal
+            intDiff = monthInService - monthFiscal
         } else {
             intDiff = monthFiscal - monthInService + 12
         }
@@ -220,20 +233,26 @@ public class DepreciationIncomes: Cashflows {
     func getMidMonthFactor (dateFiscal: Date, inService: Date) -> Decimal {
         let intMonthInService: Int = getMonthInService(dateFiscal: dateFiscal, inService: inService)
         let dayOfMonthInService: Int = getDayComponent(dateIn: inService)
-        var halfMonthAdder: Int = 2
-        if dayOfMonthInService > 15 {
-            halfMonthAdder = 1
-        }
+        var halfMonthAdder: Int = 0
         
+        if intMonthInService > 6 {
+            if dayOfMonthInService > 15 {
+                halfMonthAdder = 1
+            } else {
+                halfMonthAdder = 2
+            }
+        } else {
+            if dayOfMonthInService <= 15 {
+                halfMonthAdder = 1
+            }
+        }
         let factor = intMonthInService * 2 - halfMonthAdder  // 23
         let factor2 = Decimal(factor) * 100.0 / 24.0  // 23 x 4.1667
         let factor3 = 100.0 - factor2
         
-        print("\(factor3.toString(decPlaces: 5))")
-        
         return factor3 / 100.0
     }
-    
+        
     func getMonthInService(dateFiscal: Date, inService: Date) -> Int {
         var intDiff = 0
         let monthFiscal: Int = getMonthComponent(dateIn: dateFiscal)
@@ -248,23 +267,7 @@ public class DepreciationIncomes: Cashflows {
         return intDiff
     }
     
-    func getMethodFactor(aDepreciationType: DepreciationType) -> Decimal {
-        switch aDepreciationType {
-        case .MACRS:
-            return 2.0
-        case .One_Fifty_DB:
-            return 1.5
-        case .One_Seventy_Five_DB:
-            return 1.75
-        default:
-            return 1.0
-        }
-    }
-    
-        
 }
-        
-        
        
     
 
