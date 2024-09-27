@@ -13,16 +13,22 @@ public class NetAfterTaxCashflows: CollCashflows {
     var myPeriodicLeaseCashflows: Cashflows = Cashflows()
     var myPeriodicTaxesPaid: Cashflows = Cashflows()
     
-    public func createTable(aInvestment: Investment) {
+    public func createTable(aInvestment: Investment, plannedIncome: String = "0.00", unplannedDate: Date = Date()) {
         myPeriodicLeaseCashflows.removeAll()
         myPeriodicTaxesPaid.removeAll()
         myPeriodicLeaseCashflows.addAll(aCFs: PeriodicLeaseCashflows().createPeriodicLeaseCashflows(aInvestment: aInvestment, lesseePerspective: false))
         self.addCashflows(myPeriodicLeaseCashflows)
-        myPeriodicTaxesPaid.addAll(aCFs: AnnualTaxableIncomes().createPeriodicTaxesPaid_STD(aInvestment: aInvestment))
+        
+        if plannedIncome.toDecimal() == 0.0 {
+            myPeriodicTaxesPaid.addAll(aCFs: AnnualTaxableIncomes().createPeriodicTaxesPaid_STD(aInvestment: aInvestment))
+        } else {
+            myPeriodicTaxesPaid.addAll(aCFs: AnnualTaxableIncomes().createPeriodicTaxesPaid_EBO(aInvestment: aInvestment, plannedIncome: plannedIncome, unplannedDate: unplannedDate))
+        }
+        
         self.addCashflows(myPeriodicTaxesPaid)
     }
     
-    public func createNetAfterTaxCashflows(aInvestment: Investment) -> Cashflows {
+    public func createNetAfterTaxCashflows(aInvestment: Investment, plannedIncome: String = "0.00", unplannedDate: Date = Date()) -> Cashflows {
         self.createTable(aInvestment: aInvestment)
         self.netCashflows()
         

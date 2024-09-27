@@ -119,6 +119,18 @@ public class Cashflows {
         return myClone
     }
     
+    public func vLookup(dateAsk: Date) -> Decimal {
+        let foundValue: Decimal = 0.0
+        
+        for x in 0..<items.count {
+            if items[x].dueDate == dateAsk {
+                return items[x].amount.toDecimal()
+            }
+        }
+        
+        return foundValue
+    }
+    
     func XIRR2(guessRate: Decimal, _DayCountMethod: DayCountMethod) -> Decimal {
         var irr: Decimal = guessRate
         let y2: Decimal = ModXNPV(aDiscountRate: 0.00, aDayCountMethod: _DayCountMethod)

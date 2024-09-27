@@ -15,6 +15,7 @@ public let myFont2: Font = .body
 public let maximumLessorCost: String = "50000000.00"
 public let minimumLessorCost: String = "999.99"
 public let maximumYield: String = "0.30"
+public let maxEBOSpread: Int = 500
 public let feeAmortizationMethod: FeeAmortizationMethod = .monthly
 public let maxBaseTerm: Int = 360
 public let removeCharacters: Set<Character> = [",", "$","-", "+","%"]
