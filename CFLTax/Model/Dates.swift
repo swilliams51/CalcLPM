@@ -62,6 +62,60 @@ public func addOnePeriodToDate (dateStart: Date, payPerYear: Frequency, dateRefe
     return dateNew
 }
 
+func subtractOnePeriodFromDate(dateStart: Date, payperYear: Frequency, dateRefer: Date, bolEOMRule: Bool) -> Date {
+    let theStartDay = getDayComponent(dateIn: dateStart)
+    let theStartMonth = getMonthComponent(dateIn: dateStart)
+    let theStartYear = getYearComponent(dateIn: dateStart)
+    let referDay = getDayComponent(dateIn: dateRefer)
+    let referMonth = getMonthComponent(dateIn: dateRefer)
+    let referYear = getYearComponent(dateIn: dateRefer)
+    let isReferLDM = isLastDayOfMonth(iDay: referDay, iMonth: referMonth, iYear: referYear)
+    var theEndMonth = 0
+    var theEndYear = 0
+    
+    switch payperYear {
+    case .monthly:
+        if theStartMonth == 1 {
+            theEndMonth = 12
+            theEndYear = theStartYear - 1
+        } else {
+            theEndMonth = theStartMonth - 1
+            theEndYear = theStartYear
+        }
+    case .quarterly:
+        if theStartMonth <= 3 {
+            theEndMonth = theStartMonth - 3 + 12
+            theEndYear = theStartYear - 1
+        } else {
+            theEndMonth = theStartMonth - 3
+            theEndYear = theStartYear
+        }
+    case .semiannual:
+        if theStartMonth <= 6 {
+            theEndMonth = theStartMonth - 6 + 12
+            theEndYear = theStartYear - 1
+        } else {
+            theEndMonth = theStartMonth - 6
+            theEndYear = theStartYear
+        }
+    case .annual:
+        theEndMonth = theStartMonth
+        theEndYear = theStartYear - 1
+    }
+    let theEndDay = getTheDay(referDay: referDay, startDay: theStartDay, endMonth: theEndMonth, endYear: theEndYear, bolEOM: bolEOMRule, bolReferIsLDM: isReferLDM)
+    
+    var comps = DateComponents()
+    comps.day = theEndDay
+    comps.month = theEndMonth
+    comps.year = theEndYear
+    
+    let dateNew = Calendar.current.date(from: comps)!
+    
+    return dateNew
+}
+
+
+
 public func getFiscalYearEnd(askDate: Date, fiscalMonthEnd: Int) -> Date {
     let year:Int = getYearComponent(dateIn: askDate)
     let month: Int = fiscalMonthEnd
@@ -105,6 +159,19 @@ public func addPeriodsToDate (dateStart: Date, payPerYear: Frequency, noOfPeriod
             iCounter += 1
         }
     }
+    return tempDate
+}
+
+public func subtractPeriodsFromDate(dateStart: Date, payPerYear: Frequency, noOfPeriods: Int, referDate: Date, bolEOMRule: Bool) -> Date {
+    var iCounter = 0
+    var tempDate = dateStart
+    if noOfPeriods > 0 {
+        while iCounter < noOfPeriods {
+            tempDate = subtractOnePeriodFromDate(dateStart: tempDate, payperYear: payPerYear, dateRefer: referDate, bolEOMRule: bolEOMRule)
+            iCounter += 1
+        }
+    }
+    
     return tempDate
 }
 
@@ -306,6 +373,16 @@ public func monthsDifference (start: Date, end: Date, inclusive: Bool) -> Int {
     
     
     return totalMonths
+}
+
+public func getYearsDiff(start: Date, end: Date, inclusive: Bool) -> Int {
+    let adder: Int = inclusive ? 1 : 0
+    let startYear = getYearComponent(dateIn: start)
+    let endYear = getYearComponent(dateIn: end)
+    
+    let yearsDiff: Int = endYear - startYear + adder
+    
+    return yearsDiff
 }
 
 

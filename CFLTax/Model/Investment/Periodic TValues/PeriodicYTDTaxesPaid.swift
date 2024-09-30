@@ -30,7 +30,7 @@ public class PeriodicYTDTaxesPaid: Cashflows {
         
         while x < myCombinedCashflows.items[0].items.count {
             if myCombinedCashflows.items[0].items[x].dueDate <= nextFiscalYearEnd {
-                ytdTotal += myCombinedCashflows.items[0].items[x].amount.toDecimal()
+                ytdTotal += myCombinedCashflows.items[0].items[x].amount.toDecimal() * -1.0
                 let periodicYTDTaxesPaid: Cashflow = Cashflow(dueDate: myCombinedCashflows.items[0].items[x].dueDate, amount: ytdTotal.toString(decPlaces: 4))
                 myTempCashflow.items.append(periodicYTDTaxesPaid)
                 x += 1

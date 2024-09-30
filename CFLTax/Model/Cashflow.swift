@@ -120,11 +120,12 @@ public class Cashflows {
     }
     
     public func vLookup(dateAsk: Date) -> Decimal {
-        let foundValue: Decimal = 0.0
+        var foundValue: Decimal = 0.0
         
         for x in 0..<items.count {
             if items[x].dueDate == dateAsk {
-                return items[x].amount.toDecimal()
+                foundValue = items[x].amount.toDecimal()
+                break
             }
         }
         

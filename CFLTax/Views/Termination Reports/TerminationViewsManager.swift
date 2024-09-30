@@ -19,6 +19,7 @@ struct TerminationViewsManager: View {
                 depreciationBalancesItem
                 yearToDateIncomeItem
                 yearToDateTaxesPaidItem
+                yearToDateTaxesDueItem
                 advanceRentsItem
                 terminationValuesItem
             }
@@ -82,6 +83,19 @@ struct TerminationViewsManager: View {
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(40)
+        }
+    }
+    
+    var yearToDateTaxesDueItem: some View {
+        HStack {
+            Text("YTD Taxes Due")
+                .font(myFont2)
+            Spacer()
+            Image(systemName: "chevron.right")
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            path.append(43)
         }
     }
     

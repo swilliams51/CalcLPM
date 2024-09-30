@@ -37,7 +37,7 @@ public class FeeIncomes: Cashflows {
         dateStart = aFee.datePaid
         
         if aFee.feeType == .expense {
-            while currentFiscalDate <= aMaturityDate {
+            while currentFiscalDate < aMaturityDate {
                 let daysInFiscal = daysDiff(start: dateStart, end: currentFiscalDate)
                 let expAmount = perDiemFee * Decimal(daysInFiscal) * -1.0
                 let currentFiscalFeeExpense: Cashflow = Cashflow(dueDate: currentFiscalDate, amount: expAmount.toString(decPlaces: places))
@@ -62,7 +62,7 @@ public class FeeIncomes: Cashflows {
         dateStart = aFee.datePaid
         
         if aFee.feeType == .expense {
-            while currentFiscalDate <= aMaturityDate {
+            while currentFiscalDate < aMaturityDate {
                 let monthsInFiscalYear = monthsDifference(start: dateStart, end: currentFiscalDate, inclusive: true)
                 let expAmount = perMonthlyFee * Decimal(monthsInFiscalYear) * -1.0
                 let currentFiscalFeeExpense = Cashflow(dueDate: currentFiscalDate, amount: expAmount.toString(decPlaces: places))
@@ -74,7 +74,7 @@ public class FeeIncomes: Cashflows {
             
             let monthsInLastFiscal = monthsDifference(start: dateStart, end: aMaturityDate, inclusive: true)
             let expenseAmount = perMonthlyFee * Decimal(monthsInLastFiscal) * -1.0
-            let lastFiscalFeeExpense = Cashflow(dueDate: aMaturityDate, amount: expenseAmount.toString(decPlaces: places))
+            let lastFiscalFeeExpense = Cashflow(dueDate: currentFiscalDate, amount: expenseAmount.toString(decPlaces: places))
             items.append(lastFiscalFeeExpense)
         } else {
             createTable_FeeIncome(aFee: aFee, aMaturityDate: aMaturityDate, aFiscalMonth: aFiscalMonth)

@@ -21,7 +21,7 @@ public class TerminationValues: Cashflows {
     let myPeriodicValues: CollCashflows = CollCashflows()
     
     public func createTable(aInvestment: Investment) {
-        // AfterTaxTValue = IBAL + DepreciableBasis * FedTaxRate + (IncomeYTD - AdvanceRent) * FedTaxRate - TaxesPaidTYD + ITC Recaptured
+        // AfterTaxTValue = (IBAL + AdvanceRent) + DepreciableBasis * FedTaxRate + (IncomeYTD - AdvanceRent) * FedTaxRate - TaxesPaidTYD + ITC Recaptured
         // TV = AfterTaxTValue / (1.0 - FedTaxRate)
         myFederalTaxRate = aInvestment.taxAssumptions.federalTaxRate.toDecimal()
         
@@ -64,8 +64,10 @@ public class TerminationValues: Cashflows {
     private func terminationValue(iBalance: Decimal, dBalance: Decimal, income: Decimal, taxPaid: Decimal, advRent: Decimal) -> Decimal {
         let taxOnGain: Decimal = dBalance * myFederalTaxRate
         let taxOnIncome: Decimal = (income - advRent) * myFederalTaxRate
-        let netTaxDue: Decimal = (iBalance + advRent) - taxOnIncome - taxOnGain + taxPaid
-        let preTaxTV: Decimal = netTaxDue / (1 - myFederalTaxRate)
+        let netTaxDue: Decimal = taxOnIncome + taxOnGain + taxPaid
+        let afterTaxTV: Decimal = (iBalance + advRent) - netTaxDue
+        
+        let preTaxTV: Decimal = afterTaxTV / (1 - myFederalTaxRate)
         
         return preTaxTV
     }

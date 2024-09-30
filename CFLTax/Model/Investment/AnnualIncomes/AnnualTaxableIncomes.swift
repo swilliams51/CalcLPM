@@ -80,10 +80,10 @@ public class AnnualTaxableIncomes: CollCashflows {
                 dateTaxPayment = addOnePeriodToDate(dateStart: dateTaxPayment, payPerYear: .monthly, dateRefer: aInvestment.leaseTerm.baseCommenceDate, bolEOMRule: aInvestment.leaseTerm.endOfMonthRule)
             }
             nextFiscalYearEnd = addNextFiscalYearEnd(aDateIn: nextFiscalYearEnd)
-            }
-           self.removeAll()
+        }
+        self.removeAll()
          
-         return periodicTaxPayments
+        return periodicTaxPayments
     }
     
     

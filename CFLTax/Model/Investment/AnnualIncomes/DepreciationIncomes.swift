@@ -63,10 +63,10 @@ public class DepreciationIncomes: Cashflows {
         runTotalDepreciation = runTotalDepreciation + currentDeprecExpense
         currentDeprecBalance = decBasis + runTotalDepreciation
         
-        var nextFiscalYearEnd: Date  = firstFiscalYearEnd
-        for x in 1...intYears {
+        var nextFiscalYearEnd: Date = firstFiscalYearEnd
+        for x in 1..<intYears {
             nextFiscalYearEnd = addNextFiscalYearEnd(aDateIn: nextFiscalYearEnd)
-            if x == intYears {
+            if x == intYears - 1 {
                 currentDeprecExpense = currentDeprecBalance * -1.0
                 let annualExpense = Cashflow(dueDate: nextFiscalYearEnd, amount: currentDeprecExpense.toString(decPlaces: 10))
                 items.append(annualExpense)
@@ -168,7 +168,7 @@ public class DepreciationIncomes: Cashflows {
         return firstYearDeprec
     }
     
-    func getCurrentDeprec_DB (aBasis: Decimal, deprecFactor: Decimal) -> Decimal {
+        func getCurrentDeprec_DB (aBasis: Decimal, deprecFactor: Decimal) -> Decimal {
         let myCurrentDeprec_DB = aBasis * deprecFactor * decMACRSFactor
         
         return myCurrentDeprec_DB
@@ -181,16 +181,10 @@ public class DepreciationIncomes: Cashflows {
     }
     
     func getFiscalYearsOfLease(leaseExpiry: Date) -> Int {
-        var x: Int = 1
-        var currFiscalYearEnd: Date = firstFiscalYearEnd
-        
-        while leaseExpiry > currFiscalYearEnd {
-            currFiscalYearEnd = addNextFiscalYearEnd(aDateIn: currFiscalYearEnd)
-            x += 1
-        }
-        //x += 1 // for the fiscal year in which the lease matures
-        
-        return x
+        let firstFiscalYearEnd: Date = firstFiscalYearEnd
+        let lastFiscalYearEnd: Date = getFiscalYearEnd(askDate: leaseExpiry, fiscalMonthEnd: aFiscalMonthEnd)
+    
+        return  getYearsDiff(start: firstFiscalYearEnd, end: lastFiscalYearEnd, inclusive: true)
     }
     
     func setConventionFactor(aFiscalYearEnd: Date, dateInService: Date) {

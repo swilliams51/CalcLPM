@@ -37,7 +37,7 @@ struct ViewsManager: View {
         case 7:
             EconomicsView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 8:
-            Text("Early Buyout Option Form")
+          EarlyBuyoutView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 9:
             LessorCostTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         case 10:
@@ -106,6 +106,8 @@ struct ViewsManager: View {
             AdvanceRentsView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
       case 42:
             TerminationValuesView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
+      case 43:
+            YTDTaxesDueView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
         default:
             Text("Hello")
         }

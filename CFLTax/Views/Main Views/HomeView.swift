@@ -30,6 +30,7 @@ struct HomeView: View {
                     depreciationItem
                     taxAssumptionsItem
                     feeItem
+                    eboItem
                     economicsItem
                 }
                 Section(header: Text("Results")) {
@@ -122,6 +123,19 @@ struct HomeView: View {
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(6)
+        }
+    }
+    
+    var eboItem: some View {
+        HStack{
+            Text("Early Buyout")
+                .font(myFont2)
+            Spacer()
+            Image(systemName: "chevron.right")
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            path.append(8)
         }
     }
     

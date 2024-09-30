@@ -44,10 +44,12 @@ struct EarlyBuyoutView: View {
             Section (header: Text("Exercise Date").font(.footnote)) {
                 eboTermInMonsRow
                 exerciseDateRow
-                includesRentDueRowItem
+                parValueOnDateRow
+
             }
             
             Section (header: Text("EBO Amount").font(.footnote)) {
+                
                 eboAmountRow
                 interestRateAdderRow
                 basisPointsStepperRow2
@@ -77,7 +79,11 @@ struct EarlyBuyoutView: View {
         .navigationBarTitle("Asset")
         .navigationBarBackButtonHidden(true)
         .onAppear {
+            
+            self.myInvestment.resetEBOToDefault()
             self.myEBO = self.myInvestment.earlyBuyout
+            self.eboTerm = myEBO.getEBOTermInMonths(aInvestment: myInvestment)
+            self.parValue = myInvestment.getParValue(askDate: myEBO.exerciseDate).toString(decPlaces: 4)
            
            
         }
@@ -102,19 +108,17 @@ struct EarlyBuyoutView: View {
         HStack {
             Text("exercise date:")
                 .font(.subheadline)
-                .foregroundColor(defaultInactive)
             Image(systemName: "questionmark.circle")
-                .foregroundColor(Color.theme.accent)
+                .foregroundColor(Color.black)
                 .onTapGesture {
                     self.showPopover = true
                 }
-            
             Spacer()
             Text(myEBO.exerciseDate.toStringDateShort(yrDigits: 4))
                 .font(.subheadline)
-                .foregroundColor(defaultInactive)
+                
                 .onChange(of: myEBO.exerciseDate) { oldDate, newDate in
-                    self.parValue = self.myInvestment.getParValue(askDate: newDate, rentToBePaid: rentDueIsPaid).toString()
+                    self.parValue = self.myInvestment.getParValue(askDate: newDate).toString()
                     self.myEBO.amount = self.parValue
                 }
         }
@@ -124,23 +128,9 @@ struct EarlyBuyoutView: View {
         HStack {
             Text("par value on date:")
                 .font(.subheadline)
-                .foregroundColor(defaultInactive)
             Spacer()
             Text(amountFormatter(amount: parValue, locale: myLocale))
                 .font(.subheadline)
-                .foregroundColor(defaultInactive)
-        }
-    }
-    
-    var includesRentDueRowItem: some View {
-        Toggle(isOn: $rentDueIsPaid) {
-            Text(rentDueIsPaid ? "rent due will also be paid:" : "rent due will not be paid:")
-                .font(.subheadline)
-                .onChange(of: rentDueIsPaid) { oldValue, newValue in
-                    self.parValue = self.myInvestment.getParValue(askDate: myEBO.exerciseDate, rentToBePaid: newValue).toString()
-                    self.myEBO.amount = self.parValue
-                    self.basisPoints = 0.0
-                }
         }
     }
     
@@ -160,7 +150,7 @@ struct EarlyBuyoutView: View {
 extension EarlyBuyoutView {
     var eboAmountRow: some View {
         HStack {
-            Text(premiumIsSpecified ? "amount is specified:" : "amount is calculated:")
+            Text(premiumIsSpecified ? "Specify amount:" : "Use adder:")
                 .font(.subheadline)
             Image(systemName: "questionmark.circle")
                 .foregroundColor(Color.theme.accent)
