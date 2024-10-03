@@ -19,6 +19,8 @@ struct HomeView: View {
     @State var myFeeAmortization: FeeIncomes = FeeIncomes()
     @State var isShowingYieldErrorAlert: Bool = false
     @State var currentFile: String = "File is New"
+    @State var maximumEBOAmount: Decimal = 0.0
+    @State var minimumEBOAmount: Decimal = 0.0
 
     var body: some View {
         NavigationStack (path: $path){
@@ -41,7 +43,7 @@ struct HomeView: View {
             .environment(\.colorScheme, isDark ? .dark : .light)
             .navigationBarTitle("Home")
             .navigationDestination(for: Int.self) { selectedView in
-                ViewsManager(myInvestment: myInvestment, myDepreciationSchedule: myDepreciationSchedule, myRentalSchedule: myRentalSchedule, myTaxableIncomes: myTaxableIncomes, myFeeAmortization: myFeeAmortization, path: $path, isDark: $isDark, selectedGroup: $selectedGroup, currentFile: $currentFile, selectedView: selectedView)
+                ViewsManager(myInvestment: myInvestment, myDepreciationSchedule: myDepreciationSchedule, myRentalSchedule: myRentalSchedule, myTaxableIncomes: myTaxableIncomes, myFeeAmortization: myFeeAmortization, path: $path, isDark: $isDark, selectedGroup: $selectedGroup, currentFile: $currentFile, minimumEBOAmount: $minimumEBOAmount, maximumEBOAmount: $maximumEBOAmount, selectedView: selectedView)
             }
         }
     }
@@ -135,6 +137,10 @@ struct HomeView: View {
         }
         .contentShape(Rectangle())
         .onTapGesture {
+            if myInvestment.earlyBuyoutExists == false {
+                myInvestment.resetEBOToDefault()
+                myInvestment.earlyBuyoutExists = true
+            }
             path.append(8)
         }
     }

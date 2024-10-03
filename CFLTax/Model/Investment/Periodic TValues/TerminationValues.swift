@@ -9,7 +9,7 @@ import Foundation
 
 
 @Observable
-public class TerminationValues: Cashflows {
+public class TerminationValues: CollCashflows {
     var myLeaseTemplate: LeaseTemplateCashflows = LeaseTemplateCashflows()
     var myInvestmentBalances: PeriodicInvestmentBalances = PeriodicInvestmentBalances()
     var myDepreciableBalances: PeriodicDepreciableBalances = PeriodicDepreciableBalances()
@@ -18,7 +18,6 @@ public class TerminationValues: Cashflows {
     var myYTDTaxesPaid: PeriodicYTDTaxesPaid = PeriodicYTDTaxesPaid()
     var myITCRecaptured: PeriodicITCRecaptured = PeriodicITCRecaptured()
     var myFederalTaxRate: Decimal = 0.15
-    let myPeriodicValues: CollCashflows = CollCashflows()
     
     public func createTable(aInvestment: Investment) {
         // AfterTaxTValue = (IBAL + AdvanceRent) + DepreciableBasis * FedTaxRate + (IncomeYTD - AdvanceRent) * FedTaxRate - TaxesPaidTYD + ITC Recaptured
@@ -31,33 +30,34 @@ public class TerminationValues: Cashflows {
         myYTDTaxesPaid.removeAll()
         myAdvanceRents.removeAll()
         
-        
         myInvestmentBalances.createInvestmentBalances(aInvestment: aInvestment)
-            myPeriodicValues.items.append(myInvestmentBalances)
+            self.items.append(myInvestmentBalances)
         myDepreciableBalances.createTable(aInvestment: aInvestment)
-            myPeriodicValues.items.append(myDepreciableBalances)
+            self.items.append(myDepreciableBalances)
         myYTDIncomes.createTable(aInvestment: aInvestment)
-            myPeriodicValues.items.append(myYTDIncomes)
+            self.items.append(myYTDIncomes)
         myYTDTaxesPaid.createTable(aInvestment: aInvestment)
-            myPeriodicValues.items.append(myYTDTaxesPaid)
+            self.items.append(myYTDTaxesPaid)
         myAdvanceRents.createTable(aInvestment: aInvestment)
-            myPeriodicValues.items.append(myAdvanceRents)
+            self.items.append(myAdvanceRents)
     }
     
-    public func createTerminationValues(aInvestment: Investment) {
-        self.createTable(aInvestment: aInvestment)
+    public func createTerminationValues() -> Cashflows {
+        let myTValues: Cashflows = Cashflows()
         
-        for x in 0..<myPeriodicValues.items[0].items.count {
-            let asOfDate: Date = myPeriodicValues.items[0].items[x].dueDate
-            let investmentBalance: Decimal = myPeriodicValues.items[0].items[x].amount.toDecimal()
-            let deprecBalance: Decimal = myPeriodicValues.items[1].items[x].amount.toDecimal()
-            let incomeYTD: Decimal = myPeriodicValues.items[2].items[x].amount.toDecimal()
-            let taxYTD: Decimal = myPeriodicValues.items[3].items[x].amount.toDecimal()
-            let advRent: Decimal = myPeriodicValues.items[4].items[x].amount.toDecimal()
-            let tValue: Decimal = terminationValue(iBalance: investmentBalance, dBalance: deprecBalance, income: incomeYTD, taxPaid: taxYTD, advRent: advRent)
+        for x in 0..<self.items[0].items.count {
+            let asOfDate: Date = self.items[0].items[x].dueDate
+            let investmentBalance: Decimal = self.items[0].items[x].amount.toDecimal()
+            let deprecBalance: Decimal = self.items[1].items[x].amount.toDecimal()
+            let incomeYTD: Decimal = self.items[2].items[x].amount.toDecimal()
+            let taxPaidYTD: Decimal = self.items[3].items[x].amount.toDecimal()
+            let advRent: Decimal = self.items[4].items[x].amount.toDecimal()
+            let tValue: Decimal = terminationValue(iBalance: investmentBalance, dBalance: deprecBalance, income: incomeYTD, taxPaid: taxPaidYTD, advRent: advRent)
             let myTV: Cashflow = Cashflow(dueDate: asOfDate, amount: tValue.toString(decPlaces: 4))
-            self.items.append(myTV)
+            myTValues.add(item: myTV)
         }
+        
+        return myTValues
         
     }
     
@@ -72,8 +72,5 @@ public class TerminationValues: Cashflows {
         return preTaxTV
     }
     
-    
-    
-   
     
 }

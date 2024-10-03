@@ -33,9 +33,6 @@ public struct EarlyBuyout {
 }
 
 extension Investment {
-    
-    
-    
     public func resetEBOToDefault() {
         let leaseExpiry: Date = self.getLeaseMaturityDate()
         let frequency: Frequency = self.leaseTerm.paymentFrequency
@@ -44,14 +41,16 @@ extension Investment {
         self.earlyBuyout.exerciseDate = endDate
         
         let myTerminationValues: TerminationValues = TerminationValues()
-        myTerminationValues.createTerminationValues(aInvestment: self)
-        self.earlyBuyout.amount = myTerminationValues.vLookup(dateAsk: endDate).toString(decPlaces: 2)
+        myTerminationValues.createTable(aInvestment: self)
+        let myCFTValues: Cashflows = myTerminationValues.createTerminationValues()
+        self.earlyBuyout.amount = myCFTValues.vLookup(dateAsk: endDate).toString(decPlaces: 2)
     }
     
     public func getParValue(askDate: Date) -> Decimal {
         let myTVs: TerminationValues = TerminationValues()
-        myTVs.createTerminationValues(aInvestment: self)
-        let tvOnChopDate: Decimal = myTVs.vLookup(dateAsk: askDate)
+        myTVs.createTable(aInvestment: self)
+        let myCFTValues: Cashflows = myTVs.createTerminationValues()
+        let tvOnChopDate: Decimal = myCFTValues.vLookup(dateAsk: askDate)
         
         return tvOnChopDate
     }
@@ -75,7 +74,14 @@ extension Investment {
     
    //public func getEBOAmount
     
-    public func solveForEBOAmount(aTargetYield: Decimal) -> Decimal {
+    public func solveForEBOAmount(aEBO: EarlyBuyout, aBaseYield: Decimal, bpsSpread: Double) -> Decimal {
+        let adder: Decimal = Decimal(bpsSpread) / 10000.00
+        let targetYield: Decimal = aBaseYield + adder
+        
+        return solveForEBOAmount(aEBO: aEBO, aTargetYield: targetYield)
+    }
+    
+    public func solveForEBOAmount(aEBO: EarlyBuyout, aTargetYield: Decimal) -> Decimal {
         let myEBOInvestment: Investment = self.clone()
         let dateOfUnplanned: Date = myEBOInvestment.earlyBuyout.exerciseDate
         let myPlannedIncome: Decimal = plannedIncome(aInvestment: myEBOInvestment, dateAsk: dateOfUnplanned)
@@ -101,8 +107,9 @@ extension Investment {
     
     public func eboResidual(aInvestment: Investment) -> Decimal {
         let myTVs: TerminationValues = TerminationValues()
-        myTVs.createTerminationValues(aInvestment: aInvestment)
-        let tvOnChopDate: Decimal = myTVs.vLookup(dateAsk: aInvestment.earlyBuyout.exerciseDate)
+        myTVs.createTable(aInvestment: aInvestment)
+        let myTValues: Cashflows = myTVs.createTerminationValues()
+        let tvOnChopDate: Decimal = myTValues.vLookup(dateAsk: aInvestment.earlyBuyout.exerciseDate)
         return tvOnChopDate
     }
     

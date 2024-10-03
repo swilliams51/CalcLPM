@@ -13,7 +13,8 @@ struct TerminationValuesView: View {
     @Binding var isDark: Bool
     @Binding var currentFile: String
     
-    @State var myTValues: TerminationValues = TerminationValues()
+    @State var myComponentTValues: TerminationValues = TerminationValues()
+    @State var myTValues: Cashflows = Cashflows()
     @State var viewAsPercentOfCost: Bool = false
     
     var body: some View {
@@ -25,6 +26,14 @@ struct TerminationValuesView: View {
                         Spacer()
                         Text("\(getFormattedValue(amount: item.amount))")
                     }
+                }
+            }
+            
+            Section(header: Text("Count")) {
+                HStack{
+                    Text("Count:")
+                    Spacer()
+                    Text("\(myTValues.items.count)")
                 }
             }
            
@@ -50,7 +59,8 @@ struct TerminationValuesView: View {
             if myTValues.items.count > 0 {
                 myTValues.items.removeAll()
             }
-            myTValues.createTerminationValues(aInvestment: myInvestment)
+            myComponentTValues.createTable(aInvestment: myInvestment)
+            myTValues = myComponentTValues.createTerminationValues()
         }
     }
     

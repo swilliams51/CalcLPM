@@ -12,10 +12,14 @@ struct EarlyBuyoutView: View {
     @Binding var path: [Int]
     @Binding var isDark: Bool
     @Binding var currentFile: String
-    
+    @Binding var minimumEBOAmount: Decimal
+    @Binding var maximumEBOAmount: Decimal
+   
     @State private var alertTitle: String = ""
     @State private var amountColor: Int = 1
+    @State private var parValuePremium: Decimal = 0.0
     @State private var basisPoints: Double = 0.00
+    @State private var baseYield: Decimal = 0.05
     @State private var calculatedButtonPressed: Bool = true
     @State private var eboTerm: Int = 42
     @State private var editAmountStarted: Bool = false
@@ -45,11 +49,10 @@ struct EarlyBuyoutView: View {
                 eboTermInMonsRow
                 exerciseDateRow
                 parValueOnDateRow
-
+                fullTermYieldRow
             }
             
             Section (header: Text("EBO Amount").font(.footnote)) {
-                
                 eboAmountRow
                 interestRateAdderRow
                 basisPointsStepperRow2
@@ -80,15 +83,36 @@ struct EarlyBuyoutView: View {
         .navigationBarBackButtonHidden(true)
         .onAppear {
             
-            self.myInvestment.resetEBOToDefault()
             self.myEBO = self.myInvestment.earlyBuyout
+            self.baseYield = self.myInvestment.getMISF_AT_Yield()
             self.eboTerm = myEBO.getEBOTermInMonths(aInvestment: myInvestment)
             self.parValue = myInvestment.getParValue(askDate: myEBO.exerciseDate).toString(decPlaces: 4)
-           
+            setMaxAndMinEBOAmount()
            
         }
     }
     
+    private func setMaxAndMinEBOAmount() {
+        self.minimumEBOAmount = self.parValue.toDecimal()
+        self.maximumEBOAmount = self.myInvestment.solveForEBOAmount(aEBO: myEBO, aBaseYield: baseYield, bpsSpread: 500.0)
+    }
+    
+    private func myCancel() {
+        path.removeLast()
+    }
+    
+    private func myDone() {
+        submitForm()
+        path.removeLast()
+    }
+}
+
+#Preview {
+    EarlyBuyoutView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false), currentFile: .constant("File is New"), minimumEBOAmount: .constant(0.0), maximumEBOAmount: .constant(0.0))
+}
+
+//Section Exercise Date
+extension EarlyBuyoutView {
     var eboTermInMonsRow: some View {
         HStack {
             Text("term in mons: \(eboTerm)")
@@ -120,6 +144,7 @@ struct EarlyBuyoutView: View {
                 .onChange(of: myEBO.exerciseDate) { oldDate, newDate in
                     self.parValue = self.myInvestment.getParValue(askDate: newDate).toString()
                     self.myEBO.amount = self.parValue
+                    setMaxAndMinEBOAmount()
                 }
         }
     }
@@ -134,23 +159,20 @@ struct EarlyBuyoutView: View {
         }
     }
     
-    private func myCancel() {
-        path.removeLast()
+    var fullTermYieldRow: some View {
+        HStack {
+            Text("full term yield:")
+                .font(.subheadline)
+            Spacer()
+            Text("\(percentFormatter(percent: baseYield.toString(decPlaces: 5), locale: myLocale, places: 2))")
+        }
     }
-    
-    private func myDone() {
-        path.removeLast()
-    }
-}
-
-#Preview {
-    EarlyBuyoutView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false), currentFile: .constant("File is New"))
 }
 
 extension EarlyBuyoutView {
     var eboAmountRow: some View {
         HStack {
-            Text(premiumIsSpecified ? "Specify amount:" : "Use adder:")
+            Text(premiumIsSpecified ? "adder to par value:" : "adder to full term yield:")
                 .font(.subheadline)
             Image(systemName: "questionmark.circle")
                 .foregroundColor(Color.theme.accent)
@@ -177,7 +199,7 @@ extension EarlyBuyoutView {
     var interestRateAdderRow: some View {
         VStack {
             HStack {
-                Text("interest rate adder:")
+                Text("adder to MISF AT Yield:")
                     .font(.subheadline)
                     .foregroundColor(premiumIsSpecified ? defaultInactive : defaultCalculated)
                 Spacer()
@@ -195,6 +217,20 @@ extension EarlyBuyoutView {
         }
     }
     
+    var parValueAdderRow: some View {
+        VStack {
+            HStack{
+                Text("adder to par value:")
+                Spacer()
+                Text("\(parValuePremium) $1.00")
+                    .font(.subheadline)
+                    .foregroundColor(premiumIsSpecified ? defaultInactive : defaultCalculated)
+                    
+            }
+            
+        }
+    }
+    
     var basisPointsStepperRow2: some View {
         HStack {
             Spacer()
@@ -209,7 +245,7 @@ extension EarlyBuyoutView {
     var calculatedButtonItemRow: some View {
         HStack{
             Button(action: {
-//                self.myEBO.amount = self.myLease.getEBOAmount(aLease: myLease, bpsPremium: Int(self.basisPoints), exerDate: self.eboDate, rentDueIsPaid: rentDueIsPaid)
+                self.myEBO.amount = self.myInvestment.solveForEBOAmount(aEBO: myEBO, aBaseYield: baseYield, bpsSpread: basisPoints).toString(decPlaces: 6)
                 self.calculatedButtonPressed = true
                 self.editAmountStarted = false
             }) {
@@ -230,32 +266,20 @@ extension EarlyBuyoutView {
             Spacer()
             Text("\(eboFormatted(editStarted:editAmountStarted))")
                 .font(.subheadline)
-            
         }
     }
     
     //Row 3b
     var specifiedItemRow: some View {
         HStack {
-            Text("specified \(Image(systemName: "return"))")
-                .font(.subheadline)
+            Text("Specified Amount:")
+                .font(myFont2)
             Spacer()
-            ZStack(alignment: .trailing) {
-                TextField("",
-                          text: $myEBO.amount,
-                  onEditingChanged: { (editing) in
-                    if editing == true {
-                        self.editAmountStarted = true
-                }})
-                    .focused($amountIsFocused)
-                    .keyboardType(.decimalPad).foregroundColor(.clear)
-                    .textFieldStyle(PlainTextFieldStyle())
-                    .disableAutocorrection(true)
-                    .accentColor(.clear)
-
-                Text("\(eboFormatted(editStarted:editAmountStarted))")
-                    .font(.subheadline)
-            }
+            Text("\(amountFormatter(amount: myEBO.amount, locale: myLocale))")
+                .font(myFont2)
+                .onTapGesture {
+                    path.append(44)
+                }
         }
     }
     
@@ -284,11 +308,8 @@ extension EarlyBuyoutView {
         }
     }
     
-    func getMaxEBOAmount() -> Decimal {
-        
-        
-//        let maxAmount: Decimal = myLease.getEBOAmount(aLease: myLease, bpsPremium: maxEBOSpread, exerDate: self.eboDate, rentDueIsPaid: self.rentDueIsPaid).toDecimal()
-        return 500.00
+    func submitForm (){
+        self.myInvestment.earlyBuyout = self.myEBO
     }
 
     
@@ -298,4 +319,6 @@ extension EarlyBuyoutView {
         
         return starting...ending
     }
+    
+    
 }

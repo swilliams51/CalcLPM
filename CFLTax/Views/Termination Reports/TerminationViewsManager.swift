@@ -22,6 +22,7 @@ struct TerminationViewsManager: View {
                 yearToDateTaxesDueItem
                 advanceRentsItem
                 terminationValuesItem
+                terminationValuesProofItem
             }
         }
         .toolbar{
@@ -122,6 +123,19 @@ struct TerminationViewsManager: View {
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(42)
+        }
+    }
+    
+    var terminationValuesProofItem: some View {
+        HStack{
+            Text("Termination Values Proof")
+                .font(myFont2)
+            Spacer()
+            Image(systemName: "chevron.right")
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+        path.append(44)
         }
     }
     

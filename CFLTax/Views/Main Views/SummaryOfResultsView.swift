@@ -62,7 +62,6 @@ struct SummaryOfResultsView: View {
                 presentValueItem
                 presentValue2Item
             }
-           
             
         }
         .environment(\.defaultMinListRowHeight, lineHeight)

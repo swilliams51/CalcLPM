@@ -10,7 +10,6 @@ import Foundation
 
 @Observable
 public class PeriodicYTDIncomes: Cashflows {
-    
     var myPeriodicRentals: RentalCashflows = RentalCashflows()
     var myDayCountMethod: DayCountMethod =  .actualThreeSixtyFive
     var myFreq: Frequency = .monthly
@@ -18,7 +17,6 @@ public class PeriodicYTDIncomes: Cashflows {
     var myBaseCommencementDate: Date = Date()
     var myFiscalYearEnd: Date = Date()
     var myEOMRule: Bool = false
-    
     var ytdIncome: Decimal = 0.0
     var interimRentCF: Cashflows = Cashflows()
     var baseRentCF: Cashflows = Cashflows()

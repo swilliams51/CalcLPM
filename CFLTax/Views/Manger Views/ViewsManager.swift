@@ -17,6 +17,8 @@ struct ViewsManager: View {
     @Binding var isDark: Bool
     @Binding var selectedGroup: Group
     @Binding var currentFile: String
+    @Binding var minimumEBOAmount: Decimal
+    @Binding var maximumEBOAmount: Decimal
     
     var selectedView: Int
     
@@ -37,7 +39,7 @@ struct ViewsManager: View {
         case 7:
             EconomicsView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 8:
-          EarlyBuyoutView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
+          EarlyBuyoutView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile, minimumEBOAmount: $minimumEBOAmount, maximumEBOAmount: $maximumEBOAmount)
         case 9:
             LessorCostTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         case 10:
@@ -87,11 +89,11 @@ struct ViewsManager: View {
         case 32:
             Text("About")
         case 33:
-          TaxableIncomeView(myInvestment: myInvestment, myTaxableIncomes: myTaxableIncomes, path: $path, isDark: $isDark, currentFile: $currentFile)
+            TaxableIncomeView(myInvestment: myInvestment, myTaxableIncomes: myTaxableIncomes, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 34:
-          TaxesPaidView(myInvestment: myInvestment, myTaxableIncomes: myTaxableIncomes, path: $path, isDark: $isDark, currentFile: $currentFile)
+            TaxesPaidView(myInvestment: myInvestment, myTaxableIncomes: myTaxableIncomes, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 35:
-          InvestmentAmortizationView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
+            InvestmentAmortizationView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 36:
             TerminationViewsManager(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 37:
@@ -108,6 +110,8 @@ struct ViewsManager: View {
             TerminationValuesView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
       case 43:
             YTDTaxesDueView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
+      case 44:
+          TerminationValuesProofView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
         default:
             Text("Hello")
         }
@@ -115,5 +119,5 @@ struct ViewsManager: View {
 }
 
 #Preview {
-    ViewsManager(myInvestment: Investment(), myDepreciationSchedule: DepreciationIncomes(), myRentalSchedule: RentalCashflows(), myTaxableIncomes: AnnualTaxableIncomes(), myFeeAmortization: FeeIncomes(), path: .constant([Int]()), isDark: .constant(false), selectedGroup: .constant(Group()), currentFile: .constant("File is New"), selectedView: 36)
+    ViewsManager(myInvestment: Investment(), myDepreciationSchedule: DepreciationIncomes(), myRentalSchedule: RentalCashflows(), myTaxableIncomes: AnnualTaxableIncomes(), myFeeAmortization: FeeIncomes(), path: .constant([Int]()), isDark: .constant(false), selectedGroup: .constant(Group()), currentFile: .constant("File is New"), minimumEBOAmount: .constant(0), maximumEBOAmount: .constant(0), selectedView: 36)
 }
