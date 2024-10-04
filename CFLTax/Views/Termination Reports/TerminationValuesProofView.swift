@@ -54,23 +54,8 @@ struct TerminationValuesProofView: View {
                 actualInvestmentBalanceRowItem
             }
             Spacer()
-            HStack{
-                Text("Next")
-                    .onTapGesture {
-                        x += 1
-                        updateValues()
-                    }
-                Spacer()
-                Text("Previous")
-                    .onTapGesture {
-                        x -= 1
-                        updateValues()
-                    }
-            }.padding()
-            
+            terminationDateButtonsRow
         }
-           
-       
         Spacer()
         .navigationTitle("TValue Proof")
         .onAppear {
@@ -100,14 +85,12 @@ struct TerminationValuesProofView: View {
         self.myGain = myTV - myDeprecBalance
         self.myTaxOnGain = myGain * myTaxRate * -1.0
         self.myAdjustedYTDIncome = myYTDIncome - myAdvanceRent
-        self.myTaxOnYTDIncome = myAdjustedYTDIncome * myTaxRate * 1.0
+        self.myTaxOnYTDIncome = myAdjustedYTDIncome * myTaxRate * -1.0
         
         self.myCalculatedIB = myTV + myTaxOnGain + myTaxOnYTDIncome + myTaxesPaidYTD
         self.myAdjustedIB = myCalculatedIB - myAdvanceRent
         
     }
-
-
 }
    
 
@@ -116,189 +99,162 @@ struct TerminationValuesProofView: View {
     TerminationValuesProofView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false), currentFile: .constant("File is New"))
 }
 
-
+extension TerminationValuesProofView {
+    var terminationDateButtonsRow: some View {
+        HStack{
+            Text("Next")
+                .onTapGesture {
+                    if x < myTValues.count() - 1 {
+                        x += 1
+                        updateValues()
+                    }
+                }
+            Image(systemName: "chevron.right")
+            Spacer()
+            Image(systemName: "chevron.left")
+            Text("Previous")
+                .onTapGesture {
+                    if x > 0 {
+                        x -= 1
+                        updateValues()
+                    }
+                }
+        }
+        .foregroundColor(.blue)
+        .padding()
+    }
+}
 
 extension TerminationValuesProofView {
     var terminationDateItem: some View {
         HStack {
-            Text("Termination Date:")
-                .padding()
-            Spacer()
+            Text("Termination Date: ")
             Text("\(myTVDate.toStringDateShort(yrDigits: 2))")
-                .padding(.trailing, 10)
         }
+        .font(myFont)
         .padding()
     }
     
     var terminationValueRowItem: some View {
         GridRow() {
             Text("Termination Value:")
-                .font(.subheadline)
-        
             Text("Blank Cell")
-                .font(.subheadline)
                 .foregroundColor(.clear)
-    
             Text("\(amountFormatter(amount: myTV.toString(),locale: myLocale, places: 0))")
-                .font(.subheadline)
                 .gridColumnAlignment(.trailing)
-        }
+        }.font(myFont)
     }
     
     var depreciationRowItem: some View {
         GridRow() {
             Text("Depreciable Balance:")
-                .font(.subheadline)
             Text("\(amountFormatter(amount: myDeprecBalance.toString(), locale: myLocale, places: 0))")
-                .font(.subheadline)
             Text("Blank Cell")
-                .font(.subheadline)
                 .foregroundColor(.clear)
-        }
+        }.font(myFont)
     }
     
     var gainOnTerminationRowItem: some View {
         GridRow() {
             Text("Gain on Termination:")
-                .font(.subheadline)
             Text("\(amountFormatter(amount: myGain.toString(), locale: myLocale, places: 0))")
-                .font(.subheadline)
             Text("Blank Cell")
-                .font(.subheadline)
                 .foregroundColor(.clear)
-       }
+        }.font(myFont)
     }
     
      var taxOnGainRowItem: some View {
          GridRow() {
              Text("Tax on Gain:")
-                 .font(.subheadline)
-         
              Text("Blank Cell")
-                 .font(.subheadline)
                  .foregroundColor(.clear)
-     
              Text("\(amountFormatter(amount: myTaxOnGain.toString(), locale: myLocale, places: 0))")
-                 .font(.subheadline)
-         }
+         }.font(myFont)
     }
     
     var ytdIncomeRowItem: some View {
         GridRow() {
             Text("YTD Income:")
-                .font(.subheadline)
             Text("\(amountFormatter(amount: myYTDIncome.toString(), locale: myLocale, places: 0))")
-                .font(.subheadline)
             Text("Blank Cell")
-                .font(.subheadline)
-                .gridColumnAlignment(.leading)
+                .gridColumnAlignment(.trailing)
                 .foregroundColor(.clear)
-       }
+        }.font(myFont)
     }
     
     var advanceRentRowItem: some View {
         GridRow() {
             Text("Advance Rent:")
-                .font(.subheadline)
             Text("\(amountFormatter(amount: myAdvanceRent.toString(), locale: myLocale, places: 0))")
-                .font(.subheadline)
             Text("Blank Cell")
-                .font(.subheadline)
                 .foregroundColor(.clear)
-       }
+       }.font(myFont)
     }
     
     var adjustedYTDIncomeRowItem: some View {
         GridRow() {
             Text("Adj YTD Income:")
-                .font(.subheadline)
             Text("\(amountFormatter(amount: myAdjustedYTDIncome.toString(), locale: myLocale, places: 0))")
-                .font(.subheadline)
             Text("Blank Cell")
-                .font(.subheadline)
-                .gridColumnAlignment(.leading)
+                .gridColumnAlignment(.trailing)
                 .foregroundColor(.clear)
-       }
+        }.font(myFont)
     }
     
     var taxOnAdjustedYTDIncomeRowItem: some View {
         GridRow() {
             Text("Tax on Adj Income:")
-                .font(.subheadline)
-
             Text("Blank Cell")
-                .font(.subheadline)
                 .foregroundColor(.clear)
-    
             Text("\(amountFormatter(amount: myTaxOnYTDIncome.toString(), locale: myLocale, places: 0))")
-                .font(.subheadline)
-        }
+        }.font(myFont)
     }
     
     var taxesPaidYTDRowItem: some View {
         GridRow() {
             Text("Taxes Paid YTD:")
-                .font(.subheadline)
             Text("Blank Cell")
-                .font(.subheadline)
                 .foregroundColor(.clear)
-            
             Text("\(amountFormatter(amount: myTaxesPaidYTD.toString(), locale: myLocale, places: 0))")
-                .font(.subheadline)
-        }
+        }.font(myFont)
     }
     
     var calculatedInvestmentBalanceRowItem: some View {
         GridRow() {
             Text("Investment Balance:")
-                .font(.subheadline)
             Text("Blank Cell")
-                .font(.subheadline)
                 .foregroundColor(.clear)
-            
             Text("\(amountFormatter(amount: myCalculatedIB.toString(), locale: myLocale, places: 0))")
-                .font(.subheadline)
-        }
+        }.font(myFont)
     }
     
     var adjustedInvestmentBalanceRowItem: some View {
         GridRow() {
             Text("Investment Balance:")
-                .font(.subheadline)
             Text("Blank Cell")
-                .font(.subheadline)
                 .foregroundColor(.clear)
-            
             Text("\(amountFormatter(amount: myAdjustedIB.toString(), locale: myLocale, places: 0))")
-                .font(.subheadline)
-        }
+        }.font(myFont)
     }
     
     var blankRowItem: some View {
         GridRow() {
             Text("Blank Cell")
-                .font(.subheadline)
                 .foregroundColor(.clear)
             Text("Blank Cell")
-                .font(.subheadline)
                 .foregroundColor(.clear)
             Text("Blank Cell")
-                .font(.subheadline)
                 .foregroundColor(.clear)
-        }
+        }.font(myFont)
     }
     
     var actualInvestmentBalanceRowItem: some View {
         GridRow() {
             Text("Investment Balance:")
-                .font(.subheadline)
             Text("Blank Cell")
-                .font(.subheadline)
                 .foregroundColor(.clear)
-            
             Text("\(amountFormatter(amount: myActualIB.toString(), locale: myLocale, places: 0))")
-                .font(.subheadline)
-        }
+        }.font(myFont)
     }
     
     

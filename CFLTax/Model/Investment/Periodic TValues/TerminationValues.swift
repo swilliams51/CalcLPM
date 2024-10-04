@@ -64,8 +64,9 @@ public class TerminationValues: CollCashflows {
     private func terminationValue(iBalance: Decimal, dBalance: Decimal, income: Decimal, taxPaid: Decimal, advRent: Decimal) -> Decimal {
         let taxOnGain: Decimal = dBalance * myFederalTaxRate
         let taxOnIncome: Decimal = (income - advRent) * myFederalTaxRate
-        let netTaxDue: Decimal = taxOnIncome + taxOnGain + taxPaid
-        let afterTaxTV: Decimal = (iBalance + advRent) - netTaxDue
+//        let netTaxesDue: Decimal = taxOnGain + taxOnIncome  + taxPaid
+        //let netTaxesDue: Decimal = taxOnGain + taxOnIncome - taxPaid
+        let afterTaxTV: Decimal = (iBalance + advRent) - taxOnGain - taxPaid + taxOnIncome
         
         let preTaxTV: Decimal = afterTaxTV / (1 - myFederalTaxRate)
         
