@@ -21,6 +21,7 @@ struct TerminationViewsManager: View {
                 yearToDateTaxesPaidItem
                 yearToDateTaxesDueItem
                 advanceRentsItem
+                arrearsRentsItem
                 terminationValuesItem
                 terminationValuesProofItem
             }
@@ -110,6 +111,19 @@ struct TerminationViewsManager: View {
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(41)
+        }
+    }
+    
+    var arrearsRentsItem: some View {
+        HStack{
+        Text("Arrears Rents")
+                .font(myFont2)
+            Spacer()
+            Image(systemName: "chevron.right")
+        }
+        .contentShape(Rectangle())
+        .onTapGesture {
+            path.append(45)
         }
     }
     

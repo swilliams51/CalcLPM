@@ -111,7 +111,9 @@ struct ViewsManager: View {
       case 43:
             YTDTaxesDueView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
       case 44:
-          TerminationValuesProofView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
+            TerminationValuesProofView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
+      case 45:
+          ArrearsRentsView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
         default:
             Text("Hello")
         }

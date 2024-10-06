@@ -67,7 +67,7 @@ struct EarlyBuyoutView: View {
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        .navigationBarTitle("Asset")
+        .navigationBarTitle("Early Buyout")
         .navigationBarBackButtonHidden(true)
         .onAppear {
             self.myInvestment.economics.solveFor = .yield
