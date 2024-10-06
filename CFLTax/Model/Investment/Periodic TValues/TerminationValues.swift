@@ -15,6 +15,7 @@ public class TerminationValues: CollCashflows {
     var myDepreciableBalances: PeriodicDepreciableBalances = PeriodicDepreciableBalances()
     var myYTDIncomes: PeriodicYTDIncomes = PeriodicYTDIncomes()
     var myAdvanceRents: PeriodicAdvanceRents = PeriodicAdvanceRents()
+    var myArrearsRents: PeriodicArrearsRents = PeriodicArrearsRents()
     var myYTDTaxesPaid: PeriodicYTDTaxesPaid = PeriodicYTDTaxesPaid()
     var myITCRecaptured: PeriodicITCRecaptured = PeriodicITCRecaptured()
     var myFederalTaxRate: Decimal = 0.15
@@ -29,6 +30,7 @@ public class TerminationValues: CollCashflows {
         myYTDIncomes.removeAll()
         myYTDTaxesPaid.removeAll()
         myAdvanceRents.removeAll()
+        myArrearsRents.removeAll()
         
         myInvestmentBalances.createInvestmentBalances(aInvestment: aInvestment)
             self.items.append(myInvestmentBalances)
@@ -40,9 +42,11 @@ public class TerminationValues: CollCashflows {
             self.items.append(myYTDTaxesPaid)
         myAdvanceRents.createTable(aInvestment: aInvestment)
             self.items.append(myAdvanceRents)
+        myArrearsRents.createTable(aInvestment: aInvestment)
+        self.items.append(myArrearsRents)
     }
     
-    public func createTerminationValues() -> Cashflows {
+    public func createTerminationValues(arrearsRentDueIsPaid: Bool = false) -> Cashflows {
         let myTValues: Cashflows = Cashflows()
         
         for x in 0..<self.items[0].items.count {
@@ -52,7 +56,11 @@ public class TerminationValues: CollCashflows {
             let incomeYTD: Decimal = self.items[2].items[x].amount.toDecimal()
             let taxPaidYTD: Decimal = self.items[3].items[x].amount.toDecimal()
             let advRent: Decimal = self.items[4].items[x].amount.toDecimal()
-            let tValue: Decimal = terminationValue(iBalance: investmentBalance, dBalance: deprecBalance, income: incomeYTD, taxPaid: taxPaidYTD, advRent: advRent)
+            var tValue: Decimal = terminationValue(iBalance: investmentBalance, dBalance: deprecBalance, income: incomeYTD, taxPaid: taxPaidYTD, advRent: advRent)
+            if arrearsRentDueIsPaid {
+                let arrearsRent: Decimal = self.items[5].items[x].amount.toDecimal()
+                tValue = tValue - arrearsRent
+            }
             let myTV: Cashflow = Cashflow(dueDate: asOfDate, amount: tValue.toString(decPlaces: 4))
             myTValues.add(item: myTV)
         }

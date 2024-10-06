@@ -99,13 +99,7 @@ extension Investment {
                 tempInvestment.rent.groups[x].amount = newAmount.toString()
             }
         }
-        
-        
         tempInvestment.setAfterTaxCashflows()
-        for x in 0..<tempInvestment.afterTaxCashflows.count() {
-            print("Date: \(tempInvestment.afterTaxCashflows.items[x].dueDate) Amount: \(tempInvestment.afterTaxCashflows.items[x].amount)")
-        }
-        print("End")
        
         let myNPV: Decimal = tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: discountRate, aDayCountMethod: self.economics.dayCountMethod)
         

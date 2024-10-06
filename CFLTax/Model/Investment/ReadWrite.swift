@@ -156,7 +156,7 @@ extension Investment {
     public func writeEBO(aEBO: EarlyBuyout) -> String {
         let strEboAmount: String = aEBO.amount
         let strExerciseDate: String = aEBO.exerciseDate.toStringDateShort(yrDigits: 4)
-        let strRentDueIsPaid: String = aEBO.advRentDueIsPaid.toString()
+        let strRentDueIsPaid: String = aEBO.arrearsRentDueIsPaid.toString()
         
         let eboProperties: Array = [strEboAmount, strExerciseDate, strRentDueIsPaid]
         let strEBOProperties = eboProperties.joined(separator: ",")

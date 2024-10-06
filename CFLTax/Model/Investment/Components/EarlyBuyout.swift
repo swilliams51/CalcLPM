@@ -11,7 +11,12 @@ import Foundation
 public struct EarlyBuyout {
     public var amount: String
     public var exerciseDate: Date
-    public var advRentDueIsPaid: Bool = false
+    public var arrearsRentDueIsPaid: Bool = false
+    
+    // advance rents are never due but are incorporated into termination values so they must be backed out
+    // arrears rents can be paid or not paid.  If paid the TV must be reduced by the amount of the arrears rent
+    // the sum of the arrears rent and TV paid by the lessee must equal the calculated TV
+    // arrears rent + (TV - arrears rent) = calculated TV
     
     init(amount: String, exerciseDate: Date, rentDueIsPaid: Bool) {
         self.amount = amount
@@ -21,7 +26,7 @@ public struct EarlyBuyout {
     init() {
         self.amount = "0.00"
         self.exerciseDate = Date()
-        self.advRentDueIsPaid = false
+        self.arrearsRentDueIsPaid = false
     }
     
     public func getEBOTermInMonths(aInvestment: Investment) -> Int {
@@ -42,14 +47,14 @@ extension Investment {
         
         let myTerminationValues: TerminationValues = TerminationValues()
         myTerminationValues.createTable(aInvestment: self)
-        let myCFTValues: Cashflows = myTerminationValues.createTerminationValues()
+        let myCFTValues: Cashflows = myTerminationValues.createTerminationValues(arrearsRentDueIsPaid: true)
         self.earlyBuyout.amount = myCFTValues.vLookup(dateAsk: endDate).toString(decPlaces: 2)
     }
     
     public func getParValue(askDate: Date) -> Decimal {
         let myTVs: TerminationValues = TerminationValues()
         myTVs.createTable(aInvestment: self)
-        let myCFTValues: Cashflows = myTVs.createTerminationValues()
+        let myCFTValues: Cashflows = myTVs.createTerminationValues(arrearsRentDueIsPaid: true)
         let tvOnChopDate: Decimal = myCFTValues.vLookup(dateAsk: askDate)
         
         return tvOnChopDate
@@ -66,9 +71,12 @@ extension Investment {
     }
     
     
-    public func getEBOPremium(aEBO: EarlyBuyout) -> Decimal {
+    public func getEBOPremium_bps(aEBO: EarlyBuyout, aBaseYield: Decimal) -> Double {
+        let eboYield: Decimal = solveForEBOYield(aEBO: aEBO)
+        let eboPremium: Decimal = eboYield - aBaseYield
+        let eboPremiumBps: Double = (eboPremium * 10000.00).toDouble()
         
-        return 0.00
+        return eboPremiumBps
     }
     
     
@@ -86,6 +94,7 @@ extension Investment {
         let dateOfUnplanned: Date = myEBOInvestment.earlyBuyout.exerciseDate
         let myPlannedIncome: Decimal = plannedIncome(aInvestment: myEBOInvestment, dateAsk: dateOfUnplanned)
         myEBOInvestment.rent = eboRent(aInvestment: myEBOInvestment, chopDate: dateOfUnplanned)
+        myEBOInvestment.economics.yieldMethod = .MISF_BT
         myEBOInvestment.economics.yieldTarget = aTargetYield.toString(decPlaces: 6)
         myEBOInvestment.economics.solveFor = .residualValue
         myEBOInvestment.calculate(plannedIncome: myPlannedIncome.toString(decPlaces: 5), unplannedDate: dateOfUnplanned)
@@ -98,11 +107,12 @@ extension Investment {
         let dateOfUnplanned: Date = myEBOInvestment.earlyBuyout.exerciseDate
         let myPlannedIncome: Decimal = plannedIncome(aInvestment: myEBOInvestment, dateAsk: dateOfUnplanned)
         myEBOInvestment.rent = eboRent(aInvestment: myEBOInvestment, chopDate: dateOfUnplanned)
+        myEBOInvestment.economics.yieldMethod = .MISF_BT
         myEBOInvestment.asset.residualValue = aEBO.amount
         myEBOInvestment.economics.solveFor = .yield
         myEBOInvestment.calculate(plannedIncome: myPlannedIncome.toString(decPlaces: 5), unplannedDate: dateOfUnplanned)
         
-        return myEBOInvestment.getMISF_AT_Yield()
+        return myEBOInvestment.getMISF_BT_Yield()
     }
     
     public func eboResidual(aInvestment: Investment) -> Decimal {
