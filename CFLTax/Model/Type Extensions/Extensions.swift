@@ -39,6 +39,7 @@ extension Double {
         return decimalOf.toString(decPlaces: 0)
     }
 }
+
 extension Int {
     public func toDouble() -> Double {
         return Double(self)

@@ -41,4 +41,20 @@ public struct Depreciation {
         self.vestingPeriod = 0
     }
     
+    func isEqual(to other: Depreciation) -> Bool {
+        var isEqual: Bool = false
+        if basisReduction == other.basisReduction &&
+        bonusDeprecPercent == other.bonusDeprecPercent &&
+        convention == other.convention &&
+        life == other.life &&
+        method == other.method &&
+        investmentTaxCredit == other.investmentTaxCredit &&
+        salvageValue == other.salvageValue &&
+            vestingPeriod == other.vestingPeriod {
+            isEqual = true
+        }
+        
+        return isEqual
+    }
+    
 }

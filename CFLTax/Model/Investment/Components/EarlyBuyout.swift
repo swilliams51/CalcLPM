@@ -35,6 +35,17 @@ public struct EarlyBuyout {
         return noOfPaymentPeriods * 12 / aInvestment.leaseTerm.paymentFrequency.rawValue
     }
     
+    func isEqual(to other: EarlyBuyout) -> Bool {
+        var isEqual: Bool = false
+        if self.amount == other.amount &&
+            self.exerciseDate == other.exerciseDate &&
+            self.arrearsRentDueIsPaid == other.arrearsRentDueIsPaid {
+            isEqual = true
+        }
+        
+        return isEqual
+    }
+    
 }
 
 extension Investment {

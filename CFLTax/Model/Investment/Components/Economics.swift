@@ -24,4 +24,17 @@ public struct Economics {
         self.discountRateForRent = discountRateForRent
         self.sinkingFundRate = sinkingFundRate
     }
+    
+    func isEqual(to other: Economics) -> Bool {
+        var isEqual: Bool = true
+           if yieldMethod == other.yieldMethod
+                && yieldTarget == other.yieldTarget
+                && solveFor == other.solveFor
+                && dayCountMethod == other.dayCountMethod
+                && discountRateForRent == other.discountRateForRent
+                && sinkingFundRate == other.sinkingFundRate {
+               isEqual = true
+           }
+        return isEqual
+    }
 }

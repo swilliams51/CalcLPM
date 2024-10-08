@@ -19,6 +19,7 @@ struct AssetView: View {
     @State var lessorCost: String = "1000.00"
     @State var residualValue: String = "1000.00"
     @State var lesseeGuaranty: String =  "200.00"
+    @State var residualGuarantyPercent: Double = 0.0
     
     var body: some View {
         Form {
@@ -94,7 +95,7 @@ struct AssetView: View {
     
     var residualValueItem: some View{
         HStack {
-            Text("Residual:")
+            Text("Residual Value:")
                 .font(myFont2)
             Spacer()
             Text("\(amountFormatter(amount:residualValue, locale: myLocale))")
@@ -148,3 +149,8 @@ struct AssetView: View {
 }
 
 
+
+extension AssetView {
+    
+    
+}

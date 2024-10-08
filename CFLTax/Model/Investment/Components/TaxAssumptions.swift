@@ -19,5 +19,18 @@ public struct TaxAssumptions {
         self.dayOfMonPaid = dayOfMonPaid
     }
     
+    init() {
+        self.federalTaxRate = "0.10"
+        self.fiscalMonthEnd = .December
+        self.dayOfMonPaid = 15
+    }
     
+    func isEqual(to other: TaxAssumptions) -> Bool {
+        var isEqual: Bool = false
+        if federalTaxRate == other.federalTaxRate && fiscalMonthEnd == other.fiscalMonthEnd && dayOfMonPaid == other.dayOfMonPaid {
+            isEqual = true
+        }
+        
+        return isEqual
+    }
 }

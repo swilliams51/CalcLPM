@@ -12,6 +12,7 @@ struct SubmitFormButtonsView: View {
     let doneName: String
     let cancel: () -> Void
     let done: () -> Void
+    var isFocused: Bool = false
     @Binding var isDark: Bool
     
     var body: some View {
@@ -28,13 +29,16 @@ struct SubmitFormButtonsView: View {
 struct FormCancelButton: View {
     let name: String
     let cancel: () -> Void
+    var isFocused: Bool = false
     @Binding var isDark: Bool
     
     var body: some View {
         Text (name)
             .foregroundColor(Color.theme.accent)
             .onTapGesture {
-                cancel()
+                if isFocused == false {
+                    cancel()
+                }
             }
     }
 }
@@ -42,13 +46,16 @@ struct FormCancelButton: View {
 struct FormSubmitButton: View {
     let name: String
     let done: () -> Void
+    var isFocused: Bool = false
     @Binding var isDark: Bool
     
     var body: some View {
         Text(name)
             .foregroundColor(Color.theme.accent)
             .onTapGesture {
-                done()
+               if isFocused == false {
+                   done()
+                }
             }
     }
     

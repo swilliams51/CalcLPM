@@ -44,6 +44,15 @@ public struct Group: Identifiable {
         unDeletable = true
     }
     
+    public func isEqual(to other: Group) -> Bool {
+        var isEqual: Bool = false
+        if amount == other.amount && endDate == other.endDate && locked == other.locked && noOfPayments == other.noOfPayments && startDate == other.startDate && timing == other.timing && paymentType == other.paymentType && isInterim == other.isInterim && unDeletable == other.unDeletable {
+            isEqual = true
+        }
+        
+        return isEqual
+    }
+    
     public func isCalculatedPaymentType() -> Bool {
         var bolIsCalcPayment: Bool = false
         

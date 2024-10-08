@@ -53,17 +53,17 @@ struct ViewsManager: View {
         case 14:
             PaymentAmountTextFieldView(myInvestment: myInvestment, selectedGroup: $selectedGroup, isDark: $isDark, path: $path)
         case 15:
-            FedTaxRateTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+           Text("Federal Tax Rate")
         case 16:
-            BonusDeprecTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+            Text("No Bonus")
         case 17:
             YieldTargetTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         case 18:
             DiscountRateTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
         case 19:
-            FeeAmountTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+            Text("No Fee")
         case 20:
-            SalvageValueTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+           Text("No Salvage")
         case 21:
           RentScheduleView(myInvestment: myInvestment, myRentalSchedule: myRentalSchedule, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 22:

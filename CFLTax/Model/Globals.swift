@@ -20,3 +20,6 @@ public let feeAmortizationMethod: FeeAmortizationMethod = .monthly
 public let maxBaseTerm: Int = 360
 public let removeCharacters: Set<Character> = [",", "$","-", "+","%"]
 public let str_split_Cashflows = "#"
+
+
+

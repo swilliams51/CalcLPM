@@ -40,12 +40,35 @@ struct HomeView: View {
                     subMenuItem
                 }
             }
+            
             .environment(\.colorScheme, isDark ? .dark : .light)
             .navigationBarTitle("Home")
             .navigationDestination(for: Int.self) { selectedView in
                 ViewsManager(myInvestment: myInvestment, myDepreciationSchedule: myDepreciationSchedule, myRentalSchedule: myRentalSchedule, myTaxableIncomes: myTaxableIncomes, myFeeAmortization: myFeeAmortization, path: $path, isDark: $isDark, selectedGroup: $selectedGroup, currentFile: $currentFile, minimumEBOAmount: $minimumEBOAmount, maximumEBOAmount: $maximumEBOAmount, selectedView: selectedView)
             }
+            .toolbar{
+                ToolbarItem(placement: .bottomBar) {
+                    Menu(content: {
+                        //
+                    }, label: {
+                        Image(systemName: "minus.circle")
+                            .foregroundColor(ColorTheme().accent)
+                            .imageScale(.large)
+                    })
+                }
+                ToolbarItem(placement: .bottomBar) {
+                    Menu(content: {
+                    
+                    }, label: {
+                        Image(systemName: "plus.circle")
+                            .foregroundColor(ColorTheme().accent)
+                            .imageScale(.large)
+
+                    })
+                }
+            }
         }
+        
     }
     
         
