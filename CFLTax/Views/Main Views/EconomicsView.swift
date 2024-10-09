@@ -13,12 +13,8 @@ struct EconomicsView: View {
     @Binding var isDark: Bool
     @Binding var currentFile: String
     
-    @State var myYieldMethod: YieldMethod = .MISF_BT
-    @State var myYieldTarget: String = "0.05"
-    @State var mySolveFor: SolveForOption = .yield
-    @State var myDiscountRate: String = "0.06"
-    @State var myDayCountMethod: DayCountMethod = .actualThreeSixty
-    
+    @State var myEconomics: Economics = Economics()
+
     var body: some View {
         Form{
             Section(header: Text("Parameters").font(myFont2), footer: (Text("FileName: \(currentFile)").font(myFont2))){
@@ -42,25 +38,51 @@ struct EconomicsView: View {
         .navigationTitle("Economics")
         .navigationBarBackButtonHidden(true)
         .onAppear {
-            self.myYieldMethod = self.myInvestment.economics.yieldMethod
-            self.myYieldTarget = self.myInvestment.economics.yieldTarget
-            self.mySolveFor = self.myInvestment.economics.solveFor
-            self.myDiscountRate = self.myInvestment.economics.discountRateForRent
-            self.myDayCountMethod = self.myInvestment.economics.dayCountMethod
+            self.myEconomics = myInvestment.economics
         }
     }
-    
+}
+
+#Preview {
+    EconomicsView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false), currentFile: .constant("File is New"))
+}
+
+
+extension EconomicsView {
     var yieldMethodItem: some View {
         HStack{
             Text("Yield Method:")
-            Picker(selection: $myYieldMethod, label: Text("")) {
+            Picker(selection: $myEconomics.yieldMethod, label: Text("")) {
                 ForEach(YieldMethod.allTypes, id: \.self) { item in
                     Text(item.toString())
                 }
             }
         }
     }
+    var solveForItem: some View {
+        HStack{
+            Text("Solve For:")
+            Picker(selection: $myEconomics.solveFor, label: Text("")) {
+                ForEach(SolveForOption.allCases, id: \.self) { item in
+                    Text(item.toString())
+                }
+            }
+        }
+    }
     
+    var dayCountMethodItem: some View {
+        HStack{
+            Text("Day Count Method:")
+            Picker(selection: $myEconomics.dayCountMethod, label: Text("")) {
+                ForEach(DayCountMethod.allTypes, id: \.self) { item in
+                    Text(item.toString())
+                }
+            }
+        }
+    }
+}
+
+extension EconomicsView {
     var yieldTargetItem: some View {
         HStack {
             Text("Yield Target:")
@@ -69,22 +91,11 @@ struct EconomicsView: View {
                     self.path.append(17)
                 }
             Spacer()
-            Text("\(percentFormatter(percent:myYieldTarget, locale: myLocale, places: 3))")
+            Text("\(percentFormatter(percent:myEconomics.yieldTarget, locale: myLocale, places: 3))")
                 .font(myFont2)
                 .onTapGesture {
                     self.path.append(17)
                 }
-        }
-    }
-    
-    var solveForItem: some View {
-        HStack{
-            Text("Solve For:")
-            Picker(selection: $mySolveFor, label: Text("")) {
-                ForEach(SolveForOption.allCases, id: \.self) { item in
-                    Text(item.toString())
-                }
-            }
         }
     }
     
@@ -96,51 +107,24 @@ struct EconomicsView: View {
                     self.path.append(18)
                 }
             Spacer()
-            Text("\(percentFormatter(percent:myDiscountRate, locale: myLocale, places: 3))")
+            Text("\(percentFormatter(percent:myEconomics.discountRateForRent, locale: myLocale, places: 3))")
                 .font(myFont2)
                 .onTapGesture {
                     self.path.append(18)
                 }
         }
     }
-    
-    var dayCountMethodItem: some View {
-        HStack{
-            Text("Day Count Method:")
-            Picker(selection: $myDayCountMethod, label: Text("")) {
-                ForEach(DayCountMethod.allTypes, id: \.self) { item in
-                    Text(item.toString())
-                }
-            }
-        }
-    }
-    
-    
+}
+
+extension EconomicsView {
     func myCancel(){
         path.removeLast()
     }
     func myDone() {
-        if self.myYieldMethod != self.myInvestment.economics.yieldMethod {
+        if self.myInvestment.economics.isEqual(to: myEconomics) == false{
             self.myInvestment.hasChanged = true
-            self.myInvestment.economics.yieldMethod = myYieldMethod
+            self.myInvestment.economics = myEconomics
         }
-        
-        
-        self.myInvestment.economics.yieldTarget = myYieldTarget
-        
-        if self.mySolveFor != self.myInvestment.economics.solveFor {
-            self.myInvestment.hasChanged = true
-            self.myInvestment.economics.solveFor = mySolveFor
-        }
-        
-        self.myInvestment.economics.discountRateForRent = myDiscountRate.toDecimal().toString(decPlaces: 5)
-        
-        
-        self.myInvestment.economics.dayCountMethod = myDayCountMethod
         path.removeLast()
     }
-}
-
-#Preview {
-    EconomicsView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false), currentFile: .constant("File is New"))
 }

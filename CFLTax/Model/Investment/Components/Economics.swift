@@ -25,6 +25,15 @@ public struct Economics {
         self.sinkingFundRate = sinkingFundRate
     }
     
+    init(){
+        self.yieldMethod = .MISF_BT
+        self.yieldTarget = "0.05"
+        self.solveFor = .yield
+        self.dayCountMethod = .thirtyThreeSixty
+        self.discountRateForRent = "0.075"
+        self.sinkingFundRate = "0.00"
+    }
+    
     func isEqual(to other: Economics) -> Bool {
         var isEqual: Bool = true
            if yieldMethod == other.yieldMethod

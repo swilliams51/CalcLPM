@@ -51,9 +51,9 @@ struct ViewsManager: View {
         case 13:
             GroupDetailView(myInvestment: myInvestment, selectedGroup: $selectedGroup, isDark: $isDark, path: $path, currentFile: $currentFile)
         case 14:
-            PaymentAmountTextFieldView(myInvestment: myInvestment, selectedGroup: $selectedGroup, isDark: $isDark, path: $path)
+            Text("No Payment Amount")
         case 15:
-           Text("Federal Tax Rate")
+           Text("No Federal Tax Rate")
         case 16:
             Text("No Bonus")
         case 17:

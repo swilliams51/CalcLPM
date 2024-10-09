@@ -14,34 +14,40 @@ struct GroupDetailView: View {
     @Binding var path: [Int]
     @Binding var currentFile: String
 
-    @State var index: Int = 0
-    @State var amount: String = "10000.00"
     @State private var alertTitle: String = ""
-
     @State private var count = 0
-    @State private var maximumAmount: Decimal = 1.0
-    @State private var noOfPayments: Double = 1.0
-    @State private var paymentOnEntry: String = "0.0"
-    @State var payHelp = paymentAmountHelp
-    @State private var rangeOfPayments: ClosedRange<Double> = 1.0...120.0
-    @State private var startingNoOfPayments: Double = 120.0
-    @State private var startingTotalPayments: Double = 120.0
-    
-    @State private var editStarted: Bool = false
+    @State private var index: Int = 0
     @State private var isInterimGroup: Bool = false
     @State private var isResidualGroup: Bool = false
     @State private var isCalculatedPayment: Bool = false
-    @State private var pmtTextFieldIsLocked: Bool = false
+    @State private var noOfPayments: Double = 1.0
+    @State private var rangeOfPayments: ClosedRange<Double> = 1.0...120.0
+    @State private var sliderIsLocked: Bool = false
+    @State private var startingNoOfPayments: Double = 120.0
+    @State private var startingTotalPayments: Double = 120.0
+    @State private var timingIsLocked: Bool = false
+    
     @State private var showAlert: Bool = false
     @State var showPopover: Bool = false
-    @State private var sliderIsLocked: Bool = false
-    @State private var timingIsLocked: Bool = false
+    @State var payHelp = paymentAmountHelp
+   
+    //Payment textfield variables
     private let pasteBoard = UIPasteboard.general
+    @State private var editPaymentAmountStarted: Bool = false
+    @State private var maximumPaymentAmount: Decimal = 1.0
+    @State private var paymentAmountOnEntry: String = ""
+    @FocusState private var paymentAmountIsFocused: Bool
     
     var body: some View {
             Form {
                 Section(header: Text(isInterimGroup ? "Interim Rent Details" : "Base Rent Details").font(myFont2), footer: (Text("FileName: \(currentFile)").font(myFont2))) {
-                   groupDetailsSection
+                    VStack {
+                        paymentTypeItem
+                        noOfPaymentsItem
+                        paymentTimingItem
+                        paymentAmountItem
+                        paymentLockedItem
+                    }
                 }
                 Section(header: Text("Submit Form").font(.footnote)){
                     SubmitFormButtonsView(cancelName: "Delete", doneName: "Done", cancel: deleteGroup, done: submitForm, isDark: $isDark)
@@ -51,6 +57,9 @@ struct GroupDetailView: View {
                 ToolbarItem(placement: .topBarLeading) {
                     BackButtonView(path: $path, isDark: $isDark)
                 }
+                ToolbarItemGroup(placement: .keyboard){
+                    DecimalPadButtonsView(cancel: updateForCancel, copy: copyToClipboard, paste: paste, clear: clearAllText, enter: updateForSubmit, isDark: $isDark)
+                }
             }
             .environment(\.colorScheme, isDark ? .dark : .light)
             .navigationTitle("Payment Group")
@@ -58,7 +67,6 @@ struct GroupDetailView: View {
             .navigationBarBackButtonHidden(true)
             .onAppear{
                 viewOnAppear()
-              
             }
             .alert(isPresented: $showAlert, content: getAlert)
        
@@ -75,14 +83,10 @@ struct GroupDetailView: View {
 extension GroupDetailView {
     func viewOnAppear() {
         self.index = self.myInvestment.rent.getIndexOfGroup(aGroup: selectedGroup)
-        //print("\(index)")
         self.count = self.myInvestment.rent.groups.count - 1
         
         if self.selectedGroup.isInterim == true {
-            isInterimGroup = true
-        }
-        
-        if self.isInterimGroup == true {
+            self.isInterimGroup = true
             self.sliderIsLocked = true
         }
         
@@ -92,24 +96,15 @@ extension GroupDetailView {
         if self.selectedGroup.isCalculatedPaymentType() {
             self.resetForPaymentTypeChange()
         }
-        self.maximumAmount = myInvestment.getAssetCost(asCashflow: true)
+        self.maximumPaymentAmount = myInvestment.getAssetCost(asCashflow: true)
         self.noOfPayments = self.selectedGroup.noOfPayments.toDouble()
         self.startingNoOfPayments = self.noOfPayments
         self.startingTotalPayments = Double(self.myInvestment.rent.getTotalNumberOfPayments())
-        self.paymentOnEntry = self.selectedGroup.amount
+        self.paymentAmountOnEntry = self.selectedGroup.amount
     }
 }
 
 extension GroupDetailView {
-    var groupDetailsSection: some View {
-        VStack {
-            paymentTypeItem
-            noOfPaymentsItem
-            paymentTimingItem
-            tempPaymentItem
-            paymentLockedItem
-        }
-    }
     var paymentTypeItem: some View {
         Picker(selection: $selectedGroup.paymentType, label: Text("Type:").font(myFont2)) {
             ForEach(getPaymentTypes(), id: \.self) { paymentType in
@@ -164,31 +159,61 @@ extension GroupDetailView {
         }.disabled(timingIsLocked)
     }
     
-    var tempPaymentItem: some View {
+    var paymentLockedItem: some View {
+        Toggle(isOn: $selectedGroup.locked) {
+            Text(selectedGroup.locked ? "Locked:" : "Unlocked:")
+                .font(myFont2)
+        }
+        .disabled(self.selectedGroup.isCalculatedPaymentType() ? true : false)
+        .font(myFont2)
+    }
+}
+
+//Payment Amount TextField
+extension GroupDetailView {
+    var paymentAmountItem: some View {
         HStack{
-            Text("Amount:")
-                .font(myFont2)
-                .onTapGesture {
-                    if isCalculatedPayment == false {
-                        path.append(14)
-                    }
-                }
+            leftSideAmountItem
             Spacer()
-            Text("\(paymentFormatted(editStarted: editStarted))")
+            rightSideAmountItem
+        }
+    }
+    
+    var leftSideAmountItem: some View {
+        HStack {
+            Text(isCalculatedPayment ? "amount:" : "amount: \(Image(systemName: "return"))")
                 .font(myFont2)
+                .foregroundColor(isDark ? .white : .black)
+            Image(systemName: "questionmark.circle")
+                .foregroundColor(Color.theme.accent)
                 .onTapGesture {
-                    if isCalculatedPayment == false {
-                        path.append(14)
-                    }
-                    
+                    self.showPopover = true
                 }
         }
-        .contentShape(Rectangle())
-        .onTapGesture {
-            if isCalculatedPayment == false {
-                path.append(14)
-            }
+        .popover(isPresented: $showPopover) {
+            PopoverView(myHelp: $payHelp, isDark: $isDark)
         }
+    }
+    
+    var rightSideAmountItem: some View {
+        ZStack(alignment: .trailing) {
+            TextField("",
+              text: $selectedGroup.amount,
+              onEditingChanged: { (editing) in
+                if editing == true {
+                    self.editPaymentAmountStarted = true
+            }})
+                .disabled(paymentTextFieldIsLocked())
+                .keyboardType(.decimalPad).foregroundColor(.clear)
+                .focused($paymentAmountIsFocused)
+                .textFieldStyle(PlainTextFieldStyle())
+                .disableAutocorrection(true)
+                .accentColor(.clear)
+            Text("\(paymentFormatted(editStarted: editPaymentAmountStarted))")
+                .font(myFont2)
+                .foregroundColor(isDark ? .white : .black)
+        }
+        
     }
     
     func paymentFormatted(editStarted: Bool) -> String {
@@ -202,23 +227,82 @@ extension GroupDetailView {
         }
     }
     
-    var paymentLockedItem: some View {
-        Toggle(isOn: $selectedGroup.locked) {
-            Text(selectedGroup.locked ? "Locked:" : "Unlocked:")
-                .font(myFont2)
+    func paymentTextFieldIsLocked() -> Bool {
+        if selectedGroup.isCalculatedPaymentType() == true || selectedGroup.locked == true {
+            return true
+        } else {
+            return false
         }
-        .disabled(self.selectedGroup.isCalculatedPaymentType() ? true : false)
-        .font(myFont2)
     }
+    // Functions
+    func updateForCancel() {
+        if self.editPaymentAmountStarted == true {
+            self.selectedGroup.amount = self.paymentAmountOnEntry
+            self.editPaymentAmountStarted = false
+        }
+        self.paymentAmountIsFocused = false
+    }
+    
+    func copyToClipboard() {
+        if self.paymentAmountIsFocused {
+            pasteBoard.string = self.selectedGroup.amount
+        }
+    }
+    
+    func paste() {
+        if var string = pasteBoard.string {
+            string.removeAll(where: { removeCharacters.contains($0) } )
+            if string.isDecimal() {
+                if self.paymentAmountIsFocused {
+                    self.selectedGroup.amount = string
+                }
+            }
+        }
+    }
+    
+    func clearAllText() {
+        if self.paymentAmountIsFocused == true {
+            self.selectedGroup.amount = ""
+        }
+    }
+   
+    func updateForSubmit() {
+        if self.editPaymentAmountStarted == true {
+            updateForPaymentAmount()
+            self.myInvestment.rent.groups[index].amount = self.selectedGroup.amount
+            path.removeLast()
+        }
+        self.paymentAmountIsFocused = false
+    }
+    
+    func updateForPaymentAmount() {
+        if selectedGroup.amount == "" {
+            self.selectedGroup.amount = "0.00"
+        }
+       
+        if isAmountValid(strAmount: selectedGroup.amount, decLow: 0.0, decHigh: maximumPaymentAmount, inclusiveLow: true, inclusiveHigh: true) == false {
+            self.selectedGroup.amount = self.paymentAmountOnEntry
+            alertTitle = alertPaymentAmount
+            showAlert.toggle()
+        } else {
+            if self.selectedGroup.amount.toDecimal() > 0.00 && self.selectedGroup.amount.toDecimal() <= 1.0 {
+                self.selectedGroup.amount = myInvestment.percentToAmount(percent:  selectedGroup.amount)
+            }
+            if selectedGroup.amount.toDecimal() == 0.00 {
+                selectedGroup.locked = true
+            }
+        }
+        self.editPaymentAmountStarted = false
+        self.paymentAmountIsFocused = false
+    }
+    
 }
-
-
 //Cancel and Submit Buttons{today()
 extension GroupDetailView {
     var textButtonsForCancelAndDoneRow: some View {
         HStack {
             Text("Delete")
-                //.disabled(amountIsFocused)
+                .disabled(paymentAmountIsFocused)
                 .font(.subheadline)
                 .foregroundColor(ColorTheme().accent)
                 .onTapGesture {
@@ -226,7 +310,7 @@ extension GroupDetailView {
                 }
             Spacer()
             Text("Done")
-                //.disabled(amountIsFocused)
+                .disabled(paymentAmountIsFocused)
                 .font(.subheadline)
                 .foregroundColor(ColorTheme().accent)
                 .onTapGesture {
@@ -234,10 +318,7 @@ extension GroupDetailView {
                 }
         }
     }
-}
-
-//Local Functions
-extension GroupDetailView {
+    
     func deleteGroup () {
         let result = isGroupDeletable()
         
@@ -257,31 +338,11 @@ extension GroupDetailView {
         }
     
     func submitForm() {
-        
-        if self.selectedGroup.paymentType != self.myInvestment.rent.groups[index].paymentType {
-            self.myInvestment.hasChanged = true
-            self.myInvestment.rent.groups[index].paymentType = selectedGroup.paymentType
+        if myInvestment.rent.groups[index].isEqual(to: selectedGroup) == false {
+            myInvestment.rent.groups[index].makeEquivalent(to: selectedGroup)
+            myInvestment.hasChanged = true
         }
-        
-        if self.selectedGroup.noOfPayments != self.myInvestment.rent.groups[index].noOfPayments {
-            self.myInvestment.hasChanged = true
-            self.myInvestment.rent.groups[index].noOfPayments = self.selectedGroup.noOfPayments
-        }
-       
-        if self.selectedGroup.timing != self.myInvestment.rent.groups[index].timing {
-            self.myInvestment.hasChanged = true
-            self.myInvestment.rent.groups[index].timing = selectedGroup.timing
-        }
-        
-        self.myInvestment.rent.groups[index].amount = self.selectedGroup.amount
-        
-        if self.selectedGroup.locked != self.myInvestment.rent.groups[index].locked {
-            self.myInvestment.hasChanged = true
-            self.myInvestment.rent.groups[index].locked = self.selectedGroup.locked
-        }
-       
         self.myInvestment.resetFirstGroup(isInterim: self.myInvestment.rent.interimExists())
-        
         self.path.removeLast()
     }
     
@@ -289,13 +350,11 @@ extension GroupDetailView {
         if self.selectedGroup.isInterim == true {
             return (false, 0)
         }
-        
         if myInvestment.rent.interimExists() {
             if self.index == 1 {
                 return (false, 0)
             }
         }
-        
         if myInvestment.rent.interimExists() == false {
             if self.index == 0 {
                 return (false, 0)
@@ -305,12 +364,14 @@ extension GroupDetailView {
         return (true, -1)
     }
     
-    
+}
+
+//Local Functions
+extension GroupDetailView {
     func getAlert() -> Alert{
         return Alert(title: Text(alertTitle))
     }
-    
-    
+
     func getPaymentTypes() -> [PaymentType] {
         if self.isInterimGroup {
             return PaymentType.interimTypes
@@ -349,13 +410,11 @@ extension GroupDetailView {
     func resetForPaymentTypeChange() {
         if selectedGroup.isCalculatedPaymentType() == true {
             isCalculatedPayment = true
-            pmtTextFieldIsLocked = true
             selectedGroup.locked = true
             selectedGroup.amount = "CALCULATED"
             self.sliderIsLocked = true
         } else {
             isCalculatedPayment = false
-            pmtTextFieldIsLocked = false
             selectedGroup.amount = getDefaultPaymentAmount()
             selectedGroup.locked = false
             self.sliderIsLocked = false
@@ -366,6 +425,3 @@ extension GroupDetailView {
 }
 
 
-let alertInterimGroup: String = "To delete an interim payment group go to the home screen and reset the base term commencement date to equal the funding date!!"
-let alertFirstPaymentGroup: String = "The last payment group in which the number of payments is greater than 1 cannot be deleted!!"
-let alertPaymentAmount: String = "The amount entered exceeds the maximum allowable amount which is constrained by the Lease/Loan amount. To enter such an amount first return to the Home screen and enter a temporary amount that is greater than the payment amount that was rejected.  Then return the Payment Group screen and the desired amount."

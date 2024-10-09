@@ -19,6 +19,12 @@ public struct LeaseTerm {
         self.endOfMonthRule = eomRule
     }
     
+    init() {
+        self.baseCommenceDate = Date()
+        self.paymentFrequency = .monthly
+        self.endOfMonthRule = true
+    }
+    
     public func isEqual(to other: LeaseTerm) -> Bool {
         var isEqual = false
         if baseCommenceDate != other.baseCommenceDate && paymentFrequency == other.paymentFrequency && endOfMonthRule == other.endOfMonthRule{

@@ -25,6 +25,15 @@ public struct Asset {
         self.thirdPartyGuarantyAmount = thirdPartyGuarantyAmount
     }
     
+    init() {
+        self.name = "Sample asset name"
+        self.fundingDate = Date()
+        self.lessorCost = "100000.00"
+        self.residualValue = "20000.00"
+        self.lesseeGuarantyAmount = "0.0"
+        self.thirdPartyGuarantyAmount = "0.0"
+    }
+    
     func isEqual(to other: Asset) -> Bool {
         var isEqual: Bool = false
         if name == other.name &&
