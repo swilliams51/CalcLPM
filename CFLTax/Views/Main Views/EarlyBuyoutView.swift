@@ -100,7 +100,7 @@ extension EarlyBuyoutView {
         HStack {
             
             Text("Term in Mons: \(eboTerm)")
-                .font(.subheadline)
+                .font(myFont)
             Stepper(value: $eboTerm, in: rangeBaseTermMonths, step: getStep()) {
     
             }.onChange(of: eboTerm) { oldTerm, newTerm in
@@ -109,13 +109,13 @@ extension EarlyBuyoutView {
                 self.basisPoints = 0.0
             }
         }
-        .font(.subheadline)
+        .font(myFont)
     }
     
     var exerciseDateRow: some View {
         HStack {
             Text("Exercise Date:")
-                .font(.subheadline)
+                .font(myFont)
             Image(systemName: "questionmark.circle")
                 .foregroundColor(Color.black)
                 .onTapGesture {
@@ -123,8 +123,7 @@ extension EarlyBuyoutView {
                 }
             Spacer()
             Text(myEBO.exerciseDate.toStringDateShort(yrDigits: 4))
-                .font(.subheadline)
-                
+                .font(myFont)
                 .onChange(of: myEBO.exerciseDate) { oldDate, newDate in
                     self.parValue = self.myInvestment.getParValue(askDate: newDate).toString()
                     self.myEBO.amount = self.parValue
@@ -135,10 +134,10 @@ extension EarlyBuyoutView {
     var parValueOnDateRow: some View {
         HStack {
             Text("Par Value on Date:")
-                .font(.subheadline)
+                .font(myFont)
             Spacer()
             Text(amountFormatter(amount: parValue, locale: myLocale))
-                .font(.subheadline)
+                .font(myFont)
         }
     }
     
@@ -150,11 +149,11 @@ extension EarlyBuyoutView {
         VStack {
             HStack {
                 Text("MISF B/T Yield Adder:")
-                    .font(.subheadline)
+                    .font(myFont)
                     .foregroundColor(premiumIsSpecified ? defaultInactive : defaultCalculated)
                 Spacer()
                 Text("\(basisPoints, specifier: "%.0f") bps")
-                    .font(.subheadline)
+                    .font(myFont)
                     .foregroundColor(premiumIsSpecified ? defaultInactive : defaultCalculated)
             }
             
@@ -184,23 +183,23 @@ extension EarlyBuyoutView {
                 self.calculatedButtonPressed = true
                 self.editAmountStarted = false
             }) {
-                Text("calculate")
-                    .font(.subheadline)
+                Text("Calculate")
+                    .font(myFont)
             }
             Spacer()
             
             Text("\(eboFormatted(editStarted:editAmountStarted))")
-                .font(.subheadline)
+                .font(myFont)
         }
     }
     
     var calculatedResultItemRow: some View {
         HStack {
-            Text("calculate")
-                .font(.subheadline)
+            Text("Calculate")
+                .font(myFont)
             Spacer()
             Text("\(eboFormatted(editStarted:editAmountStarted))")
-                .font(.subheadline)
+                .font(myFont)
         }
     }
 

@@ -75,7 +75,7 @@ struct HomeView: View {
     var assetItem: some View {
         HStack {
             Text("Asset")
-                .font(myFont2)
+                .font(myFont)
             Spacer()
             Image(systemName: "chevron.right")
         }
@@ -88,7 +88,7 @@ struct HomeView: View {
     var LeaseTermItem: some View {
         HStack {
             Text("Lease Term")
-                .font(myFont2)
+                .font(myFont)
             Spacer()
             Image(systemName: "chevron.right")
         }
@@ -101,7 +101,7 @@ struct HomeView: View {
     var rentItem: some View {
         HStack {
             Text("Rent")
-                .font(myFont2)
+                .font(myFont)
 
             Spacer()
             Image(systemName: "chevron.right")
@@ -115,7 +115,7 @@ struct HomeView: View {
     var depreciationItem: some View {
         HStack {
             Text("Depreciation")
-                .font(myFont2)
+                .font(myFont)
             Spacer()
             Image(systemName: "chevron.right")
         }
@@ -128,7 +128,7 @@ struct HomeView: View {
     var taxAssumptionsItem: some View {
         HStack{
             Text("Tax Assumptions")
-                .font(myFont2)
+                .font(myFont)
             Spacer()
             Image(systemName: "chevron.right")
         }
@@ -141,7 +141,7 @@ struct HomeView: View {
     var feeItem: some View {
         HStack{
             Text("Fee")
-                .font(myFont2)
+                .font(myFont)
             Spacer()
             Image(systemName: "chevron.right")
         }
@@ -154,7 +154,7 @@ struct HomeView: View {
     var eboItem: some View {
         HStack{
             Text("Early Buyout")
-                .font(myFont2)
+                .font(myFont)
             Spacer()
             Image(systemName: "chevron.right")
         }
@@ -171,7 +171,7 @@ struct HomeView: View {
     var economicsItem: some View {
         HStack{
             Text("Economics")
-                .font(myFont2)
+                .font(myFont)
             Spacer()
             Image(systemName: "chevron.right")
         }
@@ -184,7 +184,7 @@ struct HomeView: View {
     var calculatedItem: some View {
         HStack{
             Text("Calculate")
-                .font(myFont2)
+                .font(myFont)
             Spacer()
             Image(systemName: "return")
         }
@@ -201,7 +201,7 @@ struct HomeView: View {
     var subMenuItem: some View {
         HStack{
             Text("File Menu")
-                .font(myFont2)
+                .font(myFont)
                 .foregroundColor(myInvestment.hasChanged ? .gray : .black)
             Spacer()
             Image(systemName: "chevron.right")

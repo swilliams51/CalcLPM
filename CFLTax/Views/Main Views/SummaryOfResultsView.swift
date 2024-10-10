@@ -35,7 +35,7 @@ struct SummaryOfResultsView: View {
     @State var presentValue2: String = "0.00"
     @State var discountRate: String = "0.00"
     
-    
+
     @State var lineHeight: CGFloat = 10
     @State var frameHeight: CGFloat = 10
     

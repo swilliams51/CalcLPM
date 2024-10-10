@@ -27,14 +27,14 @@ struct DepreciationView: View {
     @State private var editPercentStarted: Bool = false
     @State private var maximumPercent: Decimal = 1.0
     @FocusState private var percentIsFocused: Bool
+    
     @State private var showPopover: Bool = false
     private let pasteBoard = UIPasteboard.general
-    
     @State private var alertTitle: String = ""
     @State private var showAlert: Bool = false
     @State var payHelp = leaseAmountHelp
 
-    //Salvage Value Textfield Vars
+    //Salvage Value Textfield
     @State var mySalvageAmount: String = ""
     @State var salvageOnEntry: String = ""
     @State private var editSalvageStarted: Bool = false

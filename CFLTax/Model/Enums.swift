@@ -437,4 +437,26 @@ public enum TimingType {
 }
 
 
+public enum AssetTextFieldType {
+    case assetName
+    case lessorCost
+    case residualValue
+    case lesseeGuaranty
+    
+    func toString() -> String {
+        switch self {
+            case .assetName:
+                return "Asset Name"
+            case .lessorCost:
+                return "Lessor Cost"
+            case .residualValue:
+                return "Residual Value"
+            case .lesseeGuaranty:
+                return "Lessee Guaranty"
+            }
+    }
+    
+    
+}
+
 

@@ -23,7 +23,7 @@ struct LeaseTermView: View {
     
     var body: some View {
         Form {
-            Section (header: Text("Details").font(myFont2), footer: (Text("FileName: \(currentFile)").font(myFont2))) {
+            Section (header: Text("Details").font(myFont), footer: (Text("FileName: \(currentFile)").font(myFont))) {
                 paymentFrequencyItem
                 eomRuleItem
                 baseCommenceDateItem
@@ -53,7 +53,7 @@ struct LeaseTermView: View {
     var baseCommenceDateItem: some View {
         HStack{
             Text("Base Start:")
-                .font(myFont2)
+                .font(myFont)
             Image(systemName: "questionmark.circle")
                 .foregroundColor(Color.theme.accent)
                 .onTapGesture {
@@ -63,7 +63,7 @@ struct LeaseTermView: View {
             DatePicker("", selection: $baseCommenceDate, in: rangeBaseTermCommenceDates, displayedComponents:[.date])
                 .transformEffect(.init(scaleX: 1.0, y: 0.90))
                 .environment(\.locale, myLocale)
-                .font(myFont2)
+                .font(myFont)
                 .onChange(of: baseCommenceDate) { oldValue, newValue in
                   
                 }
@@ -78,11 +78,11 @@ struct LeaseTermView: View {
     var paymentFrequencyItem: some View {
         HStack {
             Text("Frequency:")
-                .font(myFont2)
+                .font(myFont)
             Picker(selection: $myPaymentFrequency, label: Text("")) {
                 ForEach(Frequency.allCases, id: \.self) { item in
                    Text(item.toString())
-                        .font(myFont2)
+                        .font(myFont)
 
                }
             }
@@ -93,7 +93,7 @@ struct LeaseTermView: View {
         HStack{
             Toggle(isOn: $endOfMonthRule) {
                 Text(endOfMonthRule ? "EOM Rule is On:" : "EOM Rule is Off:")
-                .font(myFont2)
+                .font(myFont)
             }
         }
     }
@@ -101,10 +101,10 @@ struct LeaseTermView: View {
     var baseTermInMonthsItem: some View {
         HStack{
             Text("Base Term in Months:")
-                .font(myFont2)
+                .font(myFont)
             Spacer()
             Text("\(myInvestment.getBaseTermInMonths())")
-                .font(myFont2)
+                .font(myFont)
         }
     }
     

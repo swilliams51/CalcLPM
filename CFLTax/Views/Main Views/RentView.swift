@@ -20,7 +20,7 @@ struct RentView: View {
     
     var body: some View {
         Form {
-            Section(header: Text("Rent").font(myFont2), footer: (Text("FileName: \(currentFile)").font(myFont2))) {
+            Section(header: Text("Rent").font(myFont), footer: (Text("FileName: \(currentFile)").font(myFont))) {
                 ForEach(myInvestment.rent.groups) { group in
                     groupDisplayRow(group: group)
                 }
@@ -91,7 +91,7 @@ extension RentView {
             VStack {
                 HStack{
                     Text(groupToFirstText(aGroup: group))
-                        .font(myFont2)
+                        .font(myFont)
                         .onTapGesture {
                             self.selectedGroup = group
                             self.path.append(13)
@@ -100,7 +100,7 @@ extension RentView {
                 }
                 HStack {
                     Text(groupToSecondText(aGroup: group))
-                        .font(myFont2)
+                        .font(myFont)
                         .onTapGesture {
                             self.selectedGroup = group
                             self.path.append(13)
@@ -165,10 +165,10 @@ extension RentView {
     private var totalsHeader: some View {
         HStack {
             Text("Number:")
-                .font(myFont2)
+                .font(myFont)
             Spacer()
             Text("Net Amount:")
-                .font(myFont2)
+                .font(myFont)
         }
     }
     
@@ -176,10 +176,10 @@ extension RentView {
         HStack {
           
             Text("\(myInvestment.rent.getTotalNumberOfPayments())")
-                .font(myFont2)
+                .font(myFont)
             Spacer()
             Text("\(amountFormatter(amount: myInvestment.rent.getTotalAmountOfPayments(aFreq: myInvestment.leaseTerm.paymentFrequency).toString(), locale: myLocale))")
-                .font(myFont2)
+                .font(myFont)
             
         }
     }

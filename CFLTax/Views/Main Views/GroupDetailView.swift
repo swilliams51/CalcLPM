@@ -40,7 +40,7 @@ struct GroupDetailView: View {
     
     var body: some View {
             Form {
-                Section(header: Text(isInterimGroup ? "Interim Rent Details" : "Base Rent Details").font(myFont2), footer: (Text("FileName: \(currentFile)").font(myFont2))) {
+                Section(header: Text(isInterimGroup ? "Interim Rent Details" : "Base Rent Details").font(myFont), footer: (Text("FileName: \(currentFile)").font(myFont))) {
                     VStack {
                         paymentTypeItem
                         noOfPaymentsItem
@@ -106,15 +106,15 @@ extension GroupDetailView {
 
 extension GroupDetailView {
     var paymentTypeItem: some View {
-        Picker(selection: $selectedGroup.paymentType, label: Text("Type:").font(myFont2)) {
+        Picker(selection: $selectedGroup.paymentType, label: Text("Type:").font(myFont)) {
             ForEach(getPaymentTypes(), id: \.self) { paymentType in
                 Text(paymentType.toString())
-                    .font(myFont2)
+                    .font(myFont)
             }
             .onChange(of: selectedGroup.paymentType) { oldValue, newValue in
                 self.resetForPaymentTypeChange()
             }
-            .font(.subheadline)
+            .font(myFont)
         }
     }
     
@@ -122,10 +122,10 @@ extension GroupDetailView {
         VStack {
             HStack {
                 Text("No. of payments:")
-                    .font(myFont2)
+                    .font(myFont)
                 Spacer()
                 Text("\(selectedGroup.noOfPayments.toString())")
-                    .font(myFont2)
+                    .font(myFont)
             }
             Slider(value: $noOfPayments, in: rangeOfPayments, step: 1) {
 
@@ -148,10 +148,10 @@ extension GroupDetailView {
     }
     
     var paymentTimingItem: some View {
-        Picker(selection: $selectedGroup.timing, label: Text("Timing:").font(myFont2)) {
+        Picker(selection: $selectedGroup.timing, label: Text("Timing:").font(myFont)) {
             ForEach(TimingType.nonResidualPayments, id: \.self) { PaymentTiming in
                 Text(PaymentTiming.toString())
-                    .font(myFont2)
+                    .font(myFont)
             }
             .onChange(of: selectedGroup.timing) { oldValue, newValue in
               
@@ -162,10 +162,10 @@ extension GroupDetailView {
     var paymentLockedItem: some View {
         Toggle(isOn: $selectedGroup.locked) {
             Text(selectedGroup.locked ? "Locked:" : "Unlocked:")
-                .font(myFont2)
+                .font(myFont)
         }
         .disabled(self.selectedGroup.isCalculatedPaymentType() ? true : false)
-        .font(myFont2)
+        .font(myFont)
     }
 }
 
@@ -182,7 +182,7 @@ extension GroupDetailView {
     var leftSideAmountItem: some View {
         HStack {
             Text(isCalculatedPayment ? "amount:" : "amount: \(Image(systemName: "return"))")
-                .font(myFont2)
+                .font(myFont)
                 .foregroundColor(isDark ? .white : .black)
             Image(systemName: "questionmark.circle")
                 .foregroundColor(Color.theme.accent)
@@ -210,7 +210,7 @@ extension GroupDetailView {
                 .disableAutocorrection(true)
                 .accentColor(.clear)
             Text("\(paymentFormatted(editStarted: editPaymentAmountStarted))")
-                .font(myFont2)
+                .font(myFont)
                 .foregroundColor(isDark ? .white : .black)
         }
         
@@ -303,7 +303,7 @@ extension GroupDetailView {
         HStack {
             Text("Delete")
                 .disabled(paymentAmountIsFocused)
-                .font(.subheadline)
+                .font(myFont)
                 .foregroundColor(ColorTheme().accent)
                 .onTapGesture {
                     deleteGroup()
@@ -311,7 +311,7 @@ extension GroupDetailView {
             Spacer()
             Text("Done")
                 .disabled(paymentAmountIsFocused)
-                .font(.subheadline)
+                .font(myFont)
                 .foregroundColor(ColorTheme().accent)
                 .onTapGesture {
                     submitForm()

@@ -64,21 +64,21 @@ struct FeeView: View {
     var datePaidItem: some View {
         HStack {
             Text("Date Paid:")
-                .font(myFont2)
+                .font(myFont)
             Spacer()
             Text("\(myFee.datePaid.toStringDateShort(yrDigits: 2))")
-                .font(myFont2)
+                .font(myFont)
         }
     }
     
     var feeTypeItem: some View {
         HStack {
             Text("Type:")
-                .font(myFont2)
+                .font(myFont)
             Picker(selection: $myFee.feeType, label: Text("")) {
                 ForEach(FeeType.allTypes, id: \.self) { item in
                     Text(item.toString())
-                        .font(myFont2)
+                        .font(myFont)
                 }
             }
         }
@@ -107,9 +107,10 @@ extension FeeView {
     var leftSideAmountItem: some View {
         HStack {
             Text("Amount: \(Image(systemName: "return"))")
+                .font(myFont)
                 .foregroundColor(isDark ? .white : .black)
-                .font(myFont2)
             Image(systemName: "questionmark.circle")
+                .font(myFont)
                 .foregroundColor(.black)
                 .onTapGesture {
                     self.showPopover = true

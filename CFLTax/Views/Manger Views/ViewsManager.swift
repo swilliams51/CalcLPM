@@ -41,13 +41,13 @@ struct ViewsManager: View {
         case 8:
           EarlyBuyoutView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile, minimumEBOAmount: $minimumEBOAmount, maximumEBOAmount: $maximumEBOAmount)
         case 9:
-            LessorCostTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+            Text("No Lessor Cost")
         case 10:
-            ResidualTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+            Text("No Residual value")
         case 11:
-            LseGtyTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+           Text("No Lessee Guaranty")
         case 12:
-            AssetNameTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+           Text("No Asset name")
         case 13:
             GroupDetailView(myInvestment: myInvestment, selectedGroup: $selectedGroup, isDark: $isDark, path: $path, currentFile: $currentFile)
         case 14:
@@ -57,9 +57,9 @@ struct ViewsManager: View {
         case 16:
             Text("No Bonus")
         case 17:
-            YieldTargetTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+            Text("No Yield Target")
         case 18:
-            DiscountRateTextFieldView(myInvestment: myInvestment, path: $path, isDark: $isDark)
+           Text("No Discount Rate")
         case 19:
             Text("No Fee")
         case 20:

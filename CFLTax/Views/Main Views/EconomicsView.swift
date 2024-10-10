@@ -14,7 +14,23 @@ struct EconomicsView: View {
     @Binding var currentFile: String
     
     @State var myEconomics: Economics = Economics()
-
+    //Yield Target TextField
+    @State private var editYieldTargetStarted: Bool = false
+    @State private var maximumYieldTarget: Decimal = maximumYield.toDecimal()
+    @State private var yieldTargetOnEntry: String = ""
+    @FocusState private var yieldTargetIsFocused: Bool
+    //Discount Rate TextField
+    @State private var editDiscountRateStarted: Bool = false
+    @State private var maximumDiscountRate: Decimal = 0.2
+    @State private var discountRateOnEntry: String = ""
+    @FocusState private var discountRateIsFocused: Bool
+    
+    @State private var showPopover: Bool = false
+    private let pasteBoard = UIPasteboard.general
+    @State private var alertTitle: String = ""
+    @State private var showAlert: Bool = false
+    @State var payHelp = leaseAmountHelp
+    
     var body: some View {
         Form{
             Section(header: Text("Parameters").font(myFont2), footer: (Text("FileName: \(currentFile)").font(myFont2))){
@@ -27,11 +43,13 @@ struct EconomicsView: View {
             Section(header: Text("Submit Form")){
                 SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isDark: $isDark)
             }
-            
         }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 BackButtonView(path: $path, isDark: $isDark)
+            }
+            ToolbarItemGroup(placement: .keyboard){
+                DecimalPadButtonsView(cancel: updateForCancel, copy: copyToClipboard, paste: paste, clear: clearAllText, enter: updateForSubmit, isDark: $isDark)
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
@@ -39,6 +57,8 @@ struct EconomicsView: View {
         .navigationBarBackButtonHidden(true)
         .onAppear {
             self.myEconomics = myInvestment.economics
+            self.yieldTargetOnEntry = myEconomics.yieldTarget
+            self.discountRateOnEntry = myEconomics.discountRateForRent
         }
     }
 }
@@ -48,10 +68,12 @@ struct EconomicsView: View {
 }
 
 
+//Pickers
 extension EconomicsView {
     var yieldMethodItem: some View {
         HStack{
             Text("Yield Method:")
+                .font(myFont)
             Picker(selection: $myEconomics.yieldMethod, label: Text("")) {
                 ForEach(YieldMethod.allTypes, id: \.self) { item in
                     Text(item.toString())
@@ -62,6 +84,7 @@ extension EconomicsView {
     var solveForItem: some View {
         HStack{
             Text("Solve For:")
+                .font(myFont)
             Picker(selection: $myEconomics.solveFor, label: Text("")) {
                 ForEach(SolveForOption.allCases, id: \.self) { item in
                     Text(item.toString())
@@ -73,6 +96,7 @@ extension EconomicsView {
     var dayCountMethodItem: some View {
         HStack{
             Text("Day Count Method:")
+                .font(myFont)
             Picker(selection: $myEconomics.dayCountMethod, label: Text("")) {
                 ForEach(DayCountMethod.allTypes, id: \.self) { item in
                     Text(item.toString())
@@ -82,36 +106,104 @@ extension EconomicsView {
     }
 }
 
+//Yield Target TextField
 extension EconomicsView {
     var yieldTargetItem: some View {
-        HStack {
-            Text("Yield Target:")
-                .font(myFont2)
-                .onTapGesture {
-                    self.path.append(17)
-                }
+        HStack{
+            leftSideAmountItem
             Spacer()
-            Text("\(percentFormatter(percent:myEconomics.yieldTarget, locale: myLocale, places: 3))")
-                .font(myFont2)
-                .onTapGesture {
-                    self.path.append(17)
-                }
+            rightSideAmountItem
         }
     }
     
-    var discountRateItem: some View {
+    var leftSideAmountItem: some View {
         HStack {
-            Text("Discount Rate:")
-                .font(myFont2)
-                .onTapGesture {
-                    self.path.append(18)
-                }
+            Text("Target Yield: \(Image(systemName: "return"))")
+                .foregroundColor(isDark ? .white : .black)
+                .font(myFont)
+        }
+    }
+    
+    var rightSideAmountItem: some View {
+        ZStack(alignment: .trailing) {
+            TextField("",
+                      text: $myEconomics.yieldTarget,
+              onEditingChanged: { (editing) in
+                if editing == true {
+                    self.editYieldTargetStarted = true
+            }})
+                .keyboardType(.decimalPad).foregroundColor(.clear)
+                .focused($yieldTargetIsFocused)
+                .textFieldStyle(PlainTextFieldStyle())
+                .disableAutocorrection(true)
+                .accentColor(.clear)
+            Text("\(percentFormatted(editStarted: editYieldTargetStarted))")
+                .font(myFont)
+                .foregroundColor(isDark ? .white : .black)
+        }
+    }
+    
+    func percentFormatted(editStarted: Bool) -> String {
+        if editStarted == true {
+            return myEconomics.yieldTarget
+        } else {
+            return percentFormatter(percent: myEconomics.yieldTarget, locale: myLocale, places: 4)
+        }
+    }
+    
+}
+
+
+//Discount Rate For Rent
+extension EconomicsView {
+    var discountRateItem: some View {
+        HStack{
+            leftSideDiscountRateItem
             Spacer()
-            Text("\(percentFormatter(percent:myEconomics.discountRateForRent, locale: myLocale, places: 3))")
-                .font(myFont2)
+            rightSideDiscountRateItem
+        }
+    }
+    
+    var leftSideDiscountRateItem: some View {
+        HStack {
+            Text("Discount Rate: \(Image(systemName: "return"))")
+                .foregroundColor(isDark ? .white : .black)
+                .font(myFont)
+            Image(systemName: "questionmark.circle")
+                .foregroundColor(.black)
                 .onTapGesture {
-                    self.path.append(18)
+                    self.showPopover = true
                 }
+        }
+        .popover(isPresented: $showPopover) {
+            PopoverView(myHelp: $payHelp, isDark: $isDark)
+        }
+    }
+    
+    var rightSideDiscountRateItem: some View {
+        ZStack(alignment: .trailing) {
+            TextField("",
+                      text: $myEconomics.discountRateForRent,
+              onEditingChanged: { (editing) in
+                if editing == true {
+                    self.editDiscountRateStarted = true
+            }})
+                .keyboardType(.decimalPad).foregroundColor(.clear)
+                .focused($discountRateIsFocused)
+                .textFieldStyle(PlainTextFieldStyle())
+                .disableAutocorrection(true)
+                .accentColor(.clear)
+            Text("\(discountRateFormatted(editStarted: editDiscountRateStarted))")
+                .font(myFont)
+                .foregroundColor(isDark ? .white : .black)
+        }
+    }
+    
+    func discountRateFormatted(editStarted: Bool) -> String {
+        if editStarted == true {
+            return myEconomics.discountRateForRent
+        } else {
+            return percentFormatter(percent: myEconomics.discountRateForRent, locale: myLocale, places: 4)
         }
     }
 }
@@ -128,3 +220,73 @@ extension EconomicsView {
         path.removeLast()
     }
 }
+
+
+extension EconomicsView {
+    func updateForCancel() {
+        if self.editYieldTargetStarted == true {
+            self.myEconomics.yieldTarget = self.yieldTargetOnEntry
+            self.editYieldTargetStarted = false
+        } else {
+            self.myEconomics.discountRateForRent = self.discountRateOnEntry
+            self.editDiscountRateStarted = false
+        }
+       
+    }
+    
+    func copyToClipboard() {
+        if self.yieldTargetIsFocused {
+            pasteBoard.string = self.myEconomics.yieldTarget
+        } else {
+            pasteBoard.string = self.myEconomics.discountRateForRent
+        }
+    }
+    
+    func paste() {
+        if var string = pasteBoard.string {
+            string.removeAll(where: { removeCharacters.contains($0) } )
+            if string.isDecimal() {
+                if self.yieldTargetIsFocused {
+                    self.myEconomics.yieldTarget = string
+                } else {
+                    self.myEconomics.discountRateForRent = string
+                }
+            }
+        }
+    }
+    
+    func clearAllText() {
+        if self.yieldTargetIsFocused == true {
+            self.myEconomics.yieldTarget = ""
+        } else {
+            self.myEconomics.discountRateForRent = ""
+        }
+    }
+   
+    func updateForSubmit() {
+        if self.editYieldTargetStarted == true {
+            updateForNewYield()
+        } else {
+            updateForNewDiscountRate()
+        }
+        path.removeLast()
+    }
+    
+    func updateForNewYield() {
+        if isAmountValid(strAmount: myEconomics.yieldTarget, decLow: 0.0, decHigh: maximumYieldTarget, inclusiveLow: true, inclusiveHigh: true) == false {
+            self.myEconomics.yieldTarget = self.yieldTargetOnEntry
+            alertTitle = alertMaxResidual
+            showAlert.toggle()
+        }
+    }
+    
+    func updateForNewDiscountRate() {
+        if isAmountValid(strAmount: myEconomics.discountRateForRent, decLow: 0.0, decHigh: maximumDiscountRate, inclusiveLow: true, inclusiveHigh: true) == false {
+            self.myEconomics.discountRateForRent = self.discountRateOnEntry
+            alertTitle = alertMaxResidual
+            showAlert.toggle()
+        }
+    }
+
+}
+

@@ -27,12 +27,12 @@ struct TaxAssumptionsView: View {
     
     var body: some View {
         Form {
-            Section (header: Text("Details").font(myFont2), footer: (Text("FileName: \(currentFile)").font(myFont2))) {
+            Section (header: Text("Details").font(myFont), footer: (Text("FileName: \(currentFile)").font(myFont))) {
                 federalTaxRateItem
                 fiscalMonthEndItem
                 dayOfMonthTaxesPaidItem
             }
-            Section(header: Text("Submit Form").font(myFont2)) {
+            Section(header: Text("Submit Form").font(myFont)) {
                 SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isDark: $isDark)
             }
         }
@@ -75,11 +75,11 @@ extension TaxAssumptionsView {
     var fiscalMonthEndItem: some View {
         HStack {
             Text("Fiscal Month End:")
-                .font(myFont2)
+                .font(myFont)
             Picker(selection: $myTaxAssumptions.fiscalMonthEnd, label: Text("")) {
                 ForEach(TaxYearEnd.allCases, id: \.self) { item in
                    Text(item.toString())
-                        .font(myFont2)
+                        .font(myFont)
                }
             }
         }
@@ -88,11 +88,11 @@ extension TaxAssumptionsView {
     var dayOfMonthTaxesPaidItem: some View {
         HStack {
             Text("Day Taxes Paid:")
-                .font(myFont2)
+                .font(myFont)
             Picker(selection: $myTaxAssumptions.dayOfMonPaid, label: Text("")) {
                 ForEach(days, id: \.self) { item in
                    Text(item.toString())
-                        .font(myFont2)
+                        .font(myFont)
                }
             }
         }
@@ -112,7 +112,7 @@ extension TaxAssumptionsView {
         HStack {
             Text("Federal Tax Rate: \(Image(systemName: "return"))")
                 .foregroundColor(isDark ? .white : .black)
-                .font(myFont2)
+                .font(myFont)
         }
         .popover(isPresented: $showPopover) {
             PopoverView(myHelp: $payHelp, isDark: $isDark)
@@ -133,7 +133,7 @@ extension TaxAssumptionsView {
                 .disableAutocorrection(true)
                 .accentColor(.clear)
             Text("\(percentFormatted(editStarted: editTaxRateStarted))")
-                .font(myFont2)
+                .font(myFont)
                 .foregroundColor(isDark ? .white : .black)
         }
     }
