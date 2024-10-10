@@ -44,13 +44,12 @@ struct AssetView: View {
     
     var body: some View {
         Form {
-            Section(header: Text("Details").font(myFont2), footer: (Text("FileName: \(currentFile)").font(myFont2))) {
+            Section(header: Text("Details").font(myFont), footer: (Text("FileName: \(currentFile)").font(myFont))) {
                 assetNameItem
                 lessorCostItem
                 residualAmountItem
                 lesseeGuarantyItem
-                
-                
+                fundingDateItem
             }
             Section(header: Text("Submit Form")) {
                 SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isDark: $isDark)
@@ -94,6 +93,33 @@ struct AssetView: View {
 
 #Preview {
     AssetView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false), currentFile: .constant("File is New"))
+}
+
+extension AssetView {
+    var fundingDateItem: some View {
+        HStack{
+            Text("Funding Date:")
+                .font(myFont)
+            Image(systemName: "questionmark.circle")
+                .foregroundColor(Color.theme.accent)
+                .onTapGesture {
+                    self.showPopover.toggle()
+                }
+            Spacer()
+            DatePicker("", selection: $myAsset.fundingDate,  displayedComponents:[.date])
+                .transformEffect(.init(scaleX: 1.0, y: 0.90))
+                .environment(\.locale, myLocale)
+                .font(myFont)
+                .onChange(of: myAsset.fundingDate) { oldValue, newValue in
+                  
+                }
+        }
+        .disabled(false)
+        
+//        .popover(isPresented: $showPopover) {
+//            PopoverView(myHelp: $baseHelp, isDark: $isDark)
+//        }
+    }
 }
 
 
