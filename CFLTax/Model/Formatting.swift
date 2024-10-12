@@ -10,7 +10,7 @@ import Foundation
 
 
 
-func amountFormatter(amount: String, locale: Locale, places: Int = 2) -> String {
+public func amountFormatter(amount: String, locale: Locale, places: Int = 2) -> String {
     let decAmount: Decimal = amount.toDecimal()
     let amtFormatter = NumberFormatter()
     amtFormatter.numberStyle = .currency
@@ -24,7 +24,7 @@ func amountFormatter(amount: String, locale: Locale, places: Int = 2) -> String 
     return amountReturned.trimmingCharacters(in: .whitespacesAndNewlines)
 }
 
-func percentFormatter(percent: String, locale: Locale, places: Int = 3) -> String {
+public func percentFormatter(percent: String, locale: Locale, places: Int = 3) -> String {
     let decPercent: Decimal = percent.toDecimal()
     let pctFormatter = NumberFormatter()
     pctFormatter.numberStyle = .percent
@@ -36,7 +36,7 @@ func percentFormatter(percent: String, locale: Locale, places: Int = 3) -> Strin
     return percentReturned.replacingOccurrences(of: " ", with: "")
 }
 
-func decimalFormatter (decimal: String, locale: Locale, places: Int = 3) -> String {
+public func decimalFormatter (decimal: String, locale: Locale, places: Int = 3) -> String {
     let decDecimal: Decimal = decimal.toDecimal()
     let decFormatter = NumberFormatter()
     decFormatter.numberStyle = .decimal
@@ -47,10 +47,23 @@ func decimalFormatter (decimal: String, locale: Locale, places: Int = 3) -> Stri
     return decFormatter.string(for: decDecimal) ?? "0.000"
 }
 
-func dateFormatter (dateIn: Date, locale: Locale) -> String {
+public func dateFormatter (dateIn: Date, locale: Locale) -> String {
     let dFormatter = DateFormatter()
     dFormatter.locale = locale
     dFormatter.setLocalizedDateFormatFromTemplate("dd MM yy")
     
     return dFormatter.string(from: dateIn)
+}
+
+public func getFormattedValue (amount: String, viewAsPercentOfCost: Bool, aInvestment: Investment) -> String {
+    if viewAsPercentOfCost {
+        let decAmount = amount.toDecimal()
+        let decCost = aInvestment.getAssetCost(asCashflow: false)
+        let decPercent = decAmount / decCost
+        let strPercent: String = decPercent.toString(decPlaces: 5)
+        
+        return percentFormatter(percent: strPercent, locale: myLocale, places: 3)
+    } else {
+         return amountFormatter(amount: amount, locale: myLocale)
+    }
 }

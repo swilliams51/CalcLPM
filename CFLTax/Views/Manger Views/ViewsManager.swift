@@ -51,11 +51,11 @@ struct ViewsManager: View {
         case 13:
             GroupDetailView(myInvestment: myInvestment, selectedGroup: $selectedGroup, isDark: $isDark, path: $path, currentFile: $currentFile)
         case 14:
-            Text("No Payment Amount")
+            CashflowView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 15:
-           Text("No Federal Tax Rate")
+            RentSummaryView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 16:
-            Text("No Bonus")
+            EBOSummaryView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 17:
             Text("No Yield Target")
         case 18:

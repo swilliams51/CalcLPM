@@ -62,6 +62,24 @@ extension Investment {
         self.earlyBuyout.amount = myCFTValues.vLookup(dateAsk: endDate).toString(decPlaces: 2)
     }
     
+    public func setToEarlyBuyout() {
+        let dateOfUnplanned: Date = self.earlyBuyout.exerciseDate
+        let myPlannedIncome: Decimal = plannedIncome(aInvestment: self, dateAsk: dateOfUnplanned)
+        self.rent = eboRent(aInvestment: self, chopDate: dateOfUnplanned)
+        self.economics.yieldMethod = .MISF_BT
+        self.economics.solveFor = .yield
+        self.calculate(plannedIncome: myPlannedIncome.toString(decPlaces: 5), unplannedDate: dateOfUnplanned)
+    }
+    
+    
+    public func createEBOInvestment(from: Investment, unplannedDate: Date) {
+        let tempInvestment: Investment = from.clone()
+        self.rent = tempInvestment.eboRent(aInvestment: from, chopDate: unplannedDate)
+        self.asset.residualValue = tempInvestment.earlyBuyout.amount
+        self.economics.yieldMethod = .MISF_BT
+        self.economics.solveFor = .yield
+    }
+    
     public func getParValue(askDate: Date) -> Decimal {
         let myTVs: TerminationValues = TerminationValues()
         myTVs.createTable(aInvestment: self)
@@ -80,7 +98,6 @@ extension Investment {
         
         return exerciseDate
     }
-    
     
     public func getEBOPremium_bps(aEBO: EarlyBuyout, aBaseYield: Decimal) -> Double {
         let eboYield: Decimal = solveForEBOYield(aEBO: aEBO)
@@ -118,8 +135,8 @@ extension Investment {
         let dateOfUnplanned: Date = myEBOInvestment.earlyBuyout.exerciseDate
         let myPlannedIncome: Decimal = plannedIncome(aInvestment: myEBOInvestment, dateAsk: dateOfUnplanned)
         myEBOInvestment.rent = eboRent(aInvestment: myEBOInvestment, chopDate: dateOfUnplanned)
-        myEBOInvestment.economics.yieldMethod = .MISF_BT
         myEBOInvestment.asset.residualValue = aEBO.amount
+        myEBOInvestment.economics.yieldMethod = .MISF_BT
         myEBOInvestment.economics.solveFor = .yield
         myEBOInvestment.calculate(plannedIncome: myPlannedIncome.toString(decPlaces: 5), unplannedDate: dateOfUnplanned)
         

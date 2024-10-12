@@ -33,11 +33,6 @@ extension Investment {
         var prevFactor: Decimal = 1.0
         var y = tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: yield, aDayCountMethod: self.economics.dayCountMethod)
         var iCount = 1
-//        for x in 0..<tempInvestment.afterTaxCashflows.count() {
-//            print("Date: \(tempInvestment.afterTaxCashflows.items[x].dueDate) Amount: \(tempInvestment.afterTaxCashflows.items[x].amount)")
-//        }
-//        print("End")
-        
         var currFactor = prevFactor
         while abs(y) > tolerancePaymentAmounts {
             if y > 0.0 {
