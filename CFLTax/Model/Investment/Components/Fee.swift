@@ -25,6 +25,7 @@ public struct Fee {
         datePaid = Date()
     }
     
+    
     func isEqual(to other: Fee) -> Bool {
         var isEqual: Bool = false
         if amount == other.amount && feeType == other.feeType && datePaid == other.datePaid {

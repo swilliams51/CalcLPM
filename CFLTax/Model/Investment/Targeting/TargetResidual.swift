@@ -41,7 +41,7 @@ extension Investment {
                 break
             }
             let myBalance = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: newFactor, discountRate: yield)
-            if abs(myBalance) < 0.025 {
+            if abs(myBalance) < toleranceAmounts {
                 break
             }
             x1 = newFactor
@@ -118,7 +118,7 @@ extension Investment {
                 break
             }
             let myBalance = getNPVAfterNewFactor_BT(aInvestment: tempInvestment, aFactor: newFactor, discountRate: yield)
-            if abs(myBalance) < 0.025 {
+            if abs(myBalance) < toleranceAmounts {
                 break
             }
             x1 = newFactor

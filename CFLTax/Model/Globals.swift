@@ -10,6 +10,7 @@ import SwiftUI
 
 public let myLocale: Locale = Locale.current
 public let tolerancePaymentAmounts: Decimal = 0.025
+public let toleranceAmounts: Decimal = 0.0025
 public let myFont: Font = .subheadline
 public let myFont2: Font = .body
 public let maximumLessorCost: String = "50000000.00"

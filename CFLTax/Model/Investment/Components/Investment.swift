@@ -202,6 +202,12 @@ public class Investment {
         return self.asset.lessorCost.toDecimal() * factor
     }
     
+    public func setFeeToDefault() {
+        self.fee.amount = (self.asset.lessorCost.toDecimal() * 0.02).toString(decPlaces: 2)
+        self.fee.datePaid = self.asset.fundingDate
+        self.fee.feeType = .expense
+    }
+    
     public func getFeeAmount() -> Decimal {
         if self.fee.amount.isEmpty {
             return 0.0
@@ -231,6 +237,30 @@ public class Investment {
     
     public func getBeforeTaxCash() -> String {
         return beforeTaxCashflows.getTotal().toString(decPlaces: 10)
+    }
+    
+    public func getSimplePayback() -> Int {
+        var runTotal: Decimal = 0.0
+        let startDate: Date = self.afterTaxCashflows.items[0].dueDate
+        var endDate: Date = Date()
+        for x in 0..<afterTaxCashflows.count() {
+            runTotal = runTotal + afterTaxCashflows.items[x].amount.toDecimal()
+            if runTotal >= 0.0 {
+                endDate = afterTaxCashflows.items[x].dueDate
+                break
+            }
+        }
+        return monthsDiff(start: startDate, end: endDate)
+    }
+    
+    public func getAverageLife() -> Decimal {
+        let yieldRate: Decimal = self.getMISF_AT_Yield()
+        let myAmortizations: Amortizations = Amortizations()
+        myAmortizations.createAmortizations(investCashflows: self.afterTaxCashflows, interestRate: yieldRate, dayCountMethod: self.economics.dayCountMethod)
+        let myTotalInterest: Decimal = myAmortizations.totalInterest
+        let myAnnualInterest: Decimal = self.getAssetCost(asCashflow: false) * yieldRate
+        
+        return myTotalInterest / myAnnualInterest
     }
     
     public func getTaxesPaid() -> String {

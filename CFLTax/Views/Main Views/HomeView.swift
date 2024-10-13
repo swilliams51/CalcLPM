@@ -31,8 +31,12 @@ struct HomeView: View {
                     rentItem
                     depreciationItem
                     taxAssumptionsItem
-                    feeItem
-                    eboItem
+                    if self.myInvestment.feeExists {
+                        feeItem
+                    }
+                    if self.myInvestment.earlyBuyoutExists {
+                        eboItem
+                    }
                     economicsItem
                 }
                 Section(header: Text("Results")) {
@@ -49,7 +53,7 @@ struct HomeView: View {
             .toolbar{
                 ToolbarItem(placement: .bottomBar) {
                     Menu(content: {
-                        //
+                        removeItemsMenu
                     }, label: {
                         Image(systemName: "minus.circle")
                             .foregroundColor(ColorTheme().accent)
@@ -58,7 +62,7 @@ struct HomeView: View {
                 }
                 ToolbarItem(placement: .bottomBar) {
                     Menu(content: {
-                    
+                        addItemsMenu
                     }, label: {
                         Image(systemName: "plus.circle")
                             .foregroundColor(ColorTheme().accent)
@@ -223,3 +227,58 @@ struct HomeView: View {
 
 
 let yieldCalcMessage = "The current inputs will produce a negative yield. Consequently, the yield calculation is terminated. The sum of the Rents and the Residual Value must be greater than the Lessor Cost."
+
+extension HomeView {
+    var removeItemsMenu: some View {
+        VStack {
+            removeFeeItem
+            removeEBOItem
+        }
+    }
+    
+    var removeFeeItem: some View {
+        Button(action: {
+            self.myInvestment.fee.amount = "0.00"
+            self.myInvestment.feeExists = false
+        }) {
+            Label("Remove Fee", systemImage: "arrowshape.turn.up.backward")
+                .font(myFont)
+        }
+    }
+    
+    var removeEBOItem: some View {
+        Button(action: {
+            self.myInvestment.earlyBuyout.amount = "0.00"
+        }) {
+            Label("Remove Early Buyout", systemImage: "arrowshape.turn.up.backward")
+                .font(myFont)
+        }
+    }
+    
+    var addItemsMenu: some View {
+        VStack{
+            addFeeItem
+            addEBOItem
+        }
+    }
+    
+    var addFeeItem: some View {
+        Button(action: {
+            self.myInvestment.setFeeToDefault()
+            self.myInvestment.feeExists = true
+        }) {
+            Label("Add Fee", systemImage: "arrowshape.turn.up.backward")
+                .font(myFont)
+        }
+    }
+    
+    var addEBOItem: some View {
+        Button(action: {
+            self.myInvestment.resetEBOToDefault()
+        }) {
+            Label("add EBO", systemImage: "arrowshape.turn.up.backward")
+        }
+    }
+    
+    
+}

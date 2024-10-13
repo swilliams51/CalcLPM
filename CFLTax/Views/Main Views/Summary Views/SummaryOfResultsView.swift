@@ -18,28 +18,31 @@ struct SummaryOfResultsView: View {
     //Yields
     @State var myATYield: Decimal = 0.075
     @State var myBTYield: Decimal = 0.075
-    @State var myIRRPTCF: Decimal = 0.075
+    @State var myIRRofPTCF: Decimal = 0.075
+    @State var myNetProfit: String = "0.00"
+    @State var myPayback: Int = 0
+    @State var myAverageLife: Decimal = 2.0
+    
     
     @State var lineHeight: CGFloat = 12
     @State var frameHeight: CGFloat = 12
     
     var body: some View {
         Form {
-            Section(header: Text("Yields"), footer: (Text("File Name: \(currentFile)"))) {
+            Section(header: Text("Profitability"), footer: (Text("File Name: \(currentFile)"))) {
                 afterTaxYieldItem
                 beforeTaxYieldItem
                 preTaxIRRItem
-                Text("Inherent Profit:")
-                Text("Payback (months):")
-                Text("Average Life (yrs):")
+                inherentProfitItem
+                simplePaybackItem
+                averageLifeItem
             }
+            
             Section(header: Text("Additional Results")) {
                 cashflowItem
                 rentalsItem
                 earlyBuyoutItem
             }
-            
-          
             
         }
         .environment(\.defaultMinListRowHeight, lineHeight)
@@ -60,11 +63,14 @@ struct SummaryOfResultsView: View {
         .navigationTitle("Summary")
         .navigationBarBackButtonHidden(true)
         .onAppear{
-            myInvestment.calculate()
-            myInvestment.hasChanged = false
-            myATYield = myInvestment.getMISF_AT_Yield()
-            myBTYield = myInvestment.getMISF_BT_Yield()
-            myIRRPTCF = myInvestment.getIRR_PTCF()
+            self.myInvestment.calculate()
+            self.myInvestment.hasChanged = false
+            self.myATYield = myInvestment.getMISF_AT_Yield()
+            self.myBTYield = myInvestment.getMISF_BT_Yield()
+            self.myIRRofPTCF = myInvestment.getIRR_PTCF()
+            self.myNetProfit = myInvestment.getAfterTaxCash()
+            self.myPayback = myInvestment.getSimplePayback()
+            self.myAverageLife = myInvestment.getAverageLife()
         }
     }
     
@@ -102,49 +108,84 @@ extension SummaryOfResultsView {
             Text("IRR PTCF:")
                 .font(myFont)
             Spacer()
-            Text("\(percentFormatter(percent:myIRRPTCF.toString(decPlaces: 5), locale: myLocale, places: 3))")
+            Text("\(percentFormatter(percent:myIRRofPTCF.toString(decPlaces: 5), locale: myLocale, places: 3))")
                 .font(myFont)
         }.frame(height: frameHeight)
     }
 }
 
+//Statistics
+extension SummaryOfResultsView {
+    var inherentProfitItem: some View {
+        HStack {
+            Text("Inherent Profit:")
+            Spacer()
+            Text("\(getFormattedValue(amount: myNetProfit, viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
+        }.font(myFont)
+        
+    }
+    
+    var simplePaybackItem: some View {
+        HStack {
+            Text("Payback (mons):")
+            Spacer()
+            Text("\(myPayback)")
+        }.font(myFont)
+    }
+    
+    var averageLifeItem: some View {
+        HStack {
+            Text("Average Life (yrs):")
+            Spacer()
+            Text("\(amountFormatter(amount:myAverageLife.toString(decPlaces: 2), locale: myLocale))")
+        }.font(myFont)
+    }
+    
+}
+
+
+//Additional Results
 extension SummaryOfResultsView {
     var cashflowItem: some View {
         HStack {
             Text("Cashflows")
-                .font(myFont2)
             Spacer()
             Image(systemName: "chevron.right")
         }
+        .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
-            path.append(36)
+            path.append(14)
         }
     }
     
     var rentalsItem: some View {
         HStack {
             Text("Rentals")
-                .font(myFont2)
             Spacer()
             Image(systemName: "chevron.right")
         }
+        .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
-            path.append(31)
+            path.append(15)
         }
     }
     
     var earlyBuyoutItem: some View {
         HStack {
             Text("Early Buyout")
-                .font(myFont2)
             Spacer()
             Image(systemName: "chevron.right")
         }
+        .foregroundColor(myInvestment.earlyBuyoutExists ? .black : .gray)
+        .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
-            path.append(32)
+            if myInvestment.earlyBuyoutExists {
+                path.append(16)
+            }
+           
         }
     }
 }

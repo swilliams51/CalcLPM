@@ -59,6 +59,8 @@ public class Cashflows {
         return  runTotal
     }
     
+    
+    
     public func getIndex(dateAsk: Date, returnNextOnMatch: Bool) -> Int {
         var idx:Int = 0
         

@@ -102,32 +102,32 @@ extension EBOSummaryView {
     var afterTaxYieldItem: some View {
         HStack{
             Text("After-Tax MISF:")
-                .font(myFont)
             Spacer()
             Text("\(percentFormatter(percent: myATYield.toString(decPlaces: 5), locale: myLocale, places:3))")
-                .font(myFont)
-        }.frame(height: frameHeight)
+        }
+        .font(myFont)
+        .frame(height: frameHeight)
     }
     
     var beforeTaxYieldItem: some View {
         HStack{
             Text("Before-Tax MISF:")
-                .font(myFont)
             Spacer()
             Text("\(percentFormatter(percent:myBTYield.toString(decPlaces: 5), locale: myLocale, places: 3))")
-                .font(myFont)
-        }.frame(height: frameHeight)
+        }
+        .font(myFont)
+        .frame(height: frameHeight)
     }
     
     
     var preTaxIRRItem: some View {
         HStack{
             Text("IRR PTCF:")
-                .font(myFont)
             Spacer()
             Text("\(percentFormatter(percent:myIRRPTCF.toString(decPlaces: 5), locale: myLocale, places: 3))")
-                .font(myFont)
-        }.frame(height: frameHeight)
+        }
+        .font(myFont)
+        .frame(height: frameHeight)
     }
 }
 
@@ -137,24 +137,27 @@ extension EBOSummaryView {
         HStack {
             Text("EBO Amount:")
             Spacer()
-            Text("\(myEBOAmount.toString(decPlaces: 2))")
+            Text("\(getFormattedValue(amount: myEBOAmount.toString(decPlaces: 2), viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
         }
+        .font(myFont)
     }
     
     var arrearsRentItem: some View {
         HStack {
             Text("Arrears Rent:")
             Spacer()
-            Text("\(myArrearsRent.toString(decPlaces: 2))")
+            Text("\(getFormattedValue(amount:myArrearsRent.toString(decPlaces: 2), viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
         }
+        .font(myFont)
     }
     
     var eboTotalDueItem: some View {
         HStack {
             Text("Total Amount Due:")
             Spacer()
-            Text("\(myTotalEBODue.toString(decPlaces: 2))")
+            Text("\(getFormattedValue(amount:myTotalEBODue.toString(decPlaces: 2), viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
         }
+        .font(myFont)
     }
 }
 
@@ -163,24 +166,27 @@ extension EBOSummaryView {
         HStack {
             Text("Pre-Tax Cash:")
             Spacer()
-            Text("\(myPreTaxCashflow.toString(decPlaces: 2))")
+            Text("\(getFormattedValue(amount:myPreTaxCashflow.toString(decPlaces: 2), viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
         }
+        .font(myFont)
     }
     
     var taxesPaidItem: some View {
         HStack {
             Text("Tax Paid:")
             Spacer()
-            Text("\(myTaxesPaid.toString(decPlaces: 2))")
+            Text("\(getFormattedValue(amount:myTaxesPaid.toString(decPlaces: 2), viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
         }
+        .font(myFont)
     }
     
     var afterTaxEBOCashItem: some View {
         HStack {
             Text("After-Tax Cash:")
             Spacer()
-            Text("\(myAfterTaxCashflow.toString(decPlaces: 2))")
+            Text("\(getFormattedValue(amount:myAfterTaxCashflow.toString(decPlaces: 2), viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
         }
+        .font(myFont)
     }
     
 }

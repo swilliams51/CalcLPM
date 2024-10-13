@@ -28,6 +28,30 @@ struct RentSummaryView: View {
             presentValueItem
             presentValue2Item
         }
+        .environment(\.defaultMinListRowHeight, lineHeight)
+        .toolbar {
+            ToolbarItem(placement: .topBarLeading) {
+                BackButtonView(path: $path, isDark: $isDark)
+            }
+            ToolbarItem(placement: .topBarTrailing){
+                Button(action: {
+                    viewAsPctOfCost.toggle()
+                }) {
+                    Image(systemName: "command.circle")
+                        .tint(viewAsPctOfCost ? Color.red : Color.black)
+                }
+            }
+        }
+        .environment(\.colorScheme, isDark ? .dark : .light)
+        .navigationTitle("Summary")
+        .navigationBarBackButtonHidden(true)
+        .onAppear {
+            self.implicitRate = myInvestment.getImplicitRate().toString()
+            self.presentValue1 = myInvestment.getPVOfRents().toString()
+            self.presentValue2 = myInvestment.getPVOfObligations().toString()
+            self.discountRate = myInvestment.economics.discountRateForRent
+    
+        }
     }
 }
 
