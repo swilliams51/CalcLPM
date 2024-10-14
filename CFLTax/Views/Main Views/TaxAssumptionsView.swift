@@ -16,7 +16,6 @@ struct TaxAssumptionsView: View {
     @State private var myTaxAssumptions: TaxAssumptions = TaxAssumptions()
     @State var days: [Int] = [1, 5, 10, 15, 20, 25, 30]
 
-    
     @State private var editTaxRateStarted: Bool = false
     @State private var maximumTaxRate: Decimal = 1.0
     @FocusState private var taxRateIsFocused: Bool
@@ -27,7 +26,7 @@ struct TaxAssumptionsView: View {
     
     var body: some View {
         Form {
-            Section (header: Text("Details").font(myFont), footer: (Text("FileName: \(currentFile)").font(myFont))) {
+            Section (header: Text("Details").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
                 federalTaxRateItem
                 fiscalMonthEndItem
                 dayOfMonthTaxesPaidItem

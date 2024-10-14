@@ -72,7 +72,12 @@ struct HomeView: View {
                 }
             }
         }
-        
+        .onAppear{
+            if self.myInvestment.hasChanged && myInvestment.earlyBuyoutExists == true {
+                self.myInvestment.earlyBuyout.amount = "0.00"
+                self.myInvestment.earlyBuyoutExists = false
+            }
+        }
     }
     
         
@@ -164,10 +169,10 @@ struct HomeView: View {
         }
         .contentShape(Rectangle())
         .onTapGesture {
-            if myInvestment.earlyBuyoutExists == false {
-                myInvestment.resetEBOToDefault()
-                myInvestment.earlyBuyoutExists = true
-            }
+//            if myInvestment.earlyBuyoutExists == false {
+//                myInvestment.resetEBOToDefault()
+//                myInvestment.earlyBuyoutExists = true
+//            }
             path.append(8)
         }
     }
@@ -249,6 +254,7 @@ extension HomeView {
     var removeEBOItem: some View {
         Button(action: {
             self.myInvestment.earlyBuyout.amount = "0.00"
+            self.myInvestment.earlyBuyoutExists = false
         }) {
             Label("Remove Early Buyout", systemImage: "arrowshape.turn.up.backward")
                 .font(myFont)
@@ -275,8 +281,9 @@ extension HomeView {
     var addEBOItem: some View {
         Button(action: {
             self.myInvestment.resetEBOToDefault()
+            self.myInvestment.earlyBuyoutExists = true
         }) {
-            Label("add EBO", systemImage: "arrowshape.turn.up.backward")
+            Label("Add EBO", systemImage: "arrowshape.turn.up.backward")
         }
     }
     

@@ -16,34 +16,24 @@ struct PreTaxLeaseCashflowsView: View {
     var body: some View {
         Form{
             Section(header: Text("\(currentFile)")) {
-                if myInvestment.beforeTaxCashflows.count() == 0 {
-                    VStack{
-                        Text("No Cashflows")
+                ForEach(myInvestment.beforeTaxCashflows.items) { item in
+                    HStack {
+                        Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
+                        Spacer()
+                        Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
                     }
-                } else {
-                    ForEach(myInvestment.beforeTaxCashflows.items) { item in
-                        HStack {
-                            Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
-                            Spacer()
-                            Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
-                        }
-                    }
+                    .font(myFont)
                 }
             }
             Section(header: Text("Results")) {
-                if myInvestment.beforeTaxCashflows.count() == 0 {
-                    VStack {
-                        Text("No Totals")
-                    }
-                } else {
-                    HStack {
-                        Text("\(myInvestment.beforeTaxCashflows.count())")
-                        Spacer()
-                        Text("\(amountFormatter(amount: myInvestment.beforeTaxCashflows.getTotal().toString(decPlaces: 2), locale: myLocale))")
-                    }
+                HStack {
+                    Text("\(myInvestment.beforeTaxCashflows.count())")
+                    Spacer()
+                    Text("\(amountFormatter(amount: myInvestment.beforeTaxCashflows.getTotal().toString(decPlaces: 2), locale: myLocale))")
                 }
-                
+                .font(myFont)
             }
+                
         }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {

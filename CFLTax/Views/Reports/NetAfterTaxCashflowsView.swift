@@ -16,32 +16,22 @@ struct NetAfterTaxCashflowsView: View {
     var body: some View {
         Form {
             Section(header: Text("\(currentFile)")) {
-                if myInvestment.afterTaxCashflows.items.count == 0 {
-                    VStack {
-                        Text("No Cashflows")
+                ForEach(myInvestment.afterTaxCashflows.items) { item in
+                    HStack {
+                        Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
+                        Spacer()
+                        Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
                     }
-                } else {
-                    ForEach(myInvestment.afterTaxCashflows.items) { item in
-                        HStack {
-                            Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
-                            Spacer()
-                            Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
-                        }
-                    }
+                    .font(myFont)
                 }
             }
             Section(header: Text("Totals")) {
-                if myInvestment.afterTaxCashflows.items.count == 0 {
-                    VStack {
-                        Text("No Totals")
-                    }
-                } else {
-                    HStack {
-                        Text("\(myInvestment.afterTaxCashflows.count())")
-                        Spacer()
-                        Text("\(amountFormatter(amount: myInvestment.afterTaxCashflows.getTotal().toString(decPlaces: 2), locale: myLocale))")
-                    }
+                HStack {
+                    Text("\(myInvestment.afterTaxCashflows.count())")
+                    Spacer()
+                    Text("\(amountFormatter(amount: myInvestment.afterTaxCashflows.getTotal().toString(decPlaces: 2), locale: myLocale))")
                 }
+                .font(myFont)
             }
             
         }
@@ -56,7 +46,6 @@ struct NetAfterTaxCashflowsView: View {
         .navigationBarBackButtonHidden(true)
         .onAppear {
             self.myInvestment.calculate()
-            
         }
     }
             

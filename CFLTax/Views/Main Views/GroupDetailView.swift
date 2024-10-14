@@ -40,7 +40,7 @@ struct GroupDetailView: View {
     
     var body: some View {
             Form {
-                Section(header: Text(isInterimGroup ? "Interim Rent Details" : "Base Rent Details").font(myFont), footer: (Text("FileName: \(currentFile)").font(myFont))) {
+                Section(header: Text(isInterimGroup ? "Interim Rent Details" : "Base Rent Details").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
                     VStack {
                         paymentTypeItem
                         noOfPaymentsItem

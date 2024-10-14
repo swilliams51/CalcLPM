@@ -20,7 +20,7 @@ struct RentView: View {
     
     var body: some View {
         Form {
-            Section(header: Text("Rent").font(myFont), footer: (Text("FileName: \(currentFile)").font(myFont))) {
+            Section(header: Text("Rent").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
                 ForEach(myInvestment.rent.groups) { group in
                     groupDisplayRow(group: group)
                 }
@@ -189,7 +189,6 @@ extension RentView {
     private var addNewMenu: some View {
         VStack {
            addNewMenuItem
-            
         }
     }
     
@@ -201,8 +200,6 @@ extension RentView {
                 .font(myFont)
         }
     }
-    
-    
 }
 
 

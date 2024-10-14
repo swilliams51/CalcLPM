@@ -23,6 +23,7 @@ struct FeeExpenseView: View {
                        Spacer()
                        Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
                    }
+                   .font(myFont)
                }
            }
            
@@ -32,6 +33,7 @@ struct FeeExpenseView: View {
                    Spacer()
                    Text("\(amountFormatter(amount: myFeeAmortization.getTotal().toString(decPlaces: 4), locale: myLocale))")
                }
+               .font(myFont)
            }
        }
        .toolbar {

@@ -120,6 +120,7 @@ extension TerminationValuesProofView {
                     }
                 }
         }
+        .font(myFont)
         .foregroundColor(.blue)
         .padding()
     }

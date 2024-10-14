@@ -24,6 +24,7 @@ struct YTDIncomesView: View {
                         Spacer()
                         Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
                     }
+                    .font(myFont)
                 }
             }
             Section(header: Text("Totals")) {
@@ -32,6 +33,7 @@ struct YTDIncomesView: View {
                     Spacer()
                     Text("\(myPeriodicIncomes.items.count)")
                 }
+                .font(myFont)
             }
            
         }

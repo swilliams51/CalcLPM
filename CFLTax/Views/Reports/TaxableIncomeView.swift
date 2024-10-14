@@ -25,6 +25,7 @@ struct TaxableIncomeView: View {
                         Spacer()
                         Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
                     }
+                    .font(myFont)
                 }
             }
             Section(header: Text("Totals")) {
@@ -33,6 +34,7 @@ struct TaxableIncomeView: View {
                     Spacer()
                     Text("\(amountFormatter(amount: myNetTaxableIncomes.getTotal().toString(decPlaces: 4), locale: myLocale))")
                 }
+                .font(myFont)
             }
         }
         .toolbar {

@@ -23,7 +23,7 @@ struct LeaseTermView: View {
     
     var body: some View {
         Form {
-            Section (header: Text("Details").font(myFont), footer: (Text("FileName: \(currentFile)").font(myFont))) {
+            Section (header: Text("Details").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
                 paymentFrequencyItem
                 eomRuleItem
                 baseCommenceDateItem

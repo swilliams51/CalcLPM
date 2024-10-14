@@ -24,6 +24,7 @@ struct TaxesPaidView: View {
                         Spacer()
                         Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
                     }
+                    .font(myFont)
                 }
             }
             Section(header: Text("Totals")) {
@@ -32,6 +33,7 @@ struct TaxesPaidView: View {
                     Spacer()
                     Text("\(amountFormatter(amount: myPeriodicTaxesPaid.getTotal().toString(decPlaces: 4), locale: myLocale))")
                 }
+                .font(myFont)
             }
         }
         .toolbar {

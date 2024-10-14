@@ -33,7 +33,7 @@ struct EconomicsView: View {
     
     var body: some View {
         Form{
-            Section(header: Text("Parameters").font(myFont2), footer: (Text("FileName: \(currentFile)").font(myFont2))){
+            Section(header: Text("Parameters").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))){
                 yieldMethodItem
                 yieldTargetItem
                 solveForItem

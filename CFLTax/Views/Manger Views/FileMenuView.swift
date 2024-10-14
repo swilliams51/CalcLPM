@@ -17,7 +17,7 @@ struct FileMenuView: View {
     
     var body: some View {
         Form {
-            Section(footer: Text(" File Name: \(currentFile)").font(myFont2)) {
+            Section(footer: Text(" File Name: \(currentFile)").font(myFont)) {
                 newFileItem
                 openFileItem
                 saveFileItem

@@ -26,6 +26,7 @@ struct TerminationValuesView: View {
                         Spacer()
                         Text("\(getFormattedValue(amount: item.amount))")
                     }
+                    .font(myFont)
                 }
             }
             
@@ -35,6 +36,7 @@ struct TerminationValuesView: View {
                     Spacer()
                     Text("\(myTValues.items.count)")
                 }
+                .font(myFont)
             }
            
         }

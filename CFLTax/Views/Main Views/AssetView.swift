@@ -99,7 +99,6 @@ extension AssetView {
     var fundingDateItem: some View {
         HStack{
             Text("Funding Date:")
-                .font(myFont)
             Image(systemName: "questionmark.circle")
                 .foregroundColor(Color.theme.accent)
                 .onTapGesture {
@@ -109,11 +108,11 @@ extension AssetView {
             DatePicker("", selection: $myAsset.fundingDate,  displayedComponents:[.date])
                 .transformEffect(.init(scaleX: 1.0, y: 0.90))
                 .environment(\.locale, myLocale)
-                .font(myFont)
                 .onChange(of: myAsset.fundingDate) { oldValue, newValue in
                   
                 }
         }
+        .font(myFont)
         .disabled(false)
         
 //        .popover(isPresented: $showPopover) {
@@ -159,7 +158,7 @@ extension AssetView {
                 .disableAutocorrection(true)
                 .accentColor(.clear)
             Text("\(myAsset.name)")
-                .font(myFont2)
+                .font(myFont)
                 .foregroundColor(isDark ? .white : .black)
         }
     }
@@ -198,7 +197,7 @@ extension AssetView {
                 .disableAutocorrection(true)
                 .accentColor(.clear)
             Text("\(amountFormatted(editStarted: editLessorStarted))")
-                .font(myFont2)
+                .font(myFont)
                 .foregroundColor(isDark ? .white : .black)
         }
     }
@@ -247,9 +246,9 @@ extension AssetView {
                 .disableAutocorrection(true)
                 .accentColor(.clear)
             Text("\(residualValueFormatted(editStarted: editResidualValueStarted))")
-                .font(myFont2)
                 .foregroundColor(isDark ? .white : .black)
         }
+        .font(myFont)
     }
     
     func residualValueFormatted(editStarted: Bool) -> String {
@@ -296,9 +295,9 @@ extension AssetView {
                 .disableAutocorrection(true)
                 .accentColor(.clear)
             Text("\(lesseeGuarantyFormatted(editStarted: editLesseeGuarantyStarted))")
-                .font(myFont2)
                 .foregroundColor(isDark ? .white : .black)
         }
+        .font(myFont)
     }
     
     func lesseeGuarantyFormatted(editStarted: Bool) -> String {

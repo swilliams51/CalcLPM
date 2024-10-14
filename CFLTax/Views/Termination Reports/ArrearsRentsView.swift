@@ -24,6 +24,7 @@ struct ArrearsRentsView: View {
                         Spacer()
                         Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
                     }
+                    .font(myFont)
                 }
             }
             Section(header: Text("Totals")) {
@@ -32,6 +33,7 @@ struct ArrearsRentsView: View {
                     Spacer()
                     Text("\(myPeriodicArrearsRents.items.count)")
                 }
+                .font(myFont)
             }
            
         }

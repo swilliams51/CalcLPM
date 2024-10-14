@@ -135,7 +135,7 @@ extension FeeView {
                 .disableAutocorrection(true)
                 .accentColor(.clear)
             Text("\(amountFormatted(editStarted: editAmountStarted))")
-                .font(myFont2)
+                .font(myFont)
                 .foregroundColor(isDark ? .white : .black)
         }
     }

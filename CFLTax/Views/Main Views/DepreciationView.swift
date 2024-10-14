@@ -45,7 +45,7 @@ struct DepreciationView: View {
     
     var body: some View {
         Form {
-            Section(header: Text("Inputs").font(myFont2), footer:(Text("FileName: \(currentFile)").font(myFont2))) {
+            Section(header: Text("Inputs").font(myFont), footer:(Text("File Name: \(currentFile)").font(myFont))) {
                 depreciationParameters
             }
             Section(header: Text("Submit Form")) {
@@ -137,17 +137,15 @@ extension DepreciationView {
     var depreciableBasisItem: some View {
         HStack {
             Text("Basis:")
-                .font(myFont2)
             Spacer()
             Text("\(amountFormatter(amount: myInvestment.asset.lessorCost, locale: myLocale))")
-                .font(myFont2)
         }
+        .font(myFont)
     }
     
     var depreciationMethod: some View {
         HStack {
             Text("Method:")
-                .font(myFont2)
             Picker(selection: $myDepreciation.method, label: Text("")) {
                 ForEach(DepreciationType.twoTypes, id: \.self) { item in
                     Text(item.toString())
@@ -157,25 +155,24 @@ extension DepreciationView {
                         macrsMode = true
                     } else {
                         macrsMode = false
-                        
                     }
                    myDepreciation.method = newValue
                 }
             }
         }
+        .font(myFont)
     }
     
     var depreciationConvention: some View {
         HStack {
             Text("1st Yr Convention:")
-                .font(myFont2)
             Picker(selection: $myDepreciation.convention, label: Text("")) {
                 ForEach(ConventionType.allCases, id: \.self) { item in
                     Text(item.toString())
-                        .font(myFont2)
                 }
             }
         }
+        .font(myFont)
         .padding(.bottom, 5)
     }
 }
@@ -185,26 +182,24 @@ extension DepreciationView {
     var depreciableLife: some View {
         HStack {
             Text("Life (in years):")
-                .font(myFont2)
             Picker(selection: $myLife, label: Text("")) {
                 ForEach(dblLife_MACRS, id: \.self) { item in
                     Text(item.toString())
-                        .font(myFont2)
                 }
             }
         }
+        .font(myFont)
     }
     var bonusDepreciation: some View {
         HStack {
             HStack {
                 Text("Bonus:")
-                    .font(myFont2)
                 Image(systemName:"return")
             }
             Spacer()
             Text("\(percentFormatter(percent: myDepreciation.bonusDeprecPercent.toString(), locale: myLocale, places: 2))")
-                .font(myFont2)
         }
+        .font(myFont)
         .contentShape(Rectangle())
         .disabled(macrsMode ? false : true)
         .onTapGesture {
@@ -221,10 +216,8 @@ extension DepreciationView {
         VStack {
             HStack {
                 Text("Life in Years:")
-                    .font(myFont2)
                 Spacer()
                 Text("\(myDepreciation.life.toString())")
-                    .font(myFont2)
             }
             Slider(value: $myLife, in: 3...20, step: 1) {
 
@@ -241,6 +234,7 @@ extension DepreciationView {
                 .transformEffect(.init(scaleX: 1.0, y: 0.9))
             }
         }
+        .font(myFont)
             
     }
     
@@ -248,13 +242,12 @@ extension DepreciationView {
         HStack {
             HStack {
                 Text("Salvage Value:")
-                    .font(myFont2)
                 Image(systemName: "return")
             }
             Spacer()
             Text("\(amountFormatter(amount: myDepreciation.salvageValue, locale: myLocale))")
-                .font(myFont2)
         }
+        .font(myFont)
         .contentShape(Rectangle())
         .disabled(macrsMode ? true : false)
         .onTapGesture {
@@ -273,16 +266,18 @@ extension DepreciationView {
             Text("ITC:")
             Spacer()
             Text("\(percentFormatter(percent: myDepreciation.salvageValue, locale: myLocale))")
+                .padding(.bottom, 10)
         }
-        .padding(.bottom, 10)
+        .font(myFont)
     }
-
+    
     var basisReduction: some View {
         HStack {
             Text("Basis Reduction:")
             Spacer()
             Text("\(percentFormatter(percent: myDepreciation.basisReduction.toString(), locale: myLocale))")
         }
+        .font(myFont)
         .padding(.top, 10)
     }
 }
@@ -302,13 +297,13 @@ extension DepreciationView {
         HStack {
             Text("Bonus: \(Image(systemName: "return"))")
                 .foregroundColor(isDark ? .white : .black)
-                .font(myFont2)
             Image(systemName: "questionmark.circle")
                 .foregroundColor(.black)
                 .onTapGesture {
                     self.showPopover = true
                 }
         }
+        .font(myFont)
         .popover(isPresented: $showPopover) {
             PopoverView(myHelp: $payHelp, isDark: $isDark)
         }
@@ -328,9 +323,9 @@ extension DepreciationView {
                 .disableAutocorrection(true)
                 .accentColor(.clear)
             Text("\(percentFormatted(editStarted: editPercentStarted))")
-                .font(myFont2)
                 .foregroundColor(isDark ? .white : .black)
         }
+        .font(myFont)
     }
     
     func percentFormatted(editStarted: Bool) -> String {
@@ -356,13 +351,13 @@ extension DepreciationView {
         HStack {
             Text("amount: \(Image(systemName: "return"))")
                 .foregroundColor(isDark ? .white : .black)
-                .font(myFont)
             Image(systemName: "questionmark.circle")
                 .foregroundColor(.black)
                 .onTapGesture {
                     self.showPopoverForSalvage = true
                 }
         }
+        .font(myFont)
         .popover(isPresented: $showPopoverForSalvage) {
             PopoverView(myHelp: $payHelp, isDark: $isDark)
         }
@@ -382,9 +377,9 @@ extension DepreciationView {
                 .disableAutocorrection(true)
                 .accentColor(.clear)
             Text("\(salvageFormatted(editStarted: editSalvageStarted))")
-                .font(myFont2)
                 .foregroundColor(isDark ? .white : .black)
         }
+        .font(myFont)
     }
     
     func salvageFormatted(editStarted: Bool) -> String {

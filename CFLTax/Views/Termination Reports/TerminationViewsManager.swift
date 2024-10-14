@@ -38,10 +38,10 @@ struct TerminationViewsManager: View {
     var investmentBalanceItem: some View {
         HStack {
             Text("Investment Balances")
-                .font(myFont2)
             Spacer()
             Image(systemName: "chevron.right")
         }
+        .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(37)
@@ -51,10 +51,10 @@ struct TerminationViewsManager: View {
     var depreciationBalancesItem: some View {
         HStack {
             Text("Depreciation Balances")
-                .font(myFont2)
             Spacer()
             Image(systemName: "chevron.right")
         }
+        .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(38)
@@ -64,10 +64,10 @@ struct TerminationViewsManager: View {
     var yearToDateIncomeItem: some View {
         HStack {
             Text("YTD Income")
-                .font(myFont2)
             Spacer()
             Image(systemName: "chevron.right")
         }
+        .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(39)
@@ -77,11 +77,11 @@ struct TerminationViewsManager: View {
     var yearToDateTaxesPaidItem: some View {
         HStack {
             Text("YTD Taxes Paid")
-                .font(myFont2)
             Spacer()
             Image(systemName: "chevron.right")
                 
         }
+        .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(40)
@@ -91,10 +91,10 @@ struct TerminationViewsManager: View {
     var yearToDateTaxesDueItem: some View {
         HStack {
             Text("YTD Taxes Due")
-                .font(myFont2)
             Spacer()
             Image(systemName: "chevron.right")
         }
+        .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(43)
@@ -104,10 +104,10 @@ struct TerminationViewsManager: View {
     var advanceRentsItem: some View {
         HStack{
         Text("Advance Rents")
-                .font(myFont2)
             Spacer()
             Image(systemName: "chevron.right")
         }
+        .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(41)
@@ -117,10 +117,10 @@ struct TerminationViewsManager: View {
     var arrearsRentsItem: some View {
         HStack{
         Text("Arrears Rents")
-                .font(myFont2)
             Spacer()
             Image(systemName: "chevron.right")
         }
+        .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(45)
@@ -130,10 +130,10 @@ struct TerminationViewsManager: View {
     var terminationValuesItem: some View {
         HStack{
         Text("Termination Values")
-                .font(myFont2)
             Spacer()
             Image(systemName: "chevron.right")
         }
+        .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(42)
@@ -143,13 +143,13 @@ struct TerminationViewsManager: View {
     var terminationValuesProofItem: some View {
         HStack{
             Text("Termination Values Proof")
-                .font(myFont2)
             Spacer()
             Image(systemName: "chevron.right")
         }
+        .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
-        path.append(44)
+            path.append(44)
         }
     }
     

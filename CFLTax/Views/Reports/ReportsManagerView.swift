@@ -16,7 +16,7 @@ struct ReportsManagerView: View {
     
     var body: some View {
         Form{
-            Section(header: Text("Reports"), footer: (Text("FileName: \(currentFile)").font(myFont2))) {
+            Section(header: Text("Reports"), footer: (Text("File Name: \(currentFile)").font(myFont))) {
                 leaseRentalsItem
                 depreciationScheduleItem
                 feeAmortizationItem
@@ -41,10 +41,10 @@ struct ReportsManagerView: View {
     var leaseRentalsItem: some View {
         HStack {
             Text("Schedule of Rents")
-                .font(myFont2)
             Spacer()
             Image(systemName: "chevron.right")
         }
+        .font(myFont2)
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(21)
@@ -54,10 +54,10 @@ struct ReportsManagerView: View {
     var depreciationScheduleItem: some View {
         HStack {
             Text("Depreciation Schedule")
-                .font(myFont2)
             Spacer()
             Image(systemName: "chevron.right")
         }
+        .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(22)
@@ -67,10 +67,10 @@ struct ReportsManagerView: View {
     var feeAmortizationItem: some View {
         HStack {
             Text("Fee Amortization")
-                .font(myFont2)
             Spacer()
             Image(systemName: "chevron.right")
         }
+        .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(28)
@@ -80,11 +80,11 @@ struct ReportsManagerView: View {
     var taxableIncomeItem: some View {
         HStack {
             Text("Taxable Income")
-                .font(myFont2)
             Spacer()
             Image(systemName: "chevron.right")
                 
         }
+        .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(33)
@@ -94,10 +94,10 @@ struct ReportsManagerView: View {
     var taxesPaidItem: some View {
         HStack{
         Text("Taxes Paid")
-                .font(myFont2)
             Spacer()
             Image(systemName: "chevron.right")
         }
+        .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(34)
@@ -107,10 +107,10 @@ struct ReportsManagerView: View {
     var beforeTaxLeaseCashflowsItem: some View {
         HStack {
             Text("Before-Tax Lease Cashflows")
-                .font(myFont2)
             Spacer()
             Image(systemName: "chevron.right")
         }
+        .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(23)
@@ -120,10 +120,10 @@ struct ReportsManagerView: View {
     var afterTaxLeaseCashflowsItem: some View {
         HStack {
             Text("After-Tax Lease Cashflows")
-                .font(myFont2)
             Spacer()
             Image(systemName: "chevron.right")
         }
+        .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(24)
@@ -133,10 +133,10 @@ struct ReportsManagerView: View {
     var investmentAmortizationItem: some View {
         HStack {
             Text("Investment Amortization")
-                .font(myFont2)
             Spacer()
             Image(systemName: "chevron.right")
         }
+        .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(35)

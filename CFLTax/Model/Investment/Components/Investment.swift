@@ -64,8 +64,6 @@ public class Investment {
         self.setFee()
     }
     
-    
-    
     public func setEBO() {
         if earlyBuyout.amount.toDecimal() != 0.0 {
             earlyBuyoutExists = true
