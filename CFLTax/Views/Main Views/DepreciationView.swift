@@ -92,7 +92,7 @@ struct DepreciationView: View {
         VStack{
             lifeInYearsItem
             depreciationConvention
-            salvageValue
+            salvageValueItem
         }
     }
    
@@ -190,23 +190,6 @@ extension DepreciationView {
         }
         .font(myFont)
     }
-    var bonusDepreciation: some View {
-        HStack {
-            HStack {
-                Text("Bonus:")
-                Image(systemName:"return")
-            }
-            Spacer()
-            Text("\(percentFormatter(percent: myDepreciation.bonusDeprecPercent.toString(), locale: myLocale, places: 2))")
-        }
-        .font(myFont)
-        .contentShape(Rectangle())
-        .disabled(macrsMode ? false : true)
-        .onTapGesture {
-            self.path.append(16)
-        }
-        .padding(.bottom, 5)
-    }
 }
 
 //Straight-Line Items
@@ -237,25 +220,6 @@ extension DepreciationView {
         .font(myFont)
             
     }
-    
-    var salvageValue: some View {
-        HStack {
-            HStack {
-                Text("Salvage Value:")
-                Image(systemName: "return")
-            }
-            Spacer()
-            Text("\(amountFormatter(amount: myDepreciation.salvageValue, locale: myLocale))")
-        }
-        .font(myFont)
-        .contentShape(Rectangle())
-        .disabled(macrsMode ? true : false)
-        .onTapGesture {
-            self.path.append(20)
-        }
-        .padding(.top, 10)
-    }
-    
     
 }
 

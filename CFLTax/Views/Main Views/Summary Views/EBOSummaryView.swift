@@ -13,20 +13,18 @@ struct EBOSummaryView: View {
     @Binding var isDark: Bool
     @Binding var currentFile: String
     
-    @State var myEBOInvestment: Investment = Investment()
-    @State var myPeriodicArrearsRents: PeriodicArrearsRents = PeriodicArrearsRents()
-    @State var myPlannedIncome: Decimal = 0.0
-    @State var myDateOfUnplannedIncome: Date = Date()
+    @State var myEBO: EarlyBuyout = EarlyBuyout()
     @State var viewAsPctOfCost: Bool = false
     //Yields
+    @State var myTaxRate: Decimal = 0.21
     @State var myATYield: Decimal = 0.075
     @State var myBTYield: Decimal = 0.075
-    @State var myIRRPTCF: Decimal = 0.075
+    @State var myIRRofPTCF: Decimal = 0.075
     
     //EBO Details
     @State var myEBOAmount: Decimal = 0.0
     @State var myArrearsRent: Decimal = 0.0
-    @State var myTotalEBODue: Decimal = 0.0
+    @State var myTotalEBOAmountDue: Decimal = 0.0
     //Cashflow
     @State var myPreTaxCashflow: Decimal = 0.0
     @State var myAfterTaxCashflow: Decimal = 0.0
@@ -43,7 +41,7 @@ struct EBOSummaryView: View {
                preTaxIRRItem
            }
            
-           Section(header: Text("EBO Details"), footer: Text("Exercise Date: \(dateFormatter(dateIn: myDateOfUnplannedIncome, locale: myLocale))")) {
+           Section(header: Text("EBO Details"), footer: Text("Exercise Date: \(dateFormatter(dateIn: myEBO.exerciseDate, locale: myLocale))")) {
                eboAmountItem
                arrearsRentItem
                eboTotalDueItem
@@ -51,7 +49,6 @@ struct EBOSummaryView: View {
            
            Section(header: Text("EBO Cashflow")) {
                preTaxEBOCashItem
-               taxesPaidItem
                afterTaxEBOCashItem
            }
            
@@ -75,20 +72,14 @@ struct EBOSummaryView: View {
        .navigationBarBackButtonHidden(true)
         
        .onAppear {
-           self.myDateOfUnplannedIncome = myInvestment.earlyBuyout.exerciseDate
-           self.myPlannedIncome = myInvestment.plannedIncome(aInvestment: myInvestment, dateAsk: myDateOfUnplannedIncome)
-           self.myPeriodicArrearsRents.createTable(aInvestment: myInvestment)
-           self.myArrearsRent = myPeriodicArrearsRents.vLookup(dateAsk: myDateOfUnplannedIncome)
-           self.myEBOInvestment.createEBOInvestment(from: myInvestment, unplannedDate: myDateOfUnplannedIncome)
-           self.myEBOInvestment.calculate(plannedIncome: myPlannedIncome.toString(decPlaces: 5), unplannedDate: myDateOfUnplannedIncome)
-           self.myATYield = myEBOInvestment.getMISF_AT_Yield()
-           self.myBTYield = myEBOInvestment.getMISF_BT_Yield()
-           self.myIRRPTCF = myEBOInvestment.getIRR_PTCF()
-           self.myEBOAmount = myEBOInvestment.asset.residualValue.toDecimal()
-           
-           self.myPreTaxCashflow = myEBOInvestment.getBeforeTaxCash().toDecimal()
-           self.myAfterTaxCashflow = myEBOInvestment.getAfterTaxCash().toDecimal()
-           self.myTaxesPaid = self.myPreTaxCashflow - self.myAfterTaxCashflow
+           self.myTaxRate = myInvestment.taxAssumptions.federalTaxRate.toDecimal()
+           self.myEBO = myInvestment.earlyBuyout
+           self.myATYield = myInvestment.solveForEBOYield(aEBO: myEBO)
+           self.myBTYield = myATYield / (1.0 - myTaxRate)
+           self.myIRRofPTCF = myInvestment.solveEBOIRR_Of_PTCF(aEBO: myEBO)
+           self.myEBOAmount = myEBO.amount.toDecimal()
+           self.myArrearsRent = myInvestment.getArrearsRent(dateAsk: myEBO.exerciseDate)
+           self.myTotalEBOAmountDue = myEBO.amount.toDecimal() + myArrearsRent
        }
     }
 }
@@ -124,7 +115,7 @@ extension EBOSummaryView {
         HStack{
             Text("IRR PTCF:")
             Spacer()
-            Text("\(percentFormatter(percent:myIRRPTCF.toString(decPlaces: 5), locale: myLocale, places: 3))")
+            Text("\(percentFormatter(percent:myIRRofPTCF.toString(decPlaces: 5), locale: myLocale, places: 3))")
         }
         .font(myFont)
         .frame(height: frameHeight)
@@ -147,6 +138,7 @@ extension EBOSummaryView {
             Text("Arrears Rent:")
             Spacer()
             Text("\(getFormattedValue(amount:myArrearsRent.toString(decPlaces: 2), viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
+                .underline()
         }
         .font(myFont)
     }
@@ -155,7 +147,7 @@ extension EBOSummaryView {
         HStack {
             Text("Total Amount Due:")
             Spacer()
-            Text("\(getFormattedValue(amount:myTotalEBODue.toString(decPlaces: 2), viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
+            Text("\(getFormattedValue(amount:myTotalEBOAmountDue.toString(decPlaces: 2), viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
         }
         .font(myFont)
     }
@@ -164,29 +156,28 @@ extension EBOSummaryView {
 extension EBOSummaryView {
     var preTaxEBOCashItem: some View {
         HStack {
-            Text("Pre-Tax Cash:")
+            Text("Before-Tax Cashflows")
             Spacer()
-            Text("\(getFormattedValue(amount:myPreTaxCashflow.toString(decPlaces: 2), viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
+            Image(systemName: "chevron.right")
         }
         .font(myFont)
-    }
-    
-    var taxesPaidItem: some View {
-        HStack {
-            Text("Tax Paid:")
-            Spacer()
-            Text("\(getFormattedValue(amount:myTaxesPaid.toString(decPlaces: 2), viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
+        .contentShape(Rectangle())
+        .onTapGesture {
+            path.append(17)
         }
-        .font(myFont)
     }
     
     var afterTaxEBOCashItem: some View {
         HStack {
-            Text("After-Tax Cash:")
+            Text("After-Tax Cashflows")
             Spacer()
-            Text("\(getFormattedValue(amount:myAfterTaxCashflow.toString(decPlaces: 2), viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
+            Image(systemName: "chevron.right")
         }
         .font(myFont)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            path.append(18)
+        }
     }
     
 }

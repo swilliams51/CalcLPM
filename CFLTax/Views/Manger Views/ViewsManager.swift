@@ -57,9 +57,9 @@ struct ViewsManager: View {
         case 16:
             EBOSummaryView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 17:
-            Text("No Yield Target")
+            EBOBeforeTaxCashflowsView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 18:
-           Text("No Discount Rate")
+          EBOAfterTaxCashflowsView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 19:
             Text("No Fee")
         case 20:

@@ -16,6 +16,7 @@ public class NetAfterTaxCashflows: CollCashflows {
     public func createTable(aInvestment: Investment, plannedIncome: String = "0.00", unplannedDate: Date = Date()) {
         myPeriodicLeaseCashflows.removeAll()
         myPeriodicTaxesPaid.removeAll()
+        
         myPeriodicLeaseCashflows.addAll(aCFs: PeriodicLeaseCashflows().createPeriodicLeaseCashflows(aInvestment: aInvestment, lesseePerspective: false))
         self.addCashflows(myPeriodicLeaseCashflows)
         
@@ -29,7 +30,7 @@ public class NetAfterTaxCashflows: CollCashflows {
     }
     
     public func createNetAfterTaxCashflows(aInvestment: Investment, plannedIncome: String = "0.00", unplannedDate: Date = Date()) -> Cashflows {
-        self.createTable(aInvestment: aInvestment)
+        self.createTable(aInvestment: aInvestment, plannedIncome: plannedIncome, unplannedDate: unplannedDate)
         self.netCashflows()
         
         let myATLeaseCashflows: Cashflows = Cashflows()
@@ -37,7 +38,7 @@ public class NetAfterTaxCashflows: CollCashflows {
             let myCashflow: Cashflow = self.items[0].items[x]
             myATLeaseCashflows.add(item: myCashflow)
         }
-        self.removeAll()
+        self.items.removeAll()
         
         return myATLeaseCashflows
     }

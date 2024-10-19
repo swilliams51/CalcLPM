@@ -30,9 +30,10 @@ public struct EarlyBuyout {
     }
     
     public func getEBOTermInMonths(aInvestment: Investment) -> Int {
-        let noOfPaymentPeriods: Int = aInvestment.payPeriodsToChopDate(aInvestment: aInvestment, dateAsk: self.exerciseDate)
+        let tempInvestment = aInvestment.clone()
+        let noOfPaymentPeriods: Int = aInvestment.payPeriodsInEBOTerm(aInvestment: tempInvestment, dateAsk: self.exerciseDate)
         
-        return noOfPaymentPeriods * 12 / aInvestment.leaseTerm.paymentFrequency.rawValue
+        return noOfPaymentPeriods * 12 / tempInvestment.leaseTerm.paymentFrequency.rawValue
     }
     
     func isEqual(to other: EarlyBuyout) -> Bool {
@@ -45,11 +46,10 @@ public struct EarlyBuyout {
         
         return isEqual
     }
-    
 }
 
 extension Investment {
-    public func resetEBOToDefault() {
+    public func setEBOToDefault() {
         let leaseExpiry: Date = self.getLeaseMaturityDate()
         let frequency: Frequency = self.leaseTerm.paymentFrequency
         let noOfPeriods: Int = self.leaseTerm.paymentFrequency.rawValue
@@ -62,24 +62,6 @@ extension Investment {
         self.earlyBuyout.amount = myCFTValues.vLookup(dateAsk: endDate).toString(decPlaces: 2)
     }
     
-    public func setToEarlyBuyout() {
-        let dateOfUnplanned: Date = self.earlyBuyout.exerciseDate
-        let myPlannedIncome: Decimal = plannedIncome(aInvestment: self, dateAsk: dateOfUnplanned)
-        self.rent = eboRent(aInvestment: self, chopDate: dateOfUnplanned)
-        self.economics.yieldMethod = .MISF_BT
-        self.economics.solveFor = .yield
-        self.calculate(plannedIncome: myPlannedIncome.toString(decPlaces: 5), unplannedDate: dateOfUnplanned)
-    }
-    
-    
-    public func createEBOInvestment(from: Investment, unplannedDate: Date) {
-        let tempInvestment: Investment = from.clone()
-        self.rent = tempInvestment.eboRent(aInvestment: from, chopDate: unplannedDate)
-        self.asset.residualValue = tempInvestment.earlyBuyout.amount
-        self.economics.yieldMethod = .MISF_BT
-        self.economics.solveFor = .yield
-    }
-    
     public func getParValue(askDate: Date) -> Decimal {
         let myTVs: TerminationValues = TerminationValues()
         myTVs.createTable(aInvestment: self)
@@ -90,25 +72,21 @@ extension Investment {
     }
     
     public func getExerciseDate(eboTermInMonths: Int) -> Date {
-        let noOfPaymentPeriods: Int = eboTermInMonths * self.leaseTerm.paymentFrequency.rawValue / 12
-        let myLeaseTemplate: LeaseTemplateCashflows = LeaseTemplateCashflows()
-        myLeaseTemplate.createTemplate(aInvestment: self)
-        
-        let exerciseDate: Date = myLeaseTemplate.items[noOfPaymentPeriods - 1].dueDate
+        let noOfPaymentPeriods: Int = eboTermInMonths * 12 / self.leaseTerm.paymentFrequency.rawValue
+        let startDate: Date = self.leaseTerm.baseCommenceDate
+        let exerciseDate = addPeriodsToDate(dateStart: startDate, payPerYear: self.leaseTerm.paymentFrequency, noOfPeriods: noOfPaymentPeriods, referDate: startDate, bolEOMRule: self.leaseTerm.endOfMonthRule)
         
         return exerciseDate
     }
     
     public func getEBOPremium_bps(aEBO: EarlyBuyout, aBaseYield: Decimal) -> Double {
+        print("Base Yield: \(aBaseYield.toString(decPlaces: 8))")
         let eboYield: Decimal = solveForEBOYield(aEBO: aEBO)
         let eboPremium: Decimal = eboYield - aBaseYield
         let eboPremiumBps: Double = (eboPremium * 10000.00).toDouble()
         
         return eboPremiumBps
     }
-    
-    
-   //public func getEBOAmount
     
     public func solveForEBOAmount(aEBO: EarlyBuyout, aBaseYield: Decimal, bpsSpread: Double) -> Decimal {
         let adder: Decimal = Decimal(bpsSpread) / 10000.00
@@ -119,10 +97,10 @@ extension Investment {
     
     public func solveForEBOAmount(aEBO: EarlyBuyout, aTargetYield: Decimal) -> Decimal {
         let myEBOInvestment: Investment = self.clone()
-        let dateOfUnplanned: Date = myEBOInvestment.earlyBuyout.exerciseDate
+        let dateOfUnplanned: Date = aEBO.exerciseDate
         let myPlannedIncome: Decimal = plannedIncome(aInvestment: myEBOInvestment, dateAsk: dateOfUnplanned)
         myEBOInvestment.rent = eboRent(aInvestment: myEBOInvestment, chopDate: dateOfUnplanned)
-        myEBOInvestment.economics.yieldMethod = .MISF_BT
+        myEBOInvestment.economics.yieldMethod = .MISF_AT
         myEBOInvestment.economics.yieldTarget = aTargetYield.toString(decPlaces: 6)
         myEBOInvestment.economics.solveFor = .residualValue
         myEBOInvestment.calculate(plannedIncome: myPlannedIncome.toString(decPlaces: 5), unplannedDate: dateOfUnplanned)
@@ -134,69 +112,121 @@ extension Investment {
         let myEBOInvestment: Investment = self.clone()
         let dateOfUnplanned: Date = myEBOInvestment.earlyBuyout.exerciseDate
         let myPlannedIncome: Decimal = plannedIncome(aInvestment: myEBOInvestment, dateAsk: dateOfUnplanned)
+        
         myEBOInvestment.rent = eboRent(aInvestment: myEBOInvestment, chopDate: dateOfUnplanned)
         myEBOInvestment.asset.residualValue = aEBO.amount
-        myEBOInvestment.economics.yieldMethod = .MISF_BT
         myEBOInvestment.economics.solveFor = .yield
+        myEBOInvestment.economics.yieldMethod = .MISF_AT
         myEBOInvestment.calculate(plannedIncome: myPlannedIncome.toString(decPlaces: 5), unplannedDate: dateOfUnplanned)
         
-        return myEBOInvestment.getMISF_BT_Yield()
+//        for x in 0..<myEBOInvestment.afterTaxCashflows.count() {
+//            print("Due Date: \(myEBOInvestment.afterTaxCashflows.items[x].dueDate) Amount: \(myEBOInvestment.afterTaxCashflows.items[x].amount)")
+//        }
+        
+        let yieldToReturn: Decimal = myEBOInvestment.getMISF_AT_Yield()
+        print("EBO Yield: \(yieldToReturn.toString(decPlaces: 8))")
+
+        return yieldToReturn
+    }
+    
+    
+    public func solveEBOIRR_Of_PTCF(aEBO: EarlyBuyout) -> Decimal {
+        let myEBOInvestment: Investment = self.clone()
+        myEBOInvestment.rent = eboRent(aInvestment: myEBOInvestment, chopDate: aEBO.exerciseDate)
+        myEBOInvestment.asset.residualValue = aEBO.amount
+        myEBOInvestment.economics.solveFor = .yield
+        myEBOInvestment.economics.yieldMethod = .IRR_PTCF
+        myEBOInvestment.calculate()
+        
+        return myEBOInvestment.getIRR_PTCF()
     }
     
     public func eboResidual(aInvestment: Investment) -> Decimal {
+        let tempInvestment: Investment = aInvestment.clone()
         let myTVs: TerminationValues = TerminationValues()
-        myTVs.createTable(aInvestment: aInvestment)
+        myTVs.createTable(aInvestment: tempInvestment)
         let myTValues: Cashflows = myTVs.createTerminationValues()
-        let tvOnChopDate: Decimal = myTValues.vLookup(dateAsk: aInvestment.earlyBuyout.exerciseDate)
+        let tvOnChopDate: Decimal = myTValues.vLookup(dateAsk: tempInvestment.earlyBuyout.exerciseDate)
         return tvOnChopDate
     }
     
     public func eboRent(aInvestment: Investment, chopDate: Date) -> Rent {
-        var noOfPeriodsInBaseTerm: Int = payPeriodsToChopDate(aInvestment: aInvestment, dateAsk: chopDate)
+        let tempInvestment: Investment = aInvestment.clone()
+        let noOfPeriodsInBaseTerm: Int = payPeriodsInEBOTerm(aInvestment: tempInvestment, dateAsk: chopDate)
         var myRent: Rent = Rent()
         var start: Int = 0
-        if aInvestment.rent.groups[0].isInterim {
-            myRent.groups.append(aInvestment.rent.groups[0])
+        if tempInvestment.rent.groups[0].isInterim {
+            myRent.groups.append(tempInvestment.rent.groups[0])
             start = 1
         }
-    
-        for x in start..<aInvestment.rent.groups.count {
-            var group: Group = aInvestment.rent.groups[x] //
-            let x = group.noOfPayments //24
-            if x >= noOfPeriodsInBaseTerm { //24>12
-                group.noOfPayments = noOfPeriodsInBaseTerm
-                myRent.groups.append(group)
-            } else {
-                myRent.groups.append(group)
-                noOfPeriodsInBaseTerm = noOfPeriodsInBaseTerm - group.noOfPayments //60-24=36, 36-24=12
-            }
+        
+        var totalNoOfPaymentsAdded: Int = 0
+        while totalNoOfPaymentsAdded < noOfPeriodsInBaseTerm { // 0 < 48
+            var group: Group = aInvestment.rent.groups[start]
+            let groupNoOfPayments: Int = group.noOfPayments // 30
+            let noToAdd: Int = min(groupNoOfPayments, noOfPeriodsInBaseTerm - totalNoOfPaymentsAdded)
+            group.noOfPayments = noToAdd
+            myRent.groups.append(group)
+            totalNoOfPaymentsAdded += noToAdd
+            start += 1
         }
         
         return myRent
     }
     
-    public func payPeriodsToChopDate(aInvestment: Investment, dateAsk: Date) -> Int {
-        var dateStart = aInvestment.rent.groups[0].startDate
-        if aInvestment.rent.groups[0].isInterim {
-            dateStart = aInvestment.rent.groups[0].endDate
+    public func payPeriodsInEBOTerm(aInvestment: Investment, dateAsk: Date) -> Int {
+        let tempInvestment: Investment = aInvestment.clone()
+        var dateStart = tempInvestment.rent.groups[0].startDate
+        if tempInvestment.rent.groups[0].isInterim {
+            dateStart = tempInvestment.rent.groups[0].endDate
         }
         
-        var counter = 0
-        while dateStart < dateAsk {
-            dateStart = addOnePeriodToDate(dateStart: dateStart, payPerYear: aInvestment.leaseTerm.paymentFrequency, dateRefer: dateStart, bolEOMRule: aInvestment.leaseTerm.endOfMonthRule)
-            counter += 1
-        }
+        let noOfMonthsInEBOTerm = monthsDifference(start: dateStart, end: dateAsk, inclusive: false)
+        let noOfPaymentsInEBOTerm = noOfMonthsInEBOTerm / (12 / tempInvestment.leaseTerm.paymentFrequency.rawValue)
         
-        return counter
+        return noOfPaymentsInEBOTerm
     }
     
    public func plannedIncome(aInvestment: Investment, dateAsk: Date) -> Decimal {
-       let fiscalYearEnd: Date = getFiscalYearEnd(askDate: dateAsk, fiscalMonthEnd: aInvestment.taxAssumptions.fiscalMonthEnd.rawValue)
+       let tempInvestment: Investment = aInvestment.clone()
+       let fiscalYearEnd: Date = getFiscalYearEnd(askDate: dateAsk, fiscalMonthEnd: tempInvestment.taxAssumptions.fiscalMonthEnd.rawValue)
        let myAnnualTaxableIncomes: AnnualTaxableIncomes = AnnualTaxableIncomes()
-       let myNetTaxableIncomes: Cashflows = myAnnualTaxableIncomes.createNetTaxableIncomes(aInvestment: aInvestment)
+       let myNetTaxableIncomes: Cashflows = myAnnualTaxableIncomes.createNetTaxableIncomes(aInvestment: tempInvestment)
        let decPlannedIncome: Decimal = myNetTaxableIncomes.vLookup(dateAsk: fiscalYearEnd)
        
        return decPlannedIncome
+    }
+    
+    public func getArrearsRent(dateAsk: Date) -> Decimal {
+        let tempInvestment: Investment = self.clone()
+        let myArrearsRents: PeriodicArrearsRents = PeriodicArrearsRents()
+        myArrearsRents.createTable(aInvestment: tempInvestment)
+        let decArrearsRent: Decimal = myArrearsRents.vLookup(dateAsk: dateAsk)
+        
+        return decArrearsRent
+    }
+    
+    public func getEBO_ATCashflows(aEBO: EarlyBuyout) -> Cashflows {
+        let myEBOInvestment: Investment = self.clone()
+        let dateOfUnplanned: Date = myEBOInvestment.earlyBuyout.exerciseDate
+        let myPlannedIncome: Decimal = plannedIncome(aInvestment: myEBOInvestment, dateAsk: dateOfUnplanned)
+        
+        myEBOInvestment.rent = eboRent(aInvestment: myEBOInvestment, chopDate: dateOfUnplanned)
+        myEBOInvestment.asset.residualValue = aEBO.amount
+        myEBOInvestment.setAfterTaxCashflows(plannedIncome: myPlannedIncome.toString(decPlaces: 5), unplannedDate: dateOfUnplanned)
+        let myEBO_ATCF: Cashflows = myEBOInvestment.afterTaxCashflows
+        
+        return myEBO_ATCF
+    }
+    
+    public func getEBO_BTCashflows(aEBO: EarlyBuyout) -> Cashflows {
+        let myEBOInvestment: Investment = self.clone()
+        myEBOInvestment.rent = eboRent(aInvestment: myEBOInvestment, chopDate: aEBO.exerciseDate)
+        myEBOInvestment.asset.residualValue = aEBO.amount
+        myEBOInvestment.setBeforeTaxCashflows()
+        let myEBO_BTCF: Cashflows = myEBOInvestment.beforeTaxCashflows
+        
+        return myEBO_BTCF
     }
     
 }

@@ -27,7 +27,7 @@ struct FeeView: View {
     
     var body: some View {
         Form{
-            Section(header: Text("Details").font(myFont2), footer: (Text("File Name: \(currentFile)").font(myFont2))) {
+            Section(header: Text("Details").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
                 feeAmountItem
                 datePaidItem
                 feeTypeItem
@@ -129,6 +129,9 @@ extension FeeView {
                 if editing == true {
                     self.editAmountStarted = true
             }})
+            .onSubmit {
+                updateForSubmit()
+            }
                 .keyboardType(.decimalPad).foregroundColor(.clear)
                 .focused($amountIsFocused)
                 .textFieldStyle(PlainTextFieldStyle())

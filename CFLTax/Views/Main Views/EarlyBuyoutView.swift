@@ -14,14 +14,14 @@ struct EarlyBuyoutView: View {
     @Binding var currentFile: String
     @Binding var minimumEBOAmount: Decimal
     @Binding var maximumEBOAmount: Decimal
-   
+    
     @State private var alertTitle: String = ""
     @State private var amountColor: Int = 1
     @State private var parValuePremium: Decimal = 0.0
     @State private var basisPoints: Double = 0.00
     @State private var baseYield: Decimal = 0.05
     @State private var calculatedButtonPressed: Bool = true
-    @State private var eboTerm: Int = 42
+    @State private var eboTerm: Int = 0
     @State private var editAmountStarted: Bool = false
     @State private var myEBO: EarlyBuyout = EarlyBuyout()
     @State private var myEBOHelp = eboHelp
@@ -45,7 +45,7 @@ struct EarlyBuyoutView: View {
     
     var body: some View {
         Form {
-            Section (header: Text("Exercise Date").font(.footnote), footer: Text("Full Term MISF B/T Yield: \(percentFormatter(percent: baseYield.toString(decPlaces: 5), locale: myLocale, places: 2))")) {
+            Section (header: Text("Exercise Date").font(.footnote), footer: Text("Full Term MISF A/T Yield: \(percentFormatter(percent: baseYield.toString(decPlaces: 5), locale: myLocale, places: 2))")) {
                 eboTermInMonsRow
                 exerciseDateRow
             }
@@ -70,12 +70,14 @@ struct EarlyBuyoutView: View {
         .navigationBarTitle("Early Buyout")
         .navigationBarBackButtonHidden(true)
         .onAppear {
+
             self.myInvestment.economics.solveFor = .yield
             self.myInvestment.calculate()
-            self.baseYield = myInvestment.getMISF_BT_Yield()
+            self.baseYield = myInvestment.getMISF_AT_Yield()
             self.myEBO = self.myInvestment.earlyBuyout
             self.eboTerm = myEBO.getEBOTermInMonths(aInvestment: myInvestment)
             self.parValue = myInvestment.getParValue(askDate: myEBO.exerciseDate).toString(decPlaces: 4)
+            self.myEBO.amount = max(parValue.toDecimal(), myEBO.amount.toDecimal()).toString(decPlaces: 4)
             self.basisPoints = myInvestment.getEBOPremium_bps(aEBO: myEBO, aBaseYield: self.baseYield)
         }
     }
@@ -104,8 +106,10 @@ extension EarlyBuyoutView {
             Stepper(value: $eboTerm, in: rangeBaseTermMonths, step: getStep()) {
     
             }.onChange(of: eboTerm) { oldTerm, newTerm in
-                let noOfPeriods: Int = newTerm / (12 / self.myInvestment.leaseTerm.paymentFrequency.rawValue)
+                let noOfPeriods: Int = newTerm  * 12 / self.myInvestment.leaseTerm.paymentFrequency.rawValue
                 self.myEBO.exerciseDate = self.myInvestment.getExerciseDate(eboTermInMonths: noOfPeriods)
+                self.parValue = self.myInvestment.getParValue(askDate: self.myEBO.exerciseDate).toString()
+                self.myEBO.amount = self.parValue
                 self.basisPoints = 0.0
             }
         }
@@ -148,7 +152,7 @@ extension EarlyBuyoutView {
     var interestRateAdderRow: some View {
         VStack {
             HStack {
-                Text("MISF B/T Yield Adder:")
+                Text("MISF A/T Yield Adder:")
                     .font(myFont)
                     .foregroundColor(premiumIsSpecified ? defaultInactive : defaultCalculated)
                 Spacer()

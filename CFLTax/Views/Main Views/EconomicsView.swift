@@ -21,7 +21,7 @@ struct EconomicsView: View {
     @FocusState private var yieldTargetIsFocused: Bool
     //Discount Rate TextField
     @State private var editDiscountRateStarted: Bool = false
-    @State private var maximumDiscountRate: Decimal = 0.2
+    @State private var maximumDiscountRate: Decimal = maximumYield.toDecimal()
     @State private var discountRateOnEntry: String = ""
     @FocusState private var discountRateIsFocused: Bool
     
@@ -132,6 +132,9 @@ extension EconomicsView {
                 if editing == true {
                     self.editYieldTargetStarted = true
             }})
+            .onSubmit {
+                updateForSubmit()
+            }
                 .keyboardType(.decimalPad).foregroundColor(.clear)
                 .focused($yieldTargetIsFocused)
                 .textFieldStyle(PlainTextFieldStyle())
@@ -188,6 +191,9 @@ extension EconomicsView {
                 if editing == true {
                     self.editDiscountRateStarted = true
             }})
+            .onSubmit {
+                updateForSubmit()
+            }
                 .keyboardType(.decimalPad).foregroundColor(.clear)
                 .focused($discountRateIsFocused)
                 .textFieldStyle(PlainTextFieldStyle())
@@ -213,7 +219,7 @@ extension EconomicsView {
         path.removeLast()
     }
     func myDone() {
-        if self.myInvestment.economics.isEqual(to: myEconomics) == false{
+        if self.myInvestment.economics.isEqual(to: myEconomics) == false {
             self.myInvestment.hasChanged = true
             self.myInvestment.economics = myEconomics
         }
@@ -264,12 +270,19 @@ extension EconomicsView {
     }
    
     func updateForSubmit() {
-        if self.editYieldTargetStarted == true {
-            updateForNewYield()
+        if yieldTargetIsFocused {
+            if self.editYieldTargetStarted == true {
+               updateForNewYield()
+                self.editYieldTargetStarted = false
+                self.yieldTargetIsFocused = false
+           }
         } else {
-            updateForNewDiscountRate()
+            if self.editDiscountRateStarted == true {
+                updateForNewDiscountRate()
+                editDiscountRateStarted = false
+                discountRateIsFocused = false
+            }
         }
-        path.removeLast()
     }
     
     func updateForNewYield() {

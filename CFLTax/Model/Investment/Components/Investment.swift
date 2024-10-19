@@ -140,7 +140,7 @@ public class Investment {
             break
         }
         
-        setAfterTaxCashflows()
+        setAfterTaxCashflows(plannedIncome: plannedIncome, unplannedDate: unplannedDate)
         setBeforeTaxCashflows()
     }
     
@@ -148,7 +148,7 @@ public class Investment {
         //if setAfterTaxCashflows is not called to the calculate function then items in afterTaxCashflows must e removed
         let myATCollCashflows: NetAfterTaxCashflows = NetAfterTaxCashflows()
         
-        let myTempCashflows = myATCollCashflows.createNetAfterTaxCashflows(aInvestment: self, plannedIncome: plannedIncome, unplannedDate: unplannedDate)
+        let myTempCashflows: Cashflows = myATCollCashflows.createNetAfterTaxCashflows(aInvestment: self, plannedIncome: plannedIncome, unplannedDate: unplannedDate)
         if afterTaxCashflows.count() > 0 {
             afterTaxCashflows.removeAll()
         }

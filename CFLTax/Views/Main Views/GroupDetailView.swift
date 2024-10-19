@@ -96,7 +96,7 @@ extension GroupDetailView {
         if self.selectedGroup.isCalculatedPaymentType() {
             self.resetForPaymentTypeChange()
         }
-        self.maximumPaymentAmount = myInvestment.getAssetCost(asCashflow: true)
+        self.maximumPaymentAmount = myInvestment.getAssetCost(asCashflow: true) * -1.0
         self.noOfPayments = self.selectedGroup.noOfPayments.toDouble()
         self.startingNoOfPayments = self.noOfPayments
         self.startingTotalPayments = Double(self.myInvestment.rent.getTotalNumberOfPayments())
@@ -203,6 +203,9 @@ extension GroupDetailView {
                 if editing == true {
                     self.editPaymentAmountStarted = true
             }})
+            .onSubmit {
+                updateForSubmit()
+            }
                 .disabled(paymentTextFieldIsLocked())
                 .keyboardType(.decimalPad).foregroundColor(.clear)
                 .focused($paymentAmountIsFocused)
@@ -269,8 +272,6 @@ extension GroupDetailView {
     func updateForSubmit() {
         if self.editPaymentAmountStarted == true {
             updateForPaymentAmount()
-            self.myInvestment.rent.groups[index].amount = self.selectedGroup.amount
-            path.removeLast()
         }
         self.paymentAmountIsFocused = false
     }
@@ -293,7 +294,6 @@ extension GroupDetailView {
             }
         }
         self.editPaymentAmountStarted = false
-        self.paymentAmountIsFocused = false
     }
     
 }

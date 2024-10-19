@@ -35,7 +35,7 @@ public struct Economics {
     }
     
     func isEqual(to other: Economics) -> Bool {
-        var isEqual: Bool = true
+        var isEqual: Bool = false
            if yieldMethod == other.yieldMethod
                 && yieldTarget == other.yieldTarget
                 && solveFor == other.solveFor

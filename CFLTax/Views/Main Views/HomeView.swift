@@ -77,6 +77,7 @@ struct HomeView: View {
                 self.myInvestment.earlyBuyout.amount = "0.00"
                 self.myInvestment.earlyBuyoutExists = false
             }
+            
         }
     }
     
@@ -280,7 +281,7 @@ extension HomeView {
     
     var addEBOItem: some View {
         Button(action: {
-            self.myInvestment.resetEBOToDefault()
+            self.myInvestment.setEBOToDefault()
             self.myInvestment.earlyBuyoutExists = true
         }) {
             Label("Add EBO", systemImage: "arrowshape.turn.up.backward")

@@ -88,98 +88,96 @@ extension CashflowView {
     var assetCostItem: some View {
         HStack {
             Text("Asset Cost:")
-                .font(myFont)
             Spacer()
             Text("\(getFormattedValue(amount: assetCost, viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))" )
-                .font(myFont)
-        }.frame(height: frameHeight)
+        }
+        .font(myFont)
+        .frame(height: frameHeight)
    }
    
    var feeAmountItem: some View {
        HStack{
            Text("Fee:")
-               .font(myFont)
            Spacer()
            Text("\(getFormattedValue(amount: feeAmount, viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
-               .font(myFont)
                .underline()
-       }.frame(height: frameHeight)
+       }
+       .font(myFont)
+       .frame(height: frameHeight)
    }
    
    var totalCashOutItem: some View {
        HStack{
            Text("Total Investment:")
-               .font(myFont)
-               .padding(.leading, 0)
            Spacer()
-           Text("\(getFormattedValue(amount: totalCashOut, viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")   
-               .font(myFont)
-       }.frame(height: frameHeight)
+           Text("\(getFormattedValue(amount: totalCashOut, viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
+       }
+       .font(myFont)
+       .frame(height: frameHeight)
    }
    
    var rentAmountItem: some View {
        HStack{
            Text("Rent:")
-               .font(myFont)
            Spacer()
            Text("\(getFormattedValue(amount: rentAmount, viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
-               .font(myFont)
-       }.frame(height: frameHeight)
+       }
+       .font(myFont)
+       .frame(height: frameHeight)
    }
    
    var residualAmountItem: some View {
        HStack{
            Text("Residual:")
-               .font(myFont)
            Spacer()
            Text(getFormattedValue(amount: residualAmount, viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))
-               .font(myFont)
                .underline()
-       }.frame(height: frameHeight)
+       }
+       .font(myFont)
+       .frame(height: frameHeight)
    }
    
    var btProfitItem: some View {
        HStack {
            Text("Before-Tax Profit:")
-               .font(myFont)
                .padding(.leading, 0)
            Spacer()
-           Text("\(getFormattedValue(amount: bTProfit, viewAsPercentOfCost: true, aInvestment: myInvestment))")
-               .font(myFont)
-       }.frame(height: frameHeight)
+           Text("\(getFormattedValue(amount: bTProfit, viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
+       }
+       .font(myFont)
+       .frame(height: frameHeight)
    }
    
    var taxesPaidItem: some View {
        HStack{
            Text("Taxes:")
-               .font(myFont)
            Spacer()
-           Text("\(getFormattedValue(amount: taxesPaid, viewAsPercentOfCost: true, aInvestment: myInvestment))")
-               .font(myFont)
-       }.frame(height: frameHeight)
+           Text("\(getFormattedValue(amount: taxesPaid, viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
+               .underline()
+       }
+       .font(myFont)
+       .frame(height: frameHeight)
    }
    
    var itcItem: some View {
        HStack {
            Text("Investment Tax Credit:")
-               .font(myFont)
-
            Spacer()
-           Text(getFormattedValue(amount: itc, viewAsPercentOfCost: true, aInvestment: myInvestment))
-               .font(myFont)
+           Text(getFormattedValue(amount: itc, viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))
                .underline()
-       }.frame(height: frameHeight)
+       }
+       .font(myFont)
+       .frame(height: frameHeight)
    }
    
    var atProfitItem: some View {
        HStack{
            Text("After-Tax Cash:")
-               .font(myFont)
-               .padding(.leading, 0)
            Spacer()
-           Text("\(getFormattedValue(amount: aTCash, viewAsPercentOfCost: true, aInvestment: myInvestment))")
-               .font(myFont)
-       }.frame(height: frameHeight)
+           Text("\(getFormattedValue(amount: aTCash, viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
+       }
+       .font(myFont)
+       .frame(height: frameHeight)
    }
    
    

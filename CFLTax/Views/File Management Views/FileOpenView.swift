@@ -58,24 +58,23 @@ struct FileOpenView: View {
     var numberOfSavedFilesRow: some View {
         HStack {
             Text("Number Saved:")
-                .font(myFont2)
             Spacer()
             Text("\(self.noOfSavedFiles)")
-                .font(myFont2)
         }
+        .font(myFont)
     }
     
     var pickerOfSavedFiles: some View {
         Picker(selection: $selectedFileIndex, label:
-                Text(textFileLabel)
-                .font(myFont2)
+            Text(textFileLabel)
+                .font(myFont)
             ){
             ForEach(0..<files.count, id: \.self) { i in
                 Text(self.files[i])
-                    .font(myFont2)
+                    .font(myFont)
             }
         }
-        .font(myFont2)
+        .font(myFont)
         .disabled(folderIsEmpty)
         .onChange(of: selectedFileIndex) { oldValue, newValue in
             self.selectedFile = String(self.files[selectedFileIndex])
@@ -85,7 +84,7 @@ struct FileOpenView: View {
     var deleteAndOpenTextButtonsRow: some View {
         HStack {
             Text("Delete")
-            .alert(isPresented: $showDeleteAlert) {
+                .alert(isPresented: $showDeleteAlert) {
                 Alert (
                     title: Text("Are you sure you want to delete this file?"),
                     message: Text("There is no undo"),
@@ -95,7 +94,6 @@ struct FileOpenView: View {
                        secondaryButton: .cancel()
                 )}
             .disabled(folderIsEmpty)
-            .font(myFont2)
             .foregroundColor(folderIsEmpty ? .gray : .accentColor)
             .onTapGesture {
                 if self.folderIsEmpty == false{
@@ -105,7 +103,6 @@ struct FileOpenView: View {
             Spacer()
             Text("Open")
                 .disabled(folderIsEmpty)
-                .font(myFont2)
                 .foregroundColor(folderIsEmpty ? .gray : .accentColor)
                 .onTapGesture {
                     if folderIsEmpty == false {
@@ -113,6 +110,7 @@ struct FileOpenView: View {
                     }
                 }
         }
+        .font(myFont)
     }
     
 }
@@ -133,13 +131,14 @@ extension FileOpenView {
     
     func openFile() {
         self.selectedFile = files[selectedFileIndex]
-        
         let strFileText: String = fm.fileOpen(fileName: selectedFile)
         
         if self.selectedFile.contains("_tmp") {
             //self.myLease.openAsTemplate(strFile: strFileText)
         } else {
             self.myInvestment.resetToFileData(strFile: strFileText)
+            self.myInvestment.setFee()
+            self.myInvestment.setEBO()
         }
         self.currentFile = self.selectedFile
         self.path.removeAll()

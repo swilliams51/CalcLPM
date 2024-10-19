@@ -104,10 +104,12 @@ public class Cashflows {
     public func checkConsolidation() -> Bool {
         var consolidationIsValid: Bool = true
         
-        for x in 0..<items.count - 1 {
-            if items[x].dueDate == items[x + 1].dueDate {
-                consolidationIsValid = false
-                break
+        if items.count > 1 {
+            for x in 0..<items.count - 1 {
+                if items[x].dueDate == items[x + 1].dueDate {
+                    consolidationIsValid = false
+                    break
+                }
             }
         }
         

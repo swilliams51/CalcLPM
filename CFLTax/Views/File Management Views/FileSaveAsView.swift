@@ -50,8 +50,7 @@ struct FileSaveAsView: View {
     
     var saveAsFileRowItem: some View {
         HStack {
-            Text("name:")
-                .font(myFont2)
+            Text("Name:")
             Image(systemName: "questionmark.circle")
                 .foregroundColor(Color.theme.accent)
                 .onTapGesture {
@@ -66,7 +65,6 @@ struct FileSaveAsView: View {
             .onSubmit {
                 updateForSubmit()
             }
-                .font(myFont2)
                 .multilineTextAlignment(.trailing)
                 .textFieldStyle(RoundedBorderTextFieldStyle())
                 .focused($saveNameIsFocused)
@@ -74,6 +72,7 @@ struct FileSaveAsView: View {
                 .keyboardType(.default)
                 .disableAutocorrection(true)
         }
+        .font(myFont)
         .alert(isPresented: $isShowingInvalidNameAlert) {
             Alert(title: Text("File Name Error"), message: Text(invalidFileNameMassage), dismissButton: .default(Text("OK")))
         }
@@ -85,19 +84,18 @@ struct FileSaveAsView: View {
     var textButtonsForSaveAsRow: some View {
         HStack{
             Text("Cancel")
-                .font(myFont2)
                 .foregroundColor(Color.theme.accent)
                 .onTapGesture {
                     cancel()
                 }
             Spacer()
             Text("Done")
-                .font(myFont2)
                 .foregroundColor(Color.theme.accent)
                 .onTapGesture {
                     done()
                 }
         }
+        .font(myFont)
     }
 }
 

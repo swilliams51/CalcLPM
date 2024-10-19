@@ -126,6 +126,9 @@ extension TaxAssumptionsView {
                 if editing == true {
                     self.editTaxRateStarted = true
             }})
+            .onSubmit {
+                updateForSubmit()
+            }
                 .keyboardType(.decimalPad).foregroundColor(.clear)
                 .focused($taxRateIsFocused)
                 .textFieldStyle(PlainTextFieldStyle())
@@ -181,7 +184,6 @@ extension TaxAssumptionsView {
     func updateForSubmit() {
         if self.editTaxRateStarted == true {
             updateForNewTaxRate()
-            path.removeLast()
         }
         self.taxRateIsFocused = false
     }

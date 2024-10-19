@@ -42,10 +42,10 @@ struct FileMenuView: View {
     var newFileItem: some View {
         HStack {
             Text("New")
-                .font(myFont2)
             Spacer()
             Image(systemName: "return")
         }
+        .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
             self.currentFile = "File is New"
@@ -57,10 +57,10 @@ struct FileMenuView: View {
     var openFileItem: some View {
         HStack {
             Text("Open")
-                .font(myFont2)
             Spacer()
             Image(systemName: "chevron.right")
         }
+        .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(27)
@@ -70,10 +70,10 @@ struct FileMenuView: View {
     var saveFileItem: some View {
         HStack {
             Text("Save")
-                .font(myFont2)
             Spacer()
             Image(systemName: "return")
         }
+        .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
             if currentFile == "File is New" {
@@ -94,10 +94,10 @@ struct FileMenuView: View {
     var saveAsFileItem: some View {
         HStack {
             Text("Save As")
-                .font(myFont2)
             Spacer()
             Image(systemName: "chevron.right")
         }
+        .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(29)
@@ -107,10 +107,10 @@ struct FileMenuView: View {
     var reportsItem: some View {
         HStack {
             Text("Reports")
-                .font(myFont2)
             Spacer()
             Image(systemName: "chevron.right")
         }
+        .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(30)
@@ -120,10 +120,10 @@ struct FileMenuView: View {
     var terminationsItem: some View {
         HStack {
             Text("Termination Reports")
-                .font(myFont2)
             Spacer()
             Image(systemName: "chevron.right")
         }
+        .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(36)
@@ -133,10 +133,10 @@ struct FileMenuView: View {
     var preferencesItem: some View {
         HStack {
             Text("Preferences")
-                .font(myFont2)
             Spacer()
             Image(systemName: "chevron.right")
         }
+        .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(31)
@@ -146,10 +146,10 @@ struct FileMenuView: View {
     var aboutItem: some View {
         HStack {
             Text("About")
-                .font(myFont2)
             Spacer()
             Image(systemName: "chevron.right")
         }
+        .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(32)

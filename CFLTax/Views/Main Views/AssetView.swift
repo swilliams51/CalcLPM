@@ -21,17 +21,14 @@ struct AssetView: View {
     @FocusState private var nameIsFocused: Bool
     //Lessor Cost TextField
     @State private var editLessorStarted: Bool = false
-    @State private var maxLessorCost: Decimal = 1.0
     @State private var lessorCostOnEntry: String = ""
     @FocusState private var lessorCostIsFocused: Bool
     //Residual value TextField
     @State private var editResidualValueStarted: Bool = false
-    @State private var maximumResidualValue: Decimal = 1.0
     @State private var residualValueOnEntry: String = ""
     @FocusState private var residualValueIsFocused: Bool
     //Lessee Guaranty TextField
     @State private var editLesseeGuarantyStarted: Bool = false
-    @State private var maximumGuaranty: Decimal = 1.0
     @FocusState private var lesseeGuarantyIsFocused: Bool
     @State private var lesseeGuarantyOnEntry: String = ""
     
@@ -67,7 +64,9 @@ struct AssetView: View {
         .navigationBarTitle("Asset")
         .navigationBarBackButtonHidden(true)
         .onAppear {
+        
             self.myAsset = myInvestment.asset
+            
         }
     }
     
@@ -191,6 +190,9 @@ extension AssetView {
                 if editing == true {
                     self.editLessorStarted = true
             }})
+            .onSubmit {
+                updateForSubmit()
+            }
                 .keyboardType(.decimalPad).foregroundColor(.clear)
                 .focused($lessorCostIsFocused)
                 .textFieldStyle(PlainTextFieldStyle())
@@ -240,6 +242,9 @@ extension AssetView {
                 if editing == true {
                     self.editResidualValueStarted = true
             }})
+                .onSubmit {
+                    updateForSubmit()
+                }
                 .keyboardType(.decimalPad).foregroundColor(.clear)
                 .focused($residualValueIsFocused)
                 .textFieldStyle(PlainTextFieldStyle())
@@ -289,6 +294,9 @@ extension AssetView {
                 if editing == true {
                     self.editLesseeGuarantyStarted = true
             }})
+                .onSubmit {
+                    updateForSubmit()
+                }
                 .keyboardType(.decimalPad).foregroundColor(.clear)
                 .focused($lesseeGuarantyIsFocused)
                 .textFieldStyle(PlainTextFieldStyle())
@@ -421,7 +429,7 @@ extension AssetView {
     }
     
     func updateForLessorCost() {
-        if isAmountValid(strAmount: myAsset.lessorCost, decLow: minimumLessorCost.toDecimal(), decHigh: maxLessorCost, inclusiveLow: true, inclusiveHigh: true) == false {
+        if isAmountValid(strAmount: myAsset.lessorCost, decLow: minimumLessorCost.toDecimal(), decHigh: maximumLessorCost.toDecimal(), inclusiveLow: true, inclusiveHigh: true) == false {
             self.myAsset.lessorCost = self.lessorCostOnEntry
             alertTitle = alertMaxAmount
             showAlert.toggle()
@@ -453,7 +461,7 @@ extension AssetView {
         if self.myAsset.lesseeGuarantyAmount.isEmpty {
             self.myAsset.lesseeGuarantyAmount = "0.00"
         }
-        if isAmountValid(strAmount: myAsset.lesseeGuarantyAmount, decLow: 0.0, decHigh: maximumGuaranty, inclusiveLow: true, inclusiveHigh: true) == false {
+        if isAmountValid(strAmount: myAsset.lesseeGuarantyAmount, decLow: 0.0, decHigh: myAsset.residualValue.toDecimal(), inclusiveLow: true, inclusiveHigh: true) == false {
             self.myAsset.lesseeGuarantyAmount = self.lesseeGuarantyOnEntry
             alertTitle = alertMaxGty
             showAlert.toggle()

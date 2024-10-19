@@ -49,7 +49,8 @@ public class AnnualTaxableIncomes: CollCashflows {
             annualTaxableIncome.add(item: item)
         }
         
-        self.items.removeAll()
+        self.removeAll()
+        
         return annualTaxableIncome
     }
     
@@ -115,17 +116,19 @@ public class AnnualTaxableIncomes: CollCashflows {
                     let myCashflow = Cashflow(dueDate: myTerminationTaxPayments.items[x].dueDate, amount: myTerminationTaxPayments.items[x].amount)
                     periodicTaxPayments.add(item: myCashflow)
                 }
+                
             }
-            
-            let periodicTaxPayment = totalTaxPayable / Decimal(numberOfPayments)
-            while dateTaxPayment < nextFiscalYearEnd {
-                if isAskMonthATaxPaymentMonth(aAskDate: dateTaxPayment, aTaxPaymentMonths: taxPaymentMonths) {
-                    let myCashflow = Cashflow(dueDate: dateTaxPayment, amount: periodicTaxPayment.toString(decPlaces: 4))
-                    periodicTaxPayments.add(item: myCashflow)
+            if x < items[0].count() - 1 {
+                let periodicTaxPayment = totalTaxPayable / Decimal(numberOfPayments)
+                while dateTaxPayment < nextFiscalYearEnd {
+                    if isAskMonthATaxPaymentMonth(aAskDate: dateTaxPayment, aTaxPaymentMonths: taxPaymentMonths) {
+                        let myCashflow = Cashflow(dueDate: dateTaxPayment, amount: periodicTaxPayment.toString(decPlaces: 4))
+                        periodicTaxPayments.add(item: myCashflow)
+                    }
+                    dateTaxPayment = addOnePeriodToDate(dateStart: dateTaxPayment, payPerYear: .monthly, dateRefer: referDate, bolEOMRule: eomRule)
                 }
-                dateTaxPayment = addOnePeriodToDate(dateStart: dateTaxPayment, payPerYear: .monthly, dateRefer: referDate, bolEOMRule: eomRule)
+                nextFiscalYearEnd = addNextFiscalYearEnd(aDateIn: nextFiscalYearEnd)
             }
-            nextFiscalYearEnd = addNextFiscalYearEnd(aDateIn: nextFiscalYearEnd)
         }
         self.removeAll()
          
@@ -135,9 +138,15 @@ public class AnnualTaxableIncomes: CollCashflows {
     
     private func periodicTaxPaymentsForTermination(totalTaxPaymentUnplanned: Decimal, totalTaxPaymentPlanned: Decimal, unPlannedDate: Date, dateTaxPayment: Date, nextFiscalDate: Date, taxPayMonths: [Int], referDate: Date, aEOMRule: Bool) -> Cashflows {
         let taxPaymentMonths: [Int] = taxPayMonths
-        let periodicTaxPaymentPlanned: Decimal = totalTaxPaymentPlanned / 4.0
+        let periodicTaxPaymentPlanned: Decimal = totalTaxPaymentPlanned / 4.0 //197463.22 / 4 = 41467.26
         let remainingNoOfTaxPaymentsAfterTermination: Int = getRemainNoOfTaxPmtsInYear_Month(aStartDate: unPlannedDate, aFiscalYearEnd: nextFiscalDate)
-        let periodicTaxPaymentUnplanned: Decimal =  (totalTaxPaymentUnplanned - totalTaxPaymentPlanned) / Decimal(remainingNoOfTaxPaymentsAfterTermination)
+        var periodicTaxPaymentUnplanned: Decimal = 0.0
+        if remainingNoOfTaxPaymentsAfterTermination == 0 {
+            periodicTaxPaymentUnplanned = totalTaxPaymentUnplanned - totalTaxPaymentPlanned
+        } else {
+            periodicTaxPaymentUnplanned = (totalTaxPaymentUnplanned - totalTaxPaymentPlanned) / Decimal(remainingNoOfTaxPaymentsAfterTermination)
+        }
+        
         var totalPeriodicTaxPayment: Decimal = 0.0
         var dateStart: Date = dateTaxPayment
         var x: Int = 1

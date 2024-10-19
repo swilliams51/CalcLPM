@@ -44,7 +44,7 @@ struct ReportsManagerView: View {
             Spacer()
             Image(systemName: "chevron.right")
         }
-        .font(myFont2)
+        .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(21)
