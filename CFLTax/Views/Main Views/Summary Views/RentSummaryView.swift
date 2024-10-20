@@ -46,11 +46,10 @@ struct RentSummaryView: View {
         .navigationTitle("Summary")
         .navigationBarBackButtonHidden(true)
         .onAppear {
-            self.implicitRate = myInvestment.getImplicitRate().toString()
-            self.presentValue1 = myInvestment.getPVOfRents().toString()
-            self.presentValue2 = myInvestment.getPVOfObligations().toString()
+            self.implicitRate = myInvestment.getImplicitRate().toString(decPlaces: 6)
+            self.presentValue1 = myInvestment.getPVOfRents().toString(decPlaces: 6)
+            self.presentValue2 = myInvestment.getPVOfObligations().toString(decPlaces: 6)
             self.discountRate = myInvestment.economics.discountRateForRent
-    
         }
     }
 }

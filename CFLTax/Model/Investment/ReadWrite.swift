@@ -8,7 +8,7 @@
 import Foundation
 
 
-public let sampleFile: String = "Mack Trucks,100000,10/01/24,20000,10000,0.00*01/15/25,Monthly,True*4000.50,01/15/25,False,1,10/01/24,Advance,Specified,True,True|1925.60,01/15/30,False,60,01/15/25,Arrears,Rent,False,False*0.00,0.00,Half_Year,5,MACRS,0.0,0.0,0*0.21,December,15*MISF_B/T,0.075,Yield,Actual/365,0.08,0.00*0.00,Expense,10/01/24*0.00,01/15/29,True"
+public let sampleFile: String = "Mack Trucks,100000,10/01/24,20000,10000,0.00*01/15/25,Monthly,False*4000.50,01/15/25,False,1,10/01/24,Advance,Specified,True,True|1925.60,01/15/30,False,60,01/15/25,Arrears,Rent,False,False*0.00,0.00,Half_Year,5,MACRS,0.0,0.0,0*0.21,December,15*MISF_B/T,0.075,Yield,Actual/365,0.08,0.00*0.00,Expense,10/01/24*0.00,01/15/29,True"
 
 
 

@@ -26,7 +26,7 @@ public let simpleEBO: EarlyBuyout = EarlyBuyout(amount: "0.00", exerciseDate: le
 
 //Simple2 - use this one
 public let simple2Asset: Asset = Asset(name: "Freightliner Tractor", fundingDate: "12/15/2024".toDate(), lessorCost: "100000.00", residualValue: "20000.00", lesseeGuarantyAmount: "0.00", thirdPartyGuarantyAmount: "0.00")
-public let simple2LeaseTerm: LeaseTerm = LeaseTerm(baseCommenceDate: "01/15/2025".toDate(), paymentFrequency: .semiannual, eomRule: true)
+public let simple2LeaseTerm: LeaseTerm = LeaseTerm(baseCommenceDate: "01/15/2025".toDate(), paymentFrequency: .semiannual, eomRule: false)
 public let simple2Rent: Rent = Rent(groups: [simple2Group1, simple2Group2])
 public let simple2Group1: Group = Group(amount: "7600.00", endDate: "01/15/2025".toDate(), locked: false, noOfPayments: 1, startDate: "12/15/2024".toDate(), timing: .arrears, paymentType: .specified, isInterim: true, unDeletable: true)
 public let simple2Group2: Group =  Group(amount: "10135.00", endDate: "01/15/2030".toDate(), locked: false, noOfPayments: 10, startDate: "01/15/2025".toDate(), timing: .arrears, paymentType: .baseRental, isInterim: false, unDeletable: true)

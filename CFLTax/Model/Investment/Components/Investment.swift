@@ -322,7 +322,13 @@ public class Investment {
     
     public func percentToAmount(percent: String) -> String {
         let decAmount: Decimal = percent.toDecimal() * self.asset.lessorCost.toDecimal()
-        return decAmount.toString(decPlaces: 2)
+        return decAmount.toString(decPlaces: 4)
+    }
+    
+    public func percentToAmount(percent: String, basis: String) -> String {
+        let decAmount: Decimal = percent.toDecimal() * basis.toDecimal()
+        return decAmount.toString(decPlaces: 4)
+        
     }
     
 }

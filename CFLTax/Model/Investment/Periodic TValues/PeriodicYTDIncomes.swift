@@ -130,7 +130,7 @@ public class PeriodicYTDIncomes: Cashflows {
                         baseRentCF.items.append(Cashflow(dueDate: dateTo, amount: ytdIncome.toString()))
                     } else if dateFrom <= dateFiscal {
                         //calculate the prorated rent from dateFrom to dateFiscal
-                        let proRatedRent: Decimal = proRatedBaseRent(dateFiscal: dateFiscal, dateEnd: dateTo, base: currentBaseRent)
+                        let proRatedRent: Decimal = proRatedBaseRent(dateStart: dateFrom, dateEnd: dateFiscal, base: currentBaseRent)
                         //add that prorated rent to BaseRentCF.items
                         ytdIncome = ytdIncome + proRatedRent
                         baseRentCF.items.append(Cashflow(dueDate: dateFiscal, amount: ytdIncome.toString()))
@@ -138,6 +138,7 @@ public class PeriodicYTDIncomes: Cashflows {
                         dateFiscal = addNextFiscalYearEnd(aDateIn: dateFiscal)
                         //set ytdIncome = the currentBaseRent - prorated rent
                         ytdIncome = currentBaseRent - proRatedRent
+                        baseRentCF.items.append(Cashflow(dueDate: dateTo, amount: ytdIncome.toString()))
                     }
                 }
                 dateFrom = addOnePeriodToDate(dateStart: dateFrom, payPerYear: myFreq, dateRefer: dateRef, bolEOMRule: myEOMRule)
@@ -154,8 +155,7 @@ public class PeriodicYTDIncomes: Cashflows {
         
     }
     
-    private func proRatedBaseRent(dateFiscal: Date, dateEnd: Date, base: Decimal) -> Decimal {
-        let dateStart = Calendar.current.date(byAdding: .day, value: 1, to: dateFiscal)!
+    private func proRatedBaseRent(dateStart: Date, dateEnd: Date, base: Decimal) -> Decimal {
         let dayCount:Int = dayCount(aDate1: dateStart, aDate2: dateEnd, aDayCount: myDayCountMethod)
         let dailyRent: Decimal = base * Decimal(myFreq.rawValue) / 360
         let proRatedRent: Decimal = dailyRent * Decimal(dayCount)

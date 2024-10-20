@@ -449,7 +449,7 @@ extension AssetView {
             showAlert.toggle()
         } else {
             if self.myAsset.residualValue.toDecimal() > 0.00 && self.myAsset.residualValue.toDecimal() <= 1.0 {
-                self.myAsset.residualValue = myInvestment.percentToAmount(percent: myAsset.residualValue)
+                self.myAsset.residualValue = myInvestment.percentToAmount(percent: myAsset.residualValue, basis: myAsset.lessorCost)
             }
         }
             
