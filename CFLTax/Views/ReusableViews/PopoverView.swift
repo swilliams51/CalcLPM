@@ -79,7 +79,6 @@ struct PopoverDecimalPadView: View {
 struct PopoverView_Previews: PreviewProvider {
     
     static var previews: some View {
-        PopoverView(myHelp: .constant(Help(title: "Title", instruction: "instructions are presented here...")), isDark: .constant(false))
-            .preferredColorScheme(.dark)
+        PopoverView(myHelp: .constant(Help(title: "Title", instruction: "Instructions are presented here...")), isDark: .constant(false))
     }
 }

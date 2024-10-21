@@ -16,7 +16,6 @@ public class ResidualCashflows: Cashflows {
             items.append(myCashflow)
         }
         
-        
         let amount:String = aInvestment.asset.residualValue
         let dateDue: Date = aInvestment.getLeaseMaturityDate()
         let myCashflow = Cashflow(dueDate: dateDue, amount: amount)

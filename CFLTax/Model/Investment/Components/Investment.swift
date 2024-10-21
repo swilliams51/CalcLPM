@@ -239,16 +239,22 @@ public class Investment {
     
     public func getSimplePayback() -> Int {
         var runTotal: Decimal = 0.0
+        var start: Int = 0
         let startDate: Date = self.afterTaxCashflows.items[0].dueDate
+        if afterTaxCashflows.items[0].amount.toDecimal() > 0.0 {
+            runTotal = runTotal + afterTaxCashflows.items[0].amount.toDecimal()
+            start = 1
+        }
         var endDate: Date = Date()
-        for x in 0..<afterTaxCashflows.count() {
+        
+        for x in start..<afterTaxCashflows.count() {
             runTotal = runTotal + afterTaxCashflows.items[x].amount.toDecimal()
             if runTotal >= 0.0 {
                 endDate = afterTaxCashflows.items[x].dueDate
                 break
             }
         }
-        return monthsDiff(start: startDate, end: endDate)
+        return monthsDifference(start: startDate, end: endDate, inclusive: true)
     }
     
     public func getAverageLife() -> Decimal {

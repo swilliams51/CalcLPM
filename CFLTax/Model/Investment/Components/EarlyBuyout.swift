@@ -58,14 +58,14 @@ extension Investment {
         
         let myTerminationValues: TerminationValues = TerminationValues()
         myTerminationValues.createTable(aInvestment: self)
-        let myCFTValues: Cashflows = myTerminationValues.createTerminationValues(arrearsRentDueIsPaid: true)
+        let myCFTValues: Cashflows = myTerminationValues.createTerminationValues()
         self.earlyBuyout.amount = myCFTValues.vLookup(dateAsk: endDate).toString(decPlaces: 2)
     }
     
     public func getParValue(askDate: Date) -> Decimal {
         let myTVs: TerminationValues = TerminationValues()
         myTVs.createTable(aInvestment: self)
-        let myCFTValues: Cashflows = myTVs.createTerminationValues(arrearsRentDueIsPaid: true)
+        let myCFTValues: Cashflows = myTVs.createTerminationValues()
         let tvOnChopDate: Decimal = myCFTValues.vLookup(dateAsk: askDate)
         
         return tvOnChopDate
@@ -80,7 +80,7 @@ extension Investment {
     }
     
     public func getEBOPremium_bps(aEBO: EarlyBuyout, aBaseYield: Decimal) -> Double {
-        print("Base Yield: \(aBaseYield.toString(decPlaces: 8))")
+
         let eboYield: Decimal = solveForEBOYield(aEBO: aEBO)
         let eboPremium: Decimal = eboYield - aBaseYield
         let eboPremiumBps: Double = (eboPremium * 10000.00).toDouble()
@@ -114,17 +114,13 @@ extension Investment {
         let myPlannedIncome: Decimal = plannedIncome(aInvestment: myEBOInvestment, dateAsk: dateOfUnplanned)
         
         myEBOInvestment.rent = eboRent(aInvestment: myEBOInvestment, chopDate: dateOfUnplanned)
+    
         myEBOInvestment.asset.residualValue = aEBO.amount
         myEBOInvestment.economics.solveFor = .yield
         myEBOInvestment.economics.yieldMethod = .MISF_AT
         myEBOInvestment.calculate(plannedIncome: myPlannedIncome.toString(decPlaces: 5), unplannedDate: dateOfUnplanned)
         
-//        for x in 0..<myEBOInvestment.afterTaxCashflows.count() {
-//            print("Due Date: \(myEBOInvestment.afterTaxCashflows.items[x].dueDate) Amount: \(myEBOInvestment.afterTaxCashflows.items[x].amount)")
-//        }
-        
         let yieldToReturn: Decimal = myEBOInvestment.getMISF_AT_Yield()
-        print("EBO Yield: \(yieldToReturn.toString(decPlaces: 8))")
 
         return yieldToReturn
     }
@@ -155,6 +151,7 @@ extension Investment {
         let noOfPeriodsInBaseTerm: Int = payPeriodsInEBOTerm(aInvestment: tempInvestment, dateAsk: chopDate)
         var myRent: Rent = Rent()
         var start: Int = 0
+        var startDate = tempInvestment.leaseTerm.baseCommenceDate
         if tempInvestment.rent.groups[0].isInterim {
             myRent.groups.append(tempInvestment.rent.groups[0])
             start = 1
@@ -162,10 +159,13 @@ extension Investment {
         
         var totalNoOfPaymentsAdded: Int = 0
         while totalNoOfPaymentsAdded < noOfPeriodsInBaseTerm { // 0 < 48
-            var group: Group = aInvestment.rent.groups[start]
-            let groupNoOfPayments: Int = group.noOfPayments // 30
+            var group: Group = Group()
+            group.makeEquivalent(to: tempInvestment.rent.groups[start])
+            let groupNoOfPayments: Int = group.noOfPayments // 60
             let noToAdd: Int = min(groupNoOfPayments, noOfPeriodsInBaseTerm - totalNoOfPaymentsAdded)
             group.noOfPayments = noToAdd
+            group.endDate = addPeriodsToDate(dateStart: startDate, payPerYear: tempInvestment.leaseTerm.paymentFrequency, noOfPeriods: noToAdd, referDate: tempInvestment.leaseTerm.baseCommenceDate, bolEOMRule: tempInvestment.leaseTerm.endOfMonthRule)
+            startDate = group.endDate
             myRent.groups.append(group)
             totalNoOfPaymentsAdded += noToAdd
             start += 1

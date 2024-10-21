@@ -28,8 +28,8 @@ struct DepreciationView: View {
     @State private var maximumPercent: Decimal = 1.0
     @FocusState private var percentIsFocused: Bool
     
-    @State private var showPopover: Bool = false
     private let pasteBoard = UIPasteboard.general
+    @State private var showPopover: Bool = false
     @State private var alertTitle: String = ""
     @State private var showAlert: Bool = false
     @State var payHelp = leaseAmountHelp
@@ -194,7 +194,6 @@ extension DepreciationView {
 
 //Straight-Line Items
 extension DepreciationView {
-
     var lifeInYearsItem: some View {
         VStack {
             HStack {
@@ -218,7 +217,6 @@ extension DepreciationView {
             }
         }
         .font(myFont)
-            
     }
     
 }

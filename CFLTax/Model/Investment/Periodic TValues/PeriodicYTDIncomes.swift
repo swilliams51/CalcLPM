@@ -129,16 +129,11 @@ public class PeriodicYTDIncomes: Cashflows {
                         ytdIncome = ytdIncome + currentBaseRent
                         baseRentCF.items.append(Cashflow(dueDate: dateTo, amount: ytdIncome.toString()))
                     } else if dateFrom <= dateFiscal {
-                        //calculate the prorated rent from dateFrom to dateFiscal
-                        let proRatedRent: Decimal = proRatedBaseRent(dateStart: dateFrom, dateEnd: dateFiscal, base: currentBaseRent)
-                        //add that prorated rent to BaseRentCF.items
-                        ytdIncome = ytdIncome + proRatedRent
-                        baseRentCF.items.append(Cashflow(dueDate: dateFiscal, amount: ytdIncome.toString()))
-                        //add next fiscal year
-                        dateFiscal = addNextFiscalYearEnd(aDateIn: dateFiscal)
-                        //set ytdIncome = the currentBaseRent - prorated rent
-                        ytdIncome = currentBaseRent - proRatedRent
+                        //calculate the prorated rent from dateFiscal to 1st payment end date of following year
+                        let proRatedRent: Decimal = proRatedBaseRent(dateStart: dateFiscal, dateEnd: dateTo, base: currentBaseRent)
+                        ytdIncome = proRatedRent
                         baseRentCF.items.append(Cashflow(dueDate: dateTo, amount: ytdIncome.toString()))
+                        dateFiscal = addNextFiscalYearEnd(aDateIn: dateFiscal)
                     }
                 }
                 dateFrom = addOnePeriodToDate(dateStart: dateFrom, payPerYear: myFreq, dateRefer: dateRef, bolEOMRule: myEOMRule)

@@ -38,17 +38,18 @@ struct RentView: View {
                 Menu(content: {
                     structuresMenu
                 }, label: {
-                    Text("new structure")
+                    Image(systemName: "plus.circle")
                         .foregroundColor(ColorTheme().accent)
+                        .imageScale(.large)
                 })
             }
             ToolbarItem(placement: .bottomBar) {
                 Menu(content: {
                     addNewMenu
                 }, label: {
-                    Text("Add")
+                    Image(systemName: "plus.circle")
                         .foregroundColor(ColorTheme().accent)
-
+                        .imageScale(.large)
                 })
             }
         }

@@ -64,9 +64,7 @@ struct AssetView: View {
         .navigationBarTitle("Asset")
         .navigationBarBackButtonHidden(true)
         .onAppear {
-        
             self.myAsset = myInvestment.asset
-            
         }
     }
     
@@ -101,7 +99,9 @@ extension AssetView {
             Image(systemName: "questionmark.circle")
                 .foregroundColor(Color.theme.accent)
                 .onTapGesture {
-                    self.showPopover.toggle()
+                    print("Show Popover")
+                    self.showPopover = true
+                    print("\(self.showPopover)")
                 }
             Spacer()
             DatePicker("", selection: $myAsset.fundingDate,  displayedComponents:[.date])
@@ -112,15 +112,12 @@ extension AssetView {
                 }
         }
         .font(myFont)
-        .disabled(false)
-        
-//        .popover(isPresented: $showPopover) {
-//            PopoverView(myHelp: $baseHelp, isDark: $isDark)
-//        }
+        .popover(isPresented: $showPopover) {
+            PopoverView(myHelp: $payHelp, isDark: $isDark)
+        }
+       
     }
 }
-
-
 
 //Asset Name TextField
 extension AssetView {
@@ -161,7 +158,6 @@ extension AssetView {
                 .foregroundColor(isDark ? .white : .black)
         }
     }
-    
 }
 
 // Lessor Cost TextField
@@ -225,9 +221,14 @@ extension AssetView {
     
     var leftSideResidualValueItem: some View {
         HStack {
-            Text("Residual Value: \(Image(systemName: "return"))")
+            Text("Residual: \(Image(systemName: "return"))")
                 .foregroundColor(isDark ? .white : .black)
                 .font(myFont)
+            Image(systemName: "questionmark.circle")
+                .foregroundColor(.black)
+                .onTapGesture {
+                    self.showPopover = true
+                }
         }
         .popover(isPresented: $showPopover) {
             PopoverView(myHelp: $payHelp, isDark: $isDark)
@@ -467,14 +468,12 @@ extension AssetView {
             showAlert.toggle()
         } else {
             if self.myAsset.lesseeGuarantyAmount.toDecimal() > 0.00 && self.myAsset.lesseeGuarantyAmount.toDecimal() <= 1.0 {
-                self.myAsset.lesseeGuarantyAmount = myInvestment.percentToAmount(percent: myAsset.lesseeGuarantyAmount)
+                self.myAsset.lesseeGuarantyAmount = myInvestment.percentToAmount(percent: myAsset.lesseeGuarantyAmount, basis: myAsset.lessorCost)
             }
         }
             
         self.editLesseeGuarantyStarted = false
     }
-    
-    
 }
 
 extension AssetView {

@@ -172,6 +172,8 @@ extension Investment {
         self.economics = readEconomics(arrayEconomics: arrayInvestment[5].components(separatedBy: ","))
         self.fee = readFee(arrayFee: arrayInvestment[6].components(separatedBy: ","))
         self.earlyBuyout = readEarlyBuyout(arrayEBO: arrayInvestment[7].components(separatedBy: ","))
+        self.setFee()
+        self.setEBO()
     }
     
     func resetToFileData(strFile: String) {
@@ -186,8 +188,6 @@ extension Investment {
         let myFee: Fee = readFee(arrayFee: arrayInvestment[6].components(separatedBy: ","))
         let myEBO: EarlyBuyout = readEarlyBuyout(arrayEBO: arrayInvestment[7].components(separatedBy: ","))
         
-        
-        
         self.asset = myAsset
         self.leaseTerm = myLeaseTerm
         self.rent = myRent
@@ -196,6 +196,8 @@ extension Investment {
         self.economics = myEconomics
         self.fee = myFee
         self.earlyBuyout = myEBO
+        self.setFee()
+        self.setEBO()
         
     }
     

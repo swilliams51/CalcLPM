@@ -70,7 +70,6 @@ struct EarlyBuyoutView: View {
         .navigationBarTitle("Early Buyout")
         .navigationBarBackButtonHidden(true)
         .onAppear {
-
             self.myInvestment.economics.solveFor = .yield
             self.myInvestment.calculate()
             self.baseYield = myInvestment.getMISF_AT_Yield()

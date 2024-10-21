@@ -67,7 +67,6 @@ struct HomeView: View {
                         Image(systemName: "plus.circle")
                             .foregroundColor(ColorTheme().accent)
                             .imageScale(.large)
-
                     })
                 }
             }
@@ -77,11 +76,9 @@ struct HomeView: View {
                 self.myInvestment.earlyBuyout.amount = "0.00"
                 self.myInvestment.earlyBuyoutExists = false
             }
-            
         }
     }
     
-        
     var assetItem: some View {
         HStack {
             Text("Asset")
@@ -170,10 +167,6 @@ struct HomeView: View {
         }
         .contentShape(Rectangle())
         .onTapGesture {
-//            if myInvestment.earlyBuyoutExists == false {
-//                myInvestment.resetEBOToDefault()
-//                myInvestment.earlyBuyoutExists = true
-//            }
             path.append(8)
         }
     }
@@ -237,8 +230,12 @@ let yieldCalcMessage = "The current inputs will produce a negative yield. Conseq
 extension HomeView {
     var removeItemsMenu: some View {
         VStack {
-            removeFeeItem
-            removeEBOItem
+            if myInvestment.feeExists {
+                removeFeeItem
+            }
+            if myInvestment.earlyBuyoutExists {
+                removeEBOItem
+            }
         }
     }
     
@@ -264,8 +261,12 @@ extension HomeView {
     
     var addItemsMenu: some View {
         VStack{
-            addFeeItem
-            addEBOItem
+            if myInvestment.feeExists == false {
+                addFeeItem
+            }
+            if myInvestment.earlyBuyoutExists == false {
+                addEBOItem
+            }
         }
     }
     
