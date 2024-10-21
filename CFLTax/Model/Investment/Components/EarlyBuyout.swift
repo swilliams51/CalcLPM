@@ -11,12 +11,7 @@ import Foundation
 public struct EarlyBuyout {
     public var amount: String
     public var exerciseDate: Date
-    public var arrearsRentDueIsPaid: Bool = false
-    
-    // advance rents are never due but are incorporated into termination values so they must be backed out
-    // arrears rents can be paid or not paid.  If paid the TV must be reduced by the amount of the arrears rent
-    // the sum of the arrears rent and TV paid by the lessee must equal the calculated TV
-    // arrears rent + (TV - arrears rent) = calculated TV
+    public var advanceRentDueIsPaid: Bool = false
     
     init(amount: String, exerciseDate: Date, rentDueIsPaid: Bool) {
         self.amount = amount
@@ -26,7 +21,7 @@ public struct EarlyBuyout {
     init() {
         self.amount = "0.00"
         self.exerciseDate = Date()
-        self.arrearsRentDueIsPaid = false
+        self.advanceRentDueIsPaid = false
     }
     
     public func getEBOTermInMonths(aInvestment: Investment) -> Int {
@@ -40,7 +35,7 @@ public struct EarlyBuyout {
         var isEqual: Bool = false
         if self.amount == other.amount &&
             self.exerciseDate == other.exerciseDate &&
-            self.arrearsRentDueIsPaid == other.arrearsRentDueIsPaid {
+            self.advanceRentDueIsPaid == other.advanceRentDueIsPaid {
             isEqual = true
         }
         
