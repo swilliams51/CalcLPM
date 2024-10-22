@@ -24,9 +24,9 @@ struct LeaseTermView: View {
     var body: some View {
         Form {
             Section (header: Text("Details").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
+                baseCommenceDateItem
                 paymentFrequencyItem
                 eomRuleItem
-                baseCommenceDateItem
                 baseTermInMonthsItem
             }
             Section(header: Text("Submit Form")) {

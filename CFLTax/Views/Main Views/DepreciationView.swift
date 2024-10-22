@@ -32,7 +32,7 @@ struct DepreciationView: View {
     @State private var showPopover: Bool = false
     @State private var alertTitle: String = ""
     @State private var showAlert: Bool = false
-    @State var payHelp = leaseAmountHelp
+    @State private var payHelp = leaseAmountHelp
 
     //Salvage Value Textfield
     @State var mySalvageAmount: String = ""
