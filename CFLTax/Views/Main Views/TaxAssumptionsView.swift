@@ -18,10 +18,12 @@ struct TaxAssumptionsView: View {
 
     @State private var editTaxRateStarted: Bool = false
     @State private var maximumTaxRate: Decimal = 1.0
-    @FocusState private var taxRateIsFocused: Bool
-    @State private var showPopover: Bool = false
-    private let pasteBoard = UIPasteboard.general
     @State private var taxRateOnEntry: String = ""
+    @FocusState private var taxRateIsFocused: Bool
+    private let pasteBoard = UIPasteboard.general
+    
+    
+    @State private var showPop1: Bool = false
     @State var payHelp = leaseAmountHelp
     
     var body: some View {
@@ -77,9 +79,9 @@ extension TaxAssumptionsView {
                 .font(myFont)
             Picker(selection: $myTaxAssumptions.fiscalMonthEnd, label: Text("")) {
                 ForEach(TaxYearEnd.allCases, id: \.self) { item in
-                   Text(item.toString())
+                    Text(item.toString())
                         .font(myFont)
-               }
+                }
             }
         }
     }
@@ -88,12 +90,22 @@ extension TaxAssumptionsView {
         HStack {
             Text("Day Taxes Paid:")
                 .font(myFont)
+            Image(systemName: "questionmark.circle")
+                .font(myFont)
+                .foregroundColor(.blue)
+                .onTapGesture {
+                    showPop1.toggle()
+                }
+            
             Picker(selection: $myTaxAssumptions.dayOfMonPaid, label: Text("")) {
                 ForEach(days, id: \.self) { item in
-                   Text(item.toString())
+                    Text(item.toString())
                         .font(myFont)
-               }
+                }
             }
+        }
+        .popover(isPresented: $showPop1) {
+            PopoverView(myHelp: $payHelp, isDark: $isDark)
         }
     }
 }
@@ -113,9 +125,7 @@ extension TaxAssumptionsView {
                 .foregroundColor(isDark ? .white : .black)
                 .font(myFont)
         }
-        .popover(isPresented: $showPopover) {
-            PopoverView(myHelp: $payHelp, isDark: $isDark)
-        }
+       
     }
     
     var rightSideAmountItem: some View {

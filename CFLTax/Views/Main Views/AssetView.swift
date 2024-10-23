@@ -31,12 +31,18 @@ struct AssetView: View {
     @State private var editLesseeGuarantyStarted: Bool = false
     @FocusState private var lesseeGuarantyIsFocused: Bool
     @State private var lesseeGuarantyOnEntry: String = ""
+   
+    private let pasteBoard = UIPasteboard.general
     
+    
+    @State private var showPop1: Bool = false
+    @State private var showPop2: Bool = false
+    @State private var showPop3: Bool = false
     @State private var alertTitle: String = ""
     @State private var showAlert: Bool = false
-    @State private var showPopover: Bool = false
+  
     @State var payHelp = leaseAmountHelp
-    private let pasteBoard = UIPasteboard.general
+ 
     
     
     var body: some View {
@@ -100,8 +106,7 @@ extension AssetView {
                 .foregroundColor(Color.theme.accent)
                 .onTapGesture {
                     print("Show Popover")
-                    self.showPopover = true
-                    print("\(self.showPopover)")
+                    self.showPop3 = true
                 }
             Spacer()
             DatePicker("", selection: $myAsset.fundingDate,  displayedComponents:[.date])
@@ -112,10 +117,9 @@ extension AssetView {
                 }
         }
         .font(myFont)
-        .popover(isPresented: $showPopover) {
+        .popover(isPresented: $showPop3) {
             PopoverView(myHelp: $payHelp, isDark: $isDark)
         }
-       
     }
 }
 
@@ -225,12 +229,12 @@ extension AssetView {
                 .foregroundColor(isDark ? .white : .black)
                 .font(myFont)
             Image(systemName: "questionmark.circle")
-                .foregroundColor(.black)
+                .foregroundColor(.blue)
                 .onTapGesture {
-                    self.showPopover = true
+                    self.showPop1 = true
                 }
         }
-        .popover(isPresented: $showPopover) {
+        .popover(isPresented: $showPop1) {
             PopoverView(myHelp: $payHelp, isDark: $isDark)
         }
     }
@@ -278,11 +282,16 @@ extension AssetView {
     
     var leftSideLesseeGuarantyItem: some View {
         HStack {
-            Text("Lessee Guaranty: \(Image(systemName: "return"))")
+            Text("Lessee GTY: \(Image(systemName: "return"))")
                 .foregroundColor(isDark ? .white : .black)
                 .font(myFont)
+            Image(systemName: "questionmark.circle")
+                .foregroundColor(.blue)
+                .onTapGesture {
+                    self.showPop2 = true
+                }
         }
-        .popover(isPresented: $showPopover) {
+        .popover(isPresented: $showPop2) {
             PopoverView(myHelp: $payHelp, isDark: $isDark)
         }
     }
@@ -456,7 +465,6 @@ extension AssetView {
             
         self.editResidualValueStarted = false
     }
-    
     
     func updateForLesseeGuaranty() {
         if self.myAsset.lesseeGuarantyAmount.isEmpty {

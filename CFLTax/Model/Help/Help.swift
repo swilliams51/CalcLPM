@@ -29,10 +29,10 @@ let discountRateHelp =
 let decimalPadHelp = Help(title: "Keypad Buttons", instruction: "From left to right the buttons are Cancel, Copy to Clipboard, Paste from Clipboard, Clear All, and Enter.")
 
 let eboHelp =
-    Help(title: "Early Buyout", instruction: "The EBO exercise date must occur on or before one year prior to the Lease's maturity date but no earlier than the first anniversary date of the Lease.  The amount of the EBO must greater than 1.005% of the par value of the Lease on the EBO exercise date but less than or equal to the Lease Amount.")
+    Help(title: "Early Buyout", instruction: "The EBO exercise date must occur on or before one year prior to the Lease maturity date but no earlier than the first anniversary date of the Lease.  An EBO Amount that is less than the par value on the applicable exercise date will result in an EBO yield that is less than the full term yield and potentially a book loss.")
 
 let eboHelp2 =
-    Help(title: "Early Buyout", instruction: "The EBO amount can be calculated given a spread in basis points over the lease interest rate, or it can entered manually.  If entered manually the spread will be automatically calculated. Upon returning to the EBO screen a specified EBO amount will be presented as a calculated amount. The slider value will be accurate to the calculated spread +/- 1 basis points.  To remove an EBO from reports set the slider value equal to 0 basis points.")
+    Help(title: "Early Buyout", instruction: "The EBO Amount can not be entered manually, but instead is expressed as a spread in basis points over the full term MISF After-Yield. The slider is accurate to ~ +/- 1 basis point.   To adjust the EBO amount move the slider to the appropriate spread and then press the calculate button. It is important to remember than any subsequent change in the investment parameters will result in the EBO being removed from the investment.  The EBO can be added back after all changes to the investment are completed.")
 
 let eomRuleHelp =
     Help(title: "End of Month Rule", instruction: "If the base term commencement date starts on last day of a month with 30 days and the rule is on, then the payment due dates for the months with 31 days will occur on the 31st of the applicable month.  If the rule is off then payment due dates for the months with 31 days will occur on the 30th.")

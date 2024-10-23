@@ -15,6 +15,8 @@ struct EarlyBuyoutView: View {
     @Binding var minimumEBOAmount: Decimal
     @Binding var maximumEBOAmount: Decimal
     
+    @State private var myEBO: EarlyBuyout = EarlyBuyout()
+    
     @State private var alertTitle: String = ""
     @State private var amountColor: Int = 1
     @State private var parValuePremium: Decimal = 0.0
@@ -23,17 +25,22 @@ struct EarlyBuyoutView: View {
     @State private var calculatedButtonPressed: Bool = true
     @State private var eboTerm: Int = 0
     @State private var editAmountStarted: Bool = false
-    @State private var myEBO: EarlyBuyout = EarlyBuyout()
-    @State private var myEBOHelp = eboHelp
-    @State private var myEBOHelp2 = eboHelp2
+    
     @State private var parValue: String = "0.00"
     @State private var premiumIsSpecified = false
     @State private var rentDueIsPaid = true
-    @State private var showAlert: Bool = false
-    @State private var showPopover: Bool = false
-    @State private var showPopover2: Bool = false
+  
     @State private var stepBps: Double = 1.0
     @State private var stepValue: Int = 1
+    
+    //Alerts and Popovers
+   
+    @State private var myEBOHelp = eboHelp
+    @State private var myEBOHelp2 = eboHelp2
+    @State private var showAlert1: Bool = false
+    @State private var showPop1: Bool = false
+    @State private var showPop2: Bool = false
+    
    
     @FocusState private var amountIsFocused: Bool
     private let pasteBoard = UIPasteboard.general
@@ -76,8 +83,13 @@ struct EarlyBuyoutView: View {
             self.myEBO = self.myInvestment.earlyBuyout
             self.eboTerm = myEBO.getEBOTermInMonths(aInvestment: myInvestment)
             self.parValue = myInvestment.getParValue(askDate: myEBO.exerciseDate).toString(decPlaces: 4)
-            self.myEBO.amount = max(parValue.toDecimal(), myEBO.amount.toDecimal()).toString(decPlaces: 4)
             self.basisPoints = myInvestment.getEBOPremium_bps(aEBO: myEBO, aBaseYield: self.baseYield)
+        }
+        .popover(isPresented: $showPop1) {
+            PopoverView(myHelp: $myEBOHelp, isDark: $isDark)
+        }
+        .popover(isPresented: $showPop2) {
+            PopoverView(myHelp: $myEBOHelp2, isDark: $isDark)
         }
     }
     
@@ -99,7 +111,6 @@ struct EarlyBuyoutView: View {
 extension EarlyBuyoutView {
     var eboTermInMonsRow: some View {
         HStack {
-            
             Text("Term in Mons: \(eboTerm)")
                 .font(myFont)
             Stepper(value: $eboTerm, in: rangeBaseTermMonths, step: getStep()) {
@@ -120,9 +131,9 @@ extension EarlyBuyoutView {
             Text("Exercise Date:")
                 .font(myFont)
             Image(systemName: "questionmark.circle")
-                .foregroundColor(Color.black)
+                .foregroundColor(Color.blue)
                 .onTapGesture {
-                    self.showPopover = true
+                    self.showPop1 = true
                 }
             Spacer()
             Text(myEBO.exerciseDate.toStringDateShort(yrDigits: 4))
@@ -160,10 +171,11 @@ extension EarlyBuyoutView {
                     .foregroundColor(premiumIsSpecified ? defaultInactive : defaultCalculated)
             }
             
-            Slider(value: $basisPoints, in: 0...maxEBOSpread.toDouble(), step: stepBps) { editing in
+            Slider(value: $basisPoints, in: -50...maxEBOSpread.toDouble(), step: stepBps) { editing in
                 self.amountColor = 1
                 self.calculatedButtonPressed = false
             }
+            .accentColor(basisPoints < 0 ? .red : .green)
         }
     }
     
@@ -188,24 +200,18 @@ extension EarlyBuyoutView {
             }) {
                 Text("Calculate")
                     .font(myFont)
+                    .foregroundColor(calculatedButtonPressed ? .gray : .blue)
             }
-            Spacer()
-            
-            Text("\(eboFormatted(editStarted:editAmountStarted))")
-                .font(myFont)
-        }
-    }
-    
-    var calculatedResultItemRow: some View {
-        HStack {
-            Text("Calculate")
-                .font(myFont)
+            Image(systemName: "questionmark.circle")
+                .foregroundColor(Color.blue)
+                .onTapGesture {
+                    self.showPop2 = true
+                }
             Spacer()
             Text("\(eboFormatted(editStarted:editAmountStarted))")
                 .font(myFont)
         }
     }
-
     
     func eboFormatted(editStarted: Bool) -> String {
         if editStarted == true {

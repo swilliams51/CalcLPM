@@ -70,12 +70,13 @@ struct HomeView: View {
                     })
                 }
             }
-        }
-        .onAppear{
-            if self.myInvestment.hasChanged && myInvestment.earlyBuyoutExists == true {
-                self.myInvestment.earlyBuyout.amount = "0.00"
-                self.myInvestment.earlyBuyoutExists = false
+            .onAppear{
+                if self.myInvestment.hasChanged && myInvestment.earlyBuyoutExists == true {
+                    self.myInvestment.earlyBuyout.amount = "0.00"
+                    self.myInvestment.earlyBuyoutExists = false
+                }
             }
+    
         }
     }
     

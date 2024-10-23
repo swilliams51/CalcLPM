@@ -25,7 +25,12 @@ struct EconomicsView: View {
     @State private var discountRateOnEntry: String = ""
     @FocusState private var discountRateIsFocused: Bool
     
-    @State private var showPopover: Bool = false
+    //Alerts and Popover
+    @State private var showPop1: Bool = false
+    @State private var showPop2: Bool = false
+    @State private var showPop3: Bool = false
+    
+
     private let pasteBoard = UIPasteboard.general
     @State private var alertTitle: String = ""
     @State private var showAlert: Bool = false
@@ -74,13 +79,22 @@ extension EconomicsView {
         HStack{
             Text("Yield Method:")
                 .font(myFont)
+            Image(systemName: "questionmark.circle")
+                .foregroundColor(.blue)
+                .onTapGesture {
+                    self.showPop1 = true
+                }
             Picker(selection: $myEconomics.yieldMethod, label: Text("")) {
                 ForEach(YieldMethod.allTypes, id: \.self) { item in
                     Text(item.toString())
                 }
             }
         }
+        .popover(isPresented: $showPop1) {
+            PopoverView(myHelp: $payHelp, isDark: $isDark)
+        }
     }
+    
     var solveForItem: some View {
         HStack{
             Text("Solve For:")
@@ -95,15 +109,24 @@ extension EconomicsView {
     
     var dayCountMethodItem: some View {
         HStack{
-            Text("Day Count Method:")
+            Text("Day Count:")
                 .font(myFont)
+            Image(systemName: "questionmark.circle")
+                .foregroundColor(.blue)
+                .onTapGesture {
+                    self.showPop3 = true
+                }
             Picker(selection: $myEconomics.dayCountMethod, label: Text("")) {
                 ForEach(DayCountMethod.allTypes, id: \.self) { item in
                     Text(item.toString())
                 }
             }
         }
+        .popover(isPresented: $showPop3) {
+            PopoverView(myHelp: $payHelp, isDark: $isDark)
+        }
     }
+    
 }
 
 //Yield Target TextField
@@ -173,12 +196,12 @@ extension EconomicsView {
                 .foregroundColor(isDark ? .white : .black)
                 .font(myFont)
             Image(systemName: "questionmark.circle")
-                .foregroundColor(.black)
+                .foregroundColor(.blue)
                 .onTapGesture {
-                    self.showPopover = true
+                    self.showPop2 = true
                 }
         }
-        .popover(isPresented: $showPopover) {
+        .popover(isPresented: $showPop2) {
             PopoverView(myHelp: $payHelp, isDark: $isDark)
         }
     }

@@ -18,8 +18,15 @@ struct LeaseTermView: View {
     @State var paymentFrequencyOnEntry: Frequency = .monthly
     @State var endOfMonthRule: Bool = false
     @State var baseTermInMonths: Int = 12
-    @State var showPopover: Bool = false
+   
+    
+    //Alerts and Popovers
+    @State private var showPop1: Bool = false
+    @State private var showPop2: Bool = false
+    @State private var showPop3: Bool = false
     @State var baseHelp: Help = baseTermHelp
+    
+    
     
     var body: some View {
         Form {
@@ -57,7 +64,7 @@ struct LeaseTermView: View {
             Image(systemName: "questionmark.circle")
                 .foregroundColor(Color.theme.accent)
                 .onTapGesture {
-                    self.showPopover.toggle()
+                    self.showPop1.toggle()
                 }
             Spacer()
             DatePicker("", selection: $baseCommenceDate, in: rangeBaseTermCommenceDates, displayedComponents:[.date])
@@ -69,8 +76,7 @@ struct LeaseTermView: View {
                 }
         }
         .disabled(false)
-        
-        .popover(isPresented: $showPopover) {
+        .popover(isPresented: $showPop1) {
             PopoverView(myHelp: $baseHelp, isDark: $isDark)
         }
     }
@@ -92,19 +98,38 @@ struct LeaseTermView: View {
     var eomRuleItem: some View {
         HStack{
             Toggle(isOn: $endOfMonthRule) {
-                Text(endOfMonthRule ? "EOM Rule is On:" : "EOM Rule is Off:")
-                .font(myFont)
+                HStack {
+                    Text("EOM Rule:")
+                        .font(myFont)
+                    Image(systemName: "questionmark.circle")
+                        .foregroundColor(Color.theme.accent)
+                        .onTapGesture {
+                            self.showPop2.toggle()
+                        }
+                }
             }
+        }
+        .popover(isPresented: $showPop2) {
+            PopoverView(myHelp: $baseHelp, isDark: $isDark)
         }
     }
     
     var baseTermInMonthsItem: some View {
         HStack{
-            Text("Base Term in Months:")
+            Text("Base Term:")
                 .font(myFont)
+            Image(systemName: "questionmark.circle")
+                .foregroundColor(Color.theme.accent)
+                .onTapGesture {
+                    self.showPop3.toggle()
+                }
             Spacer()
             Text("\(myInvestment.getBaseTermInMonths())")
                 .font(myFont)
+            
+        }
+        .popover(isPresented: $showPop3) {
+            PopoverView(myHelp: $baseHelp, isDark: $isDark)
         }
     }
     
