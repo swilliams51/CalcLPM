@@ -1,23 +1,22 @@
 //
-//  TargetPaymentsV2.swift
+//  TargetPaymentsV3.swift
 //  CFLTax
 //
-//  Created by Steven Williams on 8/27/24.
+//  Created by Steven Williams on 10/23/24.
 //
 
 import Foundation
 
 
-extension Investment {
-    
-    public func solveForPaymentsV2(aYieldMethod: YieldMethod, aTargetYield: Decimal) {
+extension Investment{
+    public func solveForUnlockedPayments(aYieldMethod: YieldMethod, aTargetYield: Decimal) {
         switch aYieldMethod {
         case .MISF_AT:
             solveForPayments2_MISF(aTargetYield: aTargetYield, isAfterTax: true)
         case .MISF_BT:
             solveForPayments2_MISF(aTargetYield: aTargetYield, isAfterTax: false)
         case .IRR_PTCF:
-            solveForPayment2_IRROfPTCF(aTargetYield: aTargetYield)
+            solveForPayment3_IRROfPTCF(aTargetYield: aTargetYield)
         }
     }
     
@@ -30,25 +29,44 @@ extension Investment {
             yield = yield * (1.0 - self.taxAssumptions.federalTaxRate.toDecimal())
         }
         
-        var prevFactor: Decimal = 1.0
-        var y = tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: yield, aDayCountMethod: self.economics.dayCountMethod)
+        var newFactor: Decimal = 0.0
+        var x1: Decimal = 1.0
+        var x2: Decimal = 1.0
+        var y1 = tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: yield, aDayCountMethod: self.economics.dayCountMethod)
         var iCount = 1
-        var currFactor = prevFactor
-        while abs(y) > tolerancePaymentAmounts {
-            if y > 0.0 {
-                currFactor = decrementFactor_AT(aInvestment: tempInvestment, discountRate: yield,x1: prevFactor, y1: y, iCounter: iCount)
-            } else {
-                currFactor = incrementFactor_AT(aInvestment:tempInvestment, discountRate: yield, x1: prevFactor, y1: y, iCounter: iCount)
-            }
-            y = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: currFactor, discountRate: yield)
-           
-            iCount += 1
-            prevFactor = currFactor
+        
+        if y1 < 0.0 {
+            x2 = incrementFactor_AT(aInvestment: tempInvestment, discountRate: yield, x1: x1, y1: y1, iCounter: iCount)
+        } else {
+            x2 = decrementFactor_AT(aInvestment: tempInvestment, discountRate: yield, x1: x1, y1: y1, iCounter: iCount)
         }
+        var y2 = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: x2, discountRate: yield)
+        
+        iCount = 2
+        while iCount < 10 {
+            newFactor = mxbFactor(factor1: x1, value1: y1, factor2: x2, value2: y2)
+            let myBalance = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: newFactor, discountRate: yield)
+            //print("newFactor: \(newFactor), NPV: \(myBalance)")
+            
+            if abs(myBalance) < tolerancePaymentAmounts {
+                break
+            }
+            x1 = newFactor
+            y1 = myBalance
+            
+            if myBalance < 0.0 {
+                x2 = incrementFactor_AT(aInvestment: tempInvestment, discountRate: yield, x1: x1, y1: y1, iCounter: iCount)
+            } else {
+                x2 = decrementFactor_AT(aInvestment: tempInvestment, discountRate: yield, x1: x1, y1: y1, iCounter: iCount)
+            }
+            y2 = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: x2, discountRate: yield)
+            iCount += 1
+        }
+        
         //Then adjust the payments in the actual investment
         for x in 0..<self.rent.groups.count {
             if self.rent.groups[x].locked == false {
-                let newAmount = self.rent.groups[x].amount.toDecimal() * currFactor
+                let newAmount = self.rent.groups[x].amount.toDecimal() * newFactor
                 self.rent.groups[x].amount = newAmount.toString()
             }
         }
@@ -59,14 +77,14 @@ extension Investment {
         let tempInvestment = aInvestment.clone()
         var newX: Decimal = x1
         var newY: Decimal = y1
-        let factor: Decimal = power(base: 10.0, exp: iCounter)
+        let factor: Decimal = min(power(base: 10.0, exp: iCounter), 100000.00)
         
         while newY > 0.0 {
             newX = newX - newX / factor
             newY = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: newX, discountRate: discountRate)
         }
         
-        return mxbFactor(factor1: x1, value1: y1, factor2: newX, value2: newY)
+        return newX
     }
     
     
@@ -74,14 +92,14 @@ extension Investment {
         let tempInvestment: Investment = aInvestment.clone()
         var newX: Decimal = x1
         var newY: Decimal = y1
-        let factor: Decimal = power(base: 10.0, exp: iCounter)
+        let factor: Decimal = min(power(base: 10.0, exp: iCounter), 100000.00)
         
         while newY < 0.0 {
             newX = newX + newX / factor
             newY = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: newX, discountRate: discountRate)
         }
         
-        return mxbFactor(factor1: x1, value1: y1, factor2: newX, value2: newY)
+        return newX
     }
     
     private func getNPVAfterNewFactor_AT(aInvestment: Investment, aFactor: Decimal, discountRate: Decimal) -> Decimal {
@@ -101,29 +119,50 @@ extension Investment {
         return myNPV
     }
     
-    //Before Tax Calcs
-    public func solveForPayment2_IRROfPTCF(aTargetYield: Decimal) {
+    //IRR of Before Tax Cashflows
+    public func solveForPayment3_IRROfPTCF(aTargetYield: Decimal) {
         let tempInvestment: Investment = self.clone()
         tempInvestment.setBeforeTaxCashflows()
         let yield = aTargetYield
         
-        var factor: Decimal = 1.0
-        var y = tempInvestment.beforeTaxCashflows.ModXNPV(aDiscountRate: yield, aDayCountMethod: self.economics.dayCountMethod)
+        var newFactor: Decimal = 0.0
+        var x1: Decimal = 1.0
+        var x2: Decimal = 1.0
+        var y1 = tempInvestment.beforeTaxCashflows.ModXNPV(aDiscountRate: yield, aDayCountMethod: self.economics.dayCountMethod)
         var iCount = 1
         
-        while abs(y) > tolerancePaymentAmounts {
-            if y > 0.0 {
-                factor = decrementFactor_BT(aInvestment: tempInvestment, discountRate: yield,x1: factor, y1: y, iCounter: iCount)
-            } else {
-                factor = incrementFactor_BT(aInvestment:tempInvestment, discountRate: yield, x1: factor, y1: y, iCounter: iCount)
+        if y1 < 0.0 {
+            x2 = incrementFactor_BT(aInvestment: tempInvestment, discountRate: yield, x1: x1, y1: y1, iCounter: iCount)
+        } else {
+            x2 = decrementFactor_BT(aInvestment: tempInvestment, discountRate: yield, x1: x1, y1: y1, iCounter: iCount)
+        }
+        var y2 = getNPVAfterNewFactor_BT(aInvestment: tempInvestment, aFactor: x2, discountRate: yield)
+        
+        iCount = 2
+        while iCount < 10 {
+            newFactor = mxbFactor(factor1: x1, value1: y1, factor2: x2, value2: y2)
+            let myBalance = getNPVAfterNewFactor_BT(aInvestment: tempInvestment, aFactor: newFactor, discountRate: yield)
+            
+            if abs(myBalance) < tolerancePaymentAmounts {
+                break
             }
-            y = getNPVAfterNewFactor_BT(aInvestment: tempInvestment, aFactor: factor, discountRate: yield)
+            x1 = newFactor
+            y1 = myBalance
+            
+            if myBalance < 0.0 {
+                x2 = incrementFactor_BT(aInvestment: tempInvestment, discountRate: yield, x1: x1, y1: y1, iCounter: iCount)
+            } else {
+                x2 = decrementFactor_BT(aInvestment: tempInvestment, discountRate: yield, x1: x1, y1: y1, iCounter: iCount)
+            }
+            y2 = getNPVAfterNewFactor_BT(aInvestment: tempInvestment, aFactor: x2, discountRate: yield)
             iCount += 1
         }
+        
+        
         //Then adjust the payments in the actual investment
         for x in 0..<self.rent.groups.count {
             if self.rent.groups[x].locked == false {
-                let newAmount = self.rent.groups[x].amount.toDecimal() * factor
+                let newAmount = self.rent.groups[x].amount.toDecimal() * newFactor
                 self.rent.groups[x].amount = newAmount.toString()
             }
         }
@@ -141,7 +180,7 @@ extension Investment {
             newY = getNPVAfterNewFactor_BT(aInvestment: tempInvestment, aFactor: newX, discountRate: discountRate)
         }
         
-        return mxbFactor(factor1: x1, value1: y1, factor2: newX, value2: newY)
+        return newX
     }
     
     private func incrementFactor_BT(aInvestment: Investment, discountRate: Decimal, x1: Decimal, y1: Decimal, iCounter: Int) -> Decimal {
@@ -155,7 +194,7 @@ extension Investment {
             newY = getNPVAfterNewFactor_BT(aInvestment: tempInvestment, aFactor: newX, discountRate: discountRate)
         }
         
-        return mxbFactor(factor1: x1, value1: y1, factor2: newX, value2: newY)
+        return newX
     }
     
     
@@ -174,7 +213,5 @@ extension Investment {
         
         return myNPV
     }
-    
-    
     
 }

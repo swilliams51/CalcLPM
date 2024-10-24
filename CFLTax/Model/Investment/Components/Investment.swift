@@ -135,7 +135,7 @@ public class Investment {
         case .residualValue:
             solveForResidual(aYieldMethod: aYieldType, aTargetYield: aTargetYield)
         case .unLockedRentals:
-            solveForPaymentsV2(aYieldMethod: aYieldType, aTargetYield: aTargetYield)
+            solveForUnlockedPayments(aYieldMethod: aYieldType, aTargetYield: aTargetYield)
         default:
             break
         }
