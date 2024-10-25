@@ -29,6 +29,7 @@ struct EconomicsView: View {
     @State private var showPop1: Bool = false
     @State private var showPop2: Bool = false
     @State private var showPop3: Bool = false
+    @State private var showPop4: Bool = false
     
 
     private let pasteBoard = UIPasteboard.general
@@ -99,11 +100,19 @@ extension EconomicsView {
         HStack{
             Text("Solve For:")
                 .font(myFont)
+            Image(systemName: "questionmark.circle")
+                .foregroundColor(.blue)
+                .onTapGesture {
+                    self.showPop4 = true
+                }
             Picker(selection: $myEconomics.solveFor, label: Text("")) {
                 ForEach(SolveForOption.allCases, id: \.self) { item in
                     Text(item.toString())
                 }
             }
+        }
+        .popover(isPresented: $showPop4) {
+            PopoverView(myHelp: $payHelp, isDark: $isDark)
         }
     }
     

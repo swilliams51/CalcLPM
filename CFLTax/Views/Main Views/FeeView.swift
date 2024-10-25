@@ -92,6 +92,7 @@ struct FeeView: View {
         if self.myInvestment.fee.isEqual(to: myFee) == false {
             self.myInvestment.hasChanged = true
             self.myInvestment.fee = myFee
+            self.myInvestment.setFee()
         }
         path.removeLast()
     }
