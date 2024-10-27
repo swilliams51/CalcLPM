@@ -102,42 +102,46 @@ extension Investment {
         
        //2. Get NPV for y1, x = 0.0
         var y1 = getNPVAfterNewFee_AT(aInvestment: tempInvestment, discountRate: aTargetYield)
-        if y1 > 0.0 {
-            x2 = incrementFee(aInvestment: tempInvestment, aFeeStartingValue: x1, aTargetYield: aTargetYield, aCounter: 1)
-        } else {
-            x2 = decrementFee(aInvestment: tempInvestment, aFeeStartingValue: x1, aTargetYield: aTargetYield, aCounter: 1)
-        }
-        
-        tempInvestment.fee.amount = x2.toString()
-        var y2: Decimal = getNPVAfterNewFee_AT(aInvestment: tempInvestment, discountRate: aTargetYield)
-       
-        iCounter = 2
-        while iCounter < 3 {
-            mxbFee = mxbFactor(factor1: x1, value1: y1, factor2: x2, value2: y2)
-            tempInvestment.fee.amount = mxbFee.toString()
-            let newNPV = getNPVAfterNewFee_AT(aInvestment: tempInvestment, discountRate: aTargetYield)
-            if abs(newNPV) < toleranceSingleAmounts {
-                break
-            }
-            
-            x1 = mxbFee
-            y1 = newNPV
-            
-            if newNPV > 0.0 {
-                x2 = incrementFee(aInvestment: tempInvestment, aFeeStartingValue: mxbFee, aTargetYield: aTargetYield, aCounter: iCounter)
-                tempInvestment.fee.amount = x2.toString()
-                y2 = getNPVAfterNewFee_AT(aInvestment: tempInvestment, discountRate: aTargetYield)
+        if abs(y1) > toleranceLumpSums {
+            if y1 > 0.0 {
+                x2 = incrementFee(aInvestment: tempInvestment, aFeeStartingValue: x1, aTargetYield: aTargetYield, aCounter: 1)
             } else {
-                x2 = decrementFee(aInvestment: tempInvestment, aFeeStartingValue: mxbFee, aTargetYield: aTargetYield, aCounter: iCounter)
-                tempInvestment.fee.amount = x2.toString()
-                y2 = getNPVAfterNewFee_AT(aInvestment: tempInvestment, discountRate: aTargetYield)
+                x2 = decrementFee(aInvestment: tempInvestment, aFeeStartingValue: x1, aTargetYield: aTargetYield, aCounter: 1)
             }
-            iCounter += 1
+            
+            tempInvestment.fee.amount = x2.toString()
+            var y2: Decimal = getNPVAfterNewFee_AT(aInvestment: tempInvestment, discountRate: aTargetYield)
+           
+            iCounter = 2
+            while iCounter < 4 {
+                mxbFee = mxbFactor(factor1: x1, value1: y1, factor2: x2, value2: y2)
+                tempInvestment.fee.amount = mxbFee.toString()
+                let newNPV = getNPVAfterNewFee_AT(aInvestment: tempInvestment, discountRate: aTargetYield)
+                print("Count: \(iCounter): MxbFee: \(mxbFee) NPV: \(newNPV)")
+                if abs(newNPV) < toleranceLumpSums {
+                    break
+                }
+                
+                x1 = mxbFee
+                y1 = newNPV
+                
+                if newNPV > 0.0 {
+                    x2 = incrementFee(aInvestment: tempInvestment, aFeeStartingValue: mxbFee, aTargetYield: aTargetYield, aCounter: iCounter)
+                    tempInvestment.fee.amount = x2.toString()
+                    y2 = getNPVAfterNewFee_AT(aInvestment: tempInvestment, discountRate: aTargetYield)
+                } else {
+                    x2 = decrementFee(aInvestment: tempInvestment, aFeeStartingValue: mxbFee, aTargetYield: aTargetYield, aCounter: iCounter)
+                    tempInvestment.fee.amount = x2.toString()
+                    y2 = getNPVAfterNewFee_AT(aInvestment: tempInvestment, discountRate: aTargetYield)
+                }
+                iCounter += 1
+            }
+            
+            self.fee.amount = mxbFee.toString(decPlaces: 4)
+            self.fee.feeType = .expense
+            self.setFee()
         }
-        
-        self.fee.amount = mxbFee.toString(decPlaces: 4)
-        self.fee.feeType = .expense
-        self.setFee()
+       
     }
    
     private func getNPVAfterNewFee_AT(aInvestment: Investment, discountRate: Decimal) -> Decimal {

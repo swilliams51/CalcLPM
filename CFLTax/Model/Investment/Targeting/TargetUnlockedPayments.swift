@@ -33,44 +33,47 @@ extension Investment{
         var x1: Decimal = 1.0
         var x2: Decimal = 1.0
         var y1 = tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: yield, aDayCountMethod: self.economics.dayCountMethod)
-        var iCount = 1
-        
-        if y1 < 0.0 {
-            x2 = incrementFactor_AT(aInvestment: tempInvestment, discountRate: yield, x1: x1, y1: y1, iCounter: iCount)
-        } else {
-            x2 = decrementFactor_AT(aInvestment: tempInvestment, discountRate: yield, x1: x1, y1: y1, iCounter: iCount)
-        }
-        var y2 = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: x2, discountRate: yield)
-        
-        iCount = 2
-        while iCount < 10 {
-            newFactor = mxbFactor(factor1: x1, value1: y1, factor2: x2, value2: y2)
-            let myBalance = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: newFactor, discountRate: yield)
-            //print("newFactor: \(newFactor), NPV: \(myBalance)")
+        if abs(y1) > tolerancePaymentAmounts {
+            var iCount = 1
             
-            if abs(myBalance) < tolerancePaymentAmounts {
-                break
-            }
-            x1 = newFactor
-            y1 = myBalance
-            
-            if myBalance < 0.0 {
+            if y1 < 0.0 {
                 x2 = incrementFactor_AT(aInvestment: tempInvestment, discountRate: yield, x1: x1, y1: y1, iCounter: iCount)
             } else {
                 x2 = decrementFactor_AT(aInvestment: tempInvestment, discountRate: yield, x1: x1, y1: y1, iCounter: iCount)
             }
-            y2 = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: x2, discountRate: yield)
-            iCount += 1
-        }
-        
-        //Then adjust the payments in the actual investment
-        for x in 0..<self.rent.groups.count {
-            if self.rent.groups[x].locked == false {
-                let newAmount = self.rent.groups[x].amount.toDecimal() * newFactor
-                self.rent.groups[x].amount = newAmount.toString()
+            var y2 = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: x2, discountRate: yield)
+            
+            iCount = 2
+            while iCount < 10 {
+                newFactor = mxbFactor(factor1: x1, value1: y1, factor2: x2, value2: y2)
+                let myBalance = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: newFactor, discountRate: yield)
+                //print("newFactor: \(newFactor), NPV: \(myBalance)")
+                
+                if abs(myBalance) < tolerancePaymentAmounts {
+                    break
+                }
+                x1 = newFactor
+                y1 = myBalance
+                
+                if myBalance < 0.0 {
+                    x2 = incrementFactor_AT(aInvestment: tempInvestment, discountRate: yield, x1: x1, y1: y1, iCounter: iCount)
+                } else {
+                    x2 = decrementFactor_AT(aInvestment: tempInvestment, discountRate: yield, x1: x1, y1: y1, iCounter: iCount)
+                }
+                y2 = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: x2, discountRate: yield)
+                iCount += 1
             }
+            
+            //Then adjust the payments in the actual investment
+            for x in 0..<self.rent.groups.count {
+                if self.rent.groups[x].locked == false {
+                    let newAmount = self.rent.groups[x].amount.toDecimal() * newFactor
+                    self.rent.groups[x].amount = newAmount.toString()
+                }
+            }
+            tempInvestment.afterTaxCashflows.items.removeAll()
         }
-        tempInvestment.afterTaxCashflows.items.removeAll()
+       
     }
     
     private func decrementFactor_AT(aInvestment: Investment, discountRate: Decimal, x1: Decimal, y1: Decimal, iCounter: Int) -> Decimal {
@@ -212,6 +215,13 @@ extension Investment{
         let myNPV: Decimal = tempInvestment.beforeTaxCashflows.ModXNPV(aDiscountRate: discountRate, aDayCountMethod: self.economics.dayCountMethod)
         
         return myNPV
+    }
+    
+    private func tolerance() -> Decimal {
+        let numberOfPayments: Decimal = self.rent.getTotalNoOfBasePayments(aFreq: self.leaseTerm.paymentFrequency, eomRule: self.leaseTerm.endOfMonthRule, interimGroupExists: self.rent.interimExists()).toString().toDecimal()
+        let myTolerance = (numberOfPayments / 30.0) * 0.50
+        
+        return myTolerance
     }
     
 }

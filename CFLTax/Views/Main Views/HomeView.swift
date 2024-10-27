@@ -21,6 +21,10 @@ struct HomeView: View {
     @State var currentFile: String = "File is New"
     @State var maximumEBOAmount: Decimal = 0.0
     @State var minimumEBOAmount: Decimal = 0.0
+    @State var showPop1: Bool = false
+    @State var showPop2: Bool = false
+    @State var payHelp = leaseAmountHelp
+    
 
     var body: some View {
         NavigationStack (path: $path){
@@ -60,6 +64,7 @@ struct HomeView: View {
                             .imageScale(.large)
                     })
                 }
+               
                 ToolbarItem(placement: .bottomBar) {
                     Menu(content: {
                         addItemsMenu
@@ -76,7 +81,12 @@ struct HomeView: View {
                     self.myInvestment.earlyBuyoutExists = false
                 }
             }
-    
+            .popover(isPresented: $showPop1) {
+                PopoverView(myHelp: $payHelp, isDark: $isDark)
+            }
+            .popover(isPresented: $showPop2) {
+                PopoverView(myHelp: $payHelp, isDark: $isDark)
+            }
         }
     }
     
@@ -150,6 +160,12 @@ struct HomeView: View {
         HStack{
             Text("Fee")
                 .font(myFont)
+            Image(systemName: "questionmark.circle")
+                .font(myFont)
+                .foregroundColor(.blue)
+                .onTapGesture {
+                    self.showPop1 = true
+                }
             Spacer()
             Image(systemName: "chevron.right")
         }
@@ -163,6 +179,12 @@ struct HomeView: View {
         HStack{
             Text("Early Buyout")
                 .font(myFont)
+            Image(systemName: "questionmark.circle")
+                .font(myFont)
+                .foregroundColor(.blue)
+                .onTapGesture {
+                    self.showPop2 = true
+                }
             Spacer()
             Image(systemName: "chevron.right")
         }
@@ -195,7 +217,6 @@ struct HomeView: View {
         .contentShape(Rectangle())
         .onTapGesture {
             self.path.append(25)
-            
         }
         .alert(isPresented: $isShowingYieldErrorAlert) {
             Alert(title: Text("Yield Calculation Error"), message: Text(yieldCalcMessage), dismissButton: .default(Text("OK")))
@@ -234,10 +255,12 @@ extension HomeView {
             if myInvestment.feeExists {
                 removeFeeItem
             }
+            
             if myInvestment.earlyBuyoutExists {
                 removeEBOItem
             }
         }
+       
     }
     
     var removeFeeItem: some View {
@@ -245,7 +268,7 @@ extension HomeView {
             self.myInvestment.fee.amount = "0.00"
             self.myInvestment.feeExists = false
         }) {
-            Label("Remove Fee", systemImage: "arrowshape.turn.up.backward")
+            Label("Remove Fee", systemImage: "folder.badge.minus")
                 .font(myFont)
         }
     }
@@ -255,7 +278,7 @@ extension HomeView {
             self.myInvestment.earlyBuyout.amount = "0.00"
             self.myInvestment.earlyBuyoutExists = false
         }) {
-            Label("Remove Early Buyout", systemImage: "arrowshape.turn.up.backward")
+            Label("Remove Early Buyout", systemImage: "folder.badge.minus")
                 .font(myFont)
         }
     }
@@ -276,7 +299,7 @@ extension HomeView {
             self.myInvestment.setFeeToDefault()
             self.myInvestment.feeExists = true
         }) {
-            Label("Add Fee", systemImage: "arrowshape.turn.up.backward")
+            Label("Add Fee", systemImage: "folder.badge.plus")
                 .font(myFont)
         }
     }
@@ -286,7 +309,7 @@ extension HomeView {
             self.myInvestment.setEBOToDefault()
             self.myInvestment.earlyBuyoutExists = true
         }) {
-            Label("Add EBO", systemImage: "arrowshape.turn.up.backward")
+            Label("Add EBO", systemImage: "folder.badge.plus")
         }
     }
     

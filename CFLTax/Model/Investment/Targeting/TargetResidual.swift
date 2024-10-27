@@ -22,43 +22,47 @@ extension Investment {
     private func solveForResidual_MISF(aTargetYield: Decimal, isAfterTax: Bool) {
         let tempInvestment: Investment = self.clone()
         var yield: Decimal = aTargetYield
-        var newFactor: Decimal = 0.0
+        var newFactor: Decimal = 1.0
         if isAfterTax == false {
             yield = yield * (1.0 - self.taxAssumptions.federalTaxRate.toDecimal())
         }
+        var myBalance = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: newFactor, discountRate: yield)
         
-        var x1: Decimal = 0.0
-        var y1: Decimal = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: x1, discountRate: yield)
-        
-        var x2: Decimal = 0.30
-        var y2: Decimal = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: x2, discountRate: yield)
-        
-        var counter:Int = 1
-        while counter < 10 {
-            newFactor = mxbFactor(factor1: x1, value1: y1, factor2: x2, value2: y2)
-            if newFactor < 0.0 {
-                newFactor = 0.0
-                break
-            }
-            let myBalance = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: newFactor, discountRate: yield)
-            if abs(myBalance) < toleranceSingleAmounts {
-                break
-            }
-            x1 = newFactor
-            y1 = myBalance
+        if abs(myBalance) > toleranceLumpSums {
+            var x1: Decimal = 0.0
+            var y1: Decimal = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: x1, discountRate: yield)
             
-            if myBalance < 0.0 {
-                x2 = incrementFactor_AT(aInvestment: tempInvestment, discountRate: yield, x1: x1, y1: y1, iCounter: counter)
-                y2 = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: x2, discountRate: yield)
-            } else {
-                x2 = decrementFactor_AT(aInvestment: tempInvestment, discountRate: yield, x1: x1, y1: y1, iCounter: counter)
-                y2 = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: x2, discountRate: yield)
+            var x2: Decimal = 0.30
+            var y2: Decimal = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: x2, discountRate: yield)
+            
+            var counter:Int = 1
+            while counter < 10 {
+                newFactor = mxbFactor(factor1: x1, value1: y1, factor2: x2, value2: y2)
+                if newFactor < 0.0 {
+                    newFactor = 0.0
+                    break
+                }
+                myBalance = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: newFactor, discountRate: yield)
+                if abs(myBalance) < toleranceLumpSums {
+                    break
+                }
+                x1 = newFactor
+                y1 = myBalance
+                
+                if myBalance < 0.0 {
+                    x2 = incrementFactor_AT(aInvestment: tempInvestment, discountRate: yield, x1: x1, y1: y1, iCounter: counter)
+                    y2 = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: x2, discountRate: yield)
+                } else {
+                    x2 = decrementFactor_AT(aInvestment: tempInvestment, discountRate: yield, x1: x1, y1: y1, iCounter: counter)
+                    y2 = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: x2, discountRate: yield)
+                }
+                counter += 1
             }
-            counter += 1
+            
+            let myResidual: Decimal = tempInvestment.getAssetCost(asCashflow: false) * newFactor
+            self.asset.residualValue = myResidual.toString(decPlaces: 4)
         }
-        
-        let myResidual: Decimal = tempInvestment.getAssetCost(asCashflow: false) * newFactor
-        self.asset.residualValue = myResidual.toString(decPlaces: 4)
+    
     }
    
     private func getNPVAfterNewFactor_AT(aInvestment: Investment, aFactor: Decimal, discountRate: Decimal) -> Decimal {
@@ -118,7 +122,7 @@ extension Investment {
                 break
             }
             let myBalance = getNPVAfterNewFactor_BT(aInvestment: tempInvestment, aFactor: newFactor, discountRate: yield)
-            if abs(myBalance) < toleranceSingleAmounts {
+            if abs(myBalance) < toleranceLumpSums {
                 break
             }
             x1 = newFactor
