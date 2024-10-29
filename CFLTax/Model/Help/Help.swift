@@ -34,6 +34,12 @@ let eboHelp =
 let eboHelp2 =
     Help(title: "Early Buyout", instruction: "The EBO Amount can not be entered manually, but instead is expressed as a spread in basis points over the full term MISF After-Yield. The slider is accurate to ~ +/- 1 basis point.   To adjust the EBO amount move the slider to the appropriate spread and then press the calculate button. It is important to remember than any subsequent change in the investment parameters will result in the EBO being removed from the investment.  The EBO can be added back after all changes to the investment are completed.")
 
+let eboHomeHelp =
+    Help(title: "Add/Remove EBO", instruction: "An EBO can be added to or removed from the Investment through the Add/Remove EBO buttons below.  Setting the EBO Amount to 0.0 will also remove the EBO from the Investment. Note an EBO will be automatically removed from the Investment when an investment parameter changes.")
+
+let feeHomeHelp =
+    Help(title: "Add/Remove Fee", instruction: "A Fee maybe added to or removed from the Investment through the Add/Remove Fee buttons below. The Fee can also be added to the Investment by selecting it as a solveFor option in the economics screen. Setting the Fee Amount to 0.0 will also remove the Fee from the Investment.")
+
 let eomRuleHelp =
     Help(title: "End of Month Rule", instruction: "If the base term commencement date starts on last day of a month with 30 days and the rule is on, then the payment due dates for the months with 31 days will occur on the 31st of the applicable month.  If the rule is off then payment due dates for the months with 31 days will occur on the 30th.")
 

@@ -9,10 +9,18 @@ import SwiftUI
 
 @main
 struct CFLTaxApp: App {
+    @State private var showLaunchView: Bool = true
     
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            ZStack{
+                HomeView()
+                if showLaunchView {
+                    SplashScreenView(showLaunchView: $showLaunchView)
+                        .transition(.move(edge: .leading))
+                }
+            }
+            
         }
     }
 }

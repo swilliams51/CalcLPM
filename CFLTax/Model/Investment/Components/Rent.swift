@@ -50,6 +50,36 @@ public struct Rent {
         return bolAdvanceRentals
     }
     
+    public func allPaymentsAreLocked() -> Bool {
+        var bolAllPaymentsLocked: Bool = true
+        
+        for x in 0..<groups.count {
+            if groups[x].locked == false {
+                bolAllPaymentsLocked = false
+                break
+            }
+        }
+        
+        return bolAllPaymentsLocked
+    }
+   
+    public func allPaymentsEqualZero() -> Bool {
+        var nonZeroPaymentExists: Bool = false
+        
+        for x in 0..<groups.count {
+            if groups[x].amount.toDecimal() != 0.00 {
+                nonZeroPaymentExists = true
+                break
+            }
+        }
+        
+        if nonZeroPaymentExists == false {
+            return true
+        } else {
+            return false
+        }
+    }
+    
     public func interimExists() -> Bool {
         if groups.count > 0 {
             if groups[0].isInterim == true {

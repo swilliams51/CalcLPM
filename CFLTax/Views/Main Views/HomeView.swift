@@ -16,14 +16,16 @@ struct HomeView: View {
     @State var myDepreciationSchedule: DepreciationIncomes = DepreciationIncomes()
     @State var myRentalSchedule: RentalCashflows = RentalCashflows()
     @State var myTaxableIncomes: AnnualTaxableIncomes = AnnualTaxableIncomes()
-    @State var myFeeAmortization: FeeIncomes = FeeIncomes()
-    @State var isShowingYieldErrorAlert: Bool = false
-    @State var currentFile: String = "File is New"
-    @State var maximumEBOAmount: Decimal = 0.0
-    @State var minimumEBOAmount: Decimal = 0.0
-    @State var showPop1: Bool = false
-    @State var showPop2: Bool = false
-    @State var payHelp = leaseAmountHelp
+    
+    @State private var myFeeAmortization: FeeIncomes = FeeIncomes()
+    @State private var isShowingYieldErrorAlert: Bool = false
+    @State private var currentFile: String = "File is New"
+    @State private var maximumEBOAmount: Decimal = 0.0
+    @State private var minimumEBOAmount: Decimal = 0.0
+    @State private var showPop1: Bool = false
+    @State private var showPop2: Bool = false
+    @State private var feeHelp = feeHomeHelp
+    @State private var eboHelp = eboHomeHelp
     
 
     var body: some View {
@@ -82,11 +84,15 @@ struct HomeView: View {
                 }
             }
             .popover(isPresented: $showPop1) {
-                PopoverView(myHelp: $payHelp, isDark: $isDark)
+                PopoverView(myHelp: $feeHelp, isDark: $isDark)
             }
             .popover(isPresented: $showPop2) {
-                PopoverView(myHelp: $payHelp, isDark: $isDark)
+                PopoverView(myHelp: $eboHelp, isDark: $isDark)
             }
+            .alert(isPresented: $isShowingYieldErrorAlert) {
+                Alert(title: Text("Yield Calculation Error"), message: Text(alertYieldCalculationError), dismissButton: .default(Text("OK")))
+            }
+            
         }
     }
     
@@ -216,10 +222,11 @@ struct HomeView: View {
         }
         .contentShape(Rectangle())
         .onTapGesture {
-            self.path.append(25)
-        }
-        .alert(isPresented: $isShowingYieldErrorAlert) {
-            Alert(title: Text("Yield Calculation Error"), message: Text(yieldCalcMessage), dismissButton: .default(Text("OK")))
+            if myInvestment.isSolveForValid() {
+                self.path.append(25)
+            } else {
+                self.isShowingYieldErrorAlert = true
+            }
         }
     }
     
@@ -247,7 +254,7 @@ struct HomeView: View {
 }
 
 
-let yieldCalcMessage = "The current inputs will produce a negative yield. Consequently, the yield calculation is terminated. The sum of the Rents and the Residual Value must be greater than the Lessor Cost."
+
 
 extension HomeView {
     var removeItemsMenu: some View {

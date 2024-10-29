@@ -10,6 +10,20 @@ import Foundation
 
 extension Investment {
     // Mark - Date Resets
+    
+    func resetAllDatesToCurrentDate() {
+        self.asset.fundingDate = Date()
+        resetForFundingDateChange()
+        resetForBaseTermCommenceDateChange()
+        if self.feeExists {
+            self.setFeeToDefault()
+        }
+        if self.earlyBuyoutExists {
+            self.setEBOToDefault()
+        }
+        self.economics.solveFor = .yield
+    }
+    
     func resetForBaseTermCommenceDateChange() {
         if self.rent.groups[0].isInterim == true {
             if self.leaseTerm.baseCommenceDate == self.asset.fundingDate {
@@ -161,9 +175,11 @@ extension Investment {
         }
     }
     
-    func resetToDefault() {
-        let arrayInvestment: [String] = sampleFile.components(separatedBy: "*")
-        
+    func resetToDefault(useSaved: Bool = false, currSaved: String = "No_Data") {
+        var arrayInvestment: [String] = sampleFile.components(separatedBy: "*")
+        if useSaved {
+            arrayInvestment = currSaved.components(separatedBy: "*")
+        }
         self.asset = readAsset(arrayAsset:  arrayInvestment[0].components(separatedBy: ","))
         self.leaseTerm = readLeaseTerm(arrayLeaseTerm: arrayInvestment[1].components(separatedBy: ","))
         self.rent = readRent(arrayGroups: arrayInvestment[2].components(separatedBy: "|"))
@@ -174,7 +190,9 @@ extension Investment {
         self.earlyBuyout = readEarlyBuyout(arrayEBO: arrayInvestment[7].components(separatedBy: ","))
         self.setFee()
         self.setEBO()
+        self.resetAllDatesToCurrentDate()
     }
+
     
     func resetToFileData(strFile: String) {
         let arrayInvestment: [String] = strFile.components(separatedBy: "*")

@@ -104,23 +104,64 @@ public class Investment {
         return investmentClone
     }
     
-    public func yieldCalculationIsValid() -> Bool {
-        var isValid: Bool = true
+    public func isSolveForValid() -> Bool {
+        switch self.economics.solveFor {
+        case .yield:
+            if isYieldCalculationIsValid() == false {
+                return false
+            }
+        case .unLockedRentals:
+            if isUnlockedRentalsCalculationIsValid()  == false {
+                return false
+            }
+        case .fee:
+            return true
+        case .residualValue:
+            return true
+        case .lessorCost:
+            return true
+        }
+        return true
+    }
+    
+    private func isUnlockedRentalsCalculationIsValid() -> Bool {
+        if self.rent.getTotalNumberOfPayments() < 12 {
+           return false
+        }
+        
+        let maxAmount: Decimal = self.asset.lessorCost.toDecimal() * 2.0
+        if self.rent.getTotalAmountOfPayments(aFreq: self.leaseTerm.paymentFrequency) > maxAmount {
+            return false
+        }
+        
+        if self.rent.allPaymentsAreLocked() == true {
+            return false
+        }
+        
+        if self.rent.allPaymentsEqualZero() == true {
+            return false
+        }
+        
+        return true
+    }
+    
+    private func isYieldCalculationIsValid() -> Bool {
         let tempInvestment: Investment = self.clone()
+        let maxAmount: Decimal = self.asset.lessorCost.toDecimal() * 2.0
         
         tempInvestment.setAfterTaxCashflows()
-        if tempInvestment.afterTaxCashflows.getTotal() < 0 {
-            isValid = false
+        if tempInvestment.afterTaxCashflows.getTotal() < 0 || tempInvestment.afterTaxCashflows.getTotal() > maxAmount {
+            return false
         }
         tempInvestment.afterTaxCashflows.removeAll()
         
         tempInvestment.setBeforeTaxCashflows()
-        if tempInvestment.beforeTaxCashflows.getTotal() < 0 {
-            isValid = false
+        if tempInvestment.beforeTaxCashflows.getTotal() < 0  || tempInvestment.beforeTaxCashflows.getTotal() > maxAmount{
+            return false
         }
         tempInvestment.beforeTaxCashflows.removeAll()
         
-        return isValid
+        return true
     }
     
     public func calculate(plannedIncome: String = "0.0", unplannedDate: Date = Date()) {

@@ -15,6 +15,9 @@ struct FileMenuView: View {
     @State private var fm = LocalFileManager()
     @State private var isShowingFileNameAlert: Bool = false
     
+    @AppStorage("savedDefault") var savedDefaultLease: String = "No_Data"
+    @AppStorage("useSaved") var useSavedAsDefault: Bool = false
+    
     var body: some View {
         Form {
             Section(footer: Text(" File Name: \(currentFile)").font(myFont)) {
@@ -48,8 +51,12 @@ struct FileMenuView: View {
         .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
+            if self.useSavedAsDefault {
+                self.myInvestment.resetToDefault(useSaved: true, currSaved: savedDefaultLease)
+            } else {
+                self.myInvestment.resetToDefault()
+            }
             self.currentFile = "File is New"
-            self.myInvestment.resetToDefault()
             path.removeLast()
         }
     }
