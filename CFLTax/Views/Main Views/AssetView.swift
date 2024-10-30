@@ -26,11 +26,13 @@ struct AssetView: View {
     //Residual value TextField
     @State private var editResidualValueStarted: Bool = false
     @State private var residualValueOnEntry: String = ""
+    @State private var residualPercentOnEntry: Decimal = 0.0
     @FocusState private var residualValueIsFocused: Bool
     //Lessee Guaranty TextField
     @State private var editLesseeGuarantyStarted: Bool = false
     @FocusState private var lesseeGuarantyIsFocused: Bool
     @State private var lesseeGuarantyOnEntry: String = ""
+    @State private var lesseeGuarantyPercentOnEntry: Decimal = 0.0
    
     private let pasteBoard = UIPasteboard.general
     
@@ -71,6 +73,12 @@ struct AssetView: View {
         .navigationBarBackButtonHidden(true)
         .onAppear {
             self.myAsset = myInvestment.asset
+            self.nameOnEntry = myAsset.name
+            self.lessorCostOnEntry = myAsset.lessorCost
+            self.residualValueOnEntry = myAsset.residualValue
+            self.lesseeGuarantyOnEntry = myAsset.lesseeGuarantyAmount
+            self.residualPercentOnEntry = residualValueOnEntry.toDecimal() / lessorCostOnEntry.toDecimal()
+            self.lesseeGuarantyPercentOnEntry = lesseeGuarantyOnEntry.toDecimal() / lessorCostOnEntry.toDecimal()
         }
     }
     
@@ -444,6 +452,8 @@ extension AssetView {
             alertTitle = alertMaxAmount
             showAlert.toggle()
         }
+        self.myAsset.residualValue = (myAsset.lessorCost.toDecimal() * residualPercentOnEntry).toString()
+        self.myAsset.lesseeGuarantyAmount = (myAsset.lessorCost.toDecimal() * lesseeGuarantyPercentOnEntry).toString()
             
         self.editLessorStarted = false
     }
@@ -461,6 +471,7 @@ extension AssetView {
             if self.myAsset.residualValue.toDecimal() > 0.00 && self.myAsset.residualValue.toDecimal() <= 1.0 {
                 self.myAsset.residualValue = myInvestment.percentToAmount(percent: myAsset.residualValue, basis: myAsset.lessorCost)
             }
+            self.myAsset.lesseeGuarantyAmount = (myAsset.lessorCost.toDecimal() * lesseeGuarantyPercentOnEntry).toString()
         }
             
         self.editResidualValueStarted = false
