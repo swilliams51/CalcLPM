@@ -35,10 +35,10 @@ let eboHelp2 =
     Help(title: "Early Buyout", instruction: "The EBO Amount can not be entered manually, but instead is expressed as a spread in basis points over the full term MISF After-Yield. The slider is accurate to ~ +/- 1 basis point.   To adjust the EBO amount move the slider to the appropriate spread and then press the calculate button. It is important to remember than any subsequent change in the investment parameters will result in the EBO being removed from the investment.  The EBO can be added back after all changes to the investment are completed.")
 
 let eboHomeHelp =
-    Help(title: "Add/Remove EBO", instruction: "An EBO can be added to or removed from the Investment through the Add/Remove EBO buttons below.  Setting the EBO Amount to 0.0 will also remove the EBO from the Investment. Note an EBO will be automatically removed from the Investment when an investment parameter changes.")
+    Help(title: "Add/Remove EBO", instruction: "An EBO can be added to or removed from the Investment using the Add/Remove EBO buttons below.  Setting the EBO Amount to 0.0 will also remove an EBO. Note, an EBO will be automatically removed from the Investment when any investment parameter changes.")
 
 let feeHomeHelp =
-    Help(title: "Add/Remove Fee", instruction: "A Fee maybe added to or removed from the Investment through the Add/Remove Fee buttons below. The Fee can also be added to the Investment by selecting it as a solveFor option in the economics screen. Setting the Fee Amount to 0.0 will also remove the Fee from the Investment.")
+    Help(title: "Add/Remove Fee", instruction: "A Fee maybe added to or removed from the Investment using the Add/Remove Fee buttons below. A Fee can also be added by selecting it as a solveFor option in the economics screen. Setting the Fee Amount to 0.0 will also remove a Fee from the Investment.")
 
 let eomRuleHelp =
     Help(title: "End of Month Rule", instruction: "If the base term commencement date starts on last day of a month with 30 days and the rule is on, then the payment due dates for the months with 31 days will occur on the 31st of the applicable month.  If the rule is off then payment due dates for the months with 31 days will occur on the 30th.")
@@ -101,3 +101,9 @@ let termAmortHelp =
     Help(title: "Amortization Term", instruction: "The amortization term is the number of months required to fully amortize the loan amount given the interest rate and a level payment structure. The program will then use that calculated payment as the payment amount for the current loan and then will calculate the balloon payment that will balance the loan. A 60-month loan at a 120-month amortization given a 5.00% interest rate will result in 56.2048% balloon payment.")
 
 let terminationHelp = Help(title: "Termination Values", instruction: "TVs are a schedule of values in excess of the applicable lease balances for each payment date. For a non-true lease, setting the discount rate for rent equal to the buy rate will protect any fees paid to the buyer in the event of an unscheduled termination of the lease.  To remove TVs from reports set the discount rates for rent and residual to the maximum values and the additional residual percentage to 0.00%.")
+
+let assetFundingDateHelp = Help(title: "Funding Date", instruction: "The asset funding date is the date that the asset is funded by the lessor.  This date can be the same as the Base Commencement Date or it can occur at an earlier date.")
+
+let assetResidualValueHelp = Help(title: "Residual Value", instruction: "The residual value is the amount of the lessor's cost that the lessor expects to realize by sale or release of the asset at the end expiration of the Base Lease Term.  The residual value can not be less than zero or gretaer than the Lessor Cost.")
+
+let assetLesseeGuarantyHelp = Help(title: "Lessee Guaranty Amount", instruction: "The Lessee Guaranty Amount is the amount of the residual value that is guaranteed by the Lessee.  It is commonmly used in TRAC Leases. The amount of the Lessee Guaranty can not exceed the residual value of the asset.")

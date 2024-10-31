@@ -7,10 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DBAAD5202CD2A5AA0041515D /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = DBAAD51F2CD2A5AA0041515D /* PrivacyInfo.xcprivacy */; };
 		DBB171362C6514EC00365B9A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = DBB171352C6514EC00365B9A /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		DBAAD51F2CD2A5AA0041515D /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		DBB1712E2C6514EA00365B9A /* CFLTax.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CFLTax.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		DBB171352C6514EC00365B9A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -35,6 +37,7 @@
 			children = (
 				DBB171302C6514EA00365B9A /* CFLTax */,
 				DBB171352C6514EC00365B9A /* Assets.xcassets */,
+				DBAAD51F2CD2A5AA0041515D /* PrivacyInfo.xcprivacy */,
 				DBB1712F2C6514EA00365B9A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -111,6 +114,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DBB171362C6514EC00365B9A /* Assets.xcassets in Resources */,
+				DBAAD5202CD2A5AA0041515D /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

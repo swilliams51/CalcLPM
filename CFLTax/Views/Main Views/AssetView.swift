@@ -43,7 +43,9 @@ struct AssetView: View {
     @State private var alertTitle: String = ""
     @State private var showAlert: Bool = false
   
-    @State var payHelp = leaseAmountHelp
+    @State var assetHelp1 = assetResidualValueHelp
+    @State var assetHelp2 = assetLesseeGuarantyHelp
+    @State var assetHelp3 = assetFundingDateHelp
  
     
     
@@ -113,7 +115,6 @@ extension AssetView {
             Image(systemName: "questionmark.circle")
                 .foregroundColor(Color.theme.accent)
                 .onTapGesture {
-                    print("Show Popover")
                     self.showPop3 = true
                 }
             Spacer()
@@ -126,7 +127,7 @@ extension AssetView {
         }
         .font(myFont)
         .popover(isPresented: $showPop3) {
-            PopoverView(myHelp: $payHelp, isDark: $isDark)
+            PopoverView(myHelp: $assetHelp3, isDark: $isDark)
         }
     }
 }
@@ -243,7 +244,7 @@ extension AssetView {
                 }
         }
         .popover(isPresented: $showPop1) {
-            PopoverView(myHelp: $payHelp, isDark: $isDark)
+            PopoverView(myHelp: $assetHelp1, isDark: $isDark)
         }
     }
     
@@ -300,7 +301,7 @@ extension AssetView {
                 }
         }
         .popover(isPresented: $showPop2) {
-            PopoverView(myHelp: $payHelp, isDark: $isDark)
+            PopoverView(myHelp: $assetHelp2, isDark: $isDark)
         }
     }
     

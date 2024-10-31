@@ -50,7 +50,6 @@ struct HomeView: View {
                     subMenuItem
                 }
             }
-            
             .environment(\.colorScheme, isDark ? .dark : .light)
             .navigationBarTitle("Home")
             .navigationDestination(for: Int.self) { selectedView in
