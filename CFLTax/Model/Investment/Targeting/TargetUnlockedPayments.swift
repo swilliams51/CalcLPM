@@ -81,10 +81,12 @@ extension Investment{
         var newX: Decimal = x1
         var newY: Decimal = y1
         let factor: Decimal = min(power(base: 10.0, exp: iCounter), 100000.00)
+        var count: Int = 1
         
         while newY > 0.0 {
-            newX = newX - newX / factor
+            newX = newX - ((newX / factor) * Decimal(count))
             newY = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: newX, discountRate: discountRate)
+            count += 1
         }
         
         return newX
@@ -96,10 +98,12 @@ extension Investment{
         var newX: Decimal = x1
         var newY: Decimal = y1
         let factor: Decimal = min(power(base: 10.0, exp: iCounter), 100000.00)
+        var count: Int = 1
         
         while newY < 0.0 {
-            newX = newX + newX / factor
+            newX = newX + ((newX / factor) * Decimal(count))
             newY = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: newX, discountRate: discountRate)
+            count += 1
         }
         
         return newX

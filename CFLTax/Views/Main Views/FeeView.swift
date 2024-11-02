@@ -17,13 +17,16 @@ struct FeeView: View {
     @State private var editAmountStarted: Bool = false
     @State private var maximumAmount: Decimal = 1.0
     @FocusState private var amountIsFocused: Bool
-    @State private var showPopover: Bool = false
+    @State private var amountOnEntry: String = ""
     private let pasteBoard = UIPasteboard.general
     
-    @State private var amountOnEntry: String = ""
+   
     @State private var alertTitle: String = ""
     @State private var showAlert: Bool = false
-    @State var payHelp = leaseAmountHelp
+    @State private var showPop1: Bool = false
+    @State var payHelp1 = feeAmountHelp
+    @State private var showPop2: Bool = false
+    @State private var payHelp2 = feeDatePaidHelp
     
     var body: some View {
         Form{
@@ -65,9 +68,18 @@ struct FeeView: View {
         HStack {
             Text("Date Paid:")
                 .font(myFont)
+            Image(systemName: "questionmark.circle")
+                .font(myFont)
+                .foregroundColor(.blue)
+                .onTapGesture {
+                    self.showPop2 = true
+                }
             Spacer()
             Text("\(myFee.datePaid.toStringDateShort(yrDigits: 2))")
                 .font(myFont)
+        }
+        .popover(isPresented: $showPop2) {
+            PopoverView(myHelp: $payHelp2, isDark: $isDark)
         }
     }
     
@@ -112,13 +124,13 @@ extension FeeView {
                 .foregroundColor(isDark ? .white : .black)
             Image(systemName: "questionmark.circle")
                 .font(myFont)
-                .foregroundColor(.black)
+                .foregroundColor(.blue)
                 .onTapGesture {
-                    self.showPopover = true
+                    self.showPop1 = true
                 }
         }
-        .popover(isPresented: $showPopover) {
-            PopoverView(myHelp: $payHelp, isDark: $isDark)
+        .popover(isPresented: $showPop1) {
+            PopoverView(myHelp: $payHelp1, isDark: $isDark)
         }
     }
     

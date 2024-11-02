@@ -18,7 +18,7 @@ let baseTermHelp =
     Help(title: "Base Term Start Date", instruction: "The date when the periodic payments commence.  If the base term start date occurs after the funding date then an interim term will be created and one non-periodic payment will added to the payment schedule. To remove an interim payment set the base start date equal to the funding date. For a monthly payment frequency the base start date cannot occur more than 90 days after the funding date. For all other payment frequencies the interim term cannot exceed the number of days in the payment frequency.")
 
 let basisHelp: Help =
-Help(title: "Basis for Depreciation", instruction: "This is a non-input field and is always equal to the Lessor Cost of the Asset.  Under certain situations, such as assets that qualify for Investment Tax Credits (ITC), the basis will be reduced by 50% of the amount of ITC taken. ITC related transaction are currently beyond the scope of this program. It is anticipated that future versions of the program will allow the user to input the basis accordingly.")
+    Help(title: "Basis for Depreciation", instruction: "This is a non-input field and is always equal to the Lessor Cost of the Asset.  Under certain situations, such as assets that qualify for Investment Tax Credits (ITC), the basis will be reduced by 50% of the amount of ITC taken. ITC related transaction are currently beyond the scope of this program. It is anticipated that future versions of the program will allow the user to input the basis accordingly.")
 
 let bonusHelp: Help =   Help(title: "Bonus Depreciation", instruction: "Bonus depreciation is the additional amount of first year depreciation that is available to the user. The bonus depreciation for 2024 is 60% and will be reduced by 20% per year until it will be phased out in 2027.")
 
@@ -38,7 +38,7 @@ let eboHelp =
     Help(title: "Early Buyout", instruction: "The EBO exercise date must occur on or before one year prior to the Lease maturity date but no earlier than the first anniversary date of the Lease.  An EBO Amount that is less than the par value on the applicable exercise date will result in an EBO yield that is less than the full term yield and potentially a book loss.")
 
 let eboHelp2 =
-    Help(title: "Early Buyout", instruction: "The EBO Amount can not be entered manually, but instead is expressed as a spread in basis points over the full term MISF After-Yield. The slider is accurate to ~ +/- 1 basis point.   To adjust the EBO amount move the slider to the appropriate spread and then press the calculate button. It is important to remember than any subsequent change in the investment parameters will result in the EBO being removed from the investment.  The EBO can be added back after all changes to the investment are completed.")
+    Help(title: "Early Buyout", instruction: "The EBO Amount can not be entered manually, but instead is expressed as a spread in basis points over the full term MISF After-Yield. The slider is accurate to ~ +/- 1 basis point.   To adjust the EBO amount move the slider to the appropriate spread and then press the calculate button to derive the EBO Amount. It is important to remember than any subsequent change to the Investment parameters will result in the EBO being removed from the Investment.  The EBO can be added back after all changes to the Investment are completed.")
 
 let eboHomeHelp =
     Help(title: "Add/Remove EBO", instruction: "An EBO can be added to or removed from the Investment using the Add/Remove EBO buttons below.  Setting the EBO Amount to 0.0 will also remove an EBO. Note, an EBO will be automatically removed from the Investment when any investment parameter changes.")
@@ -81,7 +81,7 @@ let leaseBalanceHelp =
     Help(title: "Outstanding Balance Help", instruction: "The effective date can be any date occurring after the funding date and before the maturity date of the Lease/Loan. Upon clicking the done button, an amortization report is available for the Lease/Loan Balance through the effective date. Any subsequent recalculation of the Lease/Loan will remove the Balance calculation from reports. To manually remove a Balance calculation from reports set the effective date equal to the funding date.")
 
 let numberOfPaymentsHelp =
-Help(title: "Number of Payments", instruction: "The total number of Base Term payments for all non-interim payment groups must not exceed 180 months when adjusting for the payment frequency. For example, if the payment frequency is monthly, then the total number of payments must not exceed 180.  If the payment frequency is semiannually, then the total number of payments must not exceed 90.")
+    Help(title: "Number of Payments", instruction: "The total number of Base Term payments for all non-interim payment groups must not exceed 180 months when adjusting for the payment frequency. For example, if the payment frequency is monthly, then the total number of payments must not exceed 180.  If the payment frequency is semiannually, then the total number of payments must not exceed 90.")
 
 let operatingModeHelp =
     Help(title: "Operating Mode", instruction: "The app has two modes, leasing and lending. In the lending mode, the payment types are limited to interest only, payment, principal, and balloon and the timing of such payments is limited to in arrears. In the leasing mode payments can be made in advance or in arrears and there are 3 additional payment types - daily equivalent all (deAll), daily equivalent next (deNext), and residual.")
@@ -109,19 +109,33 @@ let solveForTermHelp =
 let termAmortHelp =
     Help(title: "Amortization Term", instruction: "The amortization term is the number of months required to fully amortize the loan amount given the interest rate and a level payment structure. The program will then use that calculated payment as the payment amount for the current loan and then will calculate the balloon payment that will balance the loan. A 60-month loan at a 120-month amortization given a 5.00% interest rate will result in 56.2048% balloon payment.")
 
-let terminationHelp = Help(title: "Termination Values", instruction: "TVs are a schedule of values in excess of the applicable lease balances for each payment date. For a non-true lease, setting the discount rate for rent equal to the buy rate will protect any fees paid to the buyer in the event of an unscheduled termination of the lease.  To remove TVs from reports set the discount rates for rent and residual to the maximum values and the additional residual percentage to 0.00%.")
+let terminationHelp =
+    Help(title: "Termination Values", instruction: "TVs are a schedule of values in excess of the applicable lease balances for each payment date. For a non-true lease, setting the discount rate for rent equal to the buy rate will protect any fees paid to the buyer in the event of an unscheduled termination of the lease.  To remove TVs from reports set the discount rates for rent and residual to the maximum values and the additional residual percentage to 0.00%.")
 
-let assetFundingDateHelp = Help(title: "Funding Date", instruction: "The asset funding date is the date that the asset is funded by the lessor.  This date can be the same as the Base Commencement Date or it can occur at an earlier date.")
+let assetFundingDateHelp =
+    Help(title: "Funding Date", instruction: "The asset funding date is the date that the asset is funded by the lessor.  This date can be the same as the Base Commencement Date or it can occur at an earlier date.")
 
-let assetResidualValueHelp = Help(title: "Residual Value", instruction: "The residual value is the amount of the lessor's cost that the lessor expects to realize by sale or release of the asset at the end expiration of the Base Lease Term.  The residual value can not be less than zero or gretaer than the Lessor Cost.")
+let assetResidualValueHelp =
+    Help(title: "Residual Value", instruction: "The residual value is the amount of the lessor's cost that the lessor expects to realize by sale or release of the asset at the end expiration of the Base Lease Term.  The residual value can not be less than zero or gretaer than the Lessor Cost.")
 
-let assetLesseeGuarantyHelp = Help(title: "Lessee Guaranty Amount", instruction: "The Lessee Guaranty Amount is the amount of the residual value that is guaranteed by the Lessee.  It is commonmly used in TRAC Leases. The amount of the Lessee Guaranty can not exceed the residual value of the asset.")
+let assetLesseeGuarantyHelp =
+    Help(title: "Lessee Guaranty Amount", instruction: "The Lessee Guaranty Amount is the amount of the residual value that is guaranteed by the Lessee.  It is commonmly used in TRAC Leases. The amount of the Lessee Guaranty can not exceed the residual value of the asset.")
 
 
-let yieldMethodHelp = Help(title: "Yield Method", instruction: "The yield method is the method used to calculate the yield of the Investment.  The two primary methods are the After-Tax Multiple Investment Sinking Fund (MISF-AT) method and the Internal Rate of Return of the Pre-Tax Cashflows (IRR of PTCF) method.  The sinking rate used in the MISF method is 0.00%.  The MISF-BT yield is cacluated indirectly by dividing the MISF-AT Yield by 1.0 minus the Federal Tax Rate.")
+let yieldMethodHelp =
+    Help(title: "Yield Method", instruction: "The yield method is the method used to calculate the yield of the Investment.  The two primary methods are the After-Tax Multiple Investment Sinking Fund (MISF-AT) method and the Internal Rate of Return of the Pre-Tax Cashflows (IRR of PTCF) method.  The sinking rate used in the MISF method is 0.00%.  The MISF-BT yield is cacluated indirectly by dividing the MISF-AT Yield by 1.0 minus the Federal Tax Rate.")
 
-let solveForHelp = Help(title: "Solve For", instruction: "The program allows the user to solve for 1- the lessor cost, 2- the unlocked rentals, 3- the residual value, 4- the fee amount, or 5- any one of 3 possible yields. The first four options will solve for the amount of lessor cost, unlocked rentals, residual value, or fee amount that will produce the targeted yield while holding all other investment paranmeters constant. The yield solve for option will simply calculate all three yields based upon the input parameters.")
+let solveForHelp =
+    Help(title: "Solve For", instruction: "The program allows the user to solve for 1- the lessor cost, 2- the unlocked rentals, 3- the residual value, 4- the fee amount, or 5- any one of 3 possible yields. The first four options will solve for the amount of lessor cost, unlocked rentals, residual value, or fee amount that will produce the targeted yield while holding all other investment paranmeters constant. The yield solve for option will simply calculate all three yields based upon the input parameters.")
 
-let discountRateHelp = Help(title: "Discount Rate", instruction: "The discount rate is the rate used to calculate two present value amounts, 1- PV1, which the present value of the lease payments and 2- PV2, which is the present value of the lease payments plus the amount of the lessee's residual guaranty. PV1 and PV2 are shown in the Rentals results screen.")
+let discountRateHelp =
+    Help(title: "Discount Rate", instruction: "The discount rate is the rate used to calculate two present value amounts, 1- PV1, which the present value of the lease payments and 2- PV2, which is the present value of the lease payments plus the amount of the lessee's residual guaranty. PV1 and PV2 are shown in the Rentals results screen.")
 
-let dayCountMethodHelp = Help(title: "Day Count Method", instruction: "The day count method is the method used to calculate the number of days between two dates.  The conventional day count method the 30/360 day method, but the user has 3 additional options.")
+let dayCountMethodHelp =
+    Help(title: "Day Count Method", instruction: "The day count method is the method used to calculate the number of days between two dates.  The conventional day count method the 30/360 day method, but the user has 3 additional options.")
+
+let feeAmountHelp =
+    Help(title: "Fee Amount", instruction: "The Fee is the typically the amount paid by the Lessor to the seller to purchase the Lease. Alternatively, if the Fee Type is income then the Fee represents the additional amount the seller must pay in order for the Lessor to purchase the Lease.  Do not use this field to input any Fee paid by the Lessee.  For Lessee paid fees enter an advance Rent in the Rent Screen.  Note, that if the Fee Amount is set to 0.00 then the Fee object will be removed from the Investment.")
+
+let feeDatePaidHelp =
+Help(title: "Fee Date Paid", instruction: "This date paid field is for informational purpose only. The date that the Fee is paid will always occur on the Funding Date of the Lease.  In future versions of the program this field may become an input field.")

@@ -129,10 +129,6 @@ public class Investment {
            return false
         }
         
-        let maxAmount: Decimal = self.asset.lessorCost.toDecimal() * 2.0
-        if self.rent.getTotalAmountOfPayments(aFreq: self.leaseTerm.paymentFrequency) > maxAmount {
-            return false
-        }
         
         if self.rent.allPaymentsAreLocked() == true {
             return false
