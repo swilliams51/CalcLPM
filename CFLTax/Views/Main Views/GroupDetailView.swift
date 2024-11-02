@@ -28,8 +28,10 @@ struct GroupDetailView: View {
     @State private var timingIsLocked: Bool = false
     
     @State private var showAlert: Bool = false
-    @State var showPopover: Bool = false
-    @State var payHelp = paymentAmountHelp
+    @State private var showPop1: Bool = false
+    @State private var showPop2: Bool = false
+    @State private var payHelp1 = numberOfPaymentsHelp
+    @State private var payHelp2 = paymentAmountHelp
    
     //Payment textfield variables
     private let pasteBoard = UIPasteboard.general
@@ -123,6 +125,11 @@ extension GroupDetailView {
             HStack {
                 Text("No. of payments:")
                     .font(myFont)
+                Image(systemName: "questionmark.circle")
+                    .foregroundColor(Color.theme.accent)
+                    .onTapGesture {
+                        self.showPop1 = true
+                    }
                 Spacer()
                 Text("\(selectedGroup.noOfPayments.toString())")
                     .font(myFont)
@@ -144,7 +151,9 @@ extension GroupDetailView {
                 .disabled(sliderIsLocked)
             }
         }
-            
+        .popover(isPresented: $showPop1) {
+            PopoverView(myHelp: $payHelp1, isDark: $isDark)
+        }
     }
     
     var paymentTimingItem: some View {
@@ -187,11 +196,11 @@ extension GroupDetailView {
             Image(systemName: "questionmark.circle")
                 .foregroundColor(Color.theme.accent)
                 .onTapGesture {
-                    self.showPopover = true
+                    self.showPop2 = true
                 }
         }
-        .popover(isPresented: $showPopover) {
-            PopoverView(myHelp: $payHelp, isDark: $isDark)
+        .popover(isPresented: $showPop2) {
+            PopoverView(myHelp: $payHelp2, isDark: $isDark)
         }
     }
     

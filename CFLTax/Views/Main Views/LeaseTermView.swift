@@ -24,8 +24,8 @@ struct LeaseTermView: View {
     @State private var showPop1: Bool = false
     @State private var showPop2: Bool = false
     @State private var showPop3: Bool = false
-    @State var baseHelp: Help = baseTermHelp
-    
+    @State private var baseHelp: Help = baseTermHelp
+    @State private var eomRuleHelp = leaseTermEOMRuleHelp
     
     
     var body: some View {
@@ -110,7 +110,7 @@ struct LeaseTermView: View {
             }
         }
         .popover(isPresented: $showPop2) {
-            PopoverView(myHelp: $baseHelp, isDark: $isDark)
+            PopoverView(myHelp: $eomRuleHelp, isDark: $isDark)
         }
     }
     

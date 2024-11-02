@@ -29,10 +29,8 @@ struct DepreciationView: View {
     @FocusState private var percentIsFocused: Bool
     
     private let pasteBoard = UIPasteboard.general
-    @State private var showPopover: Bool = false
-    @State private var alertTitle: String = ""
-    @State private var showAlert: Bool = false
-    @State private var payHelp = leaseAmountHelp
+    
+   
 
     //Salvage Value Textfield
     @State var mySalvageAmount: String = ""
@@ -40,7 +38,20 @@ struct DepreciationView: View {
     @State private var editSalvageStarted: Bool = false
     @State private var maximumSalvage: Decimal = 1.0
     @FocusState private var salvageIsFocused: Bool
+   
+    
+    @State private var showPop1: Bool = false
+    @State private var payHelp1: Help = basisHelp
+    @State private var showPop2: Bool = false
+    @State private var payHelp2: Help = bonusHelp
+    @State private var showPop3: Bool = false
+    @State private var payHelp3: Help = salvageValueHelp
+    
+    @State private var alertTitle: String = ""
+    @State private var showAlert: Bool = false
     @State private var showPopoverForSalvage: Bool = false
+    
+    
     
     
     var body: some View {
@@ -137,10 +148,18 @@ extension DepreciationView {
     var depreciableBasisItem: some View {
         HStack {
             Text("Basis:")
+            Image(systemName: "questionmark.circle")
+                .foregroundColor(Color.theme.accent)
+                .onTapGesture {
+                    self.showPop1 = true
+                }
             Spacer()
             Text("\(amountFormatter(amount: myInvestment.asset.lessorCost, locale: myLocale))")
         }
         .font(myFont)
+        .popover(isPresented: $showPop1) {
+            PopoverView(myHelp: $payHelp1, isDark: $isDark)
+        }
     }
     
     var depreciationMethod: some View {
@@ -260,14 +279,14 @@ extension DepreciationView {
             Text("Bonus: \(Image(systemName: "return"))")
                 .foregroundColor(isDark ? .white : .black)
             Image(systemName: "questionmark.circle")
-                .foregroundColor(.black)
+                .foregroundColor(.blue)
                 .onTapGesture {
-                    self.showPopover = true
+                    self.showPop2 = true
                 }
         }
         .font(myFont)
-        .popover(isPresented: $showPopover) {
-            PopoverView(myHelp: $payHelp, isDark: $isDark)
+        .popover(isPresented: $showPop2) {
+            PopoverView(myHelp: $payHelp2, isDark: $isDark)
         }
     }
     
@@ -316,12 +335,12 @@ extension DepreciationView {
             Image(systemName: "questionmark.circle")
                 .foregroundColor(.black)
                 .onTapGesture {
-                    self.showPopoverForSalvage = true
+                    self.showPop3 = true
                 }
         }
         .font(myFont)
-        .popover(isPresented: $showPopoverForSalvage) {
-            PopoverView(myHelp: $payHelp, isDark: $isDark)
+        .popover(isPresented: $showPop3) {
+            PopoverView(myHelp: $payHelp3, isDark: $isDark)
         }
     }
     

@@ -27,15 +27,18 @@ struct EconomicsView: View {
     
     //Alerts and Popover
     @State private var showPop1: Bool = false
+    @State private var payHelp1 = yieldMethodHelp
     @State private var showPop2: Bool = false
+    @State private var payHelp2 = solveForHelp
     @State private var showPop3: Bool = false
+    @State private var payHelp3 = dayCountMethodHelp
     @State private var showPop4: Bool = false
-    
+    @State private var payHelp4 = discountRateHelp
 
     private let pasteBoard = UIPasteboard.general
     @State private var alertTitle: String = ""
     @State private var showAlert: Bool = false
-    @State var payHelp = leaseAmountHelp
+   
     
     var body: some View {
         Form{
@@ -92,7 +95,7 @@ extension EconomicsView {
             }
         }
         .popover(isPresented: $showPop1) {
-            PopoverView(myHelp: $payHelp, isDark: $isDark)
+            PopoverView(myHelp: $payHelp1, isDark: $isDark)
         }
     }
     
@@ -103,7 +106,7 @@ extension EconomicsView {
             Image(systemName: "questionmark.circle")
                 .foregroundColor(.blue)
                 .onTapGesture {
-                    self.showPop4 = true
+                    self.showPop2 = true
                 }
             Picker(selection: $myEconomics.solveFor, label: Text("")) {
                 ForEach(SolveForOption.allCases, id: \.self) { item in
@@ -111,8 +114,8 @@ extension EconomicsView {
                 }
             }
         }
-        .popover(isPresented: $showPop4) {
-            PopoverView(myHelp: $payHelp, isDark: $isDark)
+        .popover(isPresented: $showPop2) {
+            PopoverView(myHelp: $payHelp2, isDark: $isDark)
         }
     }
     
@@ -132,7 +135,7 @@ extension EconomicsView {
             }
         }
         .popover(isPresented: $showPop3) {
-            PopoverView(myHelp: $payHelp, isDark: $isDark)
+            PopoverView(myHelp: $payHelp3, isDark: $isDark)
         }
     }
     
@@ -207,11 +210,11 @@ extension EconomicsView {
             Image(systemName: "questionmark.circle")
                 .foregroundColor(.blue)
                 .onTapGesture {
-                    self.showPop2 = true
+                    self.showPop4 = true
                 }
         }
-        .popover(isPresented: $showPop2) {
-            PopoverView(myHelp: $payHelp, isDark: $isDark)
+        .popover(isPresented: $showPop4) {
+            PopoverView(myHelp: $payHelp4, isDark: $isDark)
         }
     }
     

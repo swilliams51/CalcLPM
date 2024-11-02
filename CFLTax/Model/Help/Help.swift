@@ -17,14 +17,20 @@ struct Help {
 let baseTermHelp =
     Help(title: "Base Term Start Date", instruction: "The date when the periodic payments commence.  If the base term start date occurs after the funding date then an interim term will be created and one non-periodic payment will added to the payment schedule. To remove an interim payment set the base start date equal to the funding date. For a monthly payment frequency the base start date cannot occur more than 90 days after the funding date. For all other payment frequencies the interim term cannot exceed the number of days in the payment frequency.")
 
+let basisHelp: Help =
+Help(title: "Basis for Depreciation", instruction: "This is a non-input field and is always equal to the Lessor Cost of the Asset.  Under certain situations, such as assets that qualify for Investment Tax Credits (ITC), the basis will be reduced by 50% of the amount of ITC taken. ITC related transaction are currently beyond the scope of this program. It is anticipated that future versions of the program will allow the user to input the basis accordingly.")
+
+let bonusHelp: Help =   Help(title: "Bonus Depreciation", instruction: "Bonus depreciation is the additional amount of first year depreciation that is available to the user. The bonus depreciation for 2024 is 60% and will be reduced by 20% per year until it will be phased out in 2027.")
+
+let salvageValueHelp: Help =    Help(title: "Salvage Value", instruction: "Is used in connection with the straight-line depreciation method. The salvage value is the value of the asset at the end of its useful life. Straightline depreciation in leasing os often used in depreciating assets than do not qualify as MARCS property such as ssome types of utility assets and foreign use property.")
+
+let dayOfMonthHelp: Help =  Help(title: "Day of Month", instruction: "This is the day of the month that lessor pays it quarterly and year end taxes. Conventionally, the 15th day of the month is used but the user may input any day of the month.")
+
 let cutOffHelp: Help =
     Help(title: "Cut-Off Date", instruction: "A new Lease/Loan will be created from the payment groups of the existing Lease/Loan that occur on and after the cut-off date as selected by the user. If an EBO exists in the current Lease it will also be included in the new Lease if the cut-off date occurs before the EBO exercise date. The ideal application for the Cut-Off method is the purchase of a seasoned lease out of portfolio.")
 
 let defaultNewHelp =
     Help(title: "Default New", instruction: "The default new lease/loan parameters can be set by the user. First, create the preferred lease/loan structure.  Then return to Preferences and switch on \"use saved\"  and switch on \"save current\". Thereafter, when New is selected from the Side Menu the user's saved lease/loan parameters will be loaded.  The default new parameters can be reset to the original parameters by turning off those same switches.")
-
-let discountRateHelp =
-    Help(title: "Specified Rate Help", instruction: "For accounting purposes the specified rate should be equal to the Lessee's Incremental Borrowing Rate (IBR).  The discount rate used to present value the minimum rents should then be the lesser of the IBR or the Implicit Rate.")
 
 let decimalPadHelp = Help(title: "Keypad Buttons", instruction: "From left to right the buttons are Cancel, Copy to Clipboard, Paste from Clipboard, Clear All, and Enter.")
 
@@ -40,8 +46,8 @@ let eboHomeHelp =
 let feeHomeHelp =
     Help(title: "Add/Remove Fee", instruction: "A Fee maybe added to or removed from the Investment using the Add/Remove Fee buttons below. A Fee can also be added by selecting it as a solveFor option in the economics screen. Setting the Fee Amount to 0.0 will also remove a Fee from the Investment.")
 
-let eomRuleHelp =
-    Help(title: "End of Month Rule", instruction: "If the base term commencement date starts on last day of a month with 30 days and the rule is on, then the payment due dates for the months with 31 days will occur on the 31st of the applicable month.  If the rule is off then payment due dates for the months with 31 days will occur on the 30th.")
+let leaseTermEOMRuleHelp =
+    Help(title: "End of Month Rule", instruction: "If the base term commencement date starts on last day of a month havong 30 days and the rule is on, then the subsequent payment due dates for the months with 31 days will occur on the 31st of the applicable month.  If the rule is off then payment due dates for the months with 31 days will occur on the 30th.")
 
 let escalationRateHelp =
     Help(title: "Escalation Rate", instruction: "The total number of payments for the starting group must be evenly divisible by 12. The resulting escalated payment structure will be a series of consecutive annual payment groups in which the payment amount for each payment group is greater than the previous group by the amount of the escalation rate.")
@@ -74,6 +80,9 @@ Help(title: "Lease Amount", instruction: "A valid lease or loan amount must be a
 let leaseBalanceHelp =
     Help(title: "Outstanding Balance Help", instruction: "The effective date can be any date occurring after the funding date and before the maturity date of the Lease/Loan. Upon clicking the done button, an amortization report is available for the Lease/Loan Balance through the effective date. Any subsequent recalculation of the Lease/Loan will remove the Balance calculation from reports. To manually remove a Balance calculation from reports set the effective date equal to the funding date.")
 
+let numberOfPaymentsHelp =
+Help(title: "Number of Payments", instruction: "The total number of Base Term payments for all non-interim payment groups must not exceed 180 months when adjusting for the payment frequency. For example, if the payment frequency is monthly, then the total number of payments must not exceed 180.  If the payment frequency is semiannually, then the total number of payments must not exceed 90.")
+
 let operatingModeHelp =
     Help(title: "Operating Mode", instruction: "The app has two modes, leasing and lending. In the lending mode, the payment types are limited to interest only, payment, principal, and balloon and the timing of such payments is limited to in arrears. In the leasing mode payments can be made in advance or in arrears and there are 3 additional payment types - daily equivalent all (deAll), daily equivalent next (deNext), and residual.")
 
@@ -81,7 +90,7 @@ let myNewHelp =
     Help(title: "New Help", instruction: "This is a test.")
 
 let paymentAmountHelp: Help =
-    Help(title: "Payment Amount", instruction: "A valid payment amount must be a decimal => 0.00 and < 2x Lease/Loan Amount. Any decimal amount entered less than 1.00 will be interpreted as a percent of Lease/Loan Amount.  The percentage option is available throughout the program. For example, if the Lease/Loan Amount is 1,000,000.00, then an entry of 0.15 will be converted into an entry of 150,000.00.")
+    Help(title: "Payment Amount", instruction: "A valid payment amount must be a decimal that is equal to or greater than 0.00 but less than 2x the Lessor's Cost of the Asset. Any decimal amount entered that is less than 1.00 will be interpreted as being a percent of Lessor Cost. For example, if the Lessor Cost of the Asset is 1,000,000.00, then an entry of 0.15 will be converted into an entry of 150,000.00.")
 
 let purchaseHelp =
     Help(title: "Buy/Sell", instruction: "Enter a buy rate and the program will solve for the amount fee to be paid by the purchaser of the Lease/Loan (the Buy Fee) or vice versa. A negative Buy Fee cannot be entered, however, a Buy Rate higher than the Lease/Loan interest rate can be entered and will result in a negative Buy Fee.  To remove a buy fee from reports set the fee paid equal to 0.00 or set the buy rate equal to the Lease/Loan interest rate.")
@@ -107,3 +116,12 @@ let assetFundingDateHelp = Help(title: "Funding Date", instruction: "The asset f
 let assetResidualValueHelp = Help(title: "Residual Value", instruction: "The residual value is the amount of the lessor's cost that the lessor expects to realize by sale or release of the asset at the end expiration of the Base Lease Term.  The residual value can not be less than zero or gretaer than the Lessor Cost.")
 
 let assetLesseeGuarantyHelp = Help(title: "Lessee Guaranty Amount", instruction: "The Lessee Guaranty Amount is the amount of the residual value that is guaranteed by the Lessee.  It is commonmly used in TRAC Leases. The amount of the Lessee Guaranty can not exceed the residual value of the asset.")
+
+
+let yieldMethodHelp = Help(title: "Yield Method", instruction: "The yield method is the method used to calculate the yield of the Investment.  The two primary methods are the After-Tax Multiple Investment Sinking Fund (MISF-AT) method and the Internal Rate of Return of the Pre-Tax Cashflows (IRR of PTCF) method.  The sinking rate used in the MISF method is 0.00%.  The MISF-BT yield is cacluated indirectly by dividing the MISF-AT Yield by 1.0 minus the Federal Tax Rate.")
+
+let solveForHelp = Help(title: "Solve For", instruction: "The program allows the user to solve for 1- the lessor cost, 2- the unlocked rentals, 3- the residual value, 4- the fee amount, or 5- any one of 3 possible yields. The first four options will solve for the amount of lessor cost, unlocked rentals, residual value, or fee amount that will produce the targeted yield while holding all other investment paranmeters constant. The yield solve for option will simply calculate all three yields based upon the input parameters.")
+
+let discountRateHelp = Help(title: "Discount Rate", instruction: "The discount rate is the rate used to calculate two present value amounts, 1- PV1, which the present value of the lease payments and 2- PV2, which is the present value of the lease payments plus the amount of the lessee's residual guaranty. PV1 and PV2 are shown in the Rentals results screen.")
+
+let dayCountMethodHelp = Help(title: "Day Count Method", instruction: "The day count method is the method used to calculate the number of days between two dates.  The conventional day count method the 30/360 day method, but the user has 3 additional options.")

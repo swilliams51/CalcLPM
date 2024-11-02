@@ -214,7 +214,7 @@ struct HomeView: View {
     
     var calculatedItem: some View {
         HStack{
-            Text("Calculate")
+            Text("Calculate: \(myInvestment.economics.solveFor.toString())")
                 .font(myFont)
             Spacer()
             Image(systemName: "return")
