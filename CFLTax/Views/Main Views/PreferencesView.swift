@@ -11,23 +11,26 @@ struct PreferencesView: View {
     @Bindable var myInvestment: Investment
     @Binding var isDark: Bool
     @Binding var path: [Int]
-    @AppStorage("useSaved") var useSavedAsDefault: Bool = false
-    @AppStorage("savedDefault") var savedDefaultLease: String = "No_Data"
     
-    @State var saveCurrentAsDefault: Bool = false
-    @State var savedDefaultExists: Bool = true
-    @State var showPopover: Bool = false
-    @State var defaultHelp = defaultNewHelp
+    @AppStorage("savedDefault") var savedDefaultLease: String = "No_Data"
+    @AppStorage("useSaved") var useSavedAsDefault: Bool = false
+    
+    @State private var useMySavedAsDefault: Bool = false // links to "useSaved
+    @State private var saveMyCurrentAsDefault: Bool = false
+    @State private var savedDefaultExists: Bool = true
+    
+    @State private var showPopover: Bool = false
+    @State private var defaultHelp = defaultNewLeaseHelp
     @State private var alertTitle: String = ""
     @State private var showAlert: Bool = false
     
     var body: some View {
         Form {
-            Section(header: Text("Default Lease Parameters")) {
+            Section(header: Text("Default New Lease")) {
                 defaultNewLeaseItem
                 saveCurrentAsDefaultItem
             }
-           Section(header: Text("Dark Mode")) {
+           Section(header: Text("Mode")) {
                 colorSchemeItem
             }
             Section(header: Text("Submit Form")){
@@ -47,13 +50,15 @@ struct PreferencesView: View {
             if self.savedDefaultLease == "No_Data" {
                 self.savedDefaultExists = false
             }
+            
+            self.useMySavedAsDefault = useSavedAsDefault
         }
    
     }
     
     var defaultNewLeaseItem: some View {
         HStack {
-            Text(useSavedAsDefault ? "Use Saved:" : "Use Default:")
+            Text(useMySavedAsDefault ? "Use Saved:" : "Use Default:")
                 .font(.subheadline)
             Image(systemName: "questionmark.circle")
                 .foregroundColor(Color.theme.accent)
@@ -61,7 +66,7 @@ struct PreferencesView: View {
                     self.showPopover = true
                 }
             Spacer()
-            Toggle("", isOn: $useSavedAsDefault)
+            Toggle("", isOn: $useMySavedAsDefault)
                 .disabled(savedDefaultExists ? false : true )
         }
         .popover(isPresented: $showPopover) {
@@ -73,32 +78,22 @@ struct PreferencesView: View {
         HStack {
             Text("Save Current:")
                 .font(.subheadline)
-            Toggle("", isOn: $saveCurrentAsDefault)
+            Toggle("", isOn: $saveMyCurrentAsDefault)
+                .onChange(of: saveMyCurrentAsDefault) { oldValue, newValue in
+                    if newValue == true {
+                        let myFile = myInvestment.writeInvestment()
+                        self.savedDefaultLease = myFile
+                        self.savedDefaultExists = true
+                    }
+                }
         }
     }
     
     var colorSchemeItem: some View {
         Toggle(isOn: $isDark) {
-            Text(isDark ? "Dark Mode is on:" : "Light Mode is on:")
+            Text(isDark ? "Dark Mode:" : "Light Mode:")
                 .font(.subheadline)
         }
-    }
-    
-    private func resetCurrentDefaultNew() {
-        if isLeaseSavable() {
-            self.savedDefaultLease = myInvestment.writeInvestment()
-        } else {
-            alertTitle = alertDefaultLease
-            showAlert.toggle()
-        }
-    }
-    
-    func isLeaseSavable () -> Bool {
-        if self.myInvestment.rent.interimExists() == true {
-            return false
-        }
-        
-        return true
     }
 }
 
@@ -109,11 +104,17 @@ struct PreferencesView: View {
 extension PreferencesView {
         
     func myCancel() {
-        
+        self.path.removeLast()
     }
     
     func myDone() {
-        
+        if self.useMySavedAsDefault {
+            self.useSavedAsDefault = true
+        } else {
+            self.useSavedAsDefault = false
+        }
+    
+        self.path.removeLast()
     }
     
 }

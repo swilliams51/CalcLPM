@@ -21,7 +21,9 @@ struct RentSummaryView: View {
     @State private var amounts: [String] = [String]()
     
     @State private var showPop1: Bool = false
-    @State private var payHelp = leaseAmountHelp
+    @State private var payHelp = pvOneHelp
+    @State private var showPop2: Bool = false
+    @State private var payHelp2 = pvTwoHelp
     @State var lineHeight: CGFloat = 12
     @State var frameHeight: CGFloat = 12
     
@@ -69,6 +71,9 @@ struct RentSummaryView: View {
         }
         .popover(isPresented: $showPop1) {
             PopoverView(myHelp: $payHelp, isDark: $isDark)
+        }
+        .popover(isPresented: $showPop2) {
+            PopoverView(myHelp: $payHelp2, isDark: $isDark)
         }
         
     }
@@ -119,7 +124,7 @@ extension RentSummaryView {
                 Text("PV1 @ \(getDiscountRateText()):")
                     .font(myFont)
                 Image(systemName: "questionmark.circle")
-                    .font(myFont)
+                    .foregroundColor(Color.theme.accent)
                     .onTapGesture {
                         self.showPop1 = true
                     }
@@ -133,6 +138,11 @@ extension RentSummaryView {
         HStack{
             Text("PV2 @ \(getDiscountRateText()):")
                 .font(myFont)
+            Image(systemName: "questionmark.circle")
+                .foregroundColor(Color.theme.accent)
+                .onTapGesture {
+                    self.showPop2 = true
+                }
             Spacer()
             Text("\(getFormattedValue(amount: presentValue2, viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
                 .font(myFont)

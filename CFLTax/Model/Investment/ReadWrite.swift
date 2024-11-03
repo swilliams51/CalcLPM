@@ -275,6 +275,21 @@ extension Investment {
         return myEconomics
     }
     
+    public func writeAsTemplate() -> String {
+        self.asset.fundingDate = Date()
+        self.resetForFundingDateChange()
+        if self.feeExists {
+            self.fee.amount = "0.00"
+            self.setFee()
+        }
+        if self.earlyBuyoutExists {
+            self.earlyBuyout.amount = "0.00"
+            self.setEBO()
+        }
+        
+        return self.writeInvestment()
+    }
+    
 }
 
 extension Cashflows {

@@ -106,8 +106,6 @@ let saveAsTemplateHelp = Help(title: "Save As Template", instruction: "The requi
 let solveForTermHelp =
     Help(title: "Solve For Term", instruction: "In order to solve for the term, there must be only one unlocked payment group.  Additionally, the number of payments for that group must greater than the minimum and less then the maximum number allowed. Finally, the payment type for that group cannot be interest only.")
 
-let termAmortHelp =
-    Help(title: "Amortization Term", instruction: "The amortization term is the number of months required to fully amortize the loan amount given the interest rate and a level payment structure. The program will then use that calculated payment as the payment amount for the current loan and then will calculate the balloon payment that will balance the loan. A 60-month loan at a 120-month amortization given a 5.00% interest rate will result in 56.2048% balloon payment.")
 
 let terminationHelp =
     Help(title: "Termination Values", instruction: "TVs are a schedule of values in excess of the applicable lease balances for each payment date. For a non-true lease, setting the discount rate for rent equal to the buy rate will protect any fees paid to the buyer in the event of an unscheduled termination of the lease.  To remove TVs from reports set the discount rates for rent and residual to the maximum values and the additional residual percentage to 0.00%.")
@@ -116,17 +114,17 @@ let assetFundingDateHelp =
     Help(title: "Funding Date", instruction: "The asset funding date is the date that the asset is funded by the lessor.  This date can be the same as the Base Commencement Date or it can occur at an earlier date.")
 
 let assetResidualValueHelp =
-    Help(title: "Residual Value", instruction: "The residual value is the amount of the lessor's cost that the lessor expects to realize by sale or release of the asset at the end expiration of the Base Lease Term.  The residual value can not be less than zero or gretaer than the Lessor Cost.")
+    Help(title: "Residual Value", instruction: "The residual value is the amount of the lessor's cost that the lessor expects to realize by sale or release of the asset at the end expiration of the Base Lease Term.  The residual value can not be less than zero or greater than the Lessor Cost.")
 
 let assetLesseeGuarantyHelp =
     Help(title: "Lessee Guaranty Amount", instruction: "The Lessee Guaranty Amount is the amount of the residual value that is guaranteed by the Lessee.  It is commonmly used in TRAC Leases. The amount of the Lessee Guaranty can not exceed the residual value of the asset.")
 
 
 let yieldMethodHelp =
-    Help(title: "Yield Method", instruction: "The yield method is the method used to calculate the yield of the Investment.  The two primary methods are the After-Tax Multiple Investment Sinking Fund (MISF-AT) method and the Internal Rate of Return of the Pre-Tax Cashflows (IRR of PTCF) method.  The sinking rate used in the MISF method is 0.00%.  The MISF-BT yield is cacluated indirectly by dividing the MISF-AT Yield by 1.0 minus the Federal Tax Rate.")
+    Help(title: "Yield Method", instruction: "The yield method is the method used to calculate the yield of the Investment.  The two primary methods are the After-Tax Multiple Investment Sinking Fund (MISF-AT) method and the Internal Rate of Return of the Pre-Tax Cashflows (IRR of PTCF) method.  The sinking rate used in the MISF method is 0.00%.  The MISF-BT yield is calculated indirectly by dividing the MISF-AT Yield by 1.0 minus the Federal Tax Rate.")
 
 let solveForHelp =
-    Help(title: "Solve For", instruction: "The program allows the user to solve for 1- the lessor cost, 2- the unlocked rentals, 3- the residual value, 4- the fee amount, or 5- any one of 3 possible yields. The first four options will solve for the amount of lessor cost, unlocked rentals, residual value, or fee amount that will produce the targeted yield while holding all other investment paranmeters constant. The yield solve for option will simply calculate all three yields based upon the input parameters.")
+    Help(title: "Solve For", instruction: "The program allows the user to solve for 1- the lessor cost, 2- the unlocked rentals, 3- the residual value, 4- the fee amount, or 5- any one of 3 possible yields. The first four options will solve for the amount of lessor cost, unlocked rentals, residual value, or fee amount that will produce the targeted yield while holding all other investment parameters constant. The yield solve for option will simply calculate all three yields based upon the input parameters.")
 
 let discountRateHelp =
     Help(title: "Discount Rate", instruction: "The discount rate is the rate used to calculate two present value amounts, 1- PV1, which the present value of the lease payments and 2- PV2, which is the present value of the lease payments plus the amount of the lessee's residual guaranty. PV1 and PV2 are shown in the Rentals results screen.")
@@ -138,4 +136,11 @@ let feeAmountHelp =
     Help(title: "Fee Amount", instruction: "The Fee is the typically the amount paid by the Lessor to the seller to purchase the Lease. Alternatively, if the Fee Type is income then the Fee represents the additional amount the seller must pay in order for the Lessor to purchase the Lease.  Do not use this field to input any Fee paid by the Lessee.  For Lessee paid fees enter an advance Rent in the Rent Screen.  Note, that if the Fee Amount is set to 0.00 then the Fee object will be removed from the Investment.")
 
 let feeDatePaidHelp =
-Help(title: "Fee Date Paid", instruction: "This date paid field is for informational purpose only. The date that the Fee is paid will always occur on the Funding Date of the Lease.  In future versions of the program this field may become an input field.")
+    Help(title: "Fee Date Paid", instruction: "This date paid field is for informational purpose only. The date that the Fee is paid will always occur on the Funding Date of the Lease.  In future versions of the program this field may become an input field.")
+
+let defaultNewLeaseHelp = Help(title: "Default New Lease", instruction: "When creating a new Lease, the user has the option of using the parameters provided by the program or those defined by the user.  By selecting use saved as default and then toggling to the save current as default option, the program will use the current lease parameters when creating a new Lease. Note, that the saved parameters will remove any interim term, any Fee or any Early Buyout.")
+
+
+ let pvOneHelp = Help(title: "PV1", instruction: "This amount is equal to the present value of the rentals discounted at the discount rate as shown in the Economics screen.")
+
+let pvTwoHelp = Help(title: "PV2", instruction: "This amount is equal to the present value of 1- the rentals plus 2- the amount of residual guaranteed by the Lessee discounted at the discount rate as shown in the Economics screen.")
