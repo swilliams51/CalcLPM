@@ -34,7 +34,7 @@ struct TaxAssumptionsView: View {
                 dayOfMonthTaxesPaidItem
             }
             Section(header: Text("Submit Form").font(myFont)) {
-                SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isDark: $isDark)
+                SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isFocused: taxRateIsFocused, isDark: $isDark)
             }
         }
         .toolbar {

@@ -12,14 +12,14 @@ struct SubmitFormButtonsView: View {
     let doneName: String
     let cancel: () -> Void
     let done: () -> Void
-    var isFocused: Bool = false
+    var isFocused: Bool
     @Binding var isDark: Bool
     
     var body: some View {
             HStack{
-                FormCancelButton(name: cancelName, cancel: cancel, isDark: $isDark)
+                FormCancelButton(name: cancelName, cancel: cancel, isFocused: isFocused, isDark: $isDark)
                 Spacer()
-                FormSubmitButton(name: doneName, done: done, isDark: $isDark)
+                FormSubmitButton(name: doneName, done: done, isFocused: isFocused, isDark: $isDark)
             }
     }
 }
@@ -66,5 +66,5 @@ struct FormSubmitButton: View {
     
 
 #Preview {
-    SubmitFormButtonsView(cancelName: "Delete", doneName: "Submit", cancel: {}, done: {}, isDark: .constant(false))
+    SubmitFormButtonsView(cancelName: "Delete", doneName: "Submit", cancel: {}, done: {}, isFocused: false, isDark: .constant(false))
 }

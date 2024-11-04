@@ -34,7 +34,6 @@ struct EarlyBuyoutView: View {
     @State private var stepValue: Int = 1
     
     //Alerts and Popovers
-   
     @State private var myEBOHelp = eboHelp
     @State private var myEBOHelp2 = eboHelp2
     @State private var showAlert1: Bool = false
@@ -65,7 +64,7 @@ struct EarlyBuyoutView: View {
             }
             
             Section(header: Text("Submit Form")) {
-                SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isDark: $isDark)
+                SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isFocused: false, isDark: $isDark)
             }
         }
         .toolbar {

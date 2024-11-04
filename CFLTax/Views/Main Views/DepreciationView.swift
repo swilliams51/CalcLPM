@@ -30,8 +30,6 @@ struct DepreciationView: View {
     
     private let pasteBoard = UIPasteboard.general
     
-   
-
     //Salvage Value Textfield
     @State var mySalvageAmount: String = ""
     @State var salvageOnEntry: String = ""
@@ -39,7 +37,6 @@ struct DepreciationView: View {
     @State private var maximumSalvage: Decimal = 1.0
     @FocusState private var salvageIsFocused: Bool
    
-    
     @State private var showPop1: Bool = false
     @State private var payHelp1: Help = basisHelp
     @State private var showPop2: Bool = false
@@ -50,17 +47,14 @@ struct DepreciationView: View {
     @State private var alertTitle: String = ""
     @State private var showAlert: Bool = false
     @State private var showPopoverForSalvage: Bool = false
-    
-    
-    
-    
+
     var body: some View {
         Form {
             Section(header: Text("Inputs").font(myFont), footer:(Text("File Name: \(currentFile)").font(myFont))) {
                 depreciationParameters
             }
             Section(header: Text("Submit Form")) {
-                SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isDark: $isDark)
+                SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isFocused: keyBoardIsActive(), isDark: $isDark)
             }
         }
         .toolbar {
@@ -107,11 +101,11 @@ struct DepreciationView: View {
         }
     }
    
-    func myCancel() {
+    private func myCancel() {
         self.path.removeLast()
     }
     
-    func myDone() {
+    private func myDone() {
         self.myDepreciation.life = myLife.toInteger()
         self.myDepreciation.bonusDeprecPercent = myBonusPercent.toDecimal()
         self.myDepreciation.salvageValue = mySalvageAmount
@@ -123,7 +117,18 @@ struct DepreciationView: View {
         self.path.removeLast()
     }
     
-    func myAppear() {
+    private func keyBoardIsActive() -> Bool {
+        if percentIsFocused {
+            return true
+        }
+        if salvageIsFocused {
+            return true
+        }
+       
+        return false
+    }
+    
+    private func myAppear() {
         self.myDepreciation = myInvestment.depreciation
         self.myLife = myDepreciation.life.toDouble()
         self.myBonusPercent = myDepreciation.bonusDeprecPercent.toString(decPlaces: 4)

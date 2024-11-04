@@ -35,8 +35,7 @@ struct AssetView: View {
     @State private var lesseeGuarantyPercentOnEntry: Decimal = 0.0
    
     private let pasteBoard = UIPasteboard.general
-    
-    
+   
     @State private var showPop1: Bool = false
     @State private var showPop2: Bool = false
     @State private var showPop3: Bool = false
@@ -59,7 +58,7 @@ struct AssetView: View {
                 fundingDateItem
             }
             Section(header: Text("Submit Form")) {
-                SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isDark: $isDark)
+                SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isFocused: keyBoardIsActive(), isDark: $isDark)
             }
         }
         .toolbar {
@@ -100,6 +99,22 @@ struct AssetView: View {
             }
         }
         path.removeLast()
+    }
+    
+    private func keyBoardIsActive() -> Bool {
+        if nameIsFocused {
+            return true
+        }
+        if lessorCostIsFocused {
+            return true
+        }
+        if residualValueIsFocused {
+            return true
+        }
+        if lesseeGuarantyIsFocused {
+            return true
+        }
+        return false
     }
     
 }

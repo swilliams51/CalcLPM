@@ -223,7 +223,7 @@ extension Investment{
     
     private func tolerance() -> Decimal {
         let numberOfPayments: Decimal = self.rent.getTotalNoOfBasePayments(aFreq: self.leaseTerm.paymentFrequency, eomRule: self.leaseTerm.endOfMonthRule, interimGroupExists: self.rent.interimExists()).toString().toDecimal()
-        let myTolerance = (numberOfPayments / 30.0) * 0.50
+        let myTolerance = (numberOfPayments / 10.0) * 0.25
         
         return myTolerance
     }

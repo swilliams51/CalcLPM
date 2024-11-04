@@ -50,7 +50,7 @@ struct EconomicsView: View {
                 dayCountMethodItem
             }
             Section(header: Text("Submit Form")){
-                SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isDark: $isDark)
+                SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isFocused: keyBoardIsActive(), isDark: $isDark)
             }
         }
         .toolbar {
@@ -69,6 +69,17 @@ struct EconomicsView: View {
             self.yieldTargetOnEntry = myEconomics.yieldTarget
             self.discountRateOnEntry = myEconomics.discountRateForRent
         }
+    }
+    
+    private func keyBoardIsActive() -> Bool {
+        if yieldTargetIsFocused {
+            return true
+        }
+        if discountRateIsFocused {
+            return true
+        }
+        
+        return false
     }
 }
 

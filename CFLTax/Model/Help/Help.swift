@@ -138,8 +138,9 @@ let feeAmountHelp =
 let feeDatePaidHelp =
     Help(title: "Fee Date Paid", instruction: "This date paid field is for informational purpose only. The date that the Fee is paid will always occur on the Funding Date of the Lease.  In future versions of the program this field may become an input field.")
 
-let defaultNewLeaseHelp = Help(title: "Default New Lease", instruction: "When creating a new Lease, the user has the option of using the parameters provided by the program or those defined by the user.  By selecting use saved as default and then toggling to the save current as default option, the program will use the current lease parameters when creating a new Lease. Note, that the saved parameters will remove any interim term, any Fee or any Early Buyout.")
+let defaultNewLeaseHelp = Help(title: "Default New Lease", instruction: "When creating a new Lease, the user has the option of using the parameters provided by the program or those defined by the user.  However, this toggle button will remain disabled until a current Lease has been saved to file using the option below.  Once a current Lease has been saved, this option allows the user to use the program's default Lease parameters or those that have been saved.  Subsequently, the user can save a new Lease as the default Lease, but the program's default Lease cannot be changed. ")
 
+let defaultSaveCurrentHelp = Help(title: "Save Current", instruction: "This option allows the user to save the current Lease as the default parameters for a new Lease when the \"File/New\" option on the File Menu Screen is selected. Note, that the file saving procedure will remove any interim term, any Fee or any Early Buyout from the saved file. This option will not take effect until the option above has been toggled to \"Use Saved\".")
 
  let pvOneHelp = Help(title: "PV1", instruction: "This amount is equal to the present value of the rentals discounted at the discount rate as shown in the Economics screen.")
 

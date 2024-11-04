@@ -52,7 +52,7 @@ struct GroupDetailView: View {
                     }
                 }
                 Section(header: Text("Submit Form").font(.footnote)){
-                    SubmitFormButtonsView(cancelName: "Delete", doneName: "Done", cancel: deleteGroup, done: submitForm, isDark: $isDark)
+                    SubmitFormButtonsView(cancelName: "Delete", doneName: "Done", cancel: deleteGroup, done: submitForm, isFocused: paymentAmountIsFocused, isDark: $isDark)
                 }
             }
             .toolbar {

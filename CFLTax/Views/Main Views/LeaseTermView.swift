@@ -37,7 +37,7 @@ struct LeaseTermView: View {
                 baseTermInMonthsItem
             }
             Section(header: Text("Submit Form")) {
-                SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isDark: $isDark)
+                SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isFocused: false, isDark: $isDark)
             }
         }
         .toolbar {

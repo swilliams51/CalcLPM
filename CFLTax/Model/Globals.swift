@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 public let myLocale: Locale = Locale.current
-public let tolerancePaymentAmounts: Decimal = 0.50
+public let tolerancePaymentAmounts: Decimal = 0.050
 public let toleranceLumpSums: Decimal = 0.005
 public let myFont: Font = .subheadline
 public let myFont2: Font = .body

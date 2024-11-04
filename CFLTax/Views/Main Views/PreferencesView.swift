@@ -19,8 +19,11 @@ struct PreferencesView: View {
     @State private var saveMyCurrentAsDefault: Bool = false
     @State private var savedDefaultExists: Bool = true
     
-    @State private var showPopover: Bool = false
-    @State private var defaultHelp = defaultNewLeaseHelp
+    @State private var showPop1: Bool = false
+    @State private var defaultHelp1 = defaultNewLeaseHelp
+    @State private var showPop2: Bool = false
+    @State private var defaultHelp2 = defaultSaveCurrentHelp
+    
     @State private var alertTitle: String = ""
     @State private var showAlert: Bool = false
     
@@ -29,12 +32,13 @@ struct PreferencesView: View {
             Section(header: Text("Default New Lease")) {
                 defaultNewLeaseItem
                 saveCurrentAsDefaultItem
+                resetFileItem
             }
            Section(header: Text("Mode")) {
                 colorSchemeItem
             }
             Section(header: Text("Submit Form")){
-                SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isDark: $isDark)
+                SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isFocused: false, isDark: $isDark)
             }
         }
         
@@ -63,14 +67,14 @@ struct PreferencesView: View {
             Image(systemName: "questionmark.circle")
                 .foregroundColor(Color.theme.accent)
                 .onTapGesture {
-                    self.showPopover = true
+                    self.showPop1 = true
                 }
             Spacer()
             Toggle("", isOn: $useMySavedAsDefault)
                 .disabled(savedDefaultExists ? false : true )
         }
-        .popover(isPresented: $showPopover) {
-            PopoverView(myHelp: $defaultHelp, isDark: $isDark)
+        .popover(isPresented: $showPop1) {
+            PopoverView(myHelp: $defaultHelp1, isDark: $isDark)
         }
     }
     
@@ -78,13 +82,27 @@ struct PreferencesView: View {
         HStack {
             Text("Save Current:")
                 .font(.subheadline)
+            Image(systemName: "questionmark.circle")
+                .foregroundColor(Color.theme.accent)
+                .onTapGesture {
+                    self.showPop2 = true
+                }
             Toggle("", isOn: $saveMyCurrentAsDefault)
-                .onChange(of: saveMyCurrentAsDefault) { oldValue, newValue in
-                    if newValue == true {
-                        let myFile = myInvestment.writeInvestment()
-                        self.savedDefaultLease = myFile
-                        self.savedDefaultExists = true
-                    }
+        }
+        .popover(isPresented: $showPop2) {
+            PopoverView(myHelp: $defaultHelp2, isDark: $isDark)
+        }
+    }
+    
+    var resetFileItem: some View {
+        HStack {
+            Text("Reset File:")
+            Spacer()
+            Text("Delete Saved")
+                .font(myFont)
+                .foregroundColor(.blue)
+                .onTapGesture {
+                    self.savedDefaultLease = "No_Data"
                 }
         }
     }
@@ -112,6 +130,11 @@ extension PreferencesView {
             self.useSavedAsDefault = true
         } else {
             self.useSavedAsDefault = false
+        }
+        
+        if self.saveMyCurrentAsDefault {
+            let myFile = myInvestment.writeInvestment()
+            self.savedDefaultLease = myFile
         }
     
         self.path.removeLast()
