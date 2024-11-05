@@ -213,7 +213,7 @@ extension FeeView {
         
         if isAmountValid(strAmount: myFee.amount, decLow: 0.0, decHigh: maximumLessorCost.toDecimal(), inclusiveLow: true, inclusiveHigh: true) == false {
             self.myFee.amount = self.amountOnEntry
-            alertTitle = alertMaxAmount
+            alertTitle = alertMaxFeeAmount
             showAlert.toggle()
         } else {
             //Amount is Valid

@@ -465,7 +465,7 @@ extension AssetView {
     func updateForLessorCost() {
         if isAmountValid(strAmount: myAsset.lessorCost, decLow: minimumLessorCost.toDecimal(), decHigh: maximumLessorCost.toDecimal(), inclusiveLow: true, inclusiveHigh: true) == false {
             self.myAsset.lessorCost = self.lessorCostOnEntry
-            alertTitle = alertMaxAmount
+            alertTitle = alertLessorCost
             showAlert.toggle()
         }
         self.myAsset.residualValue = (myAsset.lessorCost.toDecimal() * residualPercentOnEntry).toString()
@@ -481,7 +481,7 @@ extension AssetView {
         
         if isAmountValid(strAmount: myAsset.residualValue, decLow: 0.0, decHigh: maximumLessorCost.toDecimal(), inclusiveLow: true, inclusiveHigh: true) == false {
             self.myAsset.residualValue = self.residualValueOnEntry
-            alertTitle = alertMaxResidual
+            alertTitle = alertResidualValue
             showAlert.toggle()
         } else {
             if self.myAsset.residualValue.toDecimal() > 0.00 && self.myAsset.residualValue.toDecimal() <= 1.0 {
@@ -499,7 +499,7 @@ extension AssetView {
         }
         if isAmountValid(strAmount: myAsset.lesseeGuarantyAmount, decLow: 0.0, decHigh: myAsset.residualValue.toDecimal(), inclusiveLow: true, inclusiveHigh: true) == false {
             self.myAsset.lesseeGuarantyAmount = self.lesseeGuarantyOnEntry
-            alertTitle = alertMaxGty
+            alertTitle = alertLesseeGty
             showAlert.toggle()
         } else {
             if self.myAsset.lesseeGuarantyAmount.toDecimal() > 0.00 && self.myAsset.lesseeGuarantyAmount.toDecimal() <= 1.0 {

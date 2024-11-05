@@ -334,7 +334,7 @@ extension EconomicsView {
     func updateForNewYield() {
         if isAmountValid(strAmount: myEconomics.yieldTarget, decLow: 0.0, decHigh: maximumYieldTarget, inclusiveLow: true, inclusiveHigh: true) == false {
             self.myEconomics.yieldTarget = self.yieldTargetOnEntry
-            alertTitle = alertMaxResidual
+            alertTitle = alertMaxTargetYield
             showAlert.toggle()
         }
     }
@@ -342,7 +342,7 @@ extension EconomicsView {
     func updateForNewDiscountRate() {
         if isAmountValid(strAmount: myEconomics.discountRateForRent, decLow: 0.0, decHigh: maximumDiscountRate, inclusiveLow: true, inclusiveHigh: true) == false {
             self.myEconomics.discountRateForRent = self.discountRateOnEntry
-            alertTitle = alertMaxResidual
+            alertTitle = alertMaxDiscountRate
             showAlert.toggle()
         }
     }

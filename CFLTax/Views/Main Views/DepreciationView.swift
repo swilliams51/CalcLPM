@@ -437,7 +437,7 @@ extension DepreciationView {
     func updateForNewBonusPercent() {
         if isAmountValid(strAmount: myBonusPercent, decLow: 0.0, decHigh: maximumPercent, inclusiveLow: true, inclusiveHigh: true) == false {
             self.myBonusPercent = self.percentOnEntry
-            alertTitle = alertMaxResidual
+            alertTitle = alertBonusDepreciation
             showAlert.toggle()
         }
         self.editPercentStarted = false

@@ -359,14 +359,14 @@ extension GroupDetailView {
         if self.selectedGroup.isInterim == true {
             return (false, 0)
         }
-        if myInvestment.rent.interimExists() {
+        if myInvestment.rent.interimExists() == true {
             if self.index == 1 {
                 return (false, 0)
             }
         }
         if myInvestment.rent.interimExists() == false {
             if self.index == 0 {
-                return (false, 0)
+                return (false, 1)
             }
         }
          

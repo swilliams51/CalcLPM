@@ -22,7 +22,8 @@ struct TaxAssumptionsView: View {
     @FocusState private var taxRateIsFocused: Bool
     private let pasteBoard = UIPasteboard.general
     
-    
+    @State private var alertTitle: String = ""
+    @State private var showAlert: Bool = false
     @State private var showPop1: Bool = false
     @State var payHelp = leaseAmountHelp
     
@@ -199,10 +200,10 @@ extension TaxAssumptionsView {
     }
     
     func updateForNewTaxRate() {
-        if isAmountValid(strAmount: myTaxAssumptions.federalTaxRate, decLow: 0.0, decHigh: maximumTaxRate, inclusiveLow: true, inclusiveHigh: true) == false {
+        if isAmountValid(strAmount: myTaxAssumptions.federalTaxRate, decLow: 0.0, decHigh: maximumTaxRate, inclusiveLow: true, inclusiveHigh: false) == false {
             self.myTaxAssumptions.federalTaxRate = self.taxRateOnEntry
-            //alertTitle = alertMaxResidual
-            //showAlert.toggle()
+            alertTitle = alertMaxTaxRate
+            showAlert.toggle()
         }
             
         self.editTaxRateStarted = false
