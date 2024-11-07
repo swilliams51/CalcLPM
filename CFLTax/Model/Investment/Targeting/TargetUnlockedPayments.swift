@@ -32,8 +32,8 @@ extension Investment{
         var newFactor: Decimal = 0.0
         var x1: Decimal = 1.0
         var x2: Decimal = 1.0
-        var y1 = tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: yield, aDayCountMethod: self.economics.dayCountMethod)
-        if abs(y1) > tolerancePaymentAmounts {
+        var y1 = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: x1, discountRate: yield)
+        if abs(y1) > tolerance() {
             var iCount = 1
             
             if y1 < 0.0 {
@@ -44,12 +44,12 @@ extension Investment{
             var y2 = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: x2, discountRate: yield)
             
             iCount = 2
-            while iCount < 10 {
+            while iCount < 4 {
                 newFactor = mxbFactor(factor1: x1, value1: y1, factor2: x2, value2: y2)
                 let myBalance = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: newFactor, discountRate: yield)
                 //print("newFactor: \(newFactor), NPV: \(myBalance)")
                 
-                if abs(myBalance) < tolerancePaymentAmounts {
+                if abs(myBalance) < tolerance() {
                     break
                 }
                 x1 = newFactor
@@ -80,6 +80,7 @@ extension Investment{
         let tempInvestment = aInvestment.clone()
         var newX: Decimal = x1
         var newY: Decimal = y1
+        
         let factor: Decimal = min(power(base: 10.0, exp: iCounter), 100000.00)
         var count: Int = 1
         
@@ -105,6 +106,7 @@ extension Investment{
             newY = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: newX, discountRate: discountRate)
             count += 1
         }
+        
         
         return newX
     }

@@ -12,6 +12,7 @@ public struct Fee {
     public var amount: String
     public var feeType: FeeType
     public var datePaid: Date
+    public var hasChanged: Bool = false
     
     init(amount: String, feeType: FeeType = .expense, datePaid: Date = Date()) {
         self.amount = amount

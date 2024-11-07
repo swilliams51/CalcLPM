@@ -222,6 +222,13 @@ struct HomeView: View {
         .contentShape(Rectangle())
         .onTapGesture {
             if myInvestment.isSolveForValid() {
+                myInvestment.hasChanged = false
+                if myInvestment.feeExists {
+                    myInvestment.fee.hasChanged = false
+                }
+                if myInvestment.earlyBuyoutExists {
+                    myInvestment.earlyBuyout.hasChanged = false
+                }
                 self.path.append(25)
             } else {
                 self.isShowingYieldErrorAlert = true
@@ -233,19 +240,35 @@ struct HomeView: View {
         HStack{
             Text("File Menu")
                 .font(myFont)
-                .foregroundColor(myInvestment.hasChanged ? .gray : .black)
+                .foregroundColor(investmentHasChanged() ? .gray : .black)
             Spacer()
             Image(systemName: "chevron.right")
-                .foregroundColor(myInvestment.hasChanged ? .gray : .black)
+                .foregroundColor(investmentHasChanged() ? .gray : .black)
         }
         .contentShape(Rectangle())
         .onTapGesture {
             path.append(26)
         }
-        .disabled(myInvestment.hasChanged ? true : false)
+        .disabled(investmentHasChanged() ? true : false)
+    }
+    
+    private func investmentHasChanged() -> Bool {
+        if myInvestment.hasChanged {
+            return true
+        }
+        if myInvestment.fee.hasChanged {
+            return true
+        }
+        if myInvestment.earlyBuyout.hasChanged {
+            return true
+        }
+        
+        return false
     }
     
 }
+
+
 
 
 #Preview {

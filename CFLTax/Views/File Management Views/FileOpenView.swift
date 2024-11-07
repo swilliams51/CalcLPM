@@ -17,8 +17,6 @@ struct FileOpenView: View {
     @State private var fm = LocalFileManager()
     @State private var folderIsEmpty: Bool = false
     @State private var noOfSavedFiles: Int = 0
-    @State private var importHelp = importFileHelp
-    @State private var importExport = importExportHelp
     @State private var investmentDoc: InvestmentDocument = InvestmentDocument(investmentData: "")
     @State private var selectedFileIndex: Int = 0
     @State private var selectedFile: String = ""

@@ -35,7 +35,7 @@ struct FormCancelButton: View {
     var body: some View {
         Text (name)
             .font(myFont)
-            .foregroundColor(Color.theme.accent)
+            .foregroundColor(isFocused ? Color.theme.inActive : Color.theme.accent)
             .onTapGesture {
                 if isFocused == false {
                     cancel()
@@ -53,7 +53,7 @@ struct FormSubmitButton: View {
     var body: some View {
         Text(name)
             .font(myFont)
-            .foregroundColor(Color.theme.accent)
+            .foregroundColor(isFocused ? Color.theme.inActive : Color.theme.accent)
             .onTapGesture {
                if isFocused == false {
                    done()

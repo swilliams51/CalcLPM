@@ -12,6 +12,7 @@ public struct EarlyBuyout {
     public var amount: String
     public var exerciseDate: Date
     public var advanceRentDueIsPaid: Bool = false
+    public var hasChanged: Bool = false
     
     init(amount: String, exerciseDate: Date, rentDueIsPaid: Bool) {
         self.amount = amount

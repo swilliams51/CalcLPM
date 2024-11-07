@@ -22,7 +22,7 @@ struct EarlyBuyoutView: View {
     @State private var parValuePremium: Decimal = 0.0
     @State private var basisPoints: Double = 0.00
     @State private var baseYield: Decimal = 0.05
-    @State private var calculatedButtonPressed: Bool = true
+    @State private var sliderMoved: Bool = false
     @State private var eboTerm: Int = 0
     @State private var editAmountStarted: Bool = false
     
@@ -64,7 +64,7 @@ struct EarlyBuyoutView: View {
             }
             
             Section(header: Text("Submit Form")) {
-                SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isFocused: false, isDark: $isDark)
+                SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isFocused: sliderMoved, isDark: $isDark)
             }
         }
         .toolbar {
@@ -172,7 +172,7 @@ extension EarlyBuyoutView {
             
             Slider(value: $basisPoints, in: -50...maxEBOSpread.toDouble(), step: stepBps) { editing in
                 self.amountColor = 1
-                self.calculatedButtonPressed = false
+                self.sliderMoved = true
             }
             .accentColor(basisPoints < 0 ? .red : .green)
         }
@@ -183,7 +183,7 @@ extension EarlyBuyoutView {
         HStack {
             Spacer()
             Stepper("", value: $basisPoints, in: 0...maxEBOSpread.toDouble(), step: 1, onEditingChanged: { _ in
-                self.calculatedButtonPressed = false
+                self.sliderMoved = true
             }).labelsHidden()
             .transformEffect(.init(scaleX: 1.0, y: 0.9))
         }
@@ -194,12 +194,12 @@ extension EarlyBuyoutView {
         HStack{
             Button(action: {
                 self.myEBO.amount = self.myInvestment.solveForEBOAmount(aEBO: myEBO, aBaseYield: baseYield, bpsSpread: basisPoints).toString(decPlaces: 6)
-                self.calculatedButtonPressed = true
+                self.sliderMoved = false
                 self.editAmountStarted = false
             }) {
                 Text("Calculate")
                     .font(myFont)
-                    .foregroundColor(calculatedButtonPressed ? .gray : .blue)
+                    .foregroundColor(sliderMoved ? .blue : .gray)
             }
             Image(systemName: "questionmark.circle")
                 .foregroundColor(Color.blue)
@@ -238,7 +238,12 @@ extension EarlyBuyoutView {
     }
     
     func submitForm (){
-        self.myInvestment.earlyBuyout = self.myEBO
+        if self.myInvestment.earlyBuyout.isEqual(to: self.myEBO) == false {
+            self.myInvestment.earlyBuyout = self.myEBO
+            self.myInvestment.earlyBuyout.hasChanged = true
+        }
+       
+        
     }
 
     

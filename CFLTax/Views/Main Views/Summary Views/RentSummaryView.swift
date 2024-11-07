@@ -20,10 +20,15 @@ struct RentSummaryView: View {
     @State var discountRate: String = "0.00"
     @State private var amounts: [String] = [String]()
     
+    
+    @State private var showPop: Bool = false
+    @State private var payHelp = implicitRateHelp
     @State private var showPop1: Bool = false
-    @State private var payHelp = pvOneHelp
+    @State private var payHelp1 = pvOneHelp
     @State private var showPop2: Bool = false
     @State private var payHelp2 = pvTwoHelp
+    
+    
     @State var lineHeight: CGFloat = 12
     @State var frameHeight: CGFloat = 12
     
@@ -69,8 +74,11 @@ struct RentSummaryView: View {
                 self.amounts.append(strAmount)
             }
         }
-        .popover(isPresented: $showPop1) {
+        .popover(isPresented: $showPop) {
             PopoverView(myHelp: $payHelp, isDark: $isDark)
+        }
+        .popover(isPresented: $showPop1) {
+            PopoverView(myHelp: $payHelp1, isDark: $isDark)
         }
         .popover(isPresented: $showPop2) {
             PopoverView(myHelp: $payHelp2, isDark: $isDark)
@@ -113,6 +121,11 @@ extension RentSummaryView {
         HStack{
             Text("Implicit Rate:")
                 .font(myFont)
+            Image(systemName: "questionmark.circle")
+                .foregroundColor(Color.theme.accent)
+                .onTapGesture {
+                    self.showPop = true
+                }
             Spacer()
             Text("\(percentFormatter(percent: implicitRate, locale: myLocale, places: 3))")
                 .font(myFont)

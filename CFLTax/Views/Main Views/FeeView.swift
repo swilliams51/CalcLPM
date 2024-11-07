@@ -102,8 +102,8 @@ struct FeeView: View {
     
     private func myDone() {
         if self.myInvestment.fee.isEqual(to: myFee) == false {
-            self.myInvestment.hasChanged = true
             self.myInvestment.fee = myFee
+            self.myInvestment.fee.hasChanged = true
             self.myInvestment.setFee()
         }
         path.removeLast()
