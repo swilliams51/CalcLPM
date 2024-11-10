@@ -242,8 +242,6 @@ extension EarlyBuyoutView {
             self.myInvestment.earlyBuyout = self.myEBO
             self.myInvestment.earlyBuyout.hasChanged = true
         }
-       
-        
     }
 
     

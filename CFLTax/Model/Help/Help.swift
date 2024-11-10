@@ -99,7 +99,7 @@ let yieldMethodHelp =
     Help(title: "Yield Method", instruction: "The yield method is the method used to calculate the yield of the Investment.  The two primary methods are the After-Tax Multiple Investment Sinking Fund (MISF-AT) method and the Internal Rate of Return of the Pre-Tax Cashflows (IRR of PTCF) method.  The sinking rate used in the MISF method is 0.00%.  The MISF-BT yield is determined indirectly by dividing the MISF-AT Yield by 1.0 minus the Federal Tax Rate.")
 
 let solveForHelp =
-    Help(title: "Solve For", instruction: "The program allows the user to solve for 1- the lessor cost, 2- the unlocked rentals, 3- the residual value, 4- the fee amount, or 5- any one of 3 possible yields. The first four options will solve for the applicable amount that will produce the targeted yield while holding all other investment parameters constant. The yield solve for option will simply calculate all three yields while holding constant all of the input parameters.")
+    Help(title: "Solve For", instruction: "The program allows the user to solve for 1- the lessor cost, 2- the unlocked rentals, 3- the residual value, 4- the fee amount, or 5- any one of 3 possible yields. Because of rounding constraints, the targeting procedure will only be precise to +/- 1 basis point.")
 
 let discountRateHelp =
     Help(title: "Discount Rate", instruction: "The discount rate is the rate used to calculate two present value amounts, 1- PV1, which the present value of the lease payments and 2- PV2, which is the present value of the lease payments plus the amount of the lessee's residual guaranty. PV1 and PV2 are shown in the Rentals results screen.")

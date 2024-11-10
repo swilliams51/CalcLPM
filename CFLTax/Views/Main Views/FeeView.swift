@@ -155,6 +155,9 @@ extension FeeView {
                 .font(myFont)
                 .foregroundColor(isDark ? .white : .black)
         }
+        .alert(isPresented: $showAlert) {
+            Alert(title: Text("Fee Amount Error"), message: Text(alertFeeAmount), dismissButton: .default(Text("OK")))
+        }
     }
     
     func amountFormatted(editStarted: Bool) -> String {
@@ -213,7 +216,7 @@ extension FeeView {
         
         if isAmountValid(strAmount: myFee.amount, decLow: 0.0, decHigh: maximumLessorCost.toDecimal(), inclusiveLow: true, inclusiveHigh: true) == false {
             self.myFee.amount = self.amountOnEntry
-            alertTitle = alertMaxFeeAmount
+            alertTitle = alertFeeAmount
             showAlert.toggle()
         } else {
             //Amount is Valid

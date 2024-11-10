@@ -37,8 +37,8 @@ struct EconomicsView: View {
 
     private let pasteBoard = UIPasteboard.general
     @State private var alertTitle: String = ""
-    @State private var showAlert: Bool = false
-   
+    @State private var showAlert1: Bool = false
+    @State private var showAlert2: Bool = false
     
     var body: some View {
         Form{
@@ -190,6 +190,9 @@ extension EconomicsView {
                 .font(myFont)
                 .foregroundColor(isDark ? .white : .black)
         }
+        .alert(isPresented: $showAlert1) {
+            Alert(title: Text("Yield Target Error"), message: Text(alertMaxTargetYield), dismissButton: .default(Text("OK")))
+        }
     }
     
     func percentFormatted(editStarted: Bool) -> String {
@@ -248,6 +251,9 @@ extension EconomicsView {
             Text("\(discountRateFormatted(editStarted: editDiscountRateStarted))")
                 .font(myFont)
                 .foregroundColor(isDark ? .white : .black)
+        }
+        .alert(isPresented: $showAlert2) {
+            Alert(title: Text("Discount Rate Error"), message: Text(alertMaxDiscountRate), dismissButton: .default(Text("OK")))
         }
     }
     
@@ -334,16 +340,16 @@ extension EconomicsView {
     func updateForNewYield() {
         if isAmountValid(strAmount: myEconomics.yieldTarget, decLow: 0.0, decHigh: maximumYieldTarget, inclusiveLow: true, inclusiveHigh: true) == false {
             self.myEconomics.yieldTarget = self.yieldTargetOnEntry
-            alertTitle = alertMaxTargetYield
-            showAlert.toggle()
+            //alertTitle = alertMaxTargetYield
+            showAlert1 = true
         }
     }
     
     func updateForNewDiscountRate() {
         if isAmountValid(strAmount: myEconomics.discountRateForRent, decLow: 0.0, decHigh: maximumDiscountRate, inclusiveLow: true, inclusiveHigh: true) == false {
             self.myEconomics.discountRateForRent = self.discountRateOnEntry
-            alertTitle = alertMaxDiscountRate
-            showAlert.toggle()
+            //alertTitle = alertMaxDiscountRate
+            showAlert2 = true
         }
     }
 

@@ -149,6 +149,9 @@ extension TaxAssumptionsView {
                 .font(myFont)
                 .foregroundColor(isDark ? .white : .black)
         }
+        .alert(isPresented: $showAlert) {
+            Alert(title: Text("Federal Tax Rate Error"), message: Text(alertFederalTaxRate), dismissButton: .default(Text("OK")))
+        }
     }
     
     func percentFormatted(editStarted: Bool) -> String {
@@ -202,8 +205,7 @@ extension TaxAssumptionsView {
     func updateForNewTaxRate() {
         if isAmountValid(strAmount: myTaxAssumptions.federalTaxRate, decLow: 0.0, decHigh: maximumTaxRate, inclusiveLow: true, inclusiveHigh: false) == false {
             self.myTaxAssumptions.federalTaxRate = self.taxRateOnEntry
-            alertTitle = alertMaxTaxRate
-            showAlert.toggle()
+            showAlert = true
         }
             
         self.editTaxRateStarted = false

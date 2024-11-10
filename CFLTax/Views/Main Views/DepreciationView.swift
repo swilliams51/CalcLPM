@@ -45,7 +45,8 @@ struct DepreciationView: View {
     @State private var payHelp3: Help = salvageValueHelp
     
     @State private var alertTitle: String = ""
-    @State private var showAlert: Bool = false
+    @State private var showAlert1: Bool = false
+    @State private var showAlert2: Bool = false
     @State private var showPopoverForSalvage: Bool = false
 
     var body: some View {
@@ -312,6 +313,9 @@ extension DepreciationView {
                 .foregroundColor(isDark ? .white : .black)
         }
         .font(myFont)
+        .alert(isPresented: $showAlert1) {
+            Alert(title: Text("Bonus Depreciation Error"), message: Text(alertBonusDepreciation), dismissButton: .default(Text("OK")))
+        }
     }
     
     func percentFormatted(editStarted: Bool) -> String {
@@ -366,6 +370,9 @@ extension DepreciationView {
                 .foregroundColor(isDark ? .white : .black)
         }
         .font(myFont)
+        .alert(isPresented: $showAlert2) {
+            Alert(title: Text("Salvage Value Error"), message: Text(alertSalvageValue), dismissButton: .default(Text("OK")))
+        }
     }
     
     func salvageFormatted(editStarted: Bool) -> String {
@@ -437,8 +444,7 @@ extension DepreciationView {
     func updateForNewBonusPercent() {
         if isAmountValid(strAmount: myBonusPercent, decLow: 0.0, decHigh: maximumPercent, inclusiveLow: true, inclusiveHigh: true) == false {
             self.myBonusPercent = self.percentOnEntry
-            alertTitle = alertBonusDepreciation
-            showAlert.toggle()
+            showAlert1.toggle()
         }
         self.editPercentStarted = false
         self.percentIsFocused = false
@@ -450,8 +456,7 @@ extension DepreciationView {
         }
         if isAmountValid(strAmount: mySalvageAmount, decLow: 0.0, decHigh: maximumLessorCost.toDecimal(), inclusiveLow: true, inclusiveHigh: true) == false {
             self.mySalvageAmount = self.salvageOnEntry
-            //            alertTitle = alertMaxResidual
-            //            showAlert.toggle()
+            showAlert2.toggle()
         } else {
             //Amount is Valid
             if self.mySalvageAmount.toDecimal() > 0.00 && self.mySalvageAmount.toDecimal() <= 1.0 {

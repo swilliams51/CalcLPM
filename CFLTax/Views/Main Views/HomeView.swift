@@ -91,7 +91,6 @@ struct HomeView: View {
             .alert(isPresented: $isShowingYieldErrorAlert) {
                 Alert(title: Text("Yield Calculation Error"), message: Text(alertYieldCalculationError), dismissButton: .default(Text("OK")))
             }
-            
         }
     }
     

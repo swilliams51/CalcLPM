@@ -13,13 +13,13 @@ public let tolerancePaymentAmounts: Decimal = 0.050
 public let toleranceLumpSums: Decimal = 0.005
 public let myFont: Font = .subheadline
 public let myFont2: Font = .body
-public let maximumLessorCost: String = "50000000.00"
+public let maximumLessorCost: String = "9999999.99"
 public let minimumLessorCost: String = "999.99"
-public let maximumYield: String = "0.20"
+public let maximumYield: String = "0.15"
 public let maxEBOSpread: Int = 500
 public let feeAmortizationMethod: FeeAmortizationMethod = .monthly
 public let maxBaseTerm: Int = 240
-public let removeCharacters: Set<Character> = [",", "$","-", "+","%","*","#","|","&"]
+public let removeCharacters: Set<Character> = [",", "$","-", "+","%","*","#","|","&","/","!"]
 public let str_split_Cashflows = "#"
 
 

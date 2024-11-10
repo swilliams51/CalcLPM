@@ -35,7 +35,6 @@ extension Investment{
         var y1 = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: x1, discountRate: yield)
         if abs(y1) > tolerance() {
             var iCount = 1
-            
             if y1 < 0.0 {
                 x2 = incrementFactor_AT(aInvestment: tempInvestment, discountRate: yield, x1: x1, y1: y1, iCounter: iCount)
             } else {
@@ -80,33 +79,50 @@ extension Investment{
         let tempInvestment = aInvestment.clone()
         var newX: Decimal = x1
         var newY: Decimal = y1
-        
         let factor: Decimal = min(power(base: 10.0, exp: iCounter), 100000.00)
-        var count: Int = 1
         
         while newY > 0.0 {
-            newX = newX - ((newX / factor) * Decimal(count))
+            newX = newX - (newX / factor)
             newY = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: newX, discountRate: discountRate)
-            count += 1
         }
         
         return newX
     }
     
     
+    private func decrementFactor2_AT(aInvestment: Investment, discountRate: Decimal, x1: Decimal, y1: Decimal, iCounter: Int, cycle: Int = 1) -> Decimal {
+        let tempInvestment: Investment = aInvestment.clone()
+        let oldX: Decimal = x1
+        let oldY: Decimal = y1
+        var newX: Decimal = x1
+        var newY: Decimal = y1
+        var myCycle: Int = cycle
+        let factor: Decimal = min(power(base: 10.0, exp: iCounter), 100000.00)
+        
+        while newY < 0.0 {
+            newX = newX + (newX / factor) / Decimal(cycle)
+            newY = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: newX, discountRate: discountRate)
+        }
+        
+        while abs(newY) > abs(oldY) {
+            myCycle += 1
+            newX = decrementFactor2_AT(aInvestment: tempInvestment, discountRate: discountRate, x1: oldX, y1: oldY, iCounter: iCounter, cycle: myCycle)
+            newY = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: newX, discountRate: discountRate)
+        }
+        
+        return newX
+    }
+    
     private func incrementFactor_AT(aInvestment: Investment, discountRate: Decimal, x1: Decimal, y1: Decimal, iCounter: Int) -> Decimal {
         let tempInvestment: Investment = aInvestment.clone()
         var newX: Decimal = x1
         var newY: Decimal = y1
         let factor: Decimal = min(power(base: 10.0, exp: iCounter), 100000.00)
-        var count: Int = 1
         
         while newY < 0.0 {
-            newX = newX + ((newX / factor) * Decimal(count))
+            newX = newX + (newX / factor)
             newY = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: newX, discountRate: discountRate)
-            count += 1
         }
-        
         
         return newX
     }
@@ -167,7 +183,6 @@ extension Investment{
             iCount += 1
         }
         
-        
         //Then adjust the payments in the actual investment
         for x in 0..<self.rent.groups.count {
             if self.rent.groups[x].locked == false {
@@ -225,7 +240,7 @@ extension Investment{
     
     private func tolerance() -> Decimal {
         let numberOfPayments: Decimal = self.rent.getTotalNoOfBasePayments(aFreq: self.leaseTerm.paymentFrequency, eomRule: self.leaseTerm.endOfMonthRule, interimGroupExists: self.rent.interimExists()).toString().toDecimal()
-        let myTolerance = (numberOfPayments / 10.0) * 0.25
+        let myTolerance = (numberOfPayments / 60.0) *  0.50
         
         return myTolerance
     }

@@ -40,7 +40,11 @@ struct AssetView: View {
     @State private var showPop2: Bool = false
     @State private var showPop3: Bool = false
     @State private var alertTitle: String = ""
-    @State private var showAlert: Bool = false
+    
+    @State private var showAlert1: Bool = false
+    @State private var showAlert2: Bool = false
+    @State private var showAlert3: Bool = false
+    @State private var showAlert4: Bool = false
   
     @State var assetHelp1 = assetResidualValueHelp
     @State var assetHelp2 = assetLesseeGuarantyHelp
@@ -185,6 +189,9 @@ extension AssetView {
                 .font(myFont)
                 .foregroundColor(isDark ? .white : .black)
         }
+        .alert(isPresented: $showAlert1) {
+            Alert(title: Text("Asset Name Error"), message: Text(alertAssetName), dismissButton: .default(Text("OK")))
+        }
     }
 }
 
@@ -225,6 +232,9 @@ extension AssetView {
             Text("\(amountFormatted(editStarted: editLessorStarted))")
                 .font(myFont)
                 .foregroundColor(isDark ? .white : .black)
+        }
+        .alert(isPresented: $showAlert2) {
+            Alert(title: Text("Lessor Cost Error"), message: Text(alertLessorCost), dismissButton: .default(Text("OK")))
         }
     }
     
@@ -282,6 +292,9 @@ extension AssetView {
             Text("\(residualValueFormatted(editStarted: editResidualValueStarted))")
                 .foregroundColor(isDark ? .white : .black)
         }
+        .alert(isPresented: $showAlert3) {
+            Alert(title: Text("Residual Value Error"), message: Text(alertResidualValue), dismissButton: .default(Text("OK")))
+        }
         .font(myFont)
     }
     
@@ -338,6 +351,9 @@ extension AssetView {
                 .accentColor(.clear)
             Text("\(lesseeGuarantyFormatted(editStarted: editLesseeGuarantyStarted))")
                 .foregroundColor(isDark ? .white : .black)
+        }
+        .alert(isPresented: $showAlert4) {
+            Alert(title: Text("Lessee Guaranty Error"), message: Text(alertLesseeGty), dismissButton: .default(Text("OK")))
         }
         .font(myFont)
     }
@@ -455,8 +471,7 @@ extension AssetView {
     func updateForAssetName() {
         if isNameValid(strIn: myAsset.name) == false {
             self.myAsset.name = self.nameOnEntry
-            alertTitle = alertName
-            showAlert.toggle()
+            showAlert1 = true
         }
         
         self.editNameStarted = false
@@ -465,8 +480,7 @@ extension AssetView {
     func updateForLessorCost() {
         if isAmountValid(strAmount: myAsset.lessorCost, decLow: minimumLessorCost.toDecimal(), decHigh: maximumLessorCost.toDecimal(), inclusiveLow: true, inclusiveHigh: true) == false {
             self.myAsset.lessorCost = self.lessorCostOnEntry
-            alertTitle = alertLessorCost
-            showAlert.toggle()
+            showAlert2 = true
         }
         self.myAsset.residualValue = (myAsset.lessorCost.toDecimal() * residualPercentOnEntry).toString()
         self.myAsset.lesseeGuarantyAmount = (myAsset.lessorCost.toDecimal() * lesseeGuarantyPercentOnEntry).toString()
@@ -481,8 +495,7 @@ extension AssetView {
         
         if isAmountValid(strAmount: myAsset.residualValue, decLow: 0.0, decHigh: maximumLessorCost.toDecimal(), inclusiveLow: true, inclusiveHigh: true) == false {
             self.myAsset.residualValue = self.residualValueOnEntry
-            alertTitle = alertResidualValue
-            showAlert.toggle()
+            showAlert3 = true
         } else {
             if self.myAsset.residualValue.toDecimal() > 0.00 && self.myAsset.residualValue.toDecimal() <= 1.0 {
                 self.myAsset.residualValue = myInvestment.percentToAmount(percent: myAsset.residualValue, basis: myAsset.lessorCost)
@@ -499,8 +512,7 @@ extension AssetView {
         }
         if isAmountValid(strAmount: myAsset.lesseeGuarantyAmount, decLow: 0.0, decHigh: myAsset.residualValue.toDecimal(), inclusiveLow: true, inclusiveHigh: true) == false {
             self.myAsset.lesseeGuarantyAmount = self.lesseeGuarantyOnEntry
-            alertTitle = alertLesseeGty
-            showAlert.toggle()
+            showAlert4 = true
         } else {
             if self.myAsset.lesseeGuarantyAmount.toDecimal() > 0.00 && self.myAsset.lesseeGuarantyAmount.toDecimal() <= 1.0 {
                 self.myAsset.lesseeGuarantyAmount = myInvestment.percentToAmount(percent: myAsset.lesseeGuarantyAmount, basis: myAsset.lessorCost)
