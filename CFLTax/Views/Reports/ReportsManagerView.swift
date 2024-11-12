@@ -15,26 +15,23 @@ struct ReportsManagerView: View {
     @Binding var currentFile: String
     
     var body: some View {
-        Form{
-            Section(header: Text("Reports"), footer: (Text("File Name: \(currentFile)").font(myFont))) {
-                leaseRentalsItem
-                depreciationScheduleItem
-                feeAmortizationItem
-                taxableIncomeItem
-                taxesPaidItem
-                beforeTaxLeaseCashflowsItem
-                afterTaxLeaseCashflowsItem
-                investmentAmortizationItem
-            }
-            
-        }
-        .toolbar{
-            ToolbarItem(placement: .topBarLeading) {
-                BackButtonView(path: $path, isDark: $isDark)
+        VStack {
+            CustomHeaderView(name: "Reports", isReport: true, path: $path, isDark: $isDark)
+            Form{
+                Section(header: Text("Reports"), footer: (Text("File Name: \(currentFile)").font(myFont))) {
+                    leaseRentalsItem
+                    depreciationScheduleItem
+                    feeAmortizationItem
+                    taxableIncomeItem
+                    taxesPaidItem
+                    beforeTaxLeaseCashflowsItem
+                    afterTaxLeaseCashflowsItem
+                    investmentAmortizationItem
+                }
+                
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        .navigationBarTitle("Reports")
         .navigationBarBackButtonHidden(true)
     }
     

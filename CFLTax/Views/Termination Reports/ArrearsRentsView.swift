@@ -16,35 +16,30 @@ struct ArrearsRentsView: View {
     @State var myPeriodicArrearsRents: PeriodicArrearsRents = PeriodicArrearsRents()
     
     var body: some View {
-        Form {
-            Section(header: Text("\(currentFile)")) {
-                ForEach(myPeriodicArrearsRents.items) { item in
-                    HStack {
-                        Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
+        VStack {
+            CustomHeaderView(name: "Arrears Rents", isReport: true, path: $path, isDark: $isDark)
+            Form {
+                Section(header: Text("\(currentFile)")) {
+                    ForEach(myPeriodicArrearsRents.items) { item in
+                        HStack {
+                            Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
+                            Spacer()
+                            Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
+                        }
+                        .font(myFont)
+                    }
+                }
+                Section(header: Text("Totals")) {
+                    HStack{
+                        Text("Count:")
                         Spacer()
-                        Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
+                        Text("\(myPeriodicArrearsRents.items.count)")
                     }
                     .font(myFont)
                 }
             }
-            Section(header: Text("Totals")) {
-                HStack{
-                    Text("Count:")
-                    Spacer()
-                    Text("\(myPeriodicArrearsRents.items.count)")
-                }
-                .font(myFont)
-            }
-           
-        }
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButtonView(path: $path, isDark: $isDark)
-            }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        .navigationTitle("Advanced Rents")
-        .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .onAppear {
             if myPeriodicArrearsRents.items.count > 0 {

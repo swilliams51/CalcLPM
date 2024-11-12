@@ -29,34 +29,29 @@ struct CashflowView: View {
     @State var frameHeight: CGFloat = 12
     
     var body: some View {
-        Form {
-            Section(header: Text("Cashflow")) {
-                assetCostItem
-                feeAmountItem
-                totalCashOutItem
-                rentAmountItem
-                residualAmountItem
-                btProfitItem
-                taxesPaidItem
-                atProfitItem
+        VStack {
+            CustomHeaderView(name: "Summary", isReport: true, path: $path, isDark: $isDark)
+            Form {
+                Section(header: Text("Cashflow")) {
+                    percentOfCostButton
+                    assetCostItem
+                    feeAmountItem
+                    totalCashOutItem
+                    rentAmountItem
+                    residualAmountItem
+                    btProfitItem
+                    taxesPaidItem
+                    atProfitItem
+                }
             }
         }
         .environment(\.defaultMinListRowHeight, lineHeight)
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButtonView(path: $path, isDark: $isDark)
-            }
             ToolbarItem(placement: .topBarTrailing){
-                Button(action: {
-                    viewAsPctOfCost.toggle()
-                }) {
-                    Image(systemName: "command.circle")
-                        .tint(viewAsPctOfCost ? Color.red : Color.black)
-                }
+               
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        .navigationTitle("Summary")
         .navigationBarBackButtonHidden(true)
         .onAppear{
             myInvestment.calculate()
@@ -78,6 +73,7 @@ struct CashflowView: View {
             
         }
     }
+    
 }
 
 #Preview {
@@ -85,6 +81,15 @@ struct CashflowView: View {
 }
 
 extension CashflowView {
+    var percentOfCostButton: some View {
+        HStack {
+            Toggle(isOn: $viewAsPctOfCost) {
+                Text(viewAsPctOfCost ? "View as Percent:" : "View as Cost:")
+            }
+            .font(myFont)
+        }
+    }
+    
     var assetCostItem: some View {
         HStack {
             Text("Asset Cost:")

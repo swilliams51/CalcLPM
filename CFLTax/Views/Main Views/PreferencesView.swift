@@ -27,34 +27,30 @@ struct PreferencesView: View {
     @State private var alertTitle: String = ""
     @State private var showAlert: Bool = false
     
+    
     var body: some View {
-        Form {
-            Section(header: Text("Default New Lease")) {
-                defaultNewLeaseItem
-                saveCurrentAsDefaultItem
-                resetFileItem
-            }
-           Section(header: Text("Mode")) {
-                colorSchemeItem
-            }
-            Section(header: Text("Submit Form")){
-                SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isFocused: false, isDark: $isDark)
-            }
-        }
-        
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButtonView(path: $path, isDark: $isDark)
+        VStack {
+            CustomHeaderView(name: "Preferences", isReport: false, path: $path, isDark: $isDark)
+            Form {
+                Section(header: Text("Default New Lease")) {
+                    defaultNewLeaseItem
+                    saveCurrentAsDefaultItem
+                    resetFileItem
+                }
+               Section(header: Text("Mode")) {
+                    colorSchemeItem
+                }
+                Section(header: Text("Submit Form")){
+                    SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isFocused: false, isDark: $isDark)
+                }
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        .navigationBarTitle("Preferences")
         .navigationBarBackButtonHidden(true)
         .onAppear{
             if self.savedDefaultLease == "No_Data" {
                 self.savedDefaultExists = false
             }
-            
             self.useMySavedAsDefault = useSavedAsDefault
         }
    

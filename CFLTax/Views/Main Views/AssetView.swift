@@ -53,28 +53,27 @@ struct AssetView: View {
     
     
     var body: some View {
-        Form {
-            Section(header: Text("Details").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
-                assetNameItem
-                lessorCostItem
-                residualAmountItem
-                lesseeGuarantyItem
-                fundingDateItem
-            }
-            Section(header: Text("Submit Form")) {
-                SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isFocused: keyBoardIsActive(), isDark: $isDark)
+        VStack{
+            CustomHeaderView(name: "Asset", isReport: false, path: $path, isDark: $isDark)
+            Form {
+                Section(header: Text("Details").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
+                    assetNameItem
+                    lessorCostItem
+                    residualAmountItem
+                    lesseeGuarantyItem
+                    fundingDateItem
+                }
+                Section(header: Text("Submit Form")) {
+                    SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isFocused: keyBoardIsActive(), isDark: $isDark)
+                }
             }
         }
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButtonView(path: $path, isDark: $isDark)
-            }
             ToolbarItemGroup(placement: .keyboard){
                 DecimalPadButtonsView(cancel: updateForCancel, copy: copyToClipboard, paste: paste, clear: clearAllText, enter: updateForSubmit, isDark: $isDark)
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        .navigationBarTitle("Asset")
         .navigationBarBackButtonHidden(true)
         .onAppear {
             self.myAsset = myInvestment.asset

@@ -50,30 +50,27 @@ struct EarlyBuyoutView: View {
     var standard: Color = Color.theme.active
     
     var body: some View {
-        Form {
-            Section (header: Text("Exercise Date").font(.footnote), footer: Text("Full Term MISF A/T Yield: \(percentFormatter(percent: baseYield.toString(decPlaces: 5), locale: myLocale, places: 2))")) {
-                eboTermInMonsRow
-                exerciseDateRow
-            }
-            
-            Section (header: Text("EBO Amount").font(.footnote), footer: Text("Par Value on Date: \(amountFormatter(amount: parValue, locale: myLocale, places: 2))")) {
-                //eboAmountRow
-                interestRateAdderRow
-                basisPointsStepperRow2
-                calculatedButtonItemRow
-            }
-            
-            Section(header: Text("Submit Form")) {
-                SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isFocused: sliderMoved, isDark: $isDark)
-            }
-        }
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButtonView(path: $path, isDark: $isDark)
+        VStack {
+            CustomHeaderView(name: "Early Buyout", isReport: false, path: $path, isDark: $isDark)
+            Form {
+                Section (header: Text("Exercise Date").font(.footnote), footer: Text("Full Term MISF A/T Yield: \(percentFormatter(percent: baseYield.toString(decPlaces: 5), locale: myLocale, places: 2))")) {
+                    eboTermInMonsRow
+                    exerciseDateRow
+                }
+                
+                Section (header: Text("EBO Amount").font(.footnote), footer: Text("Par Value on Date: \(amountFormatter(amount: parValue, locale: myLocale, places: 2))")) {
+                    //eboAmountRow
+                    interestRateAdderRow
+                    basisPointsStepperRow2
+                    calculatedButtonItemRow
+                }
+                
+                Section(header: Text("Submit Form")) {
+                    SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isFocused: sliderMoved, isDark: $isDark)
+                }
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        .navigationBarTitle("Early Buyout")
         .navigationBarBackButtonHidden(true)
         .onAppear {
             self.myInvestment.economics.solveFor = .yield

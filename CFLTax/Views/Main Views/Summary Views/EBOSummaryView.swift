@@ -34,30 +34,32 @@ struct EBOSummaryView: View {
     @State var frameHeight: CGFloat = 12
     
     var body: some View {
-       Form {
-           Section(header: Text("EBO Yields")) {
-               afterTaxYieldItem
-               beforeTaxYieldItem
-               preTaxIRRItem
+       VStack {
+           CustomHeaderView(name: "Summary", isReport: true, path: $path, isDark: $isDark)
+           Form {
+              Section(header: Text("EBO Yields")) {
+                  afterTaxYieldItem
+                  beforeTaxYieldItem
+                  preTaxIRRItem
+              }
+              
+              Section(header: Text("EBO Details"), footer: Text("Exercise Date: \(dateFormatter(dateIn: myEBO.exerciseDate, locale: myLocale))")) {
+                  eboAmountItem
+                  arrearsRentItem
+                  eboTotalDueItem
+              }
+              
+              Section(header: Text("EBO Cashflow")) {
+                  preTaxEBOCashItem
+                  afterTaxEBOCashItem
+              }
+              
            }
-           
-           Section(header: Text("EBO Details"), footer: Text("Exercise Date: \(dateFormatter(dateIn: myEBO.exerciseDate, locale: myLocale))")) {
-               eboAmountItem
-               arrearsRentItem
-               eboTotalDueItem
-           }
-           
-           Section(header: Text("EBO Cashflow")) {
-               preTaxEBOCashItem
-               afterTaxEBOCashItem
-           }
-           
         }
+        
+        
        .environment(\.defaultMinListRowHeight, lineHeight)
        .toolbar {
-           ToolbarItem(placement: .topBarLeading) {
-               BackButtonView(path: $path, isDark: $isDark)
-           }
            ToolbarItem(placement: .topBarTrailing){
                Button(action: {
                    viewAsPctOfCost.toggle()
@@ -68,7 +70,6 @@ struct EBOSummaryView: View {
            }
        }
        .environment(\.colorScheme, isDark ? .dark : .light)
-       .navigationTitle("Summary")
        .navigationBarBackButtonHidden(true)
         
        .onAppear {

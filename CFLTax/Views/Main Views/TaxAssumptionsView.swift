@@ -28,26 +28,25 @@ struct TaxAssumptionsView: View {
     @State var payHelp = leaseAmountHelp
     
     var body: some View {
-        Form {
-            Section (header: Text("Details").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
-                federalTaxRateItem
-                fiscalMonthEndItem
-                dayOfMonthTaxesPaidItem
-            }
-            Section(header: Text("Submit Form").font(myFont)) {
-                SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isFocused: taxRateIsFocused, isDark: $isDark)
+        VStack {
+            CustomHeaderView(name: "Tax Assumptions", isReport: false, path: $path, isDark: $isDark)
+            Form {
+                Section (header: Text("Details").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
+                    federalTaxRateItem
+                    fiscalMonthEndItem
+                    dayOfMonthTaxesPaidItem
+                }
+                Section(header: Text("Submit Form").font(myFont)) {
+                    SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isFocused: taxRateIsFocused, isDark: $isDark)
+                }
             }
         }
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButtonView(path: $path, isDark: $isDark)
-            }
             ToolbarItemGroup(placement: .keyboard) {
                 DecimalPadButtonsView(cancel: updateForCancel, copy: copyToClipboard, paste: paste, clear: clearAllText, enter: updateForSubmit, isDark: $isDark)
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        .navigationBarTitle("Tax Assumptions")
         .navigationBarBackButtonHidden(true)
         .onAppear() {
             self.myTaxAssumptions = self.myInvestment.taxAssumptions

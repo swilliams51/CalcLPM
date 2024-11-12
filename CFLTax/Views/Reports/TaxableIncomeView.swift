@@ -17,34 +17,30 @@ struct TaxableIncomeView: View {
     @State var myNetTaxableIncomes: Cashflows = Cashflows()
     
     var body: some View {
-        Form{
-            Section(header: Text("\(currentFile)")) {
-                ForEach(myNetTaxableIncomes.items) { item in
+        VStack {
+            CustomHeaderView(name: "Taxable Income", isReport: true, path: $path, isDark: $isDark)
+            Form{
+                Section(header: Text("\(currentFile)")) {
+                    ForEach(myNetTaxableIncomes.items) { item in
+                        HStack {
+                            Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
+                            Spacer()
+                            Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
+                        }
+                        .font(myFont)
+                    }
+                }
+                Section(header: Text("Totals")) {
                     HStack {
-                        Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
+                        Text("\(myNetTaxableIncomes.items.count)")
                         Spacer()
-                        Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
+                        Text("\(amountFormatter(amount: myNetTaxableIncomes.getTotal().toString(decPlaces: 4), locale: myLocale))")
                     }
                     .font(myFont)
                 }
             }
-            Section(header: Text("Totals")) {
-                HStack {
-                    Text("\(myNetTaxableIncomes.items.count)")
-                    Spacer()
-                    Text("\(amountFormatter(amount: myNetTaxableIncomes.getTotal().toString(decPlaces: 4), locale: myLocale))")
-                }
-                .font(myFont)
-            }
-        }
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButtonView(path: $path, isDark: $isDark)
-            }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        .navigationTitle("Taxable Income")
-        .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .onAppear {
             myNetTaxableIncomes =   myTaxableIncomes.createNetTaxableIncomes(aInvestment: myInvestment)

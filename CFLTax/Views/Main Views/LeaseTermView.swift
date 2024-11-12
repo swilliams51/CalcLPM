@@ -29,26 +29,22 @@ struct LeaseTermView: View {
     
     
     var body: some View {
-        Form {
-            Section (header: Text("Details").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
-                baseCommenceDateItem
-                paymentFrequencyItem
-                eomRuleItem
-                baseTermInMonthsItem
-            }
-            Section(header: Text("Submit Form")) {
-                SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isFocused: false, isDark: $isDark)
-            }
-        }
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButtonView(path: $path, isDark: $isDark)
+        VStack {
+            CustomHeaderView(name: "Lease Term", isReport: false, path: $path, isDark: $isDark)
+            Form {
+                Section (header: Text("Details").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
+                    baseCommenceDateItem
+                    paymentFrequencyItem
+                    eomRuleItem
+                    baseTermInMonthsItem
+                }
+                Section(header: Text("Submit Form")) {
+                    SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isFocused: false, isDark: $isDark)
+                }
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        .navigationBarTitle("Lease Term")
         .navigationBarBackButtonHidden(true)
-        
         .onAppear {
             self.baseCommenceDate = myInvestment.leaseTerm.baseCommenceDate
             self.paymentFrequencyOnEntry = myInvestment.leaseTerm.paymentFrequency

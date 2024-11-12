@@ -15,36 +15,32 @@ struct RentScheduleView: View {
     @Binding var currentFile: String
     
     var body: some View {
-        Form {
-            Section(header: Text("\(currentFile)")) {
-                ForEach(myRentalSchedule.items) { item in
+        VStack {
+            CustomHeaderView(name: "Rental Schedule", isReport: true, path: $path, isDark: $isDark)
+            Form {
+                Section(header: Text("\(currentFile)")) {
+                    ForEach(myRentalSchedule.items) { item in
+                        HStack {
+                            Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
+                            Spacer()
+                            Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
+                        }
+                        .font(myFont)
+                    }
+                }
+                
+                Section(header: Text("Totals")) {
                     HStack {
-                        Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
+                        Text("\(myRentalSchedule.items.count)")
                         Spacer()
-                        Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
+                        Text("\(amountFormatter(amount: myRentalSchedule.getTotal().toString(decPlaces: 4), locale: myLocale))")
                     }
                     .font(myFont)
                 }
-            }
-            
-            Section(header: Text("Totals")) {
-                HStack {
-                    Text("\(myRentalSchedule.items.count)")
-                    Spacer()
-                    Text("\(amountFormatter(amount: myRentalSchedule.getTotal().toString(decPlaces: 4), locale: myLocale))")
-                }
-                .font(myFont)
-            }
-           
-        }
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButtonView(path: $path, isDark: $isDark)
+               
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        .navigationTitle("Rent Schedule")
-        .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .onAppear {
             if myRentalSchedule.items.count > 0 {

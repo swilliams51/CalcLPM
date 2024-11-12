@@ -15,35 +15,31 @@ struct DepreciationScheduleView: View {
     @Binding var currentFile: String
     
     var body: some View {
-        Form {
-            Section(header: Text("\(currentFile)")) {
-                ForEach(myDepreciationSchedule.items) { item in
+        VStack {
+            CustomHeaderView(name: "Depreciation Schedule", isReport: true, path: $path, isDark: $isDark)
+            Form {
+                Section(header: Text("\(currentFile)")) {
+                    ForEach(myDepreciationSchedule.items) { item in
+                        HStack {
+                            Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
+                            Spacer()
+                            Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
+                        }
+                        .font(myFont)
+                    }
+                }
+                
+                Section(header: Text("Totals")) {
                     HStack {
-                        Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
+                        Text("\(myDepreciationSchedule.items.count)")
                         Spacer()
-                        Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
+                        Text("\(amountFormatter(amount: myDepreciationSchedule.getTotal().toString(decPlaces: 4), locale: myLocale))")
                     }
                     .font(myFont)
                 }
             }
-            
-            Section(header: Text("Totals")) {
-                HStack {
-                    Text("\(myDepreciationSchedule.items.count)")
-                    Spacer()
-                    Text("\(amountFormatter(amount: myDepreciationSchedule.getTotal().toString(decPlaces: 4), locale: myLocale))")
-                }
-                .font(myFont)
-            }
-        }
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButtonView(path: $path, isDark: $isDark)
-            }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        .navigationTitle("Deprec Schedule")
-        .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .onAppear {
             if myDepreciationSchedule.items.count > 0 {

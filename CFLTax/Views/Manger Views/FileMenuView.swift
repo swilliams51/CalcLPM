@@ -19,25 +19,22 @@ struct FileMenuView: View {
     @AppStorage("useSaved") var useSavedAsDefault: Bool = false
     
     var body: some View {
-        Form {
-            Section(footer: Text(" File Name: \(currentFile)").font(myFont)) {
-                newFileItem
-                openFileItem
-                saveFileItem
-                saveAsFileItem
-                reportsItem
-                terminationsItem
-                preferencesItem
-                aboutItem
-            }
-        }
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButtonView(path: $path, isDark: $isDark)
+        VStack {
+            CustomHeaderView(name: "File", isReport: true, path: $path, isDark: $isDark)
+            Form {
+                Section(footer: Text(" File Name: \(currentFile)").font(myFont)) {
+                    newFileItem
+                    openFileItem
+                    saveFileItem
+                    saveAsFileItem
+                    reportsItem
+                    terminationsItem
+                    preferencesItem
+                    aboutItem
+                }
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        .navigationTitle("File")
         .navigationBarTitleDisplayMode(.large)
         .navigationBarBackButtonHidden(true)
     }

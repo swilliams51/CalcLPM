@@ -16,35 +16,31 @@ struct YTDTaxesDueView: View {
     @State var myPeriodicTaxesDue: PeriodicNetTaxesDue = PeriodicNetTaxesDue()
   
     var body: some View {
-        Form {
-            Section(header: Text("\(currentFile)")) {
-                ForEach(myPeriodicTaxesDue.items) { item in
-                    HStack {
-                        Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
+        VStack {
+            CustomHeaderView(name: "YTD Taxes Due", isReport: true, path: $path, isDark: $isDark)
+            Form {
+                Section(header: Text("\(currentFile)")) {
+                    ForEach(myPeriodicTaxesDue.items) { item in
+                        HStack {
+                            Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
+                            Spacer()
+                            Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
+                        }
+                        .font(myFont)
+                    }
+                }
+                Section(header: Text("Count")) {
+                    HStack{
+                        Text("Count:")
                         Spacer()
-                        Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
+                        Text("\(myPeriodicTaxesDue.items.count)")
                     }
                     .font(myFont)
                 }
-            }
-            Section(header: Text("Count")) {
-                HStack{
-                    Text("Count:")
-                    Spacer()
-                    Text("\(myPeriodicTaxesDue.items.count)")
-                }
-                .font(myFont)
-            }
-           
-        }
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButtonView(path: $path, isDark: $isDark)
+               
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        .navigationTitle("YTD Taxes Due")
-        .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .onAppear {
             if myPeriodicTaxesDue.items.count > 0 {

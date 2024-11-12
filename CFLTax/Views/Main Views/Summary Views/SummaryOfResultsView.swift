@@ -28,28 +28,28 @@ struct SummaryOfResultsView: View {
     @State var frameHeight: CGFloat = 12
     
     var body: some View {
-        Form {
-            Section(header: Text("Profitability"), footer: (Text("File Name: \(currentFile)"))) {
-                afterTaxYieldItem
-                beforeTaxYieldItem
-                preTaxIRRItem
-                inherentProfitItem
-                simplePaybackItem
-                averageLifeItem
+        VStack {
+            CustomHeaderView(name: "Summary", isReport: true, path: $path, isDark: $isDark)
+            Form {
+                Section(header: Text("Profitability"), footer: (Text("File Name: \(currentFile)"))) {
+                    afterTaxYieldItem
+                    beforeTaxYieldItem
+                    preTaxIRRItem
+                    inherentProfitItem
+                    simplePaybackItem
+                    averageLifeItem
+                }
+                
+                Section(header: Text("Additional Results")) {
+                    cashflowItem
+                    rentalsItem
+                    earlyBuyoutItem
+                }
             }
-            
-            Section(header: Text("Additional Results")) {
-                cashflowItem
-                rentalsItem
-                earlyBuyoutItem
-            }
-            
         }
+        
         .environment(\.defaultMinListRowHeight, lineHeight)
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButtonView(path: $path, isDark: $isDark)
-            }
             ToolbarItem(placement: .topBarTrailing){
                 Button(action: {
                     viewAsPctOfCost.toggle()
@@ -60,7 +60,7 @@ struct SummaryOfResultsView: View {
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        .navigationTitle("Summary")
+        //.navigationTitle("Summary")
         .navigationBarBackButtonHidden(true)
         .onAppear{
             self.myInvestment.calculate()

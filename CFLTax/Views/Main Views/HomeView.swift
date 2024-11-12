@@ -30,28 +30,30 @@ struct HomeView: View {
 
     var body: some View {
         NavigationStack (path: $path){
-            Form {
-                Section(header: Text("Parameters"), footer: (Text("File Name: \(currentFile)"))) {
-                    assetItem
-                    LeaseTermItem
-                    rentItem
-                    depreciationItem
-                    taxAssumptionsItem
-                    if self.myInvestment.feeExists {
-                        feeItem
+            VStack {
+                CustomHeaderView(name: "Home", isReport: false, path: $path, isDark: $isDark)
+                Form {
+                    Section(header: Text("Parameters"), footer: (Text("File Name: \(currentFile)"))) {
+                        assetItem
+                        LeaseTermItem
+                        rentItem
+                        depreciationItem
+                        taxAssumptionsItem
+                        if self.myInvestment.feeExists {
+                            feeItem
+                        }
+                        if self.myInvestment.earlyBuyoutExists {
+                            eboItem
+                        }
+                        economicsItem
                     }
-                    if self.myInvestment.earlyBuyoutExists {
-                        eboItem
+                    Section(header: Text("Results")) {
+                        calculatedItem
+                        subMenuItem
                     }
-                    economicsItem
-                }
-                Section(header: Text("Results")) {
-                    calculatedItem
-                    subMenuItem
                 }
             }
             .environment(\.colorScheme, isDark ? .dark : .light)
-            .navigationBarTitle("Home")
             .navigationDestination(for: Int.self) { selectedView in
                 ViewsManager(myInvestment: myInvestment, myDepreciationSchedule: myDepreciationSchedule, myRentalSchedule: myRentalSchedule, myTaxableIncomes: myTaxableIncomes, myFeeAmortization: myFeeAmortization, path: $path, isDark: $isDark, selectedGroup: $selectedGroup, currentFile: $currentFile, minimumEBOAmount: $minimumEBOAmount, maximumEBOAmount: $maximumEBOAmount, selectedView: selectedView)
             }

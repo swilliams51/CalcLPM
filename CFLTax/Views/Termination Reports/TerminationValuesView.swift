@@ -18,32 +18,32 @@ struct TerminationValuesView: View {
     @State var viewAsPercentOfCost: Bool = false
     
     var body: some View {
-        Form {
-            Section(header: Text("\(currentFile)")) {
-                ForEach(myTValues.items) { item in
-                    HStack {
-                        Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
+        VStack {
+            CustomHeaderView(name: "Termination Values", isReport: true, path: $path, isDark: $isDark)
+            Form {
+                Section(header: Text("\(currentFile)")) {
+                    ForEach(myTValues.items) { item in
+                        HStack {
+                            Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
+                            Spacer()
+                            Text("\(getFormattedValue(amount: item.amount))")
+                        }
+                        .font(myFont)
+                    }
+                }
+                
+                Section(header: Text("Count")) {
+                    HStack{
+                        Text("Count:")
                         Spacer()
-                        Text("\(getFormattedValue(amount: item.amount))")
+                        Text("\(myTValues.items.count)")
                     }
                     .font(myFont)
                 }
+               
             }
-            
-            Section(header: Text("Count")) {
-                HStack{
-                    Text("Count:")
-                    Spacer()
-                    Text("\(myTValues.items.count)")
-                }
-                .font(myFont)
-            }
-           
         }
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButtonView(path: $path, isDark: $isDark)
-            }
             ToolbarItem(placement: .topBarTrailing){
                 Button(action: {
                     viewAsPercentOfCost.toggle()
@@ -54,8 +54,6 @@ struct TerminationValuesView: View {
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        .navigationTitle("Termination Values")
-        .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .onAppear {
             if myTValues.items.count > 0 {

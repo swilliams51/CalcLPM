@@ -16,35 +16,31 @@ struct AdvanceRentsView: View {
     @State var myPeriodicAdvanceRents: PeriodicAdvanceRents = PeriodicAdvanceRents()
     
     var body: some View {
-        Form {
-            Section(header: Text("\(currentFile)")) {
-                ForEach(myPeriodicAdvanceRents.items) { item in
-                    HStack {
-                        Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
+        VStack {
+            CustomHeaderView(name: "Advance Rents", isReport: true, path: $path, isDark: $isDark)
+            Form {
+                Section(header: Text("\(currentFile)")) {
+                    ForEach(myPeriodicAdvanceRents.items) { item in
+                        HStack {
+                            Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
+                            Spacer()
+                            Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
+                        }
+                        .font(myFont)
+                    }
+                }
+                Section(header: Text("Totals")) {
+                    HStack{
+                        Text("Count:")
                         Spacer()
-                        Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
+                        Text("\(myPeriodicAdvanceRents.items.count)")
                     }
                     .font(myFont)
                 }
-            }
-            Section(header: Text("Totals")) {
-                HStack{
-                    Text("Count:")
-                    Spacer()
-                    Text("\(myPeriodicAdvanceRents.items.count)")
-                }
-                .font(myFont)
-            }
-           
-        }
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButtonView(path: $path, isDark: $isDark)
+               
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        .navigationTitle("Advanced Rents")
-        .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .onAppear {
             if myPeriodicAdvanceRents.items.count > 0 {

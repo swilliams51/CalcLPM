@@ -16,35 +16,31 @@ struct DepreciationBalancesView: View {
     @State var myPeriodicDepreciationBalances: PeriodicDepreciableBalances = PeriodicDepreciableBalances()
 
     var body: some View {
-        Form {
-            Section(header: Text("\(currentFile)")) {
-                ForEach(myPeriodicDepreciationBalances.items) { item in
-                    HStack {
-                        Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
+        VStack {
+            CustomHeaderView(name: "Depreciation Balances", isReport: true, path: $path, isDark: $isDark)
+            Form {
+                Section(header: Text("\(currentFile)")) {
+                    ForEach(myPeriodicDepreciationBalances.items) { item in
+                        HStack {
+                            Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
+                            Spacer()
+                            Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
+                        }
+                        .font(myFont)
+                    }
+                }
+                Section(header: Text("Totals")) {
+                    HStack{
+                        Text("Count:")
                         Spacer()
-                        Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
+                        Text("\(myPeriodicDepreciationBalances.items.count)")
                     }
                     .font(myFont)
                 }
-            }
-            Section(header: Text("Totals")) {
-                HStack{
-                    Text("Count:")
-                    Spacer()
-                    Text("\(myPeriodicDepreciationBalances.items.count)")
-                }
-                .font(myFont)
-            }
-           
-        }
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButtonView(path: $path, isDark: $isDark)
+               
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        .navigationTitle("Depreciation Balances")
-        .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .onAppear {
             if myPeriodicDepreciationBalances.items.count > 0 {

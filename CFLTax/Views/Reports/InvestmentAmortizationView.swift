@@ -16,29 +16,25 @@ struct InvestmentAmortizationView: View {
     @State var myAmortizations: Amortizations = Amortizations()
     
     var body: some View {
-        Form {
-            Section(header: Text("\(currentFile)")
-                .font(myFont)) {
-                ScrollView {
-                    Grid (alignment: .trailing, horizontalSpacing: 23, verticalSpacing: 10) {
-                        rateAndCostGridRow
-                        amortHeaderGridRow
-                        ForEach(myAmortizations.items) { item in
-                            amortGridRow(item: item)
+        VStack {
+            CustomHeaderView(name: "A/T Ending Balances", isReport: true, path: $path, isDark: $isDark)
+            Form {
+                Section(header: Text("\(currentFile)")
+                    .font(myFont)) {
+                    ScrollView {
+                        Grid (alignment: .trailing, horizontalSpacing: 23, verticalSpacing: 10) {
+                            rateAndCostGridRow
+                            amortHeaderGridRow
+                            ForEach(myAmortizations.items) { item in
+                                amortGridRow(item: item)
+                            }
+                            amortTotalsGridRow
                         }
-                        amortTotalsGridRow
                     }
                 }
             }
         }
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButtonView(path: $path, isDark: $isDark)
-            }
-        }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        .navigationTitle("A/T Ending Balances")
-        .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .onAppear {
             self.myInvestment.calculate()

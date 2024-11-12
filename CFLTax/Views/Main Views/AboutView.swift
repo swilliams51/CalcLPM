@@ -14,17 +14,13 @@ struct AboutView: View {
     
     @ScaledMetric var scale: CGFloat = 1
     var body: some View {
-        Form{
-            thankYouItem
-            
-        }
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButtonView(path: $path, isDark: $isDark)
+        VStack {
+            CustomHeaderView(name: "About", isReport: false, path: $path, isDark: $isDark)
+            Form {
+                thankYouItem
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        .navigationBarTitle("About")
         .navigationBarBackButtonHidden(true)
         .onAppear{
             
@@ -34,7 +30,7 @@ struct AboutView: View {
     var thankYouItem: some View {
         HStack{
             Spacer()
-            Text("Thank you for downloading Leasey!")
+            Text("Thank you for downloading LeaseY!")
                 .font(.subheadline)
             Spacer()
     

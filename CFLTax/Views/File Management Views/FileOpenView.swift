@@ -36,11 +36,11 @@ struct FileOpenView: View {
         }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                BackButtonView(path: $path, isDark: $isDark)
+                CustomHeaderView(name: "File Open", isReport: false, path: $path, isDark: $isDark)
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        .navigationBarTitle("File Open")
+        //.navigationBarTitle("File Open")
         .navigationBarBackButtonHidden(true)
         .onAppear {
             self.files = fm.listFiles(templateMode: templateMode)

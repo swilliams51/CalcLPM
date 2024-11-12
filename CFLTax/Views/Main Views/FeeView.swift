@@ -29,26 +29,25 @@ struct FeeView: View {
     @State private var payHelp2 = feeDatePaidHelp
     
     var body: some View {
-        Form{
-            Section(header: Text("Details").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
-                feeAmountItem
-                datePaidItem
-                feeTypeItem
-            }
-            Section(header: Text("Submit Form")) {
-                SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isFocused: amountIsFocused, isDark: $isDark)
+        VStack {
+            CustomHeaderView(name: "Fee", isReport: false, path: $path, isDark: $isDark)
+            Form{
+                Section(header: Text("Details").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
+                    feeAmountItem
+                    datePaidItem
+                    feeTypeItem
+                }
+                Section(header: Text("Submit Form")) {
+                    SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isFocused: amountIsFocused, isDark: $isDark)
+                }
             }
         }
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButtonView(path: $path, isDark: $isDark)
-            }
             ToolbarItemGroup(placement: .keyboard){
                 DecimalPadButtonsView(cancel: updateForCancel, copy: copyToClipboard, paste: paste, clear: clearAllText, enter: updateForSubmit, isDark: $isDark)
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        .navigationBarTitle("Fee")
         .navigationBarBackButtonHidden(true)
         .onAppear {
             self.myFee = self.myInvestment.fee

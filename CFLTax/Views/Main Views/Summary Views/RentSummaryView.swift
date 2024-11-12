@@ -33,25 +33,27 @@ struct RentSummaryView: View {
     @State var frameHeight: CGFloat = 12
     
     var body: some View {
-        Form {
-            Section(header: Text("Statistics")) {
-                implicitRateItem
-                presentValueItem
-                presentValue2Item
-            }
-            
-            Section(header: Text("Lease Rate Factors")) {
-                ForEach(Array(amounts.enumerated()), id: \.offset) { index, item in
-                    leaseRateFactorRow(amount: item, index: index)
+        VStack {
+            CustomHeaderView(name: "Summary",isReport: true, path: $path, isDark: $isDark)
+            Form {
+                Section(header: Text("Statistics")) {
+                    implicitRateItem
+                    presentValueItem
+                    presentValue2Item
                 }
+                
+                Section(header: Text("Lease Rate Factors")) {
+                    ForEach(Array(amounts.enumerated()), id: \.offset) { index, item in
+                        leaseRateFactorRow(amount: item, index: index)
+                    }
+                }
+                
             }
-            
         }
+        
+       
         .environment(\.defaultMinListRowHeight, lineHeight)
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButtonView(path: $path, isDark: $isDark)
-            }
             ToolbarItem(placement: .topBarTrailing){
                 Button(action: {
                     viewAsPctOfCost.toggle()
@@ -62,7 +64,6 @@ struct RentSummaryView: View {
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        .navigationTitle("Summary")
         .navigationBarBackButtonHidden(true)
         .onAppear {
             self.implicitRate = myInvestment.getImplicitRate().toString(decPlaces: 6)

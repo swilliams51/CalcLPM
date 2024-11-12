@@ -12,27 +12,26 @@ struct TerminationViewsManager: View {
     @Binding var path: [Int]
     @Binding var isDark: Bool
     @Binding var currentFile: String
+    
+    
     var body: some View {
-        Form{
-            Section(header: Text("Reports"), footer: (Text("FileName: \(currentFile)"))) {
-                investmentBalanceItem
-                depreciationBalancesItem
-                yearToDateIncomeItem
-                yearToDateTaxesPaidItem
-                yearToDateTaxesDueItem
-                advanceRentsItem
-                arrearsRentsItem
-                terminationValuesItem
-                terminationValuesProofItem
-            }
-        }
-        .toolbar{
-            ToolbarItem(placement: .topBarLeading) {
-                BackButtonView(path: $path, isDark: $isDark)
+        VStack {
+            CustomHeaderView(name: "Reports", isReport: false, path: $path, isDark: $isDark)
+            Form{
+                Section(header: Text("Reports"), footer: (Text("FileName: \(currentFile)"))) {
+                    investmentBalanceItem
+                    depreciationBalancesItem
+                    yearToDateIncomeItem
+                    yearToDateTaxesPaidItem
+                    yearToDateTaxesDueItem
+                    advanceRentsItem
+                    arrearsRentsItem
+                    terminationValuesItem
+                    terminationValuesProofItem
+                }
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        .navigationBarTitle("Reports")
         .navigationBarBackButtonHidden(true)
     }
     var investmentBalanceItem: some View {

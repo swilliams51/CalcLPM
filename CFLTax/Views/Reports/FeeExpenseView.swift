@@ -15,35 +15,32 @@ struct FeeExpenseView: View {
     @Binding var currentFile: String
     
     var body: some View {
-       Form {
-           Section(header: Text("\(currentFile)")) {
-               ForEach(myFeeAmortization.items) { item in
+        VStack {
+            CustomHeaderView(name: "Fee Amortization", isReport: true, path: $path, isDark: $isDark)
+            Form {
+               Section(header: Text("\(currentFile)")) {
+                   ForEach(myFeeAmortization.items) { item in
+                       HStack {
+                           Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
+                           Spacer()
+                           Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
+                       }
+                       .font(myFont)
+                   }
+               }
+               
+               Section(header: Text("Totals")) {
                    HStack {
-                       Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
+                       Text("\(myFeeAmortization.items.count)")
                        Spacer()
-                       Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
+                       Text("\(amountFormatter(amount: myFeeAmortization.getTotal().toString(decPlaces: 4), locale: myLocale))")
                    }
                    .font(myFont)
                }
            }
-           
-           Section(header: Text("Totals")) {
-               HStack {
-                   Text("\(myFeeAmortization.items.count)")
-                   Spacer()
-                   Text("\(amountFormatter(amount: myFeeAmortization.getTotal().toString(decPlaces: 4), locale: myLocale))")
-               }
-               .font(myFont)
-           }
-       }
-       .toolbar {
-           ToolbarItem(placement: .topBarLeading) {
-               BackButtonView(path: $path, isDark: $isDark)
-           }
-       }
+        }
+        
        .environment(\.colorScheme, isDark ? .dark : .light)
-       .navigationTitle("Fee Amortization")
-       .navigationBarTitleDisplayMode(.inline)
        .navigationBarBackButtonHidden(true)
        .onAppear {
            if myFeeAmortization.items.count > 0 {

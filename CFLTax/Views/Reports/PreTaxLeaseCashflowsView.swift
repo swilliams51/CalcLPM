@@ -14,35 +14,31 @@ struct PreTaxLeaseCashflowsView: View {
     @Binding var currentFile: String
     
     var body: some View {
-        Form{
-            Section(header: Text("\(currentFile)")) {
-                ForEach(myInvestment.beforeTaxCashflows.items) { item in
+        VStack {
+            CustomHeaderView(name: "Pre-Tax Cash", isReport: true, path: $path, isDark: $isDark)
+            Form{
+                Section(header: Text("\(currentFile)")) {
+                    ForEach(myInvestment.beforeTaxCashflows.items) { item in
+                        HStack {
+                            Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
+                            Spacer()
+                            Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
+                        }
+                        .font(myFont)
+                    }
+                }
+                Section(header: Text("Results")) {
                     HStack {
-                        Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
+                        Text("\(myInvestment.beforeTaxCashflows.count())")
                         Spacer()
-                        Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
+                        Text("\(amountFormatter(amount: myInvestment.beforeTaxCashflows.getTotal().toString(decPlaces: 2), locale: myLocale))")
                     }
                     .font(myFont)
                 }
-            }
-            Section(header: Text("Results")) {
-                HStack {
-                    Text("\(myInvestment.beforeTaxCashflows.count())")
-                    Spacer()
-                    Text("\(amountFormatter(amount: myInvestment.beforeTaxCashflows.getTotal().toString(decPlaces: 2), locale: myLocale))")
-                }
-                .font(myFont)
-            }
-                
-        }
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButtonView(path: $path, isDark: $isDark)
+                    
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        .navigationBarTitle("Pre-Tax Cash")
-        .navigationBarTitleDisplayMode(.inline)
         .navigationBarBackButtonHidden(true)
         .onAppear {
             myInvestment.setBeforeTaxCashflows()

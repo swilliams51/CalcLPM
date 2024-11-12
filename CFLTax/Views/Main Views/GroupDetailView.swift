@@ -41,6 +41,8 @@ struct GroupDetailView: View {
     @FocusState private var paymentAmountIsFocused: Bool
     
     var body: some View {
+        VStack{
+            CustomHeaderView(name: "Payment Group", isReport: false, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text(isInterimGroup ? "Interim Rent Details" : "Base Rent Details").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
                     VStack {
@@ -55,22 +57,19 @@ struct GroupDetailView: View {
                     SubmitFormButtonsView(cancelName: "Delete", doneName: "Done", cancel: deleteGroup, done: submitForm, isFocused: paymentAmountIsFocused, isDark: $isDark)
                 }
             }
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading) {
-                    BackButtonView(path: $path, isDark: $isDark)
-                }
-                ToolbarItemGroup(placement: .keyboard){
-                    DecimalPadButtonsView(cancel: updateForCancel, copy: copyToClipboard, paste: paste, clear: clearAllText, enter: updateForSubmit, isDark: $isDark)
-                }
+        }
+        .toolbar {
+            ToolbarItemGroup(placement: .keyboard){
+                DecimalPadButtonsView(cancel: updateForCancel, copy: copyToClipboard, paste: paste, clear: clearAllText, enter: updateForSubmit, isDark: $isDark)
             }
-            .environment(\.colorScheme, isDark ? .dark : .light)
-            .navigationTitle("Payment Group")
-            .navigationBarTitleDisplayMode(.large)
-            .navigationBarBackButtonHidden(true)
-            .onAppear{
-                viewOnAppear()
-            }
-            .alert(isPresented: $showAlert, content: getAlert)
+        }
+        .environment(\.colorScheme, isDark ? .dark : .light)
+        .navigationBarTitleDisplayMode(.large)
+        .navigationBarBackButtonHidden(true)
+        .onAppear{
+            viewOnAppear()
+        }
+        .alert(isPresented: $showAlert, content: getAlert)
        
         }
 }

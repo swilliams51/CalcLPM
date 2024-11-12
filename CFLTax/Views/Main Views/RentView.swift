@@ -19,21 +19,20 @@ struct RentView: View {
     @State var interimExists: Bool = false
     
     var body: some View {
-        Form {
-            Section(header: Text("Rent").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
-                ForEach(myInvestment.rent.groups) { group in
-                    groupDisplayRow(group: group)
+        VStack {
+            CustomHeaderView(name: "Rent", isReport: false, path: $path, isDark: $isDark)
+            Form {
+                Section(header: Text("Rent").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
+                    ForEach(myInvestment.rent.groups) { group in
+                        groupDisplayRow(group: group)
+                    }
+                }
+                Section(header: Text("Total")){
+                    totalsSection
                 }
             }
-            Section(header: Text("Total")){
-                totalsSection
-            }
-        
         }
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                BackButtonView(path: $path, isDark: $isDark)
-            }
             ToolbarItem(placement: .bottomBar) {
                 Menu(content: {
                     structuresMenu
@@ -54,7 +53,7 @@ struct RentView: View {
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        .navigationTitle("Rent")
+        //.navigationTitle("Rent")
         .navigationBarBackButtonHidden(true)
         .onAppear{
             self.noOfPayments = myInvestment.rent.getTotalNumberOfPayments()

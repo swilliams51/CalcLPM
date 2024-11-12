@@ -34,14 +34,14 @@ struct FileSaveAsView: View {
         }
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                BackButtonView(path: $path, isDark: $isDark)
+                CustomHeaderView(name: "File Save As", isReport: false, path: $path, isDark: $isDark)
             }
             ToolbarItemGroup(placement: .keyboard){
                 DecimalPadButtonsView(cancel: updateForCancel, copy: copyToClipboard, paste: paste, clear: clearAllText, enter: updateForSubmit, isDark: $isDark)
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        .navigationBarTitle("File Save As")
+        //.navigationBarTitle("File Save As")
         .navigationBarBackButtonHidden(true)
         .onAppear {
             self.files = fm.listFiles(templateMode: false)
