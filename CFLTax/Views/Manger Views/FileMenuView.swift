@@ -20,7 +20,7 @@ struct FileMenuView: View {
     
     var body: some View {
         VStack {
-            CustomHeaderView(name: "File", isReport: true, path: $path, isDark: $isDark)
+            CustomHeaderView(name: "File Menu", isReport: false, path: $path, isDark: $isDark)
             Form {
                 Section(footer: Text(" File Name: \(currentFile)").font(myFont)) {
                     newFileItem

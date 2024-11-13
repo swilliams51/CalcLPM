@@ -34,10 +34,14 @@ struct RentSummaryView: View {
     
     var body: some View {
         VStack {
-            CustomHeaderView(name: "Summary",isReport: true, path: $path, isDark: $isDark)
+            CustomHeaderView(name: "Rentals",isReport: false, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("Statistics")) {
                     implicitRateItem
+                }
+                
+                Section(header: Text("Present Values")) {
+                    percentOfCostButton
                     presentValueItem
                     presentValue2Item
                 }
@@ -131,6 +135,15 @@ extension RentSummaryView {
             Text("\(percentFormatter(percent: implicitRate, locale: myLocale, places: 3))")
                 .font(myFont)
         }.frame(height: frameHeight)
+    }
+    
+    var percentOfCostButton: some View {
+        HStack {
+            Toggle(isOn: $viewAsPctOfCost) {
+                Text(viewAsPctOfCost ? "View as Percent:" : "View as Cost:")
+            }
+            .font(myFont)
+        }
     }
     
     var presentValueItem: some View {

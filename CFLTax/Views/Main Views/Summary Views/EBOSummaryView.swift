@@ -35,7 +35,7 @@ struct EBOSummaryView: View {
     
     var body: some View {
        VStack {
-           CustomHeaderView(name: "Summary", isReport: true, path: $path, isDark: $isDark)
+           CustomHeaderView(name: "EBO Summary", isReport: true, path: $path, isDark: $isDark)
            Form {
               Section(header: Text("EBO Yields")) {
                   afterTaxYieldItem

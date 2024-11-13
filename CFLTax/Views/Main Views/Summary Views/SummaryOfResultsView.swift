@@ -29,7 +29,7 @@ struct SummaryOfResultsView: View {
     
     var body: some View {
         VStack {
-            CustomHeaderView(name: "Summary", isReport: true, path: $path, isDark: $isDark)
+            CustomHeaderView(name: "Summary", isReport: false, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("Profitability"), footer: (Text("File Name: \(currentFile)"))) {
                     afterTaxYieldItem
