@@ -22,18 +22,18 @@ struct SplashScreenView: View {
             HStack {
                 Text("Leasey")
                     .font(.largeTitle)
-                    .foregroundColor(.white)
+                    .foregroundColor(.black)
             }
             .offset(y: -80)
             
             Image("LeaseyLogo")
                 .resizable()
-                .frame(width: 100, height: 100)
+                .frame(width: 100, height: 100).fontWeight(.bold)
             
             HStack {
                 Text(banner)
-                    .font(.headline)
-                    .foregroundColor(.white)
+                    .font(.headline).fontWeight(.bold)
+                    .foregroundColor(.black)
                     .onReceive(timer) { _ in
                         if counter <= phrase.count + 1 {
                             banner = String(phrase.prefix(counter))

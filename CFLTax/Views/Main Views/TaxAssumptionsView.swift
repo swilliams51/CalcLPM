@@ -25,7 +25,7 @@ struct TaxAssumptionsView: View {
     @State private var alertTitle: String = ""
     @State private var showAlert: Bool = false
     @State private var showPop1: Bool = false
-    @State var payHelp = leaseAmountHelp
+    @State var payHelp = dayOfMonthHelp
     
     var body: some View {
         VStack {

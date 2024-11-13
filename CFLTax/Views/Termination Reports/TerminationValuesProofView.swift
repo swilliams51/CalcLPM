@@ -35,8 +35,8 @@ struct TerminationValuesProofView: View {
     
     var body: some View {
         VStack {
+            CustomHeaderView(name: "Termination Values Proof", isReport: true, path: $path, isDark: $isDark)
             terminationDateItem
-            
             Grid(alignment: .trailing, horizontalSpacing: 20, verticalSpacing: 5) {
                 terminationValueRowItem
                 depreciationRowItem
@@ -57,7 +57,10 @@ struct TerminationValuesProofView: View {
             terminationDateButtonsRow
         }
         Spacer()
-        .navigationTitle("TValue Proof")
+        .background(Color.black.opacity(isDark ? 1.0 : 0.1))
+        .ignoresSafeArea(.all)
+       
+        .navigationBarBackButtonHidden(true)
         .onAppear {
             self.myComponentValues.createTable(aInvestment: self.myInvestment)
             self.myTValues = myComponentValues.createTerminationValues()
@@ -121,7 +124,7 @@ extension TerminationValuesProofView {
                 }
         }
         .font(myFont)
-        .foregroundColor(.blue)
+        .foregroundColor(Color("BackButtonColor"))
         .padding()
     }
 }

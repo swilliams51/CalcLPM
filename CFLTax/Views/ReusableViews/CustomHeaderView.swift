@@ -48,7 +48,7 @@ struct CustomHeaderView: View {
                     Image(systemName: "chevron.left")
                     Text(buttonName)
                 }
-                .tint(backButtonColor())
+                .tint(Color("BackButtonColor"))
             }
             .padding()
             Spacer()
@@ -61,32 +61,16 @@ struct CustomHeaderView: View {
                 .font(isReport ? .headline : .title)
                 .fontWeight(.bold)
                 .padding(.bottom, 10)
-                .foregroundColor(headerColor())
+                .foregroundColor(Color("HeaderColor"))
         }
     }
     
-    func backButtonColor() -> Color {
-        if isHome {
-            return .clear
-        } else {
-            if isDark {
-                return Color.yellow
-            } else {
-                return Color.blue
-            }
-        }
-    }
-    
-    func headerColor() -> Color {
-        if isDark {
-            return Color.white
-        } else {
-            return Color.black
-        }
-    }
 }
 
 #Preview {
    
     CustomHeaderView(name: "Header", isReport: false , path: .constant([Int]()), isDark: .constant(false))
 }
+
+
+

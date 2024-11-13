@@ -24,7 +24,7 @@ let bonusHelp: Help =   Help(title: "Bonus Depreciation", instruction: "Bonus de
 
 let salvageValueHelp: Help =    Help(title: "Salvage Value", instruction: "Is used in connection with the straight-line depreciation method. The salvage value is the value of the asset at the end of its useful life. Straightline depreciation in leasing os often used in depreciating assets than do not qualify as MARCS property such as ssome types of utility assets and foreign use property.")
 
-let dayOfMonthHelp: Help =  Help(title: "Day of Month", instruction: "This is the day of the month that lessor pays it quarterly and year end taxes. Conventionally, the 15th day of the month is used but the user may input any day of the month.")
+let dayOfMonthHelp: Help =  Help(title: "Day of Month", instruction: "This is the day of the month that the lessor pays it quarterly or year end taxes. Conventionally, the 15th day of the month is used but the user may input any recurring day of the month.")
 
 let defaultNewHelp =
     Help(title: "Default New", instruction: "The default new lease/loan parameters can be set by the user. First, create the preferred lease/loan structure.  Then return to Preferences and switch on \"use saved\"  and switch on \"save current\". Thereafter, when New is selected from the Side Menu the user's saved lease/loan parameters will be loaded.  The default new parameters can be reset to the original parameters by turning off those same switches.")
@@ -38,7 +38,7 @@ let eboHelp2 =
     Help(title: "Early Buyout", instruction: "The EBO Amount can not be entered manually, but instead is expressed as a spread in basis points over the full term MISF After-Yield. The slider is accurate to ~ +/- 1 basis point.   To adjust the EBO amount move the slider to the appropriate spread and then press the calculate button to derive the EBO Amount. It is important to remember than any subsequent change to the Investment parameters will result in the EBO being removed from the Investment.  The EBO can be added back after all changes to the Investment are completed.")
 
 let eboHomeHelp =
-    Help(title: "Add/Remove EBO", instruction: "An EBO can be added to or removed from the Investment using the Add/Remove EBO buttons below.  Setting the EBO Amount to 0.0 will also remove an EBO. Note, an EBO will be automatically removed from the Investment when any investment parameter changes.")
+    Help(title: "Add or Remove EBO", instruction: "An EBO can be added to or removed from the Investment using the Add/Remove EBO buttons below.  Setting the EBO Amount to 0.0 will also remove an EBO. Note, an EBO will be automatically removed from the Investment when any investment parameter changes.")
 
 let feeHomeHelp =
     Help(title: "Add/Remove Fee", instruction: "A Fee maybe added to or removed from the Investment using the Add/Remove Fee buttons below. A Fee can also be added by selecting it as a solveFor option in the economics screen. Setting the Fee Amount to 0.0 will also remove a Fee from the Investment.")
@@ -53,15 +53,11 @@ let exportFileHelp =
     Help(title: "Export File Help", instruction: "When the export action is turned on, the above selected file can be exported to iCloud or to another location on the user's phone.  Once a file is located on the iCloud drive it may be shared with other users of CFLease.")
 
 let FirstAndLastHelp =
-    Help(title: "1stAndLast", instruction: "The last payment will be added to the first payment and the last payment will be set to 0.00.")
+    Help(title: "First And Last", instruction: "The last payment will be added to the first payment and the last payment will be set to 0.00.")
 
 
 let implicitRateHelp =
     Help(title: "Implicit Rate", instruction: "The implicit rate is the discount rate that equates the present value of the Minimum Lease Payments and the unguaranteed residual value to the the Lessor's Cost as of the Funding Date. The Implicit Rate is then used to discount the Lessee's Minimum Payment Obligations to determine if the Lease passes or fails the 90% test in connection classifying the Lease as an operating or finance lease." )
-
-
-let leaseAmountHelp =
-Help(title: "Lease Amount", instruction: "A valid lease or loan amount must be a decimal greater than 999.99 and less than or equal 50000000.00.")
 
 
 let numberOfPaymentsHelp =
@@ -69,7 +65,7 @@ let numberOfPaymentsHelp =
 
 
 let paymentAmountHelp: Help =
-    Help(title: "Payment Amount", instruction: "A valid payment amount must be a decimal that is equal to or greater than 0.00 but less than 2x the Lessor's Cost of the Asset. Any decimal amount entered that is less than 1.00 will be interpreted as being a percent of Lessor Cost. For example, if the Lessor Cost of the Asset is 1,000,000.00, then an entry of 0.15 will be converted into an entry of 150,000.00.")
+    Help(title: "Payment Amount", instruction: "A valid payment amount must be a decimal that is equal to or greater than 0.00 but less than the Lessor's Cost of the Asset. Any decimal amount entered that is less than 1.00 will be interpreted as being a percent of Lessor Cost. For example, if the Lessor Cost of the Asset is 1,000,000.00, then an entry of 0.15 will be converted into an entry of 150,000.00.")
 
 
 let renameHelp =
@@ -79,18 +75,14 @@ let saveAsHelp =
     Help(title: "Save As", instruction: "A legal file name must not already exist, must not contain any illegal characters, and must be less than 30 characters in length.")
 
 
-let solveForTermHelp =
-    Help(title: "Solve For Term", instruction: "In order to solve for the term, there must be only one unlocked payment group.  Additionally, the number of payments for that group must greater than the minimum and less then the maximum number allowed. Finally, the payment type for that group cannot be interest only.")
-
-
 let terminationHelp =
     Help(title: "Termination Values", instruction: "TVs are a schedule of values in excess of the applicable lease balances for each payment date. For a non-true lease, setting the discount rate for rent equal to the buy rate will protect any fees paid to the buyer in the event of an unscheduled termination of the lease.  To remove TVs from reports set the discount rates for rent and residual to the maximum values and the additional residual percentage to 0.00%.")
 
 let assetFundingDateHelp =
-    Help(title: "Funding Date", instruction: "The asset funding date is the date that the asset is funded by the lessor.  This date can be the same as the Base Commencement Date or it can occur at an earlier date.")
+    Help(title: "Funding Date", instruction: "The Asset Funding Date is the date that the asset is funded by the Lessor.  This date can be the same as the Base Commencement Date or it can occur at an earlier date.")
 
 let assetResidualValueHelp =
-    Help(title: "Residual Value", instruction: "The residual value is the amount of the lessor's cost that the lessor expects to realize by sale or release of the asset at the end expiration of the Base Lease Term.  The residual value can not be less than zero or greater than the Lessor Cost.")
+    Help(title: "Residual Value", instruction: "The residual value is the amount of the Lessor's Cost that the lessor expects to realize by sale or release of the Asset at the end expiration of the Base Lease Term.  The residual value can not be less than zero or greater than the Lessor Cost.")
 
 let assetLesseeGuarantyHelp =
     Help(title: "Lessee Guaranty Amount", instruction: "The Lessee Guaranty Amount is the amount of the residual value that is guaranteed by the Lessee.  It is commonly used in TRAC Leases. The amount of the Lessee Guaranty can not exceed the residual value of the asset.")
@@ -105,7 +97,7 @@ let discountRateHelp =
     Help(title: "Discount Rate", instruction: "The discount rate is the rate used to calculate two present value amounts, 1- PV1, which the present value of the lease payments and 2- PV2, which is the present value of the lease payments plus the amount of the lessee's residual guaranty. PV1 and PV2 are shown in the Rentals results screen.")
 
 let dayCountMethodHelp =
-    Help(title: "Day Count Method", instruction: "The day count method is the method used to calculate the number of days between two dates.  The conventional day count method used in the Leasing industry is the 30/360 day method, but the user has 3 additional options.")
+    Help(title: "Day Count Method", instruction: "The Day Count Method is the method used to calculate the number of days between two dates.  The conventional day count method used in the Leasing industry is the 30/360 day method, but the user has 3 additional options.")
 
 let feeAmountHelp =
     Help(title: "Fee Amount", instruction: "The Fee is the typically the amount paid by the Lessor to the seller to purchase the Lease. Alternatively, if the Fee Type is income then the Fee represents the additional amount the seller must pay in order for the Lessor to purchase the Lease.  Do not use this field to input any Fee paid by the Lessee.  For Lessee paid fees enter an advance Rent in the Rent Screen.  Note, that if the Fee Amount is set to 0.00 then the Fee object will be removed from the Investment.")
@@ -117,6 +109,6 @@ let defaultNewLeaseHelp = Help(title: "Default New Lease", instruction: "When cr
 
 let defaultSaveCurrentHelp = Help(title: "Save Current", instruction: "This option allows the user to save the current Lease as the default parameters for a new Lease when the \"File/New\" option on the File Menu Screen is selected. Note, that the file saving procedure will remove any interim term, any Fee or any Early Buyout from the saved file. This option will not take effect until the option above has been toggled to \"Use Saved\".")
 
- let pvOneHelp = Help(title: "PV1", instruction: "This amount is equal to the present value of the rentals discounted at the discount rate as shown in the Economics screen.")
+ let pvOneHelp = Help(title: "PV1", instruction: "This amount is equal to the present value of the rentals discounted at the Discount Rate as shown in the Economics screen.")
 
-let pvTwoHelp = Help(title: "PV2", instruction: "This amount is equal to the present value of 1- the rentals plus 2- the amount of residual guaranteed by the Lessee discounted at the discount rate as shown in the Economics screen.")
+let pvTwoHelp = Help(title: "PV2", instruction: "This amount is equal the sum of (1) and (2) where (1) is the present value of the rentals and (2) is the present value of the amount of residual guaranteed by the Lessee both of which aare discounted at the Discount Rate as shown in the Economics screen.")
