@@ -25,22 +25,19 @@ struct FileOpenView: View {
     @State private var templateMode: Bool = false
     
     var body: some View {
-        Form {
-            Section(header: Text(textFileLabel)) {
-                numberOfSavedFilesRow
-                pickerOfSavedFiles
-            }
-            Section(header: Text("Submit Form")){
-                deleteAndOpenTextButtonsRow
-            }
-        }
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                CustomHeaderView(name: "File Open", isReport: false, path: $path, isDark: $isDark)
+        VStack {
+            CustomHeaderView(name: "File Open", isReport: false, path: $path, isDark: $isDark)
+            Form {
+                Section(header: Text(textFileLabel)) {
+                    numberOfSavedFilesRow
+                    pickerOfSavedFiles
+                }
+                Section(header: Text("Submit Form")){
+                    deleteAndOpenTextButtonsRow
+                }
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        //.navigationBarTitle("File Open")
         .navigationBarBackButtonHidden(true)
         .onAppear {
             self.files = fm.listFiles(templateMode: templateMode)

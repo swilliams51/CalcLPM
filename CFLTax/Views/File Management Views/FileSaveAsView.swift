@@ -24,24 +24,23 @@ struct FileSaveAsView: View {
     private let pasteBoard = UIPasteboard.general
     
     var body: some View {
-        Form {
-            Section(header: Text("Current File Name")){
-                saveAsFileRowItem
-            }
-            Section(header: Text("Submit Form")){
-                textButtonsForSaveAsRow
+        VStack {
+            CustomHeaderView(name: "File Save As", isReport: false, path: $path, isDark: $isDark)
+            Form {
+                Section(header: Text("Current File Name")){
+                    saveAsFileRowItem
+                }
+                Section(header: Text("Submit Form")){
+                    textButtonsForSaveAsRow
+                }
             }
         }
         .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                CustomHeaderView(name: "File Save As", isReport: false, path: $path, isDark: $isDark)
-            }
             ToolbarItemGroup(placement: .keyboard){
                 DecimalPadButtonsView(cancel: updateForCancel, copy: copyToClipboard, paste: paste, clear: clearAllText, enter: updateForSubmit, isDark: $isDark)
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        //.navigationBarTitle("File Save As")
         .navigationBarBackButtonHidden(true)
         .onAppear {
             self.files = fm.listFiles(templateMode: false)

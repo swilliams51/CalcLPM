@@ -17,7 +17,9 @@ struct AboutView: View {
         VStack {
             CustomHeaderView(name: "About", isReport: false, path: $path, isDark: $isDark)
             Form {
+                logoItem
                 thankYouItem
+                companyDetailsItem
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
@@ -41,7 +43,7 @@ struct AboutView: View {
             VStack{
                 HStack {
                     Spacer()
-                    Image("cfleaseLogo")
+                    Image("LeaseyLogo")
                         .resizable()
                         .frame(width: scale * 100, height: scale * 100 , alignment: .center)
                         .padding()
