@@ -18,7 +18,7 @@ public let minimumLessorCost: String = "999.99"
 public let maximumYield: String = "0.15"
 public let maxEBOSpread: Int = 500
 public let feeAmortizationMethod: FeeAmortizationMethod = .monthly
-public let maxBaseTerm: Int = 240
+public let maxBaseTerm: Int = 180
 public let removeCharacters: Set<Character> = [",", "$","-", "+","%","*","#","|","&","/","!"]
 public let str_split_Cashflows = "#"
 

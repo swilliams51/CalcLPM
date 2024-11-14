@@ -107,11 +107,11 @@ public class Investment {
     public func isSolveForValid() -> Bool {
         switch self.economics.solveFor {
         case .yield:
-            if isYieldCalculationIsValid() == false {
+            if isYieldCalculationValid() == false {
                 return false
             }
         case .unLockedRentals:
-            if isUnlockedRentalsCalculationIsValid()  == false {
+            if isUnlockedRentalsCalculationValid()  == false {
                 return false
             }
         case .fee:
@@ -119,12 +119,14 @@ public class Investment {
         case .residualValue:
             return true
         case .lessorCost:
-            return true
+            if isLessorCostCalculationValid() == false {
+                return false
+            }
         }
         return true
     }
     
-    private func isUnlockedRentalsCalculationIsValid() -> Bool {
+    private func isUnlockedRentalsCalculationValid() -> Bool {
         if self.rent.getTotalNumberOfPayments() < 12 {
            return false
         }
@@ -141,7 +143,7 @@ public class Investment {
         return true
     }
     
-    private func isYieldCalculationIsValid() -> Bool {
+    private func isYieldCalculationValid() -> Bool {
         let tempInvestment: Investment = self.clone()
         let maxAmount: Decimal = self.asset.lessorCost.toDecimal() * 2.0
         
@@ -156,6 +158,18 @@ public class Investment {
             return false
         }
         tempInvestment.beforeTaxCashflows.removeAll()
+        
+        return true
+    }
+    
+    private func isLessorCostCalculationValid() -> Bool {
+        let tempInvestment: Investment = self.clone()
+        let totalOfPayments = tempInvestment.rent.getTotalAmountOfPayments(aFreq: tempInvestment.leaseTerm.paymentFrequency)
+        let totalResidualValue: Decimal = tempInvestment.asset.residualValue.toDecimal()
+        
+        if totalResidualValue > totalOfPayments * 1.5 {
+            return false
+        }
         
         return true
     }

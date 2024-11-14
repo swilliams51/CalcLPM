@@ -16,7 +16,7 @@ struct HomeView: View {
     @State var myDepreciationSchedule: DepreciationIncomes = DepreciationIncomes()
     @State var myRentalSchedule: RentalCashflows = RentalCashflows()
     @State var myTaxableIncomes: AnnualTaxableIncomes = AnnualTaxableIncomes()
-    
+    @State var isLoading: Bool = false
     @State private var myFeeAmortization: FeeIncomes = FeeIncomes()
     @State private var isShowingYieldErrorAlert: Bool = false
     @State private var currentFile: String = "File is New"
@@ -30,29 +30,37 @@ struct HomeView: View {
 
     var body: some View {
         NavigationStack (path: $path){
-            VStack {
-                CustomHeaderView(name: "Home", isReport: false, path: $path, isDark: $isDark)
-                Form {
-                    Section(header: Text("Parameters"), footer: (Text("File Name: \(currentFile)"))) {
-                        assetItem
-                        LeaseTermItem
-                        rentItem
-                        depreciationItem
-                        taxAssumptionsItem
-                        if self.myInvestment.feeExists {
-                            feeItem
+            ZStack {
+                VStack {
+                    CustomHeaderView(name: "Home", isReport: false, path: $path, isDark: $isDark)
+                    Form {
+                        Section(header: Text("Parameters"), footer: (Text("File Name: \(currentFile)"))) {
+                            assetItem
+                            LeaseTermItem
+                            rentItem
+                            depreciationItem
+                            taxAssumptionsItem
+                            if self.myInvestment.feeExists {
+                                feeItem
+                            }
+                            if self.myInvestment.earlyBuyoutExists {
+                                eboItem
+                            }
+                            economicsItem
                         }
-                        if self.myInvestment.earlyBuyoutExists {
-                            eboItem
+                        Section(header: Text("Results")) {
+                            calculatedItem
+                            subMenuItem
                         }
-                        economicsItem
-                    }
-                    Section(header: Text("Results")) {
-                        calculatedItem
-                        subMenuItem
                     }
                 }
+                if isLoading {
+                    ProgressView()
+                        .scaleEffect(3)
+                }
             }
+            
+            
             .environment(\.colorScheme, isDark ? .dark : .light)
             .navigationDestination(for: Int.self) { selectedView in
                 ViewsManager(myInvestment: myInvestment, myDepreciationSchedule: myDepreciationSchedule, myRentalSchedule: myRentalSchedule, myTaxableIncomes: myTaxableIncomes, myFeeAmortization: myFeeAmortization, path: $path, isDark: $isDark, selectedGroup: $selectedGroup, currentFile: $currentFile, minimumEBOAmount: $minimumEBOAmount, maximumEBOAmount: $maximumEBOAmount, selectedView: selectedView)
@@ -79,6 +87,7 @@ struct HomeView: View {
                 }
             }
             .onAppear{
+                self.isLoading = false
                 if self.myInvestment.hasChanged && myInvestment.earlyBuyoutExists == true {
                     self.myInvestment.earlyBuyout.amount = "0.00"
                     self.myInvestment.earlyBuyoutExists = false
@@ -222,17 +231,9 @@ struct HomeView: View {
         }
         .contentShape(Rectangle())
         .onTapGesture {
-            if myInvestment.isSolveForValid() {
-                myInvestment.hasChanged = false
-                if myInvestment.feeExists {
-                    myInvestment.fee.hasChanged = false
-                }
-                if myInvestment.earlyBuyoutExists {
-                    myInvestment.earlyBuyout.hasChanged = false
-                }
-                self.path.append(25)
-            } else {
-                self.isShowingYieldErrorAlert = true
+            self.isLoading = true
+            Task {
+                await calculate()
             }
         }
     }
@@ -251,6 +252,21 @@ struct HomeView: View {
             path.append(26)
         }
         .disabled(investmentHasChanged() ? true : false)
+    }
+    
+    private func calculate() async {
+        if myInvestment.isSolveForValid() {
+            myInvestment.hasChanged = false
+            if myInvestment.feeExists {
+                myInvestment.fee.hasChanged = false
+            }
+            if myInvestment.earlyBuyoutExists {
+                myInvestment.earlyBuyout.hasChanged = false
+            }
+            self.path.append(25)
+        } else {
+            self.isShowingYieldErrorAlert = true
+        }
     }
     
     private func investmentHasChanged() -> Bool {
