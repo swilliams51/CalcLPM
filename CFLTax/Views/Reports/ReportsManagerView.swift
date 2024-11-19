@@ -16,7 +16,7 @@ struct ReportsManagerView: View {
     
     var body: some View {
         VStack {
-            CustomHeaderView(name: "Reports", isReport: false, path: $path, isDark: $isDark)
+            MenuHeaderView(name: "Reports", path: $path, isDark: $isDark)
             Form{
                 Section(header: Text("Reports"), footer: (Text("File Name: \(currentFile)").font(myFont))) {
                     leaseRentalsItem

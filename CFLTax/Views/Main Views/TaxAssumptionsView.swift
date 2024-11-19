@@ -29,7 +29,7 @@ struct TaxAssumptionsView: View {
     
     var body: some View {
         VStack {
-            CustomHeaderView(name: "Tax Assumptions", isReport: false, path: $path, isDark: $isDark)
+            MenuHeaderView(name: "Tax Assumptions", path: $path, isDark: $isDark)
             Form {
                 Section (header: Text("Details").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
                     federalTaxRateItem

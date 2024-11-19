@@ -51,7 +51,7 @@ struct EarlyBuyoutView: View {
     
     var body: some View {
         VStack {
-            CustomHeaderView(name: "Early Buyout", isReport: false, path: $path, isDark: $isDark)
+            MenuHeaderView(name: "Early Buyout", path: $path, isDark: $isDark)
             Form {
                 Section (header: Text("Exercise Date").font(.footnote), footer: Text("Full Term MISF A/T Yield: \(percentFormatter(percent: baseYield.toString(decPlaces: 5), locale: myLocale, places: 2))")) {
                     eboTermInMonsRow

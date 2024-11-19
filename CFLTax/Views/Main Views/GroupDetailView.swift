@@ -42,7 +42,7 @@ struct GroupDetailView: View {
     
     var body: some View {
         VStack{
-            CustomHeaderView(name: "Payment Group", isReport: false, path: $path, isDark: $isDark)
+            MenuHeaderView(name: "Payment Group", path: $path, isDark: $isDark)
             Form {
                 Section(header: Text(isInterimGroup ? "Interim Rent Details" : "Base Rent Details").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
                     VStack {

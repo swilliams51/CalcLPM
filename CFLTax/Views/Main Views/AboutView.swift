@@ -15,7 +15,7 @@ struct AboutView: View {
     @ScaledMetric var scale: CGFloat = 1
     var body: some View {
         VStack {
-            CustomHeaderView(name: "About", isReport: false, path: $path, isDark: $isDark)
+            MenuHeaderView(name: "About", path: $path, isDark: $isDark)
             Form {
                 logoItem
                 thankYouItem

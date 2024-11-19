@@ -26,7 +26,7 @@ struct FileOpenView: View {
     
     var body: some View {
         VStack {
-            CustomHeaderView(name: "File Open", isReport: false, path: $path, isDark: $isDark)
+            MenuHeaderView(name: "File Open", path: $path, isDark: $isDark)
             Form {
                 Section(header: Text(textFileLabel)) {
                     numberOfSavedFilesRow

@@ -32,7 +32,7 @@ struct HomeView: View {
         NavigationStack (path: $path){
             ZStack {
                 VStack {
-                    CustomHeaderView(name: "Home", isReport: false, path: $path, isDark: $isDark)
+                    HomeHeaderView(isDark: $isDark)
                     Form {
                         Section(header: Text("Parameters"), footer: (Text("File Name: \(currentFile)"))) {
                             assetItem

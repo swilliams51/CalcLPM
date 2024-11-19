@@ -20,11 +20,11 @@ let baseTermHelp =
 let basisHelp: Help =
     Help(title: "Basis for Depreciation", instruction: "This is an informational only field and is always equal to the Lessor Cost of the Asset.  Under certain situations, such as assets that qualify for Investment Tax Credits (ITC), the basis will be reduced by 50% of the amount of ITC taken. ITC related transactions are currently beyond the scope of this program. It is anticipated that future versions of the program will allow the user to input the basis directly.")
 
-let bonusHelp: Help =   Help(title: "Bonus Depreciation", instruction: "Bonus depreciation is the additional amount of first year depreciation that is available to the user. The bonus depreciation for 2024 is 60% and will be reduced by 20% per year until it will be phased out in 2027.")
+let bonusHelp: Help =   Help(title: "Bonus Depreciation", instruction: "The additional amount of first year depreciation that is available to the owner. The bonus depreciation for 2024 is 60% and will be reduced by 20% per year thereafter until it is phased out in 2027.")
 
 let salvageValueHelp: Help =    Help(title: "Salvage Value", instruction: "Is used in connection with the straight-line depreciation method. The salvage value is the value of the asset at the end of its useful life. Straightline depreciation in leasing os often used in depreciating assets than do not qualify as MARCS property such as ssome types of utility assets and foreign use property.")
 
-let dayOfMonthHelp: Help =  Help(title: "Day of Month", instruction: "This is the day of the month that the lessor pays it quarterly or year end taxes. Conventionally, the 15th day of the month is used but the user may input any recurring day of the month.")
+let dayOfMonthHelp: Help =  Help(title: "Day of Month", instruction: "This is the day of the month that the lessor pays its quarterly or year end taxes. Conventionally, the 15th day of the month is used but the user may input any recurring day of the month.")
 
 let defaultNewHelp =
     Help(title: "Default New", instruction: "The default new lease/loan parameters can be set by the user. First, create the preferred lease/loan structure.  Then return to Preferences and switch on \"use saved\" and switch on \"save current\". Thereafter, when New is selected from the Side Menu the user's saved lease/loan parameters will be loaded.  The default new parameters can be reset to the original parameters by turning off those same switches.")
@@ -32,7 +32,7 @@ let defaultNewHelp =
 let decimalPadHelp = Help(title: "Keypad Buttons", instruction: "From left to right the buttons are Cancel, Copy to Clipboard, Paste from Clipboard, Clear All, and Enter.")
 
 let eboHelp =
-    Help(title: "Early Buyout", instruction: "The EBO exercise date must occur on or before one year prior to the Lease maturity date but no earlier than the first anniversary date of the Lease.  An EBO Amount that is less than the par value on the applicable exercise date will result in an EBO yield that is less than the full term yield and potentially a book loss.")
+    Help(title: "Early Buyout", instruction: "The EBO exercise date must occur on or before one year prior to the Lease maturity date but no earlier than the first anniversary date of the Lease.  An EBO Amount that is less than the par value on the applicable exercise date will result in an EBO yield that is less than the full term yield and potentially result in a book loss.")
 
 let eboHelp2 =
     Help(title: "Early Buyout", instruction: "The EBO Amount can not be entered manually, but instead is expressed as a spread in basis points over the full term MISF After-Yield. The slider is accurate to ~ +/- 1 basis point.   To adjust the EBO amount move the slider to the appropriate spread and then press the calculate button to derive the EBO Amount. It is important to remember than any subsequent change to the Investment parameters will result in the EBO being removed from the Investment.  The EBO can be added back after all changes to the Investment are completed.")
@@ -57,7 +57,7 @@ let FirstAndLastHelp =
 
 
 let implicitRateHelp =
-    Help(title: "Implicit Rate", instruction: "The Implicit Rate is the discount rate that equates the present value of the Minimum Lease Payments and the unguaranteed Residual Value to the the Lessor's Cost as of the Funding Date. The Implicit Rate is then used to discount the Lessee's Minimum Payment Obligations to determine if the Lease passes or fails the 90% test in connection classifying the Lease as an operating or finance lease." )
+    Help(title: "Implicit Rate", instruction: "Is the discount rate that equates the present value of the Minimum Lease Payments and the unguaranteed Residual Value to the the Lessor's Cost as of the Funding Date. The Implicit Rate is then used to discount the Lessee's Minimum Payment Obligations to determine if the Lease passes or fails the 90% test in connection classifying the Lease as an operating or finance lease." )
 
 
 let numberOfPaymentsHelp =
@@ -76,34 +76,34 @@ let saveAsHelp =
 
 
 let terminationHelp =
-    Help(title: "Termination Values", instruction: "TVs are a schedule of values in excess of the applicable lease balances for each payment date. For a non-true lease, setting the discount rate for rent equal to the buy rate will protect any fees paid to the buyer in the event of an unscheduled termination of the lease.  To remove TVs from reports set the discount rates for rent and residual to the maximum values and the additional residual percentage to 0.00%.")
+    Help(title: "Termination Values", instruction: "Are a schedule of values in excess of the applicable lease balances for each payment date. For a non-true lease, setting the discount rate for rent equal to the buy rate will protect any fees paid to the buyer in the event of an unscheduled termination of the lease.  To remove TVs from reports set the discount rates for rent and residual to the maximum values and the additional residual percentage to 0.00%.")
 
 let assetFundingDateHelp =
-    Help(title: "Funding Date", instruction: "The Asset Funding Date is the date that the asset is funded by the Lessor.  This date can be the same as the Base Commencement Date or it can occur at an earlier date.")
+    Help(title: "Funding Date", instruction: "The date that the asset is funded by the Lessor.  This date can occur on the Base Commencement Date or it can occur at an earlier date.")
 
 let assetResidualValueHelp =
-    Help(title: "Residual Value", instruction: "The Residual Value is the amount of the Lessor's Cost that the lessor expects to realize by sale or release of the Asset at the end expiration of the Base Lease Term.  The Residual Value can not be less than zero or greater than the Lessor Cost.")
+    Help(title: "Residual Value", instruction: "Is the amount of the Lessor's Cost that the Lessor expects to realize by sale or release of the Asset at the end of the Base Lease Term.  The Residual Value can not be less than zero or greater than the Lessor Cost.")
 
 let assetLesseeGuarantyHelp =
-    Help(title: "Lessee Guaranty Amount", instruction: "The Lessee Guaranty Amount is the amount of the residual value that is guaranteed by the Lessee.  It is commonly used in TRAC Leases. The amount of the Lessee Guaranty can not exceed the residual value of the asset.")
+    Help(title: "Lessee Guaranty Amount", instruction: "Is the amount of the Residual Value that is guaranteed by the Lessee.  It is commonly used in TRAC Leases. The amount of the Lessee Guaranty can not exceed the Residual Value of the Asset.")
 
 let yieldMethodHelp =
-    Help(title: "Yield Method", instruction: "The yield method is the method used to calculate the yield of the Investment.  The two primary methods are the After-Tax Multiple Investment Sinking Fund (MISF-AT) method and the Internal Rate of Return of the Pre-Tax Cashflows (IRR of PTCF) method.  The Sinking Fund Rate used in the MISF method is 0.00%.  The MISF-BT yield is determined indirectly by dividing the MISF-AT Yield by 1.0 minus the Federal Tax Rate.")
+    Help(title: "Yield Method", instruction: "The method that is used to calculate the yield of the Investment.  The two primary methods are the After-Tax Multiple Investment Sinking Fund (MISF-AT) method and the Internal Rate of Return of the Pre-Tax Cashflows (IRR of PTCF) method.  The Sinking Fund Rate used in the MISF method is 0.00%.  The MISF-BT yield is determined indirectly by dividing the MISF-AT Yield by 1.0 minus the Federal Tax Rate.")
 
 let solveForHelp =
     Help(title: "Solve For", instruction: "The program allows the user to solve for 1- the Lessor Cost, 2- the unlocked Rentals, 3- the Residual value, 4- the Fee Amount, or 5- any one of 3 possible yields. Because of rounding constraints, the targeting procedure will only be precise to +/- 1 basis point of the Target Yield.")
 
 let discountRateHelp =
-    Help(title: "Discount Rate", instruction: "The Discount Rate is the rate used to calculate two present value amounts, 1- PV1, which the present value of the Rental payments and 2- PV2, which is the present value of the Rentals payments plus the amount of the Lessee's Residual Guaranty. PV1 and PV2 are shown in the Rentals results screen.")
+    Help(title: "Discount Rate", instruction: "The rate used to calculate two present value amounts, 1- PV1, which the present value of the Rental payments and 2- PV2, which is the present value of the Rentals payments plus the amount of the Lessee's Residual Guaranty. PV1 and PV2 are shown in the Rentals results screen.")
 
 let dayCountMethodHelp =
-    Help(title: "Day Count Method", instruction: "The Day Count Method is the method used to calculate the number of days between two dates.  The conventional day count method used in the Leasing industry is the 30/360 Day Count method, but the user has 3 additional options.")
+    Help(title: "Day Count Method", instruction: "The method used to calculate the number of days between two dates.  The conventional day count method used in the Leasing industry is the 30/360 Day Count method, but the user has 3 additional options.")
 
 let feeAmountHelp =
-    Help(title: "Fee Amount", instruction: "The Fee is the typically the amount paid by the Lessor to the seller to purchase the Lease. Alternatively, if the Fee Type is income then the Fee represents the additional amount the seller must pay in order for the Lessor to purchase the Lease.  Do not use this field to input any Fee paid by the Lessee.  For Lessee paid fees enter an advance Rent in the Rent Screen.  Note, that if the Fee Amount is set to 0.00 then the Fee object will be removed from the Investment.")
+    Help(title: "Fee Amount", instruction: "The amount paid by the Lessor to the seller in order to purchase the Lease. Alternatively, if the Fee Type is income then the Fee represents the additional amount the seller must pay in order for the Lessor to purchase the Lease.  Do not use this field to input any Fee paid by the Lessee.  For Lessee paid fees enter an advance Rent in the Rent Screen.  Note, that if the Fee Amount is set to 0.00 then the Fee object will be removed from the Investment.")
 
 let feeDatePaidHelp =
-    Help(title: "Fee Date Paid", instruction: "This date paid field is for informational purpose only. The date that the Fee is paid will always occur on the Funding Date of the Lease.  In future versions of the program this field may become an input field.")
+    Help(title: "Fee Date Paid", instruction: "This field is for informational purpose only. The date that the Fee is paid will always occur on the Funding Date of the Lease.  In future versions of the program this field may become determined by the user.")
 
 let defaultNewLeaseHelp = Help(title: "Default New Lease", instruction: "When creating a new Lease, the user has the option of using the parameters provided by the program or those defined by the user.  However, this toggle button will remain disabled until a current Lease has been saved to file using the option below.  Once a current Lease has been saved, this option will allow the user to use the program's default Lease parameters or those that have been saved by the user.  Subsequently, the user can save a new Lease as the default Lease, but the program's default Lease cannot be changed. ")
 

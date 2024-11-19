@@ -29,7 +29,7 @@ struct SummaryOfResultsView: View {
     
     var body: some View {
         VStack {
-            CustomHeaderView(name: "Summary", isReport: false, path: $path, isDark: $isDark)
+            ReportHeaderView(name: "Results", viewAsPct: myViewAsPct, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("Profitability"), footer: (Text("File Name: \(currentFile)"))) {
                     afterTaxYieldItem
@@ -49,18 +49,7 @@ struct SummaryOfResultsView: View {
         }
         
         .environment(\.defaultMinListRowHeight, lineHeight)
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing){
-                Button(action: {
-                    viewAsPctOfCost.toggle()
-                }) {
-                    Image(systemName: "command.circle")
-                        .tint(viewAsPctOfCost ? Color.red : Color.black)
-                }
-            }
-        }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        //.navigationTitle("Summary")
         .navigationBarBackButtonHidden(true)
         .onAppear{
             self.myInvestment.calculate()
@@ -72,6 +61,10 @@ struct SummaryOfResultsView: View {
             self.myPayback = myInvestment.getSimplePayback()
             self.myAverageLife = myInvestment.getAverageLife()
         }
+    }
+    
+    private func myViewAsPct() {
+        self.viewAsPctOfCost.toggle()
     }
     
 }

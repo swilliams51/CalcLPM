@@ -54,7 +54,7 @@ struct AssetView: View {
     
     var body: some View {
         VStack{
-            CustomHeaderView(name: "Asset", isReport: false, path: $path, isDark: $isDark)
+            MenuHeaderView(name: "Asset", path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("Details").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
                     assetNameItem

@@ -35,7 +35,7 @@ struct TerminationValuesProofView: View {
     
     var body: some View {
         VStack {
-            CustomHeaderView(name: "Termination Values Proof", isReport: true, path: $path, isDark: $isDark)
+            ReportHeaderView(name: "Termination Values Proof", viewAsPct: myViewAsPct, path: $path, isDark: $isDark)
             terminationDateItem
             Grid(alignment: .trailing, horizontalSpacing: 20, verticalSpacing: 5) {
                 terminationValueRowItem
@@ -92,6 +92,10 @@ struct TerminationValuesProofView: View {
         
         self.myCalculatedIB = myTV + myTaxOnGain + myTaxOnYTDIncome + myTaxesPaidYTD
         self.myAdjustedIB = myCalculatedIB - myAdvanceRent
+        
+    }
+    
+    private func myViewAsPct() {
         
     }
 }

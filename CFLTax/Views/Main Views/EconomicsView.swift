@@ -42,7 +42,7 @@ struct EconomicsView: View {
     
     var body: some View {
         VStack {
-            CustomHeaderView(name: "Economics", isReport: false, path: $path, isDark: $isDark)
+            MenuHeaderView(name: "Economics", path: $path, isDark: $isDark)
             Form{
                 Section(header: Text("Parameters").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))){
                     yieldMethodItem

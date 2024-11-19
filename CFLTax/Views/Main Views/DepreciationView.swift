@@ -51,7 +51,7 @@ struct DepreciationView: View {
 
     var body: some View {
         VStack{
-            CustomHeaderView(name: "Depreciation", isReport: false, path: $path, isDark: $isDark)
+            MenuHeaderView(name: "Depreciation", path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("Inputs").font(myFont), footer:(Text("File Name: \(currentFile)").font(myFont))) {
                     depreciationParameters

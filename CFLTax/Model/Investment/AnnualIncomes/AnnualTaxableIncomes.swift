@@ -7,7 +7,6 @@
 
 import Foundation
 
-
 @Observable
 public class AnnualTaxableIncomes: CollCashflows {
     public var myInterimRentalIncomes: InterimRentalIncomes = InterimRentalIncomes()

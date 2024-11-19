@@ -30,10 +30,9 @@ struct CashflowView: View {
     
     var body: some View {
         VStack {
-            CustomHeaderView(name: "Summary", isReport: true, path: $path, isDark: $isDark)
+            ReportHeaderView(name: "Cashflow Summary", viewAsPct: myViewAsPct, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("Cashflow")) {
-                    percentOfCostButton
                     assetCostItem
                     feeAmountItem
                     totalCashOutItem
@@ -46,11 +45,6 @@ struct CashflowView: View {
             }
         }
         .environment(\.defaultMinListRowHeight, lineHeight)
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing){
-               
-            }
-        }
         .environment(\.colorScheme, isDark ? .dark : .light)
         .navigationBarBackButtonHidden(true)
         .onAppear{
@@ -74,6 +68,10 @@ struct CashflowView: View {
         }
     }
     
+    private func myViewAsPct() {
+        self.viewAsPctOfCost.toggle()
+    }
+    
 }
 
 #Preview {
@@ -81,14 +79,6 @@ struct CashflowView: View {
 }
 
 extension CashflowView {
-    var percentOfCostButton: some View {
-        HStack {
-            Toggle(isOn: $viewAsPctOfCost) {
-                Text(viewAsPctOfCost ? "View as Percent:" : "View as Cost:")
-            }
-            .font(myFont)
-        }
-    }
     
     var assetCostItem: some View {
         HStack {

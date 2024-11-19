@@ -16,7 +16,7 @@ struct RentScheduleView: View {
     
     var body: some View {
         VStack {
-            CustomHeaderView(name: "Rental Schedule", isReport: true, path: $path, isDark: $isDark)
+            ReportHeaderView(name: "Rental Schedule", viewAsPct: myViewAsPct, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("\(currentFile)")) {
                     ForEach(myRentalSchedule.items) { item in
@@ -48,6 +48,10 @@ struct RentScheduleView: View {
             }
             myRentalSchedule.createTable(aInvestment: myInvestment)
         }
+    }
+    
+    private func myViewAsPct() {
+        
     }
 }
 

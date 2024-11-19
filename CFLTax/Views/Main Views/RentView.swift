@@ -20,7 +20,7 @@ struct RentView: View {
     
     var body: some View {
         VStack {
-            CustomHeaderView(name: "Rent", isReport: false, path: $path, isDark: $isDark)
+            MenuHeaderView(name: "Rent", path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("Rent").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
                     ForEach(myInvestment.rent.groups) { group in

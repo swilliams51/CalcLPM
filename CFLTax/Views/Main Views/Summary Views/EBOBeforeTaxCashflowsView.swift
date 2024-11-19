@@ -13,17 +13,18 @@ struct EBOBeforeTaxCashflowsView: View {
     @Binding var isDark: Bool
     @Binding var currentFile: String
     @State var myBTCashflows: Cashflows = Cashflows()
+    @State var viewAsPctOfCost: Bool = false
     
     var body: some View {
         VStack {
-            CustomHeaderView(name: "Before-Tax Cashflows", isReport: true, path: $path, isDark: $isDark)
+            ReportHeaderView(name: "Before-Tax Cashflows", viewAsPct: myViewAsPct, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("\(currentFile)")) {
                     ForEach(myBTCashflows.items) { item in
                         HStack {
                             Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
                             Spacer()
-                            Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
+                            Text("\(getFormattedValue(amount: item.amount, viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
                         }
                         .font(myFont)
                     }
@@ -32,7 +33,7 @@ struct EBOBeforeTaxCashflowsView: View {
                     HStack{
                         Text("\(myBTCashflows.items.count)")
                         Spacer()
-                        Text("\(amountFormatter(amount: myBTCashflows.getTotal().toString(decPlaces: 4), locale: myLocale))")
+                        Text("\(getFormattedValue(amount: myBTCashflows.getTotal().toString(decPlaces: 4), viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
                     }
                     .font(myFont)
                 }
@@ -46,6 +47,10 @@ struct EBOBeforeTaxCashflowsView: View {
             }
             myBTCashflows = myInvestment.getEBO_BTCashflows(aEBO: myInvestment.earlyBuyout)
         }
+    }
+    
+    private func myViewAsPct() {
+        self.viewAsPctOfCost.toggle()
     }
 }
 

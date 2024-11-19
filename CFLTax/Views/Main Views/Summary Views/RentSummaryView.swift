@@ -34,14 +34,13 @@ struct RentSummaryView: View {
     
     var body: some View {
         VStack {
-            CustomHeaderView(name: "Rentals",isReport: false, path: $path, isDark: $isDark)
+            ReportHeaderView(name: "Rentals", viewAsPct: myViewAsPct, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("Statistics")) {
                     implicitRateItem
                 }
                 
                 Section(header: Text("Present Values")) {
-                    percentOfCostButton
                     presentValueItem
                     presentValue2Item
                 }
@@ -54,19 +53,7 @@ struct RentSummaryView: View {
                 
             }
         }
-        
-       
         .environment(\.defaultMinListRowHeight, lineHeight)
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing){
-                Button(action: {
-                    viewAsPctOfCost.toggle()
-                }) {
-                    Image(systemName: "command.circle")
-                        .tint(viewAsPctOfCost ? Color.red : Color.black)
-                }
-            }
-        }
         .environment(\.colorScheme, isDark ? .dark : .light)
         .navigationBarBackButtonHidden(true)
         .onAppear {
@@ -100,7 +87,9 @@ struct RentSummaryView: View {
         .font(myFont)
     }
     
-    
+    private func myViewAsPct() {
+        self.viewAsPctOfCost.toggle()
+    }
     
     func getAmount(amount: String, index: Int) -> String {
         var strAmount = amount
@@ -135,15 +124,6 @@ extension RentSummaryView {
             Text("\(percentFormatter(percent: implicitRate, locale: myLocale, places: 3))")
                 .font(myFont)
         }.frame(height: frameHeight)
-    }
-    
-    var percentOfCostButton: some View {
-        HStack {
-            Toggle(isOn: $viewAsPctOfCost) {
-                Text(viewAsPctOfCost ? "View as Percent:" : "View as Cost:")
-            }
-            .font(myFont)
-        }
     }
     
     var presentValueItem: some View {

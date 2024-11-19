@@ -15,7 +15,7 @@ struct NetAfterTaxCashflowsView: View {
     
     var body: some View {
         VStack {
-            CustomHeaderView(name: "Net A/T Cashflows", isReport: true, path: $path, isDark: $isDark)
+            ReportHeaderView(name: "Net A/T Cashflows", viewAsPct: myViewAsPct, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("\(currentFile)")) {
                     ForEach(myInvestment.afterTaxCashflows.items) { item in
@@ -43,6 +43,10 @@ struct NetAfterTaxCashflowsView: View {
         .onAppear {
             self.myInvestment.calculate()
         }
+    }
+    
+    private func myViewAsPct() {
+        
     }
             
 }

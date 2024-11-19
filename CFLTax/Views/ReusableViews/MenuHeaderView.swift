@@ -7,9 +7,8 @@
 
 import SwiftUI
 
-struct CustomHeaderView: View {
+struct MenuHeaderView: View {
     let name: String
-    let isReport: Bool
     @Binding var path: [Int]
     @Binding var isDark: Bool
     @State var buttonName: String = "Back"
@@ -21,17 +20,14 @@ struct CustomHeaderView: View {
                 .ignoresSafeArea()
             VStack {
                 backButtonItem
+                    .padding(.top, 20)
                 headerItem
-                Spacer()
             }
 
         }
         .frame(height: 75)
-        .onAppear{
-            if name == "Home" {
-                isHome = true
-            }
-            if path.count == 1 {
+        .onAppear {
+            if self.path.count == 1 {
                 buttonName = "Home"
             }
         }
@@ -40,17 +36,13 @@ struct CustomHeaderView: View {
     var backButtonItem: some View {
         HStack {
             Button {
-                if isHome == false {
-                    self.path.removeLast()
-                }
+                self.path.removeLast()
             } label: {
-                HStack {
-                    Image(systemName: "chevron.left")
-                    Text(buttonName)
-                }
-                .tint(Color("BackButtonColor"))
+                Image(systemName: "chevron.left")
+                Text(buttonName)
             }
-            .padding()
+            .tint(Color("BackButtonColor"))
+            .padding(.leading, 20)
             Spacer()
         }
     }
@@ -58,9 +50,9 @@ struct CustomHeaderView: View {
     var headerItem: some View {
         HStack {
             Text(name)
-                .font(isReport ? .headline : .title)
+                .font(.title)
                 .fontWeight(.bold)
-                .padding(.bottom, 10)
+                .padding(.bottom, 20)
                 .foregroundColor(Color("HeaderColor"))
         }
     }
@@ -69,7 +61,7 @@ struct CustomHeaderView: View {
 
 #Preview {
    
-    CustomHeaderView(name: "Header", isReport: false , path: .constant([Int]()), isDark: .constant(false))
+    MenuHeaderView(name: "Header", path: .constant([Int]()), isDark: .constant(false))
 }
 
 

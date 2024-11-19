@@ -15,11 +15,11 @@ struct TerminationValuesView: View {
     
     @State var myComponentTValues: TerminationValues = TerminationValues()
     @State var myTValues: Cashflows = Cashflows()
-    @State var viewAsPercentOfCost: Bool = false
+    @State var viewAsPctOfCost: Bool = false
     
     var body: some View {
         VStack {
-            CustomHeaderView(name: "Termination Values", isReport: true, path: $path, isDark: $isDark)
+            ReportHeaderView(name: "Termination Values", viewAsPct: myViewAsPct, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("\(currentFile)")) {
                     ForEach(myTValues.items) { item in
@@ -43,16 +43,6 @@ struct TerminationValuesView: View {
                
             }
         }
-        .toolbar {
-            ToolbarItem(placement: .topBarTrailing){
-                Button(action: {
-                    viewAsPercentOfCost.toggle()
-                }) {
-                    Image(systemName: "command.circle")
-                        .tint(viewAsPercentOfCost ? Color.red : Color.black)
-                }
-            }
-        }
         .environment(\.colorScheme, isDark ? .dark : .light)
         .navigationBarBackButtonHidden(true)
         .onAppear {
@@ -64,8 +54,12 @@ struct TerminationValuesView: View {
         }
     }
     
+    private func myViewAsPct() {
+        self.viewAsPctOfCost.toggle()
+    }
+    
     func getFormattedValue (amount: String) -> String {
-        if viewAsPercentOfCost {
+        if viewAsPctOfCost {
             let decAmount = amount.toDecimal()
             let decCost = myInvestment.getAssetCost(asCashflow: false)
             let decPercent = decAmount / decCost

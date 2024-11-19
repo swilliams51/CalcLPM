@@ -25,7 +25,7 @@ struct FileSaveAsView: View {
     
     var body: some View {
         VStack {
-            CustomHeaderView(name: "File Save As", isReport: false, path: $path, isDark: $isDark)
+            MenuHeaderView(name: "File Save As", path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("Current File Name")){
                     saveAsFileRowItem

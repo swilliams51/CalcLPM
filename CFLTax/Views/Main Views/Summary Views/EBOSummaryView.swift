@@ -35,7 +35,7 @@ struct EBOSummaryView: View {
     
     var body: some View {
        VStack {
-           CustomHeaderView(name: "EBO Summary", isReport: true, path: $path, isDark: $isDark)
+           ReportHeaderView(name: "EBO Summary", viewAsPct: myViewAsPct, path: $path, isDark: $isDark)
            Form {
               Section(header: Text("EBO Yields")) {
                   afterTaxYieldItem
@@ -56,22 +56,9 @@ struct EBOSummaryView: View {
               
            }
         }
-        
-        
        .environment(\.defaultMinListRowHeight, lineHeight)
-       .toolbar {
-           ToolbarItem(placement: .topBarTrailing){
-               Button(action: {
-                   viewAsPctOfCost.toggle()
-               }) {
-                   Image(systemName: "command.circle")
-                       .tint(viewAsPctOfCost ? Color.red : Color.black)
-               }
-           }
-       }
        .environment(\.colorScheme, isDark ? .dark : .light)
        .navigationBarBackButtonHidden(true)
-        
        .onAppear {
            self.myTaxRate = myInvestment.taxAssumptions.federalTaxRate.toDecimal()
            self.myEBO = myInvestment.earlyBuyout
@@ -82,6 +69,10 @@ struct EBOSummaryView: View {
            self.myArrearsRent = myInvestment.getArrearsRent(dateAsk: myEBO.exerciseDate)
            self.myTotalEBOAmountDue = myEBO.amount.toDecimal() + myArrearsRent
        }
+    }
+    
+    private func myViewAsPct() {
+        self.viewAsPctOfCost.toggle()
     }
 }
 

@@ -17,7 +17,7 @@ struct InvestmentAmortizationView: View {
     
     var body: some View {
         VStack {
-            CustomHeaderView(name: "A/T Ending Balances", isReport: true, path: $path, isDark: $isDark)
+            ReportHeaderView(name: "A/T Ending Balances", viewAsPct: myViewAsPct, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("\(currentFile)")
                     .font(myFont)) {
@@ -82,6 +82,10 @@ struct InvestmentAmortizationView: View {
             
             Text("")
         }.font(myFont)
+    }
+    
+    private func myViewAsPct() {
+        
     }
     
     func expressedAsFactor(amount: Decimal) -> String {

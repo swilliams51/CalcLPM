@@ -30,7 +30,7 @@ struct LeaseTermView: View {
     
     var body: some View {
         VStack {
-            CustomHeaderView(name: "Lease Term", isReport: false, path: $path, isDark: $isDark)
+            MenuHeaderView(name: "Lease Term", path: $path, isDark: $isDark)
             Form {
                 Section (header: Text("Details").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
                     baseCommenceDateItem

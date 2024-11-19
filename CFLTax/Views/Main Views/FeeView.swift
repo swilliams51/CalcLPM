@@ -30,7 +30,7 @@ struct FeeView: View {
     
     var body: some View {
         VStack {
-            CustomHeaderView(name: "Fee", isReport: false, path: $path, isDark: $isDark)
+            MenuHeaderView(name: "Fee", path: $path, isDark: $isDark)
             Form{
                 Section(header: Text("Details").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
                     feeAmountItem

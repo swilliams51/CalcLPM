@@ -30,7 +30,7 @@ struct PreferencesView: View {
     
     var body: some View {
         VStack {
-            CustomHeaderView(name: "Preferences", isReport: false, path: $path, isDark: $isDark)
+            MenuHeaderView(name: "Preferences", path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("Default New Lease")) {
                     defaultNewLeaseItem
