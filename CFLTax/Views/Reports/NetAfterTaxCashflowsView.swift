@@ -13,6 +13,8 @@ struct NetAfterTaxCashflowsView: View {
     @Binding var isDark: Bool
     @Binding var currentFile: String
     
+    @State var viewAsPct: Bool = false
+    
     var body: some View {
         VStack {
             ReportHeaderView(name: "Net A/T Cashflows", viewAsPct: myViewAsPct, path: $path, isDark: $isDark)
@@ -22,7 +24,7 @@ struct NetAfterTaxCashflowsView: View {
                         HStack {
                             Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
                             Spacer()
-                            Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
+                            Text("\(getFormattedValue(amount: item.amount, viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment)))")
                         }
                         .font(myFont)
                     }
@@ -46,7 +48,7 @@ struct NetAfterTaxCashflowsView: View {
     }
     
     private func myViewAsPct() {
-        
+        self.viewAsPct.toggle()
     }
             
 }

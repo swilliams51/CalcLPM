@@ -25,7 +25,7 @@ struct HomeHeaderView: View {
            
             
         }
-        .frame(height: 75)
+        .frame(width: UIScreen.main.bounds.width, height: 75)
     }
     
     var backButtonItem: some View {

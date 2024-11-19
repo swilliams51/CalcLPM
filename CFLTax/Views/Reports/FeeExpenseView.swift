@@ -14,6 +14,8 @@ struct FeeExpenseView: View {
     @Binding var isDark: Bool
     @Binding var currentFile: String
     
+    @State var viewAsPct: Bool = false
+    
     var body: some View {
         VStack {
             ReportHeaderView(name: "Fee Amortization", viewAsPct: myViewAsPct, path: $path, isDark: $isDark)
@@ -23,7 +25,7 @@ struct FeeExpenseView: View {
                        HStack {
                            Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
                            Spacer()
-                           Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
+                           Text("\(getFormattedValue(amount: item.amount, viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment))")
                        }
                        .font(myFont)
                    }
@@ -51,7 +53,7 @@ struct FeeExpenseView: View {
     }
     
     private func myViewAsPct() {
-        
+        self.viewAsPct.toggle()
     }
 }
 

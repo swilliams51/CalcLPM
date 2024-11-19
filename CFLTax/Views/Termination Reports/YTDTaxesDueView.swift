@@ -14,6 +14,7 @@ struct YTDTaxesDueView: View {
     @Binding var currentFile: String
     
     @State var myPeriodicTaxesDue: PeriodicNetTaxesDue = PeriodicNetTaxesDue()
+    @State var viewAsPct: Bool = false
   
     var body: some View {
         VStack {
@@ -24,7 +25,7 @@ struct YTDTaxesDueView: View {
                         HStack {
                             Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
                             Spacer()
-                            Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
+                            Text("\(getFormattedValue(amount: item.amount, viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment))")
                         }
                         .font(myFont)
                     }
@@ -52,7 +53,7 @@ struct YTDTaxesDueView: View {
     }
     
     private func myViewAsPct() {
-        
+        self.viewAsPct.toggle()
     }
 }
 

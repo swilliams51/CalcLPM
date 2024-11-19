@@ -14,6 +14,7 @@ struct ArrearsRentsView: View {
     @Binding var currentFile: String
     
     @State var myPeriodicArrearsRents: PeriodicArrearsRents = PeriodicArrearsRents()
+    @State var viewAsPct: Bool = false
     
     var body: some View {
         VStack {
@@ -24,7 +25,7 @@ struct ArrearsRentsView: View {
                         HStack {
                             Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
                             Spacer()
-                            Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
+                            Text("\(getFormattedValue(amount: item.amount, viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment))")
                         }
                         .font(myFont)
                     }
@@ -50,7 +51,7 @@ struct ArrearsRentsView: View {
     }
     
     private func myViewAsPct() {
-        
+        self.viewAsPct.toggle()
     }
 }
 

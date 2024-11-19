@@ -26,7 +26,7 @@ struct TerminationValuesView: View {
                         HStack {
                             Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
                             Spacer()
-                            Text("\(getFormattedValue(amount: item.amount))")
+                            Text("\(CFLTax.getFormattedValue(amount: item.amount, viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
                         }
                         .font(myFont)
                     }

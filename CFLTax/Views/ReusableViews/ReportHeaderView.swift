@@ -27,7 +27,7 @@ struct ReportHeaderView: View {
             }
 
         }
-        .frame(height: 75)
+        .frame(width: UIScreen.main.bounds.width, height: 75)
         .onAppear {
             if self.path.count == 1 {
                 buttonName = "Home"
@@ -62,6 +62,7 @@ struct ReportHeaderView: View {
     var commandButtonItem: some View {
         Button(action: {
             viewAsPct()
+            viewAsPctOfCost.toggle()
         }) {
             Image(systemName: "command.circle")
                 .tint(viewAsPctOfCost ? Color.red : Color.black)

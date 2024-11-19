@@ -25,7 +25,7 @@ struct MenuHeaderView: View {
             }
 
         }
-        .frame(height: 75)
+        .frame(width: UIScreen.main.bounds.width, height: 75)
         .onAppear {
             if self.path.count == 1 {
                 buttonName = "Home"

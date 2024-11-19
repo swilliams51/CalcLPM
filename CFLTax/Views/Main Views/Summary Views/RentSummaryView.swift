@@ -123,7 +123,8 @@ extension RentSummaryView {
             Spacer()
             Text("\(percentFormatter(percent: implicitRate, locale: myLocale, places: 3))")
                 .font(myFont)
-        }.frame(height: frameHeight)
+        }
+        .frame(width: UIScreen.main.bounds.width * 0.8, height: frameHeight)
     }
     
     var presentValueItem: some View {
@@ -138,7 +139,8 @@ extension RentSummaryView {
                 Spacer()
                 Text("\(getFormattedValue(amount: presentValue1, viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
                     .font(myFont)
-            }.frame(height: frameHeight)
+            }
+            .frame(width: UIScreen.main.bounds.width * 0.8, height: frameHeight)
     }
     
     var presentValue2Item: some View {
@@ -153,7 +155,8 @@ extension RentSummaryView {
             Spacer()
             Text("\(getFormattedValue(amount: presentValue2, viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
                 .font(myFont)
-        }.frame(height: frameHeight)
+        }
+        .frame(width: UIScreen.main.bounds.width * 0.8, height: frameHeight)
     }
     
     func getDiscountRateText() -> String {

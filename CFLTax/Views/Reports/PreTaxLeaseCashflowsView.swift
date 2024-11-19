@@ -13,6 +13,8 @@ struct PreTaxLeaseCashflowsView: View {
     @Binding var isDark: Bool
     @Binding var currentFile: String
     
+    @State var viewAsPct: Bool = false
+    
     var body: some View {
         VStack {
             ReportHeaderView(name: "Pre-Tax Cash", viewAsPct: myViewAsPct, path: $path, isDark: $isDark)
@@ -22,7 +24,7 @@ struct PreTaxLeaseCashflowsView: View {
                         HStack {
                             Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
                             Spacer()
-                            Text("\(amountFormatter(amount: item.amount, locale: myLocale))")
+                            Text("\(getFormattedValue(amount: item.amount, viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment))")
                         }
                         .font(myFont)
                     }
@@ -46,7 +48,7 @@ struct PreTaxLeaseCashflowsView: View {
     }
     
     private func myViewAsPct() {
-        
+        self.viewAsPct.toggle()
     }
 }
 
