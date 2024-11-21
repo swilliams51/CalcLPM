@@ -24,7 +24,7 @@ struct SummaryOfResultsView: View {
     @State var myAverageLife: Decimal = 2.0
     
     
-    @State var lineHeight: CGFloat = 12
+    //@State var lineHeight: CGFloat = 12
     @State var frameHeight: CGFloat = 12
     
     var body: some View {
@@ -48,7 +48,7 @@ struct SummaryOfResultsView: View {
             }
         }
         
-        .environment(\.defaultMinListRowHeight, lineHeight)
+        //.environment(\.defaultMinListRowHeight, lineHeight)
         .environment(\.colorScheme, isDark ? .dark : .light)
         .navigationBarBackButtonHidden(true)
         .onAppear{

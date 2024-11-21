@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct HomeView: View {
-    @State public var myInvestment: Investment = Investment(aFile: sampleFile)
+    @State public var myInvestment: Investment = Investment(aFile: sampleFile, resetDates: true)
     @State public var path: [Int] = [Int]()
     @State public var isDark: Bool = false
     @State var selectedGroup: Group = Group()
@@ -26,7 +26,7 @@ struct HomeView: View {
     @State private var showPop2: Bool = false
     @State private var feeHelp = feeHomeHelp
     @State private var eboHelp = eboHomeHelp
-    
+    @AppStorage("darkMode") var darkMode: Bool = false
 
     var body: some View {
         NavigationStack (path: $path){
@@ -91,6 +91,9 @@ struct HomeView: View {
                 if self.myInvestment.hasChanged && myInvestment.earlyBuyoutExists == true {
                     self.myInvestment.earlyBuyout.amount = "0.00"
                     self.myInvestment.earlyBuyoutExists = false
+                }
+                if self.darkMode == true {
+                    isDark = true
                 }
             }
             .popover(isPresented: $showPop1) {
@@ -242,10 +245,10 @@ struct HomeView: View {
         HStack{
             Text("File Menu")
                 .font(myFont)
-                .foregroundColor(investmentHasChanged() ? .gray : .black)
+                .foregroundColor(investmentHasChanged() ? Color("InvestChangedTrue") : Color("InvestChangedFalse"))
             Spacer()
             Image(systemName: "chevron.right")
-                .foregroundColor(investmentHasChanged() ? .gray : .black)
+                .foregroundColor(investmentHasChanged() ? Color("InvestChangedTrue") : Color("InvestChangedFalse"))
         }
         .contentShape(Rectangle())
         .onTapGesture {
@@ -266,6 +269,7 @@ struct HomeView: View {
             self.path.append(25)
         } else {
             self.isShowingYieldErrorAlert = true
+            self.isLoading = false
         }
     }
     

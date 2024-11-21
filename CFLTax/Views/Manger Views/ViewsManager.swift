@@ -85,9 +85,9 @@ struct ViewsManager: View {
         case 30:
             ReportsManagerView(myInvestment: myInvestment, myDepreciationSchedule: myDepreciationSchedule, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 31:
-          PreferencesView(myInvestment: myInvestment, isDark: $isDark, path: $path)
+            PreferencesView(myInvestment: myInvestment, isDark: $isDark, path: $path)
         case 32:
-            Text("About")
+            AboutView(myInvestment: myInvestment, isDark: $isDark, path: $path)
         case 33:
             TaxableIncomeView(myInvestment: myInvestment, myTaxableIncomes: myTaxableIncomes, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 34:

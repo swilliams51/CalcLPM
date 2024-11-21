@@ -14,7 +14,7 @@ struct TaxAssumptionsView: View {
     @Binding var currentFile: String
     
     @State private var myTaxAssumptions: TaxAssumptions = TaxAssumptions()
-    @State var days: [Int] = [1, 5, 10, 15, 20, 25, 30]
+    @State var days: [Int] = [1, 5, 10, 15, 20, 25]
 
     @State private var editTaxRateStarted: Bool = false
     @State private var maximumTaxRate: Decimal = 1.0
@@ -40,14 +40,15 @@ struct TaxAssumptionsView: View {
                     SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isFocused: taxRateIsFocused, isDark: $isDark)
                 }
             }
+            
         }
+        .environment(\.colorScheme, isDark ? .dark : .light)
+        .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItemGroup(placement: .keyboard) {
                 DecimalPadButtonsView(cancel: updateForCancel, copy: copyToClipboard, paste: paste, clear: clearAllText, enter: updateForSubmit, isDark: $isDark)
             }
         }
-        .environment(\.colorScheme, isDark ? .dark : .light)
-        .navigationBarBackButtonHidden(true)
         .onAppear() {
             self.myTaxAssumptions = self.myInvestment.taxAssumptions
         }

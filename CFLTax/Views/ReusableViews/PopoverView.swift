@@ -17,7 +17,7 @@ struct PopoverView: View {
             helpTitle
             helpContent
         }
-        .frame(width: 300, height: 500)
+        .frame(width: UIScreen.main.bounds.width * 0.8, height: UIScreen.main.bounds.height * 0.8)
         .background(Color.theme.popOver)
         .cornerRadius(25.0)
         .environment(\.colorScheme, isDark ? .dark : .light)
@@ -68,7 +68,7 @@ struct PopoverDecimalPadView: View {
                 .multilineTextAlignment(.center)
                 .padding()
         }
-        .frame(width: 300, height: 500)
+        .frame(width: UIScreen.main.bounds.width * 0.8, height: UIScreen.main.bounds.height * 0.5)
         .background(.blue)
         .cornerRadius(25.0)
         .environment(\.colorScheme, isDark ? .dark : .light)

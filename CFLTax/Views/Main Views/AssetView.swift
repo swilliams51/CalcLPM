@@ -131,7 +131,7 @@ extension AssetView {
         HStack{
             Text("Funding Date:")
             Image(systemName: "questionmark.circle")
-                .foregroundColor(Color.theme.accent)
+                .foregroundColor(.blue)
                 .onTapGesture {
                     self.showPop3 = true
                 }
@@ -499,7 +499,7 @@ extension AssetView {
             if self.myAsset.residualValue.toDecimal() > 0.00 && self.myAsset.residualValue.toDecimal() <= 1.0 {
                 self.myAsset.residualValue = myInvestment.percentToAmount(percent: myAsset.residualValue, basis: myAsset.lessorCost)
             }
-            self.myAsset.lesseeGuarantyAmount = (myAsset.lessorCost.toDecimal() * lesseeGuarantyPercentOnEntry).toString()
+            self.myAsset.lesseeGuarantyAmount = (0.00).toString()
         }
             
         self.editResidualValueStarted = false

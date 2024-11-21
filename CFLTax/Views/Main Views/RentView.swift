@@ -33,7 +33,7 @@ struct RentView: View {
             }
         }
         .toolbar {
-            ToolbarItem(placement: .bottomBar) {
+            ToolbarItem(placement: .topBarTrailing) {
                 Menu(content: {
                     structuresMenu
                 }, label: {
@@ -53,7 +53,6 @@ struct RentView: View {
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
-        //.navigationTitle("Rent")
         .navigationBarBackButtonHidden(true)
         .onAppear{
             self.noOfPayments = myInvestment.rent.getTotalNumberOfPayments()
@@ -92,6 +91,9 @@ extension RentView {
                 HStack{
                     Text(groupToFirstText(aGroup: group))
                         .font(myFont)
+                        .frame(width: 270, height: 20, alignment: .leading)
+                      
+                    
                         .onTapGesture {
                             self.selectedGroup = group
                             self.path.append(13)
@@ -101,6 +103,8 @@ extension RentView {
                 HStack {
                     Text(groupToSecondText(aGroup: group))
                         .font(myFont)
+                        .frame(width: 270, height: 20, alignment: .leading)
+                        
                         .onTapGesture {
                             self.selectedGroup = group
                             self.path.append(13)
@@ -110,8 +114,9 @@ extension RentView {
             }
             Spacer()
             Image(systemName: "chevron.right")
+                .frame(width: 20, height: 24, alignment: .trailing)
         }
-        .contentShape(Rectangle())
+        //.contentShape(Rectangle())
         .onTapGesture {
             self.selectedGroup = group
             self.path.append(13)
@@ -166,9 +171,11 @@ extension RentView {
         HStack {
             Text("Number:")
                 .font(myFont)
+                .frame(width: 100, height: 20, alignment: .leading)
             Spacer()
             Text("Net Amount:")
                 .font(myFont)
+                .frame(width: 120, height: 20, alignment: .trailing)
         }
     }
     
@@ -177,10 +184,11 @@ extension RentView {
           
             Text("\(myInvestment.rent.getTotalNumberOfPayments())")
                 .font(myFont)
+                .frame(width: 100, height: 20, alignment: .leading)
             Spacer()
             Text("\(amountFormatter(amount: myInvestment.rent.getTotalAmountOfPayments(aFreq: myInvestment.leaseTerm.paymentFrequency).toString(), locale: myLocale))")
                 .font(myFont)
-            
+                .frame(width: 120, height: 20, alignment: .trailing)
         }
     }
 }

@@ -25,7 +25,7 @@ struct CashflowView: View {
     @State var itc: String = "0.00"
     @State var aTCash: String = "-100000.00"
 
-    @State var lineHeight: CGFloat = 12
+    //@State var lineHeight: CGFloat = 12
     @State var frameHeight: CGFloat = 12
     
     var body: some View {
@@ -44,7 +44,7 @@ struct CashflowView: View {
                 }
             }
         }
-        .environment(\.defaultMinListRowHeight, lineHeight)
+        //.environment(\.defaultMinListRowHeight, lineHeight)
         .environment(\.colorScheme, isDark ? .dark : .light)
         .navigationBarBackButtonHidden(true)
         .onAppear{

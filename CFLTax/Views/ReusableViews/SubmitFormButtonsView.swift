@@ -35,6 +35,9 @@ struct FormCancelButton: View {
     var body: some View {
         Text (name)
             .font(myFont)
+            .padding(.leading, 10)
+            .frame(width: UIScreen.main.bounds.width * 0.4, alignment: .leading)
+            .border(Color.red, width: 0)
             .foregroundColor(isFocused ? Color.theme.inActive : Color.theme.accent)
             .onTapGesture {
                 if isFocused == false {
@@ -53,7 +56,10 @@ struct FormSubmitButton: View {
     var body: some View {
         Text(name)
             .font(myFont)
+            .padding(.trailing, 10)
             .foregroundColor(isFocused ? Color.theme.inActive : Color.theme.accent)
+            .frame(width: UIScreen.main.bounds.width * 0.4, alignment: .trailing)
+            .border(Color.red, width: 0)
             .onTapGesture {
                if isFocused == false {
                    done()

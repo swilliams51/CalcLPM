@@ -58,7 +58,7 @@ struct LeaseTermView: View {
             Text("Base Start:")
                 .font(myFont)
             Image(systemName: "questionmark.circle")
-                .foregroundColor(Color.theme.accent)
+                .foregroundColor(.blue)
                 .onTapGesture {
                     self.showPop1.toggle()
                 }
@@ -98,7 +98,7 @@ struct LeaseTermView: View {
                     Text("EOM Rule:")
                         .font(myFont)
                     Image(systemName: "questionmark.circle")
-                        .foregroundColor(Color.theme.accent)
+                        .foregroundColor(.blue)
                         .onTapGesture {
                             self.showPop2.toggle()
                         }
@@ -115,7 +115,7 @@ struct LeaseTermView: View {
             Text("Base Term:")
                 .font(myFont)
             Image(systemName: "questionmark.circle")
-                .foregroundColor(Color.theme.accent)
+                .foregroundColor(.blue)
                 .onTapGesture {
                     self.showPop3.toggle()
                 }

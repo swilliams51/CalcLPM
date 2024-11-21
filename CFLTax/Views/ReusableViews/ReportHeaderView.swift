@@ -22,7 +22,6 @@ struct ReportHeaderView: View {
                 .ignoresSafeArea()
             VStack {
                 buttonItems
-
                 headerItem
             }
 
@@ -65,7 +64,7 @@ struct ReportHeaderView: View {
             viewAsPctOfCost.toggle()
         }) {
             Image(systemName: "command.circle")
-                .tint(viewAsPctOfCost ? Color.red : Color.black)
+                .tint(viewAsPctOfCost ? Color("PercentOff") : Color("PercentOn"))
                 .scaleEffect(1.2)
         }
         .padding(.trailing, 20)

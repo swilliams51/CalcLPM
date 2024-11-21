@@ -30,8 +30,8 @@ struct EBOSummaryView: View {
     @State var myAfterTaxCashflow: Decimal = 0.0
     @State var myTaxesPaid: Decimal = 0.0
     
-    @State var lineHeight: CGFloat = 12
-    @State var frameHeight: CGFloat = 12
+    //@State var lineHeight: CGFloat = 12
+    @State var frameHeight: CGFloat = 14
     
     var body: some View {
        VStack {
@@ -56,7 +56,7 @@ struct EBOSummaryView: View {
               
            }
         }
-       .environment(\.defaultMinListRowHeight, lineHeight)
+       //.environment(\.defaultMinListRowHeight, lineHeight)
        .environment(\.colorScheme, isDark ? .dark : .light)
        .navigationBarBackButtonHidden(true)
        .onAppear {

@@ -14,6 +14,7 @@ struct PreferencesView: View {
     
     @AppStorage("savedDefault") var savedDefaultLease: String = "No_Data"
     @AppStorage("useSaved") var useSavedAsDefault: Bool = false
+    @AppStorage("darkMode") var darkMode: Bool = false
     
     @State private var useMySavedAsDefault: Bool = false // links to "useSaved
     @State private var saveMyCurrentAsDefault: Bool = false
@@ -61,7 +62,7 @@ struct PreferencesView: View {
             Text(useMySavedAsDefault ? "Use Saved:" : "Use Default:")
                 .font(.subheadline)
             Image(systemName: "questionmark.circle")
-                .foregroundColor(Color.theme.accent)
+                .foregroundColor(.blue)
                 .onTapGesture {
                     self.showPop1 = true
                 }
@@ -79,7 +80,7 @@ struct PreferencesView: View {
             Text("Save Current:")
                 .font(.subheadline)
             Image(systemName: "questionmark.circle")
-                .foregroundColor(Color.theme.accent)
+                .foregroundColor(.blue)
                 .onTapGesture {
                     self.showPop2 = true
                 }
@@ -131,6 +132,13 @@ extension PreferencesView {
         if self.saveMyCurrentAsDefault {
             let myFile = myInvestment.writeInvestment()
             self.savedDefaultLease = myFile
+        }
+        
+        //save to AppStorage darkMode
+        if isDark == true {
+            self.darkMode = true
+        } else {
+            self.darkMode = false
         }
     
         self.path.removeLast()

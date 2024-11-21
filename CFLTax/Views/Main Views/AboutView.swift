@@ -20,6 +20,7 @@ struct AboutView: View {
                 logoItem
                 thankYouItem
                 companyDetailsItem
+                sendSuggestionsItem
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
@@ -32,7 +33,7 @@ struct AboutView: View {
     var thankYouItem: some View {
         HStack{
             Spacer()
-            Text("Thank you for downloading LeaseY!")
+            Text("Thank you for downloading Leasey!")
                 .font(.subheadline)
             Spacer()
     
@@ -65,17 +66,23 @@ struct AboutView: View {
                 .padding()
                 Spacer()
             }
-            Link("Training Videos", destination: URL(string: "https:/www.cfsoftwaresolutions.com")!)
-                .font(.subheadline)
+            Link("Website", destination: URL(string: "https:/www.cfsoftwaresolutions.com")!)
+                .font(myFont)
         }
     }
     
     var sendSuggestionsItem: some View {
         VStack {
-            Text("Questions or comments")
-                .font(.subheadline)
-                .padding()
+            HStack {
+                Spacer()
+                Text("Questions or comments:")
+                    .font(.subheadline)
+                    .padding()
+                Spacer()
+            }
+            
             Text("info@cfsoftwaresolutions.com")
+                .font(myFont)
             
         }
     }

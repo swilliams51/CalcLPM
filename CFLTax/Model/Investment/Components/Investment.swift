@@ -64,6 +64,24 @@ public class Investment {
         self.setFee()
     }
     
+    
+    public init(aFile: String, resetDates: Bool) {
+        let arrayInvestment: [String] = aFile.components(separatedBy: "*")
+        self.asset = readAsset(arrayAsset: arrayInvestment[0].components(separatedBy: ","))
+        self.leaseTerm = readLeaseTerm(arrayLeaseTerm: arrayInvestment[1].components(separatedBy: ","))
+        self.rent = readRent(arrayGroups: arrayInvestment[2].components(separatedBy: "|"))
+        self.depreciation = readDepreciation(arrayDepreciation: arrayInvestment[3].components(separatedBy: ","))
+        self.taxAssumptions = readTaxAssumptions(arrayTaxAssumptions: arrayInvestment[4].components(separatedBy: ","))
+        self.economics = readEconomics(arrayEconomics: arrayInvestment[5].components(separatedBy: ","))
+        self.fee = readFee(arrayFee: arrayInvestment[6].components(separatedBy: ","))
+        self.earlyBuyout = readEarlyBuyout(arrayEBO: arrayInvestment[7].components(separatedBy: ","))
+        self.setEBO()
+        self.setFee()
+        if resetDates {
+            self.resetAllDatesToCurrentDate()
+        }
+    }
+    
     public func setEBO() {
         if earlyBuyout.amount.toDecimal() != 0.0 {
             earlyBuyoutExists = true

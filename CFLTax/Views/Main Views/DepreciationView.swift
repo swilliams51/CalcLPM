@@ -154,7 +154,7 @@ extension DepreciationView {
         HStack {
             Text("Basis:")
             Image(systemName: "questionmark.circle")
-                .foregroundColor(Color.theme.accent)
+                .foregroundColor(.blue)
                 .onTapGesture {
                     self.showPop1 = true
                 }
@@ -341,7 +341,7 @@ extension DepreciationView {
             Text("amount: \(Image(systemName: "return"))")
                 .foregroundColor(isDark ? .white : .black)
             Image(systemName: "questionmark.circle")
-                .foregroundColor(.black)
+                .foregroundColor(.blue)
                 .onTapGesture {
                     self.showPop3 = true
                 }

@@ -125,7 +125,7 @@ extension GroupDetailView {
                 Text("No. of payments:")
                     .font(myFont)
                 Image(systemName: "questionmark.circle")
-                    .foregroundColor(Color.theme.accent)
+                    .foregroundColor(.blue)
                     .onTapGesture {
                         self.showPop1 = true
                     }
@@ -193,7 +193,7 @@ extension GroupDetailView {
                 .font(myFont)
                 .foregroundColor(isDark ? .white : .black)
             Image(systemName: "questionmark.circle")
-                .foregroundColor(Color.theme.accent)
+                .foregroundColor(.blue)
                 .onTapGesture {
                     self.showPop2 = true
                 }
@@ -220,8 +220,12 @@ extension GroupDetailView {
                 .textFieldStyle(PlainTextFieldStyle())
                 .disableAutocorrection(true)
                 .accentColor(.clear)
+                .frame(width: 100, height: 30, alignment: .trailing)
+                .border(Color.clear, width: 0)
+               
             Text("\(paymentFormatted(editStarted: editPaymentAmountStarted))")
                 .font(myFont)
+                .frame(width: 100, height: 30, alignment: .trailing)
                 .foregroundColor(isDark ? .white : .black)
         }
         

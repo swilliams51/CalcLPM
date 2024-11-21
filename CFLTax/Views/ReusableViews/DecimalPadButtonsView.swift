@@ -16,6 +16,8 @@ struct DecimalPadButtonsView: View {
     let enter: () -> Void
     @Binding var isDark: Bool
     
+    @State var lineWidth: CGFloat = 0
+    
     var body: some View {
         HStack {
             cancelDecimalPadButton(cancel: cancel, isDark: $isDark)
@@ -27,13 +29,13 @@ struct DecimalPadButtonsView: View {
             Spacer()
             enterDecimalPadButton(enter: enter, isDark: $isDark)
         }
+        .frame(width: UIScreen.main.bounds.width * 0.90, height: 40)
+        .border(Color.red, width: lineWidth)
         .padding(.leading, 20)
         .padding(.trailing, 20)
     }
     
 }
-
-
 
 #Preview {
     DecimalPadButtonsView(cancel: {}, copy: {}, paste: {}, clear: {}, enter: {}, isDark: .constant(false))
@@ -50,6 +52,8 @@ struct cancelDecimalPadButton: View {
         } label: {
             Label ("", systemImage: "escape")
         }
+        .frame(width: 40, height: 40)
+        .border(Color.red, width: 0)
         .tint(isDark ? .white : .red)
     }
 }
@@ -65,10 +69,13 @@ struct helpDecimalPadItem: View {
                 showPopover.toggle()
             }
             .padding()
+            .frame(width: 40, height: 40)
+            .border(Color.red, width: 0)
             .popover(isPresented: $showPopover) {
                 PopoverDecimalPadView(isDark: $isDark)
             }
     }
+    
 }
 
 struct copyDecimalPadButton: View {
@@ -82,6 +89,8 @@ struct copyDecimalPadButton: View {
             Label("", systemImage: "clipboard")
         }
         .tint(isDark ? .white : .orange)
+        .frame(width: 40, height: 40)
+        .border(Color.red, width: 0)
     }
 }
 
@@ -94,7 +103,10 @@ struct pasteDecimalPadButton: View {
             paste()
         } label: {
             Label("", systemImage: "paintbrush")
-        }.tint(isDark ? .white : .purple)
+        }
+        .tint(isDark ? .white : .purple)
+        .frame(width: 40, height: 40)
+        .border(Color.red, width: 0)
     }
 }
 
@@ -107,7 +119,10 @@ struct clearDecimalPadButton: View {
             clear()
         } label: {
             Label("", systemImage: "clear")
-        }.tint(isDark ? .white : .black)
+        }
+        .tint(isDark ? .white : .black)
+        .frame(width: 40, height: 40)
+        .border(Color.red, width: 0)
     }
 }
 
@@ -120,7 +135,10 @@ struct enterDecimalPadButton: View {
             enter()
         } label: {
             Label("", systemImage: "return")
-        }.tint(isDark ? .white : .black)
+        }
+        .tint(isDark ? .white : .black)
+        .frame(width: 40, height: 40)
+        .border(Color.red, width: 0)
     }
     
 }

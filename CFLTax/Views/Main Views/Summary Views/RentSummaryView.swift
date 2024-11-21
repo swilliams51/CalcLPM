@@ -29,7 +29,7 @@ struct RentSummaryView: View {
     @State private var payHelp2 = pvTwoHelp
     
     
-    @State var lineHeight: CGFloat = 12
+    //@State var lineHeight: CGFloat = 12
     @State var frameHeight: CGFloat = 12
     
     var body: some View {
@@ -53,7 +53,7 @@ struct RentSummaryView: View {
                 
             }
         }
-        .environment(\.defaultMinListRowHeight, lineHeight)
+        //.environment(\.defaultMinListRowHeight, lineHeight)
         .environment(\.colorScheme, isDark ? .dark : .light)
         .navigationBarBackButtonHidden(true)
         .onAppear {
