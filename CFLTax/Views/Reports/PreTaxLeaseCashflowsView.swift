@@ -33,7 +33,7 @@ struct PreTaxLeaseCashflowsView: View {
                     HStack {
                         Text("\(myInvestment.beforeTaxCashflows.count())")
                         Spacer()
-                        Text("\(amountFormatter(amount: myInvestment.beforeTaxCashflows.getTotal().toString(decPlaces: 2), locale: myLocale))")
+                        Text("\(getFormattedValue(amount: myInvestment.beforeTaxCashflows.getTotal().toString(decPlaces: 2), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment))")
                     }
                     .font(myFont)
                 }

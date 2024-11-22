@@ -35,7 +35,7 @@ struct RentScheduleView: View {
                     HStack {
                         Text("\(myRentalSchedule.items.count)")
                         Spacer()
-                        Text("\(amountFormatter(amount: myRentalSchedule.getTotal().toString(decPlaces: 4), locale: myLocale))")
+                        Text("\(getFormattedValue(amount: myRentalSchedule.getTotal().toString(decPlaces: 4), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment))")
                     }
                     .font(myFont)
                 }

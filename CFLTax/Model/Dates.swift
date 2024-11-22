@@ -351,15 +351,6 @@ public func daysDiff (start: Date, end: Date) -> Int {
     return days
 }
 
-public func monthsDiff (start: Date, end: Date) -> Int {
-    var months: Int = 0
-    
-    if end > start {
-        months = Calendar.current.dateComponents([.month], from: start, to: end).month!
-    }
-    return months
-}
-
 public func monthsDifference (start: Date, end: Date, inclusive: Bool) -> Int {
     let adder: Int = inclusive ? 1 : 0
     let startMonth = getMonthComponent(dateIn: start)

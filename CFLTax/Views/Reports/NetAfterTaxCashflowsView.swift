@@ -24,7 +24,7 @@ struct NetAfterTaxCashflowsView: View {
                         HStack {
                             Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
                             Spacer()
-                            Text("\(getFormattedValue(amount: item.amount, viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment)))")
+                            Text("\(getFormattedValue(amount: item.amount, viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment))")
                         }
                         .font(myFont)
                     }
@@ -33,7 +33,7 @@ struct NetAfterTaxCashflowsView: View {
                     HStack {
                         Text("\(myInvestment.afterTaxCashflows.count())")
                         Spacer()
-                        Text("\(amountFormatter(amount: myInvestment.afterTaxCashflows.getTotal().toString(decPlaces: 2), locale: myLocale))")
+                        Text("\(getFormattedValue(amount: myInvestment.afterTaxCashflows.getTotal().toString(decPlaces: 2), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment))")
                     }
                     .font(myFont)
                 }

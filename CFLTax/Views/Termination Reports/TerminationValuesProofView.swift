@@ -32,6 +32,7 @@ struct TerminationValuesProofView: View {
     @State var myActualIB:  Decimal = 0.0
     @State var myTaxRate:  Decimal = 0.0
     @State var x: Int = 0
+    @State var viewAsPct: Bool = false
     
     var body: some View {
         VStack {
@@ -96,7 +97,7 @@ struct TerminationValuesProofView: View {
     }
     
     private func myViewAsPct() {
-        
+        self.viewAsPct.toggle()
     }
 }
    
@@ -148,7 +149,7 @@ extension TerminationValuesProofView {
             Text("Termination Value:")
             Text("Blank Cell")
                 .foregroundColor(.clear)
-            Text("\(amountFormatter(amount: myTV.toString(),locale: myLocale, places: 0))")
+            Text("\(getFormattedValue(amount: myTV.toString(),viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, places: 0))")
                 .gridColumnAlignment(.trailing)
         }.font(myFont)
     }
@@ -156,7 +157,7 @@ extension TerminationValuesProofView {
     var depreciationRowItem: some View {
         GridRow() {
             Text("Depreciable Balance:")
-            Text("\(amountFormatter(amount: myDeprecBalance.toString(), locale: myLocale, places: 0))")
+            Text("\(getFormattedValue(amount: myDeprecBalance.toString(), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, places: 0))")
             Text("Blank Cell")
                 .foregroundColor(.clear)
         }.font(myFont)
@@ -165,7 +166,7 @@ extension TerminationValuesProofView {
     var gainOnTerminationRowItem: some View {
         GridRow() {
             Text("Gain on Termination:")
-            Text("\(amountFormatter(amount: myGain.toString(), locale: myLocale, places: 0))")
+            Text("\(getFormattedValue(amount: myGain.toString(), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, places: 0))")
             Text("Blank Cell")
                 .foregroundColor(.clear)
         }.font(myFont)
@@ -176,14 +177,14 @@ extension TerminationValuesProofView {
              Text("Tax on Gain:")
              Text("Blank Cell")
                  .foregroundColor(.clear)
-             Text("\(amountFormatter(amount: myTaxOnGain.toString(), locale: myLocale, places: 0))")
+             Text("\(getFormattedValue(amount: myTaxOnGain.toString(), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, places: 0))")
          }.font(myFont)
     }
     
     var ytdIncomeRowItem: some View {
         GridRow() {
             Text("YTD Income:")
-            Text("\(amountFormatter(amount: myYTDIncome.toString(), locale: myLocale, places: 0))")
+            Text("\(getFormattedValue(amount: myYTDIncome.toString(), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, places: 0))")
             Text("Blank Cell")
                 .gridColumnAlignment(.trailing)
                 .foregroundColor(.clear)
@@ -193,7 +194,7 @@ extension TerminationValuesProofView {
     var advanceRentRowItem: some View {
         GridRow() {
             Text("Advance Rent:")
-            Text("\(amountFormatter(amount: myAdvanceRent.toString(), locale: myLocale, places: 0))")
+            Text("\(getFormattedValue(amount: myAdvanceRent.toString(), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, places: 0))")
             Text("Blank Cell")
                 .foregroundColor(.clear)
        }.font(myFont)
@@ -202,7 +203,7 @@ extension TerminationValuesProofView {
     var adjustedYTDIncomeRowItem: some View {
         GridRow() {
             Text("Adj YTD Income:")
-            Text("\(amountFormatter(amount: myAdjustedYTDIncome.toString(), locale: myLocale, places: 0))")
+            Text("\(getFormattedValue(amount: myAdjustedYTDIncome.toString(), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, places: 0))")
             Text("Blank Cell")
                 .gridColumnAlignment(.trailing)
                 .foregroundColor(.clear)
@@ -214,7 +215,7 @@ extension TerminationValuesProofView {
             Text("Tax on Adj Income:")
             Text("Blank Cell")
                 .foregroundColor(.clear)
-            Text("\(amountFormatter(amount: myTaxOnYTDIncome.toString(), locale: myLocale, places: 0))")
+            Text("\(getFormattedValue(amount: myTaxOnYTDIncome.toString(),viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, places: 0))")
         }.font(myFont)
     }
     
@@ -223,7 +224,7 @@ extension TerminationValuesProofView {
             Text("Taxes Paid YTD:")
             Text("Blank Cell")
                 .foregroundColor(.clear)
-            Text("\(amountFormatter(amount: myTaxesPaidYTD.toString(), locale: myLocale, places: 0))")
+            Text("\(getFormattedValue(amount: myTaxesPaidYTD.toString(), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, places: 0))")
         }.font(myFont)
     }
     
@@ -232,7 +233,7 @@ extension TerminationValuesProofView {
             Text("Investment Balance:")
             Text("Blank Cell")
                 .foregroundColor(.clear)
-            Text("\(amountFormatter(amount: myCalculatedIB.toString(), locale: myLocale, places: 0))")
+            Text("\(getFormattedValue(amount: myCalculatedIB.toString(), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, places: 0))")
         }.font(myFont)
     }
     
@@ -241,7 +242,7 @@ extension TerminationValuesProofView {
             Text("Investment Balance:")
             Text("Blank Cell")
                 .foregroundColor(.clear)
-            Text("\(amountFormatter(amount: myAdjustedIB.toString(), locale: myLocale, places: 0))")
+            Text("\(getFormattedValue(amount: myAdjustedIB.toString(), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, places: 0))")
         }.font(myFont)
     }
     
@@ -261,7 +262,7 @@ extension TerminationValuesProofView {
             Text("Investment Balance:")
             Text("Blank Cell")
                 .foregroundColor(.clear)
-            Text("\(amountFormatter(amount: myActualIB.toString(), locale: myLocale, places: 0))")
+            Text("\(getFormattedValue(amount: myActualIB.toString(), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, places: 0))")
         }.font(myFont)
     }
     

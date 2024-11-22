@@ -35,7 +35,7 @@ struct FeeExpenseView: View {
                    HStack {
                        Text("\(myFeeAmortization.items.count)")
                        Spacer()
-                       Text("\(amountFormatter(amount: myFeeAmortization.getTotal().toString(decPlaces: 4), locale: myLocale))")
+                       Text("\(getFormattedValue(amount: myFeeAmortization.getTotal().toString(decPlaces: 4), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment))")
                    }
                    .font(myFont)
                }

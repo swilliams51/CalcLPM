@@ -17,7 +17,7 @@ struct InvestmentAmortizationView: View {
     
     var body: some View {
         VStack {
-            ReportHeaderView(name: "A/T Ending Balances", viewAsPct: myViewAsPct, path: $path, isDark: $isDark)
+            InvestAmortHeaderView(name: "A/T Ending Balances", path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("\(currentFile)")
                     .font(myFont)) {

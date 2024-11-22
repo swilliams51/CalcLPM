@@ -73,7 +73,7 @@ extension Investment {
         
         
         for x in start..<self.rent.groups.count {
-            let groupTermInMons: Decimal = Decimal(monthsDiff(start: self.rent.groups[x].startDate, end: self.rent.groups[x].endDate))
+            let groupTermInMons: Decimal = Decimal(monthsDifference(start: self.rent.groups[x].startDate, end: self.rent.groups[x].endDate, inclusive: true))
             var newNoOfPayments: Decimal = 1.0
             var myAmount:Decimal = self.rent.groups[x].amount.toDecimal()
                 switch self.leaseTerm.paymentFrequency {

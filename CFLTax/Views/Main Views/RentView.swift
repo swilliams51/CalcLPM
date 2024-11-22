@@ -33,7 +33,7 @@ struct RentView: View {
             }
         }
         .toolbar {
-            ToolbarItem(placement: .topBarTrailing) {
+            ToolbarItem(placement: .bottomBar) {
                 Menu(content: {
                     structuresMenu
                 }, label: {

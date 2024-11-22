@@ -34,7 +34,7 @@ struct TaxesPaidView: View {
                     HStack {
                         Text("\(myPeriodicTaxesPaid.items.count)")
                         Spacer()
-                        Text("\(amountFormatter(amount: myPeriodicTaxesPaid.getTotal().toString(decPlaces: 4), locale: myLocale))")
+                        Text("\(getFormattedValue(amount: myPeriodicTaxesPaid.getTotal().toString(decPlaces: 4), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment))")
                     }
                     .font(myFont)
                 }

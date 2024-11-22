@@ -64,6 +64,6 @@ public func getFormattedValue (amount: String, viewAsPercentOfCost: Bool, aInves
         
         return percentFormatter(percent: strPercent, locale: myLocale, places: places)
     } else {
-         return amountFormatter(amount: amount, locale: myLocale)
+         return amountFormatter(amount: amount, locale: myLocale, places: places)
     }
 }

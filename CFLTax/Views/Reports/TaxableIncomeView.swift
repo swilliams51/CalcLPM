@@ -35,7 +35,7 @@ struct TaxableIncomeView: View {
                     HStack {
                         Text("\(myNetTaxableIncomes.items.count)")
                         Spacer()
-                        Text("\(amountFormatter(amount: myNetTaxableIncomes.getTotal().toString(decPlaces: 4), locale: myLocale))")
+                        Text("\(getFormattedValue(amount: myNetTaxableIncomes.getTotal().toString(decPlaces: 4), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment))")
                     }
                     .font(myFont)
                 }
