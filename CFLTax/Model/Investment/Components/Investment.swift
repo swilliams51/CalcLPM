@@ -145,10 +145,10 @@ public class Investment {
     }
     
     private func isUnlockedRentalsCalculationValid() -> Bool {
-        if self.rent.getTotalNumberOfPayments() < 12 {
+        let minNoOfPayments = self.rent.getMinTotalNumberPayments(aFrequency: self.leaseTerm.paymentFrequency)
+        if self.rent.getTotalNumberOfPayments() < minNoOfPayments {
            return false
         }
-        
         
         if self.rent.allPaymentsAreLocked() == true {
             return false
