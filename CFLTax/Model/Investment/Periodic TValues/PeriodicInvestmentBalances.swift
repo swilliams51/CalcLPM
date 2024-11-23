@@ -41,7 +41,7 @@ public class PeriodicInvestmentBalances: Cashflows {
         var askDateIsLeaseDate = false
         
         for x in 0..<aLeaseTemplate.items.count {
-            if askDate == aLeaseTemplate.items[x].dueDate {
+            if aLeaseTemplate.items[x].dueDate.isEqualTo(date: askDate) {
                 askDateIsLeaseDate = true
                 break
             }

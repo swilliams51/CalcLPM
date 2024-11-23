@@ -92,8 +92,6 @@ extension RentView {
                     Text(groupToFirstText(aGroup: group))
                         .font(myFont)
                         .frame(width: 270, height: 20, alignment: .leading)
-                      
-                    
                         .onTapGesture {
                             self.selectedGroup = group
                             self.path.append(13)
@@ -104,7 +102,6 @@ extension RentView {
                     Text(groupToSecondText(aGroup: group))
                         .font(myFont)
                         .frame(width: 270, height: 20, alignment: .leading)
-                        
                         .onTapGesture {
                             self.selectedGroup = group
                             self.path.append(13)
@@ -116,7 +113,7 @@ extension RentView {
             Image(systemName: "chevron.right")
                 .frame(width: 20, height: 24, alignment: .trailing)
         }
-        //.contentShape(Rectangle())
+        .contentShape(Rectangle())
         .onTapGesture {
             self.selectedGroup = group
             self.path.append(13)

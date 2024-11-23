@@ -65,10 +65,10 @@ public class Cashflows {
         var idx:Int = 0
         
         for i in 0..<items.count {
-            if dateAsk == items[i].dueDate {
+            if dateAsk.isEqualTo(date: items[i].dueDate) {
                 idx = i
                 break
-            } else if dateAsk < items[i].dueDate {
+            } else if dateAsk.isLessThan(date: items[i].dueDate) {
                 if returnNextOnMatch == true {
                     idx = i - 1
                     break
@@ -90,7 +90,7 @@ public class Cashflows {
                         if x + y > items.count - 1 {
                             break
                         }
-                        if items[x].dueDate == items[x + y].dueDate {
+                        if items[x].dueDate.isEqualTo(date: items[x + y].dueDate) {
                             let newAmount: Decimal = items[x].amount.toDecimal() + items[x + y].amount.toDecimal()
                             items[x].amount = newAmount.toString(decPlaces: 8)
                             items.remove(at: x + y)
@@ -106,7 +106,7 @@ public class Cashflows {
         
         if items.count > 1 {
             for x in 0..<items.count - 1 {
-                if items[x].dueDate == items[x + 1].dueDate {
+                if items[x].dueDate.isEqualTo(date: items[x + 1].dueDate) {
                     consolidationIsValid = false
                     break
                 }
@@ -127,7 +127,7 @@ public class Cashflows {
         var foundValue: Decimal = 0.0
         
         for x in 0..<items.count {
-            if items[x].dueDate == dateAsk {
+            if items[x].dueDate.isEqualTo(date: dateAsk) {
                 foundValue = items[x].amount.toDecimal()
                 break
             }

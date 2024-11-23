@@ -12,7 +12,6 @@ struct InvestmentAmortizationView: View {
     @Binding var path: [Int]
     @Binding var isDark: Bool
     @Binding var currentFile: String
-    
     @State var myAmortizations: Amortizations = Amortizations()
     
     var body: some View {
@@ -20,9 +19,10 @@ struct InvestmentAmortizationView: View {
             InvestAmortHeaderView(name: "A/T Ending Balances", path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("\(currentFile)")
-                    .font(myFont)) {
+                    .font(myFont2)) {
                     ScrollView {
-                        Grid (alignment: .trailing, horizontalSpacing: 23, verticalSpacing: 10) {
+                        Grid (alignment: .trailing, horizontalSpacing: 30, verticalSpacing: 10)
+                        {
                             rateAndCostGridRow
                             amortHeaderGridRow
                             ForEach(myAmortizations.items) { item in
@@ -49,7 +49,7 @@ struct InvestmentAmortizationView: View {
             Text("Cost:")
             Text("1.00")
         }
-        .font(myFont)
+        .font(myFont2)
     }
     
     var amortHeaderGridRow: some View {
@@ -59,7 +59,7 @@ struct InvestmentAmortizationView: View {
             Text("Interest")
             Text("Balance")
         }
-        .font(myFont)
+        .font(myFont2)
         .bold()
     }
     
@@ -71,7 +71,7 @@ struct InvestmentAmortizationView: View {
             Text("\(expressedAsFactor(amount:item.endBalance))")
         }
         .gridColumnAlignment(.trailing)
-        .font(myFont)
+        .font(myFont2)
     }
     
     var amortTotalsGridRow: some View {
@@ -79,9 +79,8 @@ struct InvestmentAmortizationView: View {
             Text("Totals")
             Text("\(expressedAsFactor(amount: myAmortizations.totalCashflow))")
             Text("\(expressedAsFactor(amount: myAmortizations.totalInterest))")
-            
             Text("")
-        }.font(myFont)
+        }.font(myFont2)
     }
     
     private func myViewAsPct() {

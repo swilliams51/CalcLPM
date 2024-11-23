@@ -104,7 +104,7 @@ public class PeriodicYTDIncomes: Cashflows {
         var dateTo: Date = addOnePeriodToDate(dateStart: dateFrom, payPerYear: myFreq, dateRefer: dateRef, bolEOMRule: myEOMRule)
         var dateFiscal: Date = myFiscalYearEnd
         
-        if myBaseCommencementDate > myFiscalYearEnd {
+        if myBaseCommencementDate.isGreaterThan(date: myFiscalYearEnd) {
             dateFiscal = addNextFiscalYearEnd(aDateIn: myFiscalYearEnd)
         }
         
@@ -113,7 +113,7 @@ public class PeriodicYTDIncomes: Cashflows {
             while y <= aRent.groups[x].noOfPayments {
                 let currentBaseRent: Decimal = aRent.groups[x].amount.toDecimal()
                 if aRent.groups[x].timing == .advance {  //Rents are in advance
-                    if dateFrom <= dateFiscal {
+                    if dateFrom.isLessThanOrEqualTo(date: dateFiscal) {
                         ytdIncome = ytdIncome + currentBaseRent
                     } else {
                         dateFiscal = addNextFiscalYearEnd(aDateIn: dateFiscal)
@@ -125,7 +125,7 @@ public class PeriodicYTDIncomes: Cashflows {
                     if x == baseStart && y == 1 {
                         baseRentCF.items.append(Cashflow(dueDate: dateFrom, amount: "0.00"))
                     }
-                    if dateTo <= dateFiscal {
+                    if dateTo.isLessThanOrEqualTo(date: dateFiscal) {
                         ytdIncome = ytdIncome + currentBaseRent
                         baseRentCF.items.append(Cashflow(dueDate: dateTo, amount: ytdIncome.toString()))
                     } else if dateFrom <= dateFiscal {

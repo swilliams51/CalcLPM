@@ -67,3 +67,11 @@ public func getFormattedValue (amount: String, viewAsPercentOfCost: Bool, aInves
          return amountFormatter(amount: amount, locale: myLocale, places: places)
     }
 }
+
+public func basisPointsFormatter (basisPoints: Double, locale: Locale) -> String {
+    let strBasisPoints = basisPoints.toString(decPlaces: 0)
+    
+    return amountFormatter(amount: strBasisPoints, locale: locale, places: 0)
+    
+    
+}

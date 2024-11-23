@@ -62,7 +62,7 @@ public class FeeIncomes: Cashflows {
         dateStart = aFee.datePaid
         
         if aFee.feeType == .expense {
-            while currentFiscalDate < aMaturityDate {
+            while currentFiscalDate.isLessThan(date: aMaturityDate) {
                 let monthsInFiscalYear = monthsDifference(start: dateStart, end: currentFiscalDate, inclusive: true)
                 let expAmount = perMonthlyFee * Decimal(monthsInFiscalYear) * -1.0
                 let currentFiscalFeeExpense = Cashflow(dueDate: currentFiscalDate, amount: expAmount.toString(decPlaces: places))
@@ -85,7 +85,7 @@ public class FeeIncomes: Cashflows {
         let currentFiscalIncome = Cashflow(dueDate: currentFiscalDate, amount: aFee.amount)
         items.append(currentFiscalIncome)
         currentFiscalDate = addNextFiscalYearEnd(aDateIn: currentFiscalDate)
-        while currentFiscalDate <= aMaturityDate {
+        while currentFiscalDate.isLessThanOrEqualTo(date: aMaturityDate) {
             items.append(Cashflow(dueDate: currentFiscalDate, amount: "0.00"))
             currentFiscalDate = addNextFiscalYearEnd(aDateIn: currentFiscalDate)
         }

@@ -21,7 +21,7 @@ public class RentalCashflows: Cashflows {
         var rentAmount: String = "0.00"
         
         //Interim Rent
-        if aAsset.fundingDate != aLeaseTerm.baseCommenceDate {
+        if aAsset.fundingDate.isNotEqualTo(date: aLeaseTerm.baseCommenceDate) {
             dateStart = aAsset.fundingDate
             switch aRent.groups[0].paymentType {
                 case .dailyEquivAll:

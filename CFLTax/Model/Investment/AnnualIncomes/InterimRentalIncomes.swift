@@ -30,11 +30,11 @@ public class InterimRentalIncomes: Cashflows {
                 let interimRentExpense = Cashflow(dueDate: nextFiscalYearEnd, amount: strAmount)
                 items.append(interimRentExpense)
             } else {
-                if dateEnd <= nextFiscalYearEnd {
+                if dateEnd.isLessThanOrEqualTo(date: nextFiscalYearEnd) {
                     let interimRentExpense = Cashflow(dueDate: nextFiscalYearEnd, amount: strAmount)
                     items.append(interimRentExpense)
                 } else {
-                    if dateEnd > nextFiscalYearEnd {
+                    if dateEnd.isGreaterThan(date: nextFiscalYearEnd) {
                         let intDaysInPeriod = daysDiff(start: dateStart, end: dateEnd)
                         let intDaysInFiscal = daysDiff(start: dateStart, end: nextFiscalYearEnd)
                         let allocatedRent: Decimal = aRent.groups[0].amount.toDecimal() / Decimal(intDaysInPeriod) * Decimal(intDaysInFiscal)

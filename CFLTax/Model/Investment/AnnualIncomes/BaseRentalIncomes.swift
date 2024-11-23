@@ -44,7 +44,7 @@ public class BaseRentalIncomes: Cashflows {
                 while y < myGroups[x].noOfPayments {
                     if myGroups[x].timing == .advance { //rents are in advance
                         let dateFromPlusOne: Date = addOnePeriodToDate(dateStart: dateFrom, payPerYear: frequency, dateRefer: dateFrom, bolEOMRule: eomRule)
-                        if dateFromPlusOne <= nextFiscalYearEnd {
+                        if dateFromPlusOne.isLessThanOrEqualTo(date: nextFiscalYearEnd) {
                             fiscalIncome = fiscalIncome + myGroups[x].amount.toDecimal()
                         } else {
                             fiscalIncome = fiscalIncome + myGroups[x].amount.toDecimal()
@@ -54,9 +54,9 @@ public class BaseRentalIncomes: Cashflows {
                         }
                     } else {
                         let dateFromPlusOne: Date = addOnePeriodToDate(dateStart: dateFrom, payPerYear: frequency, dateRefer: dateFrom, bolEOMRule: eomRule)
-                        if dateFromPlusOne <= nextFiscalYearEnd {
+                        if dateFromPlusOne.isLessThanOrEqualTo(date: nextFiscalYearEnd) {
                             fiscalIncome = fiscalIncome + myGroups[x].amount.toDecimal()
-                        } else if dateFrom <= nextFiscalYearEnd {
+                        } else if dateFrom.isLessThanOrEqualTo(date: nextFiscalYearEnd) {
                             let proRataRent:Decimal = getProRataRent(dateStart: dateFrom, dateEnd: nextFiscalYearEnd, rentAmount: myGroups[x].amount.toDecimal(), aFrequency: frequency, baseCommence: baseCommence, aEOMRule: eomRule, aDayCountMethod: dayCountMethod)
                             
                             fiscalIncome = fiscalIncome + proRataRent

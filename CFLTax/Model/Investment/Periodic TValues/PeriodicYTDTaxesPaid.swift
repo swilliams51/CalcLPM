@@ -29,7 +29,7 @@ public class PeriodicYTDTaxesPaid: Cashflows {
         var x = 0
         
         while x < myCombinedCashflows.items[0].items.count {
-            if myCombinedCashflows.items[0].items[x].dueDate <= nextFiscalYearEnd {
+            if myCombinedCashflows.items[0].items[x].dueDate.isLessThanOrEqualTo(date: nextFiscalYearEnd) {
                 ytdTotal += myCombinedCashflows.items[0].items[x].amount.toDecimal() * -1.0
                 let periodicYTDTaxesPaid: Cashflow = Cashflow(dueDate: myCombinedCashflows.items[0].items[x].dueDate, amount: ytdTotal.toString(decPlaces: 4))
                 myTempCashflow.items.append(periodicYTDTaxesPaid)
@@ -54,7 +54,7 @@ public class PeriodicYTDTaxesPaid: Cashflows {
         var askDateIsLeaseDate = false
         
         for x in 0..<aLeaseTemplate.items.count {
-            if askDate == aLeaseTemplate.items[x].dueDate {
+            if aLeaseTemplate.items[x].dueDate.isEqualTo(date: askDate) {
                 askDateIsLeaseDate = true
                 break
             }

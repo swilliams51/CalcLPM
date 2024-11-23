@@ -76,7 +76,6 @@ extension Investment {
     }
     
     public func getEBOPremium_bps(aEBO: EarlyBuyout, aBaseYield: Decimal) -> Double {
-
         let eboYield: Decimal = solveForEBOYield(aEBO: aEBO)
         let eboPremium: Decimal = eboYield - aBaseYield
         let eboPremiumBps: Double = (eboPremium * 10000.00).toDouble()

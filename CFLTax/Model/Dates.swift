@@ -145,8 +145,6 @@ public func addNextFiscalYearEnd(aDateIn: Date) -> Date {
     let dateNew = Calendar.current.date(from: comps)!
     
     return dateNew
-    
-    
 }
 
 //MARK: - addPeriodsToDate
@@ -499,6 +497,65 @@ public func isDatePeriodic(compareDate: Date, askDate: Date, aFreq: Frequency, e
     }
     return bolIsPeriodic
 }
+
+public func areDatesEqual(date1: Date, date2: Date) -> Bool {
+    let day1 = getDayComponent(dateIn: date1)
+    let month1 = getMonthComponent(dateIn: date1)
+    let year1 = getYearComponent(dateIn: date1)
+    
+    let day2 = getDayComponent(dateIn: date2)
+    let month2 = getMonthComponent(dateIn: date2)
+    let year2 = getYearComponent(dateIn: date2)
+    
+    if year1 == year2 && month1 == month2 && day1 == day2 {
+        return true
+    } else {
+        return false
+    }
+}
+
+
+public func areDatesUnequal(date1: Date, date2: Date) -> Bool {
+    if !areDatesEqual(date1: date1, date2: date2) {
+        return true
+    } else {
+        return false
+    }
+}
+
+public func isDateLessThan(date1: Date, date2: Date) -> Bool {
+    let day1 = getDayComponent(dateIn: date1)
+    let month1 = getMonthComponent(dateIn: date1)
+    let year1 = getYearComponent(dateIn: date1)
+    
+    let day2 = getDayComponent(dateIn: date2)
+    let month2 = getMonthComponent(dateIn: date2)
+    let year2 = getYearComponent(dateIn: date2)
+    
+    if year1 < year2 || (year1 == year2 && month1 < month2) || (year1 == year2 && month1 == month2 && day1 < day2) {
+        return true
+    } else {
+        return false
+    }
+}
+
+public func isDateLessThanOrEqual(date1: Date, date2: Date) -> Bool {
+    if isDateLessThan(date1: date1, date2: date2) || areDatesEqual(date1: date1, date2: date2) {
+        return true
+    } else {
+        return false
+    }
+}
+
+public func isDateGreaterThan(date1: Date, date2: Date) -> Bool {
+    if !isDateLessThan(date1: date1, date2: date2) && !areDatesEqual(date1: date1, date2: date2) {
+        return true
+    } else {
+        return false
+    }
+}
+
+
 
 
 public func getTheMonth(mon: Int) -> String {

@@ -162,7 +162,7 @@ extension EarlyBuyoutView {
                     .font(myFont)
                     .foregroundColor(premiumIsSpecified ? defaultInactive : defaultCalculated)
                 Spacer()
-                Text("\(basisPoints, specifier: "%.0f") bps")
+                Text("\(basisPointsFormatter(basisPoints: basisPoints, locale: myLocale)) bps")
                     .font(myFont)
                     .foregroundColor(premiumIsSpecified ? defaultInactive : defaultCalculated)
             }

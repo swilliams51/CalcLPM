@@ -29,3 +29,56 @@ extension Date {
         return strMonth + " " + iDay + ", " + iYear
     }
 }
+
+extension Date {
+    func isEqualTo(date: Date) -> Bool {
+        if areDatesEqual(date1: self, date2: date) {
+            return true
+        } else {
+            return false
+        }
+        
+    }
+}
+
+extension Date {
+    func isLessThanOrEqualTo(date: Date) -> Bool {
+        if areDatesEqual(date1: self, date2: date) || isDateLessThan(date1: self, date2: date) {
+            return true
+        } else {
+            return false
+        }
+    }
+}
+
+extension Date {
+    func isGreaterThan(date: Date) -> Bool {
+        if isDateGreaterThan(date1: self, date2: date) {
+            return true
+        } else {
+            return false
+        }
+    }
+}
+
+extension Date {
+    func isNotEqualTo(date: Date) -> Bool {
+        if !areDatesEqual(date1: self, date2: date) {
+            return true
+        } else {
+            return false
+        }
+    }
+}
+
+extension Date {
+    func isLessThan(date: Date) -> Bool {
+        if isDateLessThan(date1: self, date2: date) {
+            return true
+        } else {
+            return false
+        }
+    }
+}
+
+
