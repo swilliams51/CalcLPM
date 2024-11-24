@@ -324,8 +324,8 @@ public class AnnualTaxableIncomes: CollCashflows {
         var firstDate: Date = myTaxPaymentDates[3]
         
         for x in 0..<myTaxPaymentDates.count {
-            if aStartDate <= myTaxPaymentDates[x] {
-               firstDate = myTaxPaymentDates[x]
+            if aStartDate.isLessThanOrEqualTo(date: myTaxPaymentDates[x]) {
+                firstDate = myTaxPaymentDates[x]
                 break
             }
         }

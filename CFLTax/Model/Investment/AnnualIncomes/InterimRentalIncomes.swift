@@ -53,7 +53,7 @@ public class InterimRentalIncomes: Cashflows {
         }
         
         nextFiscalYearEnd = addNextFiscalYearEnd(aDateIn: nextFiscalYearEnd)
-        while nextFiscalYearEnd <= finalFiscalYearEnd {
+        while nextFiscalYearEnd.isLessThanOrEqualTo(date: finalFiscalYearEnd) {
             let interimRentExpense = Cashflow(dueDate: nextFiscalYearEnd, amount: "0.00")
             items.append(interimRentExpense)
             nextFiscalYearEnd = addNextFiscalYearEnd(aDateIn: nextFiscalYearEnd)

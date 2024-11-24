@@ -34,14 +34,14 @@ public class CollCashflows {
                 while items[1].items.count > 0 {
                     var x = 0
                     while x < items[0].items.count {
-                        if items[1].items[0].dueDate < items[0].items[x].dueDate {
+                        if items[1].items[0].dueDate.isLessThan(date: items[0].items[x].dueDate) {
                             let myDate: Date = items[1].items[0].dueDate
                             let myAmount: String = items[1].items[0].amount
                             let newCashflow = Cashflow(dueDate: myDate, amount: myAmount)
                             items[0].items.insert(newCashflow, at: x)
                             items[1].items.remove(at: 0)
                             break
-                        } else if items[1].items[0].dueDate == items[0].items[x].dueDate { // occurs on same date
+                        } else if items[1].items[0].dueDate.isEqualTo(date: items[0].items[x].dueDate) { // occurs on same date
                             let myAmount: Decimal = (items[1].items[0].amount.toDecimal() + items[0].items[x].amount.toDecimal())
                             items[0].items[x].amount = myAmount.toString(decPlaces: 10)
                             items[1].items.remove(at: 0)
