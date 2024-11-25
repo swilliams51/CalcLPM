@@ -46,7 +46,6 @@ extension Investment{
             while iCount < 4 {
                 newFactor = mxbFactor(factor1: x1, value1: y1, factor2: x2, value2: y2)
                 let myBalance = getNPVAfterNewFactor_AT(aInvestment: tempInvestment, aFactor: newFactor, discountRate: yield)
-                //print("newFactor: \(newFactor), NPV: \(myBalance)")
                 
                 if abs(myBalance) < tolerance() {
                     break

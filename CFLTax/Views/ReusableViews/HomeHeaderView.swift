@@ -15,32 +15,17 @@ struct HomeHeaderView: View {
             Color.black.opacity(isDark ? 1.0 : 0.05)
                 .ignoresSafeArea()
             VStack {
-                backButtonItem
-                    .padding(.top, 20)
+                Spacer()
                 Text("Home")
                     .font(.largeTitle).fontWeight(.bold)
                     .foregroundStyle(Color("HeaderColor"))
-                    .padding()
+                    .padding(.top, 30)
+                    .padding(.bottom, 20)
             }
-           
-            
         }
         .frame(width: UIScreen.main.bounds.width, height: 75)
     }
-    
-    var backButtonItem: some View {
-        HStack {
-            Button {
-                print("")
-            } label: {
-                Image(systemName: "chevron.left")
-                Text("Back")
-            }
-            .foregroundColor(.clear)
-            .padding(.leading, 15)
-            Spacer()
-        }
-    }
+
 }
 
 #Preview {

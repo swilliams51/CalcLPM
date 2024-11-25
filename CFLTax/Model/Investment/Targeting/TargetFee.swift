@@ -117,7 +117,6 @@ extension Investment {
                 mxbFee = mxbFactor(factor1: x1, value1: y1, factor2: x2, value2: y2)
                 tempInvestment.fee.amount = mxbFee.toString()
                 let newNPV = getNPVAfterNewFee_AT(aInvestment: tempInvestment, discountRate: aTargetYield)
-                print("Count: \(iCounter): MxbFee: \(mxbFee) NPV: \(newNPV)")
                 if abs(newNPV) < toleranceLumpSums {
                     break
                 }

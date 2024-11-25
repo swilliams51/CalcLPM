@@ -162,7 +162,6 @@ public class DepreciationIncomes: Cashflows {
     
     func getFirstYearDeprecExpense (aBasis: Decimal, decFactor: Decimal) -> Decimal {
         let myBasis: Decimal = aBasis - bonusDepreciation
-        //print("\(bonusDepreciation.toString(decPlaces: 5))")
         let firstYearDeprec: Decimal = bonusDepreciation + (myBasis * decFactor * decMACRSFactor * decConvention)
         
         return firstYearDeprec
