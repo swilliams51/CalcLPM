@@ -21,4 +21,4 @@ public let alertInterimGroup: String = "To delete an Interim Payment Group go to
 public let alertFirstPaymentGroup: String = "The first Payment Group following a Interim Payment Group cannot be deleted. If an interim payment group does not exist then the Rent must include one payment group in which the number of payments is greater than 1!!"
 public let alertMaxTargetYield: String = "The Target Yield cannot exceed \(percentFormatter(percent:maximumYield, locale: myLocale, places: 2))!"
 public let alertMaxDiscountRate: String = "The Discount Rate for calculating the present value of Rents cannot exceed 20%!"
-public let alertYieldCalculationError = "There is one or more issues with the input parameters that will cause the yield calculation to produce either a negative value or a value greater than the maximum allowable yield. The current calculation has been terminated."
+public let alertCalculationError = "There is one or more issues with the input parameters that will cause the calculation to produce either a negative value or a value greater than the maximum amount allowable. Please review your inputs. The current calculation has been terminated."

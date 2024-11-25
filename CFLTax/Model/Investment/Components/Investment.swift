@@ -135,7 +135,9 @@ public class Investment {
         case .fee:
             return true
         case .residualValue:
-            return true
+            if isResidualCalculationValid(aTargetYield: self.economics.yieldTarget.toDecimal()) == false {
+                return false
+            }
         case .lessorCost:
             if isLessorCostCalculationValid() == false {
                 return false
@@ -186,6 +188,28 @@ public class Investment {
         let totalResidualValue: Decimal = tempInvestment.asset.residualValue.toDecimal()
         
         if totalResidualValue > totalOfPayments * 1.5 {
+            return false
+        }
+        
+        return true
+    }
+    
+    private func isResidualCalculationValid(aTargetYield: Decimal) -> Bool {
+        let tempInvestment: Investment = self.clone()
+        let minAmount: Decimal = 0.0
+        let maxAmount: Decimal = tempInvestment.asset.lessorCost.toDecimal()
+        
+        //If NPV > 0 when Residual = 0 then invalid (the residual cannot be less than 0)
+        tempInvestment.asset.residualValue = minAmount.toString(decPlaces: 4)
+        tempInvestment.setAfterTaxCashflows()
+        if tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: tempInvestment.economics.dayCountMethod) > 0.0 {
+            return false
+        }
+        //If NPV < 0 when Residual = Lessor Cost then invalid (the Residual cannot be greater than Lessor Cost)
+        tempInvestment.afterTaxCashflows.removeAll()
+        tempInvestment.asset.residualValue = maxAmount.toString(decPlaces: 4)
+        tempInvestment.setAfterTaxCashflows()
+        if tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: tempInvestment.economics.dayCountMethod) < 0.0 {
             return false
         }
         

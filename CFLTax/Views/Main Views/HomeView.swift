@@ -18,7 +18,7 @@ struct HomeView: View {
     @State var myTaxableIncomes: AnnualTaxableIncomes = AnnualTaxableIncomes()
     @State var isLoading: Bool = false
     @State private var myFeeAmortization: FeeIncomes = FeeIncomes()
-    @State private var isShowingYieldErrorAlert: Bool = false
+    @State private var isShowingCalculationErrorAlert: Bool = false
     @State private var currentFile: String = "File is New"
     @State private var maximumEBOAmount: Decimal = 0.0
     @State private var minimumEBOAmount: Decimal = 0.0
@@ -102,8 +102,8 @@ struct HomeView: View {
             .popover(isPresented: $showPop2) {
                 PopoverView(myHelp: $eboHelp, isDark: $isDark)
             }
-            .alert(isPresented: $isShowingYieldErrorAlert) {
-                Alert(title: Text("Yield Calculation Error"), message: Text(alertYieldCalculationError), dismissButton: .default(Text("OK")))
+            .alert(isPresented: $isShowingCalculationErrorAlert) {
+                Alert(title: Text("Calculation Error"), message: Text(alertCalculationError), dismissButton: .default(Text("OK")))
             }
         }
     }
@@ -268,7 +268,7 @@ struct HomeView: View {
             }
             self.path.append(25)
         } else {
-            self.isShowingYieldErrorAlert = true
+            self.isShowingCalculationErrorAlert = true
             self.isLoading = false
         }
     }
