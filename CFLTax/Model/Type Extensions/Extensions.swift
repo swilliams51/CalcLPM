@@ -27,6 +27,15 @@ extension Decimal {
     }
 }
 
+extension Decimal {
+    public func truncate(places: Int = 0) -> Double {
+        let string = self.toString(decPlaces: places)
+        let strDecimal = string.toDecimal()
+        let doubleOf = strDecimal.toDouble()
+        return doubleOf
+    }
+}
+
 extension Double {
     public func toInteger() -> Int {
         return Int(self)

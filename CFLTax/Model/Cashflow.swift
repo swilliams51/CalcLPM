@@ -155,7 +155,7 @@ public class Cashflows {
         var y: Decimal = ModXNPV(aDiscountRate: irr, aDayCountMethod: _DayCountMethod)
         var iCount: Int = 1
         
-        while abs(y) > tolerancePaymentAmounts {
+        while abs(y) > 0.005 {
             if y > 0.0 {
                 irr = incrementRateForPositive(x1: irr, y1: y, iCounter: iCount, _DayCountMethod: _DayCountMethod)
             } else {
@@ -174,7 +174,7 @@ public class Cashflows {
         var y: Decimal = ModXNPV(aDiscountRate: irr, aDayCountMethod: _DayCountMethod)
         var iCount: Int = 1
         
-        while abs(y) > tolerancePaymentAmounts {
+        while abs(y) > 0.005 {
             if y > 0.0 {
                 irr = incrementRateForNegative(x1: irr, y1: y, iCounter: iCount, _DayCountMethod: _DayCountMethod)
             } else {

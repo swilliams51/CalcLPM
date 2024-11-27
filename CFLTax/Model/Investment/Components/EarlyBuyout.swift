@@ -78,14 +78,17 @@ extension Investment {
     public func getEBOPremium_bps(aEBO: EarlyBuyout, aBaseYield: Decimal) -> Double {
         let eboYield: Decimal = solveForEBOYield(aEBO: aEBO)
         let eboPremium: Decimal = eboYield - aBaseYield
-        let eboPremiumBps: Double = (eboPremium * 10000.00).toDouble()
+        let eboPremiumBps: Decimal = (eboPremium * 10000.00)
+        let bps:Double = eboPremiumBps.truncate()
         
-        return eboPremiumBps
+        return bps
     }
     
     public func solveForEBOAmount(aEBO: EarlyBuyout, aBaseYield: Decimal, bpsSpread: Double) -> Decimal {
         let adder: Decimal = Decimal(bpsSpread) / 10000.00
+        print("Adder: \(adder)")
         let targetYield: Decimal = aBaseYield + adder
+        print("Target Yield: \(targetYield.toString(decPlaces: 6))")
         
         return solveForEBOAmount(aEBO: aEBO, aTargetYield: targetYield)
     }
@@ -93,23 +96,21 @@ extension Investment {
     public func solveForEBOAmount(aEBO: EarlyBuyout, aTargetYield: Decimal) -> Decimal {
         let myEBOInvestment: Investment = self.clone()
         let dateOfUnplanned: Date = aEBO.exerciseDate
-        let myPlannedIncome: Decimal = plannedIncome(aInvestment: myEBOInvestment, dateAsk: dateOfUnplanned)
-        myEBOInvestment.rent = eboRent(aInvestment: myEBOInvestment, chopDate: dateOfUnplanned)
-        myEBOInvestment.economics.yieldMethod = .MISF_AT
-        myEBOInvestment.economics.yieldTarget = aTargetYield.toString(decPlaces: 6)
-        myEBOInvestment.economics.solveFor = .residualValue
-        myEBOInvestment.calculate(plannedIncome: myPlannedIncome.toString(decPlaces: 5), unplannedDate: dateOfUnplanned)
-    
-        return myEBOInvestment.asset.residualValue.toDecimal()
+        let myPlannedIncome: Decimal = plannedIncome(aInvestment: self, dateAsk: dateOfUnplanned)
+        
+        myEBOInvestment.rent = eboRent(aInvestment: self, chopDate: dateOfUnplanned)
+        let myEBOAmount: Decimal = solveForEarlyBuyoutAmount(aEBOInvestment: myEBOInvestment, aTargetYield: aTargetYield, aPlannedIncome: myPlannedIncome, aUnplannedDate: dateOfUnplanned)
+        
+        return myEBOAmount
     }
     
     public func solveForEBOYield(aEBO: EarlyBuyout) -> Decimal {
         let myEBOInvestment: Investment = self.clone()
         let dateOfUnplanned: Date = myEBOInvestment.earlyBuyout.exerciseDate
-        let myPlannedIncome: Decimal = plannedIncome(aInvestment: myEBOInvestment, dateAsk: dateOfUnplanned)
+        let myPlannedIncome: Decimal = plannedIncome(aInvestment: self, dateAsk: dateOfUnplanned)
+       
+        myEBOInvestment.rent = eboRent(aInvestment: self, chopDate: dateOfUnplanned)
         
-        myEBOInvestment.rent = eboRent(aInvestment: myEBOInvestment, chopDate: dateOfUnplanned)
-    
         myEBOInvestment.asset.residualValue = aEBO.amount
         myEBOInvestment.economics.solveFor = .yield
         myEBOInvestment.economics.yieldMethod = .MISF_AT
@@ -204,9 +205,9 @@ extension Investment {
     public func getEBO_ATCashflows(aEBO: EarlyBuyout) -> Cashflows {
         let myEBOInvestment: Investment = self.clone()
         let dateOfUnplanned: Date = myEBOInvestment.earlyBuyout.exerciseDate
-        let myPlannedIncome: Decimal = plannedIncome(aInvestment: myEBOInvestment, dateAsk: dateOfUnplanned)
+        let myPlannedIncome: Decimal = plannedIncome(aInvestment: self, dateAsk: dateOfUnplanned)
         
-        myEBOInvestment.rent = eboRent(aInvestment: myEBOInvestment, chopDate: dateOfUnplanned)
+        myEBOInvestment.rent = eboRent(aInvestment: self, chopDate: dateOfUnplanned)
         myEBOInvestment.asset.residualValue = aEBO.amount
         myEBOInvestment.setAfterTaxCashflows(plannedIncome: myPlannedIncome.toString(decPlaces: 5), unplannedDate: dateOfUnplanned)
         let myEBO_ATCF: Cashflows = myEBOInvestment.afterTaxCashflows

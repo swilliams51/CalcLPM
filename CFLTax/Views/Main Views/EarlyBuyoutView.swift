@@ -181,6 +181,7 @@ extension EarlyBuyoutView {
             Spacer()
             Stepper("", value: $basisPoints, in: 0...maxEBOSpread.toDouble(), step: 1, onEditingChanged: { _ in
                 self.sliderMoved = true
+                
             }).labelsHidden()
             .transformEffect(.init(scaleX: 1.0, y: 0.9))
         }

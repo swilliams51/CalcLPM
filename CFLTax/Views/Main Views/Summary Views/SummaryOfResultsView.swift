@@ -174,7 +174,7 @@ extension SummaryOfResultsView {
             Spacer()
             Image(systemName: "chevron.right")
         }
-        .foregroundColor(myInvestment.earlyBuyoutExists ? .black : .gray)
+        .foregroundColor(myInvestment.earlyBuyoutExists ? Color("InvestChangedFalse") : Color("InvestChangedTrue"))
         .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {

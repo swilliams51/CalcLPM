@@ -50,7 +50,7 @@ extension Investment{
                 mxbCost = mxbFactor(factor1: x1, value1: y1, factor2: x2, value2: y2)
                 tempInvestment.asset.lessorCost = mxbCost.toString()
                 let newNPV = getNPVAfterNewCost_AT(aInvestment: tempInvestment, aDiscountRate: yield)
-                print("Count: \(iCounter): MxbCost: \(mxbCost) NPV: \(newNPV)")
+
                 if abs(newNPV) < toleranceLumpSums {
                     break
                 }
