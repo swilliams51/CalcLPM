@@ -10,7 +10,7 @@ import SwiftUI
 struct HomeView: View {
     @State public var myInvestment: Investment = Investment(aFile: sampleFile, resetDates: true)
     @State public var path: [Int] = [Int]()
-    @State public var isDark: Bool = false
+    @State public var isDark: Bool = true
     @State var selectedGroup: Group = Group()
     @State var index: Int = 0
     @State var myDepreciationSchedule: DepreciationIncomes = DepreciationIncomes()
@@ -59,12 +59,6 @@ struct HomeView: View {
                         .scaleEffect(3)
                 }
             }
-            
-            
-            .environment(\.colorScheme, isDark ? .dark : .light)
-            .navigationDestination(for: Int.self) { selectedView in
-                ViewsManager(myInvestment: myInvestment, myDepreciationSchedule: myDepreciationSchedule, myRentalSchedule: myRentalSchedule, myTaxableIncomes: myTaxableIncomes, myFeeAmortization: myFeeAmortization, path: $path, isDark: $isDark, selectedGroup: $selectedGroup, currentFile: $currentFile, minimumEBOAmount: $minimumEBOAmount, maximumEBOAmount: $maximumEBOAmount, selectedView: selectedView)
-            }
             .toolbar{
                 ToolbarItem(placement: .bottomBar) {
                     Menu(content: {
@@ -85,6 +79,10 @@ struct HomeView: View {
                             .imageScale(.large)
                     })
                 }
+            }
+            .environment(\.colorScheme, isDark ? .dark : .light)
+            .navigationDestination(for: Int.self) { selectedView in
+                ViewsManager(myInvestment: myInvestment, myDepreciationSchedule: myDepreciationSchedule, myRentalSchedule: myRentalSchedule, myTaxableIncomes: myTaxableIncomes, myFeeAmortization: myFeeAmortization, path: $path, isDark: $isDark, selectedGroup: $selectedGroup, currentFile: $currentFile, minimumEBOAmount: $minimumEBOAmount, maximumEBOAmount: $maximumEBOAmount, selectedView: selectedView)
             }
             .onAppear{
                 self.isLoading = false
@@ -310,7 +308,6 @@ extension HomeView {
                 removeEBOItem
             }
         }
-       
     }
     
     var removeFeeItem: some View {

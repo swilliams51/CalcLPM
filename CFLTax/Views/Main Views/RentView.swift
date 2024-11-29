@@ -17,6 +17,8 @@ struct RentView: View {
     @State var noOfPayments: Int = 0
     @State var totalRent: String = "0.00"
     @State var interimExists: Bool = false
+    @State var showAlert: Bool = false
+    @State var showAlert2: Bool = false
     
     var body: some View {
         VStack {
@@ -61,6 +63,12 @@ struct RentView: View {
                 self.interimExists = true
             }
         }
+        .alert(isPresented: $showAlert) {
+            Alert(title: Text("Maximum Base Term Exceeded"), message: Text(alertMaxBaseTerm), dismissButton: .default(Text("OK")))
+        }
+        .alert(isPresented: $showAlert2) {
+            Alert(title: Text("Applied Structure Warning"), message: Text(alertMaxBaseTerm), dismissButton: .default(Text("OK")))
+        }
     }
 }
 
@@ -70,16 +78,17 @@ struct RentView: View {
 
 
 extension RentView {
-    private func addNewGroup () {
+    private func addNewGroup() {
         let idx = myInvestment.rent.groups.count - 1
         let maxNoPayments = myInvestment.rent.getNumberOfPaymentsForNewGroup(aGroup: myInvestment.rent.groups[idx], aFrequency: myInvestment.leaseTerm.paymentFrequency, eomRule: myInvestment.leaseTerm.endOfMonthRule, referDate: myInvestment.leaseTerm.baseCommenceDate)
+        
         if maxNoPayments > 0 {
             var newGroup = myInvestment.rent.groups[idx].copyGroup()
             newGroup.noOfPayments = maxNoPayments
             self.myInvestment.rent.addGroup(groupToAdd: newGroup)
             self.myInvestment.resetFirstGroup(isInterim: interimExists)
         } else {
-            print("alert")
+            self.showAlert.toggle()
         }
     }
 }
@@ -224,8 +233,7 @@ extension RentView {
     private var firstAndLast: some View {
         Button(action: {
             if self.myInvestment.rent.structureCanBeApplied(freq: myInvestment.leaseTerm.paymentFrequency) == false {
-//                alertTitle = alertForStructureWarning()
-//                showAlert.toggle()
+                showAlert2.toggle()
             } else {
                 self.myInvestment.rent.firstAndLast(freq: myInvestment.leaseTerm.paymentFrequency, baseCommence: myInvestment.leaseTerm.baseCommenceDate, EOMRule: myInvestment.leaseTerm.endOfMonthRule)
                 //solveForRate()
@@ -239,11 +247,9 @@ extension RentView {
     private var firstAndLastTwo: some View {
         Button(action: {
             if self.myInvestment.rent.structureCanBeApplied(freq: myInvestment.leaseTerm.paymentFrequency) == false {
-//                alertTitle = alertForStructureWarning()
-//                showAlert.toggle()
+                self.showAlert2.toggle()
             } else {
                 self.myInvestment.rent.firstAndLastTwo(freq: myInvestment.leaseTerm.paymentFrequency, baseCommence: myInvestment.leaseTerm.baseCommenceDate, EOMRule: myInvestment.leaseTerm.endOfMonthRule)
-             
             }
         }) {
             Label("1stAndLastTwo", systemImage: "arrowshape.turn.up.backward.2")
@@ -254,12 +260,10 @@ extension RentView {
     private var lowHigh: some View {
         Button(action: {
             if self.myInvestment.rent.structureCanBeApplied(freq: myInvestment.leaseTerm.paymentFrequency) == false {
-//                alertTitle = alertForStructureWarning()
-//                showAlert.toggle()
+                self.showAlert2.toggle()
             } else {
                 self.myInvestment.rent.unevenPayments(lowHigh: true, freq: myInvestment.leaseTerm.paymentFrequency, baseCommence: myInvestment.leaseTerm.baseCommenceDate, EOMRule: myInvestment.leaseTerm.endOfMonthRule)
                 self.totalRent = myInvestment.rent.getTotalAmountOfPayments(aFreq: myInvestment.leaseTerm.paymentFrequency, aDayCountMethod: myInvestment.economics.dayCountMethod).toString(decPlaces: 4)
-
             }
         }) {
             Label("Low-High", systemImage: "arrow.up.right")
@@ -270,10 +274,9 @@ extension RentView {
     private var highLow: some View {
         Button(action: {
             if self.myInvestment.rent.structureCanBeApplied(freq: myInvestment.leaseTerm.paymentFrequency) == false  {
-                
+                self.showAlert2.toggle()
             } else {
                 self.myInvestment.rent.unevenPayments(lowHigh: false, freq: myInvestment.leaseTerm.paymentFrequency, baseCommence: myInvestment.leaseTerm.baseCommenceDate, EOMRule: myInvestment.leaseTerm.endOfMonthRule)
-               
             }
         }) {
             Label("High-Low", systemImage: "arrow.down.right")
