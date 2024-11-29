@@ -25,9 +25,9 @@ class PeriodicArrearsRents: Cashflows {
             dateStart = aAsset.fundingDate
             switch aRent.groups[0].paymentType {
                 case .dailyEquivAll:
-                    rentAmount = getDailyRentForAll(aRent: aRent, aFreq: aLeaseTerm.paymentFrequency).toString(decPlaces: 4)
+                rentAmount = getDailyRentForAll(aRent: aRent, aFreq: aLeaseTerm.paymentFrequency, aDayCountMethod: aInvestment.economics.dayCountMethod).toString(decPlaces: 4)
                 case .dailyEquivNext:
-                    rentAmount = getDailyRentForNext(aRent: aRent, aFreq: aLeaseTerm.paymentFrequency).toString(decPlaces: 4)
+                    rentAmount = getDailyRentForNext(aRent: aRent, aFreq: aLeaseTerm.paymentFrequency, aDayCountMethod: aInvestment.economics.dayCountMethod).toString(decPlaces: 4)
                 default :
                     rentAmount = aRent.groups[0].amount
             }

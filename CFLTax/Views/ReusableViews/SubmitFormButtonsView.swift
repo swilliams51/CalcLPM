@@ -72,5 +72,5 @@ struct FormSubmitButton: View {
     
 
 #Preview {
-    SubmitFormButtonsView(cancelName: "Delete", doneName: "Submit", cancel: {}, done: {}, isFocused: false, isDark: .constant(false))
+    SubmitFormButtonsView(cancelName: "Delete", doneName: "Submit", cancel: {}, done: {}, isFocused: false, isDark: .constant(true))
 }

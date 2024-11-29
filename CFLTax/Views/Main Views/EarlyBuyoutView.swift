@@ -53,7 +53,7 @@ struct EarlyBuyoutView: View {
         VStack {
             MenuHeaderView(name: "Early Buyout", path: $path, isDark: $isDark)
             Form {
-                Section (header: Text("Exercise Date").font(.footnote), footer: Text("Full Term MISF A/T Yield: \(percentFormatter(percent: baseYield.toString(decPlaces: 5), locale: myLocale, places: 2))")) {
+                Section (header: Text("Exercise Date").font(.footnote), footer: Text("Full Term MISF A/T Yield: \(percentFormatter(percent: baseYield.toString(decPlaces: 5), locale: myLocale, places: 3))")) {
                     eboTermInMonsRow
                     exerciseDateRow
                 }

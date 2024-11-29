@@ -213,7 +213,8 @@ extension FeeView {
             self.myFee.amount = "0.00"
         }
         
-        if isAmountValid(strAmount: myFee.amount, decLow: 0.0, decHigh: maximumLessorCost.toDecimal(), inclusiveLow: true, inclusiveHigh: true) == false {
+        let maximumFee: Decimal = myInvestment.asset.lessorCost.toDecimal() * maximumFeePercent.toDecimal()
+        if isAmountValid(strAmount: myFee.amount, decLow: 0.0, decHigh: maximumFee, inclusiveLow: true, inclusiveHigh: true) == false {
             self.myFee.amount = self.amountOnEntry
             alertTitle = alertFeeAmount
             showAlert.toggle()

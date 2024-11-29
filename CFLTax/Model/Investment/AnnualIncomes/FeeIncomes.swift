@@ -24,21 +24,21 @@ public class FeeIncomes: Cashflows {
         let aFiscalMonth: Int = aInvestment.taxAssumptions.fiscalMonthEnd.rawValue
         
         if feeAmortizationMethod == .daily {
-            createTable_Daily(aFee: aFee, aMaturityDate: aMaturityDate, aFiscalMonth: aFiscalMonth)
+            createTable_Daily(aInvestment: aInvestment, aFee: aFee, aMaturityDate: aMaturityDate, aFiscalMonth: aFiscalMonth)
         } else {
             createTable_Monthly(aFee: aFee, aMaturityDate: aMaturityDate, aFiscalMonth: aFiscalMonth)
         }
     }
     
-    private func createTable_Daily (aFee: Fee, aMaturityDate: Date, aFiscalMonth: Int) {
+    private func createTable_Daily (aInvestment: Investment, aFee: Fee, aMaturityDate: Date, aFiscalMonth: Int) {
         currentFiscalDate = getFiscalYearEnd(askDate: aFee.datePaid, fiscalMonthEnd: aFiscalMonth)
-        daysInLease = daysDiff(start: aFee.datePaid, end: aMaturityDate)
+        daysInLease = dayCount(aDate1: aFee.datePaid, aDate2: aMaturityDate, aDayCount: aInvestment.economics.dayCountMethod)
         perDiemFee = aFee.amount.toDecimal() / Decimal(daysInLease)
         dateStart = aFee.datePaid
         
         if aFee.feeType == .expense {
             while currentFiscalDate < aMaturityDate {
-                let daysInFiscal = daysDiff(start: dateStart, end: currentFiscalDate)
+                let daysInFiscal = dayCount(aDate1: dateStart, aDate2: currentFiscalDate, aDayCount: aInvestment.economics.dayCountMethod)
                 let expAmount = perDiemFee * Decimal(daysInFiscal) * -1.0
                 let currentFiscalFeeExpense: Cashflow = Cashflow(dueDate: currentFiscalDate, amount: expAmount.toString(decPlaces: places))
                 items.append(currentFiscalFeeExpense)
@@ -46,7 +46,7 @@ public class FeeIncomes: Cashflows {
                 currentFiscalDate = addNextFiscalYearEnd(aDateIn: currentFiscalDate)
             }
             
-            let daysInLastFiscal = daysDiff(start: dateStart, end: aMaturityDate)
+            let daysInLastFiscal = dayCount(aDate1: dateStart, aDate2: aMaturityDate, aDayCount: aInvestment.economics.dayCountMethod)
             let amount = perDiemFee * Decimal(daysInLastFiscal) * -1.0
             let lastFiscalIncome: Cashflow = Cashflow(dueDate: currentFiscalDate, amount: amount.toString(decPlaces: places))
             items.append(lastFiscalIncome)

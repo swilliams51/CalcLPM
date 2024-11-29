@@ -56,7 +56,7 @@ struct RentView: View {
         .navigationBarBackButtonHidden(true)
         .onAppear{
             self.noOfPayments = myInvestment.rent.getTotalNumberOfPayments()
-            self.totalRent = myInvestment.rent.getTotalAmountOfPayments(aFreq: myInvestment.leaseTerm.paymentFrequency).toString(decPlaces: 2)
+            self.totalRent = myInvestment.rent.getTotalAmountOfPayments(aFreq: myInvestment.leaseTerm.paymentFrequency, aDayCountMethod: myInvestment.economics.dayCountMethod).toString(decPlaces: 2)
             if myInvestment.rent.interimExists() {
                 self.interimExists = true
             }
@@ -183,7 +183,7 @@ extension RentView {
                 .font(myFont)
                 .frame(width: 100, height: 20, alignment: .leading)
             Spacer()
-            Text("\(amountFormatter(amount: myInvestment.rent.getTotalAmountOfPayments(aFreq: myInvestment.leaseTerm.paymentFrequency).toString(), locale: myLocale))")
+            Text("\(amountFormatter(amount: myInvestment.rent.getTotalAmountOfPayments(aFreq: myInvestment.leaseTerm.paymentFrequency, aDayCountMethod: myInvestment.economics.dayCountMethod).toString(), locale: myLocale))")
                 .font(myFont)
                 .frame(width: 120, height: 20, alignment: .trailing)
         }
@@ -258,7 +258,7 @@ extension RentView {
 //                showAlert.toggle()
             } else {
                 self.myInvestment.rent.unevenPayments(lowHigh: true, freq: myInvestment.leaseTerm.paymentFrequency, baseCommence: myInvestment.leaseTerm.baseCommenceDate, EOMRule: myInvestment.leaseTerm.endOfMonthRule)
-                self.totalRent = myInvestment.rent.getTotalAmountOfPayments(aFreq: myInvestment.leaseTerm.paymentFrequency).toString(decPlaces: 4)
+                self.totalRent = myInvestment.rent.getTotalAmountOfPayments(aFreq: myInvestment.leaseTerm.paymentFrequency, aDayCountMethod: myInvestment.economics.dayCountMethod).toString(decPlaces: 4)
 
             }
         }) {

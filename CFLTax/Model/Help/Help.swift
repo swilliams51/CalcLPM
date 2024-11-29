@@ -109,6 +109,8 @@ let defaultNewLeaseHelp = Help(title: "Default New Lease", instruction: "When cr
 
 let defaultSaveCurrentHelp = Help(title: "Save Current", instruction: "This option allows the user to save the current Lease as the default parameters for a new Lease when the \"File/New\" option on the File Menu Screen is selected. Note, that the file saving procedure will remove any interim term, any Fee or any Early Buyout from the saved file. This option will not take effect until the option above has been toggled to \"Use Saved\".")
 
- let pvOneHelp = Help(title: "PV1", instruction: "This amount is equal to the present value of the Rentals discounted at the Discount Rate as shown in the Economics screen.")
+let pvOneHelp = Help(title: "PV1", instruction: "This amount is equal to the present value of the Rentals discounted at the Discount Rate as shown in the Economics screen.")
 
 let pvTwoHelp = Help(title: "PV2", instruction: "This amount is equal the sum of (1) and (2), where (1) is the present value of the Rentals and (2) is the present value of the amount of Residual Value that is guaranteed by the Lessee.  Both amounts are discounted at the Discount Rate as shown in the Economics screen.")
+
+let pvImplicitHelp = Help(title: "PV @ Implicit Rate", instruction: "This amount is equal to the sum of (1) and (2), where (1) is the present value of the Rentals and (2) is the present value of the amount of Residual Value that is guaranteed by the Lessee.  Both amounts are discounted at the Implicit Rate as shown above.")

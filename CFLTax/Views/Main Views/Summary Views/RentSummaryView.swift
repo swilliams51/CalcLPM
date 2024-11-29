@@ -15,6 +15,7 @@ struct RentSummaryView: View {
     
     @State private var viewAsPctOfCost: Bool = false
     @State var implicitRate: String = "0.00"
+    @State var presentValue: String = "0.00"
     @State var presentValue1: String = "0.00"
     @State var presentValue2: String = "0.00"
     @State var discountRate: String = "0.00"
@@ -27,6 +28,8 @@ struct RentSummaryView: View {
     @State private var payHelp1 = pvOneHelp
     @State private var showPop2: Bool = false
     @State private var payHelp2 = pvTwoHelp
+    @State private var showPop3: Bool = false
+    @State private var payHelp3 = pvImplicitHelp
     
     
     //@State var lineHeight: CGFloat = 12
@@ -36,8 +39,9 @@ struct RentSummaryView: View {
         VStack {
             ReportHeaderView(name: "Rentals", viewAsPct: myViewAsPct, path: $path, isDark: $isDark)
             Form {
-                Section(header: Text("Statistics")) {
+                Section(header: Text("Accounting")) {
                     implicitRateItem
+                    pvAtImplicitRateItem
                 }
                 
                 Section(header: Text("Present Values")) {
@@ -58,9 +62,11 @@ struct RentSummaryView: View {
         .navigationBarBackButtonHidden(true)
         .onAppear {
             self.implicitRate = myInvestment.getImplicitRate().toString(decPlaces: 6)
-            self.presentValue1 = myInvestment.getPVOfRents().toString(decPlaces: 6)
-            self.presentValue2 = myInvestment.getPVOfObligations().toString(decPlaces: 6)
             self.discountRate = myInvestment.economics.discountRateForRent
+            self.presentValue = myInvestment.getPVOfObligations(aDiscountRate: implicitRate.toDecimal()).toString(decPlaces: 6)
+            self.presentValue1 = myInvestment.getPVOfRents().toString(decPlaces: 6)
+            self.presentValue2 = myInvestment.getPVOfObligations(aDiscountRate: discountRate.toDecimal()).toString(decPlaces: 6)
+           
             for x in 0..<myInvestment.rent.groups.count {
                 let strAmount: String = myInvestment.rent.groups[x].amount
                 self.amounts.append(strAmount)
@@ -68,6 +74,9 @@ struct RentSummaryView: View {
         }
         .popover(isPresented: $showPop) {
             PopoverView(myHelp: $payHelp, isDark: $isDark)
+        }
+        .popover(isPresented: $showPop3 ) {
+            PopoverView(myHelp: $payHelp3, isDark: $isDark)
         }
         .popover(isPresented: $showPop1) {
             PopoverView(myHelp: $payHelp1, isDark: $isDark)
@@ -96,9 +105,9 @@ struct RentSummaryView: View {
         
         if myInvestment.rent.groups[index].isInterim {
             if myInvestment.rent.groups[index].paymentType == .dailyEquivNext {
-                strAmount = getDailyRentForNext(aRent: myInvestment.rent, aFreq: myInvestment.leaseTerm.paymentFrequency).toString(decPlaces: 8)
+                strAmount = getDailyRentForNext(aRent: myInvestment.rent, aFreq: myInvestment.leaseTerm.paymentFrequency, aDayCountMethod: myInvestment.economics.dayCountMethod).toString(decPlaces: 8)
             } else if myInvestment.rent.groups[index].paymentType == .dailyEquivAll{
-                strAmount = getDailyRentForAll(aRent: myInvestment.rent, aFreq: myInvestment.leaseTerm.paymentFrequency).toString(decPlaces: 8)
+                strAmount = getDailyRentForAll(aRent: myInvestment.rent, aFreq: myInvestment.leaseTerm.paymentFrequency, aDayCountMethod: myInvestment.economics.dayCountMethod).toString(decPlaces: 8)
             }
         }
         
@@ -118,13 +127,28 @@ extension RentSummaryView {
             Image(systemName: "questionmark.circle")
                 .foregroundColor(Color.theme.accent)
                 .onTapGesture {
-                    self.showPop = true
+                    self.showPop1 = true
                 }
             Spacer()
             Text("\(percentFormatter(percent: implicitRate, locale: myLocale, places: 3))")
                 .font(myFont)
         }
         .frame(width: UIScreen.main.bounds.width * 0.8, height: frameHeight)
+    }
+    
+    var pvAtImplicitRateItem: some View {
+        HStack{
+            Text("PV @ Implicit Rate:")
+                    .font(myFont)
+            Image(systemName: "questionmark.circle")
+                .foregroundColor(Color.theme.accent)
+                .onTapGesture {
+                    self.showPop3 = true
+                }
+            Spacer()
+            Text("\(getFormattedValue(amount: presentValue, viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
+                .font(myFont)
+        }
     }
     
     var presentValueItem: some View {

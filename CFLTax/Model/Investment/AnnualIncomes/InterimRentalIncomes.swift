@@ -24,7 +24,7 @@ public class InterimRentalIncomes: Cashflows {
         let dateEnd: Date = aRent.groups[0].endDate
         
         if aRent.groups[0].isInterim == true {
-            let strAmount: String = getInterimAmount(aRent: aRent, interimAmount: aRent.groups[0].amount, aFreq: aFrequency)
+            let strAmount: String = getInterimAmount(aInvestment: aInvestment, aRent: aRent, interimAmount: aRent.groups[0].amount, aFreq: aFrequency)
             
             if aRent.groups[0].timing == .advance {
                 let interimRentExpense = Cashflow(dueDate: nextFiscalYearEnd, amount: strAmount)
@@ -35,8 +35,8 @@ public class InterimRentalIncomes: Cashflows {
                     items.append(interimRentExpense)
                 } else {
                     if dateEnd.isGreaterThan(date: nextFiscalYearEnd) {
-                        let intDaysInPeriod = daysDiff(start: dateStart, end: dateEnd)
-                        let intDaysInFiscal = daysDiff(start: dateStart, end: nextFiscalYearEnd)
+                        let intDaysInPeriod = dayCount(aDate1: dateStart, aDate2: dateEnd, aDayCount: aInvestment.economics.dayCountMethod)
+                        let intDaysInFiscal = dayCount(aDate1: dateStart, aDate2: nextFiscalYearEnd, aDayCount: aInvestment.economics.dayCountMethod)
                         let allocatedRent: Decimal = aRent.groups[0].amount.toDecimal() / Decimal(intDaysInPeriod) * Decimal(intDaysInFiscal)
                         var interimRentExpense = Cashflow(dueDate: nextFiscalYearEnd, amount: allocatedRent.toString(decPlaces: 10))
                         items.append(interimRentExpense)
@@ -60,12 +60,12 @@ public class InterimRentalIncomes: Cashflows {
         }
     }
     
-    private func getInterimAmount(aRent: Rent, interimAmount: String, aFreq: Frequency) -> String {
+    private func getInterimAmount(aInvestment: Investment, aRent: Rent, interimAmount: String, aFreq: Frequency) -> String {
         if interimAmount == "CALCULATED" {
             if aRent.groups[0].paymentType == .dailyEquivNext {
-                return getDailyRentForNext(aRent: aRent, aFreq: aFreq).toString(decPlaces: 10)
+                return getDailyRentForNext(aRent: aRent, aFreq: aFreq, aDayCountMethod: aInvestment.economics.dayCountMethod).toString(decPlaces: 4)
             } else {
-                return getDailyRentForAll(aRent: aRent, aFreq: aFreq).toString(decPlaces: 10)
+                return getDailyRentForAll(aRent: aRent, aFreq: aFreq, aDayCountMethod: aInvestment.economics.dayCountMethod).toString(decPlaces: 4)
             }
         } else {
             return interimAmount

@@ -99,7 +99,7 @@ public struct Rent {
         return runTotalPayments
     }
 
-    public func getTotalAmountOfPayments(aFreq: Frequency) -> Decimal {
+    public func getTotalAmountOfPayments(aFreq: Frequency, aDayCountMethod: DayCountMethod) -> Decimal {
         var runTotalAmount: Decimal = 0.00
         var amount:Decimal = 0.0
         var counter:Int = 0
@@ -107,9 +107,9 @@ public struct Rent {
         if groups[0].isInterim == true {
             if groups[0].amount == "CALCULATED" {
                 if groups[0].paymentType == .dailyEquivAll {
-                    amount = getDailyRentForAll(aRent: self, aFreq: aFreq)
+                    amount = getDailyRentForAll(aRent: self, aFreq: aFreq, aDayCountMethod: aDayCountMethod)
                 } else {
-                    amount = getDailyRentForNext(aRent: self, aFreq: aFreq)
+                    amount = getDailyRentForNext(aRent: self, aFreq: aFreq, aDayCountMethod: aDayCountMethod)
                 }
             } else {
                 amount = groups[0].amount.toDecimal()
@@ -189,17 +189,17 @@ public struct Rent {
 }
 
 
-public func getDailyRentForNext(aRent: Rent, aFreq: Frequency) -> Decimal {
+public func getDailyRentForNext(aRent: Rent, aFreq: Frequency, aDayCountMethod: DayCountMethod) -> Decimal {
     let nextAmount:Decimal = aRent.groups[1].amount.toDecimal()
     let daysInPeriod: Decimal = 360.0 / Decimal(aFreq.rawValue)
-    let daysInInterim = daysDiff(start: aRent.groups[0].startDate, end: aRent.groups[0].endDate)
+    let daysInInterim = dayCount(aDate1: aRent.groups[0].startDate, aDate2: aRent.groups[0].endDate, aDayCount: aDayCountMethod)
     let dailyRent = nextAmount / daysInPeriod
     let interimRent = dailyRent * daysInInterim.toString().toDecimal()
     
     return interimRent
 }
 
-public func getDailyRentForAll (aRent: Rent, aFreq: Frequency) -> Decimal {
+public func getDailyRentForAll (aRent: Rent, aFreq: Frequency, aDayCountMethod: DayCountMethod) -> Decimal {
     var runTotalAmount: Decimal = 0.00
     
     for x in 1..<aRent.groups.count {
@@ -208,9 +208,9 @@ public func getDailyRentForAll (aRent: Rent, aFreq: Frequency) -> Decimal {
         let totalAmount = decAmount * decNumber
         runTotalAmount = runTotalAmount + totalAmount
     }
-    let daysInLease = daysDiff(start: aRent.groups[0].startDate, end: aRent.groups[aRent.groups.count - 1].endDate)
+    let daysInLease = dayCount(aDate1: aRent.groups[0].startDate, aDate2: aRent.groups[aRent.groups.count - 1].endDate, aDayCount: aDayCountMethod)
     let dailyRent = runTotalAmount / daysInLease.toString().toDecimal()
-    let daysInInterim = daysDiff(start: aRent.groups[0].startDate, end: aRent.groups[0].endDate)
+    let daysInInterim = dayCount(aDate1: aRent.groups[0].startDate, aDate2: aRent.groups[0].endDate, aDayCount: aDayCountMethod)
     let interimRent = dailyRent * daysInInterim.toString().toDecimal()
 
     return interimRent

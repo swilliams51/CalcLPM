@@ -16,6 +16,7 @@ public let myFont2: Font = .footnote
 public let maximumLessorCost: String = "9999999.99"
 public let minimumLessorCost: String = "999.99"
 public let maximumYield: String = "0.15"
+public let maximumFeePercent: String = "0.15"
 public let maxEBOSpread: Int = 500
 public let feeAmortizationMethod: FeeAmortizationMethod = .monthly
 public let maxBaseTerm: Int = 180

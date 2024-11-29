@@ -269,11 +269,9 @@ extension EconomicsView {
     func myCancel(){
         path.removeLast()
     }
+    
     func myDone() {
-        if self.myInvestment.economics.isEqual(to: myEconomics) == false {
-            self.myInvestment.hasChanged = true
-            self.myInvestment.economics = myEconomics
-        }
+        self.myInvestment.economics = myEconomics
         path.removeLast()
     }
 }

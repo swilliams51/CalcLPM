@@ -86,9 +86,7 @@ extension Investment {
     
     public func solveForEBOAmount(aEBO: EarlyBuyout, aBaseYield: Decimal, bpsSpread: Double) -> Decimal {
         let adder: Decimal = Decimal(bpsSpread) / 10000.00
-        print("Adder: \(adder)")
         let targetYield: Decimal = aBaseYield + adder
-        print("Target Yield: \(targetYield.toString(decPlaces: 6))")
         
         return solveForEBOAmount(aEBO: aEBO, aTargetYield: targetYield)
     }

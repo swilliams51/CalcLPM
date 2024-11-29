@@ -340,15 +340,6 @@ func isLastDayOfFebruary (dateAsk: Date) -> Bool {
     return false
 }
 
-public func daysDiff (start: Date, end: Date) -> Int {
-    var days: Int = 0
-    
-    if end > start {
-        days = Calendar.current.dateComponents([.day], from: start, to: end).day!
-    }
-    return days
-}
-
 public func monthsDifference (start: Date, end: Date, inclusive: Bool) -> Int {
     let adder: Int = inclusive ? 1 : 0
     let startMonth = getMonthComponent(dateIn: start)
