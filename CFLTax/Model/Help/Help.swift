@@ -15,7 +15,7 @@ struct Help {
 
 
 let baseTermHelp =
-    Help(title: "Base Term Start Date", instruction: "The date when the periodic payments commence.  If the Base Term Start Date occurs after the Funding Date then an interim term will be created and one non-periodic payment will added to the payment schedule. To remove an interim payment set the Base Term Start Date equal to the Funding Date. For a monthly payment frequency the Base Term Start Date cannot occur more than 90 days after the Funding Date. For all other payment frequencies the interim term cannot exceed the number of days in the Payment Frequency.")
+    Help(title: "Base Term Start Date", instruction: "The date when the periodic rental payments commence.  If the Base Term Start Date occurs after the Funding Date then an interim term will be created and one non-periodic payment will added to the payment schedule. To remove an interim payment set the Base Term Start Date equal to the Funding Date. For a monthly payment frequency the Base Term Start Date cannot occur more than 90 days after the Funding Date. For all other payment frequencies the interim term cannot exceed the number of days in the Payment Frequency.")
 
 let basisHelp: Help =
     Help(title: "Basis for Depreciation", instruction: "This is an informational only field and is always equal to the Lessor Cost of the Asset.  Under certain situations, such as assets that qualify for Investment Tax Credits (ITC), the basis will be reduced by 50% of the amount of ITC taken. ITC related transactions are currently beyond the scope of this program. It is anticipated that future versions of the program will allow the user to input the basis directly.")
@@ -57,7 +57,7 @@ let FirstAndLastHelp =
 
 
 let implicitRateHelp =
-    Help(title: "Implicit Rate", instruction: "Is the discount rate that equates the present value of the Minimum Lease Payments and the unguaranteed Residual Value to the the Lessor's Cost as of the Funding Date. The Implicit Rate is then used to discount the Lessee's Minimum Payment Obligations to determine if the Lease passes or fails the 90% test in connection classifying the Lease as an operating or finance lease." )
+    Help(title: "Implicit Rate", instruction: "Is the discount rate that equates the present value of the Minimum Lease Payments and the unguaranteed Residual Value to the Lessor's Cost as of the Funding Date. The Implicit Rate is then used to discount the Lessee's Minimum Payment Obligations to determine if the Lease passes or fails the 90% test in connection with the classification of the Lease as either an operating or finance lease." )
 
 
 let numberOfPaymentsHelp =
@@ -65,7 +65,7 @@ let numberOfPaymentsHelp =
 
 
 let paymentAmountHelp: Help =
-    Help(title: "Payment Amount", instruction: "A valid Payment Amount must be a decimal that is equal to or greater than 0.00 but less than the Lessor's Cost of the Asset. Any decimal amount entered that is less than 1.00 will be interpreted as being a percent of Lessor Cost. For example, if the Lessor Cost of the Asset is 1,000,000.00, then an entry of 0.15 will be converted into an entry of 150,000.00.")
+    Help(title: "Payment Amount", instruction: "A valid Payment Amount must be a decimal that is equal to or greater than 0.00 but less than the Lessor's Cost of the Asset. Any decimal amount entered that is less than 1.00 will be interpreted as being a percent of Lessor Cost. For example, if the Lessor Cost of the Asset is 1,000,000.00, then an entry of 0.15 will be converted to an entry of 150,000.00.")
 
 
 let renameHelp =
@@ -75,8 +75,8 @@ let saveAsHelp =
     Help(title: "Save As", instruction: "A legal file name must not already exist, must not contain any illegal characters, and must be less than 30 characters in length.")
 
 
-let terminationHelp =
-    Help(title: "Termination Values", instruction: "Are a schedule of values in excess of the applicable lease balances for each payment date. For a non-true lease, setting the discount rate for rent equal to the buy rate will protect any fees paid to the buyer in the event of an unscheduled termination of the lease.  To remove TVs from reports set the discount rates for rent and residual to the maximum values and the additional residual percentage to 0.00%.")
+//let terminationHelp =
+//    Help(title: "Termination Values", instruction: "Are a schedule of values in excess of the applicable lease balances for each payment date. For a non-true lease, setting the discount rate for rent equal to the buy rate will protect any fees paid to the buyer in the event of an unscheduled termination of the lease.  To remove TVs from reports set the discount rates for rent and residual to the maximum values and the additional residual percentage to 0.00%.")
 
 let assetFundingDateHelp =
     Help(title: "Funding Date", instruction: "The date that the asset is funded by the Lessor.  This date can occur on the Base Commencement Date or it can occur at an earlier date.")

@@ -36,6 +36,17 @@ extension Decimal {
     }
 }
 
+
+extension Decimal{
+    public func isEquivalentToZero(aTolerance: Decimal) -> Bool {
+        if abs(self) < aTolerance {
+            return true
+        }
+        
+        return false
+    }
+}
+
 extension Double {
     public func toInteger() -> Int {
         return Int(self)

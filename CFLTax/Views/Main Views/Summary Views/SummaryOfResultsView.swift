@@ -12,7 +12,6 @@ struct SummaryOfResultsView: View {
     @Binding var path: [Int]
     @Binding var isDark: Bool
     @Binding var currentFile: String
-    
     @State var viewAsPctOfCost: Bool = false
     
     //Yields
@@ -22,36 +21,41 @@ struct SummaryOfResultsView: View {
     @State var myNetProfit: String = "0.00"
     @State var myPayback: Int = 0
     @State var myAverageLife: Decimal = 2.0
-    
-    
-    //@State var lineHeight: CGFloat = 12
+    @State private var isLoading: Bool = false
+
     @State var frameHeight: CGFloat = 12
     
     var body: some View {
-        VStack {
-            ReportHeaderView(name: "Results", viewAsPct: myViewAsPct, path: $path, isDark: $isDark)
-            Form {
-                Section(header: Text("Profitability"), footer: (Text("File Name: \(currentFile)"))) {
-                    afterTaxYieldItem
-                    beforeTaxYieldItem
-                    preTaxIRRItem
-                    inherentProfitItem
-                    simplePaybackItem
-                    averageLifeItem
-                }
-                
-                Section(header: Text("Additional Results")) {
-                    cashflowItem
-                    rentalsItem
-                    earlyBuyoutItem
+        ZStack {
+            VStack {
+                ReportHeaderView(name: "Results", viewAsPct: myViewAsPct, path: $path, isDark: $isDark)
+                Form {
+                    Section(header: Text("Profitability"), footer: (Text("File Name: \(currentFile)"))) {
+                        afterTaxYieldItem
+                        beforeTaxYieldItem
+                        preTaxIRRItem
+                        inherentProfitItem
+                        simplePaybackItem
+                        averageLifeItem
+                    }
+                    
+                    Section(header: Text("Additional Results")) {
+                        cashflowItem
+                        rentalsItem
+                        earlyBuyoutItem
+                    }
                 }
             }
+            if self.isLoading {
+                ProgressView()
+                    .scaleEffect(3)
+            }
+            
         }
-        
-        //.environment(\.defaultMinListRowHeight, lineHeight)
         .environment(\.colorScheme, isDark ? .dark : .light)
         .navigationBarBackButtonHidden(true)
         .onAppear{
+            self.isLoading = false
             self.myInvestment.calculate()
             self.myInvestment.hasChanged = false
             self.myATYield = myInvestment.getMISF_AT_Yield()
@@ -61,6 +65,10 @@ struct SummaryOfResultsView: View {
             self.myPayback = myInvestment.getSimplePayback()
             self.myAverageLife = myInvestment.getAverageLife()
         }
+    }
+    
+    private func goToCashflows() async {
+        self.path.append(14)
     }
     
     private func myViewAsPct() {
@@ -151,7 +159,10 @@ extension SummaryOfResultsView {
         .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
-            path.append(14)
+            self.isLoading = true
+            Task {
+                await goToCashflows()
+            }
         }
     }
     

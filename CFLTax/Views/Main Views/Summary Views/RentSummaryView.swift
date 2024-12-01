@@ -75,14 +75,14 @@ struct RentSummaryView: View {
         .popover(isPresented: $showPop) {
             PopoverView(myHelp: $payHelp, isDark: $isDark)
         }
-        .popover(isPresented: $showPop3 ) {
-            PopoverView(myHelp: $payHelp3, isDark: $isDark)
-        }
         .popover(isPresented: $showPop1) {
             PopoverView(myHelp: $payHelp1, isDark: $isDark)
         }
         .popover(isPresented: $showPop2) {
             PopoverView(myHelp: $payHelp2, isDark: $isDark)
+        }
+        .popover(isPresented: $showPop3 ) {
+            PopoverView(myHelp: $payHelp3, isDark: $isDark)
         }
         
     }
@@ -127,7 +127,7 @@ extension RentSummaryView {
             Image(systemName: "questionmark.circle")
                 .foregroundColor(Color.theme.accent)
                 .onTapGesture {
-                    self.showPop1 = true
+                    self.showPop = true
                 }
             Spacer()
             Text("\(percentFormatter(percent: implicitRate, locale: myLocale, places: 3))")

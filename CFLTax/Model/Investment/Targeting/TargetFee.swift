@@ -11,52 +11,49 @@ import Foundation
 extension Investment {
     public func solveForFee(aYieldMethod: YieldMethod, aTargetYield: Decimal) {
         let myInvestment: Investment = self.clone()
-        
-        var bolIsAfterTax: Bool = true
+        var feeType: FeeType = .expense
         
         switch aYieldMethod {
         case .MISF_AT:
-            bolIsAfterTax = true
+            feeType = getFeeType_MISF(aInvestment: myInvestment, aTargetYield: aTargetYield, isAfterTax: true)
         case .MISF_BT:
-            bolIsAfterTax = false
+            feeType = getFeeType_MISF(aInvestment: myInvestment, aTargetYield: aTargetYield, isAfterTax: false)
         case .IRR_PTCF:
-            bolIsAfterTax = false
+            feeType = getFeeType_IRR(aInvestment: myInvestment, aTargetYield: aTargetYield)
         }
-        
-        let feeType: FeeType = getFeeType(aInvestment: myInvestment, aTargetYield: aTargetYield, isAfterTax: bolIsAfterTax)
+    
         
         if feeType == .income {
             switch aYieldMethod {
             case .MISF_AT:
-                solveForFeeIncome_MISF(aInvestment: myInvestment, aTargetYield: aTargetYield, isAfterTax: true)
+                solveForFee_MISF(aInvestment: myInvestment, aTargetYield: aTargetYield, isAfterTax: true, aFeeType: .income)
             case .MISF_BT:
-                solveForFeeIncome_MISF(aInvestment: myInvestment, aTargetYield: aTargetYield, isAfterTax: false)
+                solveForFee_MISF(aInvestment: myInvestment, aTargetYield: aTargetYield, isAfterTax: false, aFeeType: .income)
             case .IRR_PTCF:
-                solveForFee_IRROfPTCF(aInvestment: myInvestment, aTargetYield: aTargetYield)
+                solveForFee_IRROfPTCF(aInvestment: myInvestment, aTargetYield: aTargetYield, aFeeType: .income)
             }
         } else {
             switch aYieldMethod {
             case .MISF_AT:
-                solveForFeeExpense_MISF(aInvestment: myInvestment ,aTargetYield: aTargetYield, isAfterTax: true)
+                solveForFee_MISF(aInvestment: myInvestment ,aTargetYield: aTargetYield, isAfterTax: true, aFeeType: .expense)
             case .MISF_BT:
-                solveForFeeExpense_MISF(aInvestment: myInvestment, aTargetYield: aTargetYield, isAfterTax: false)
+                solveForFee_MISF(aInvestment: myInvestment, aTargetYield: aTargetYield, isAfterTax: false, aFeeType: .expense)
             case .IRR_PTCF:
-                solveForFee_IRROfPTCF(aInvestment: myInvestment, aTargetYield: aTargetYield)
+                solveForFee_IRROfPTCF(aInvestment: myInvestment, aTargetYield: aTargetYield, aFeeType: .expense)
             }
         }
     }
     
-    private func getFeeType(aInvestment: Investment, aTargetYield: Decimal, isAfterTax: Bool) -> FeeType {
+    private func getFeeType_MISF(aInvestment: Investment, aTargetYield: Decimal, isAfterTax: Bool) -> FeeType {
         var myFeeType: FeeType = .expense
         let tempInvestment: Investment = aInvestment.clone()
-        
         tempInvestment.setFeeToDefault()
         tempInvestment.fee.amount = (0.0).toString()
         tempInvestment.economics.solveFor = .yield
         tempInvestment.calculate()
         var baseRate: Decimal = tempInvestment.getMISF_AT_Yield()
         if isAfterTax == false {
-            baseRate = baseRate * (1.0 - tempInvestment.taxAssumptions.federalTaxRate.toDecimal())
+            baseRate = baseRate / (1.0 - tempInvestment.taxAssumptions.federalTaxRate.toDecimal())
         }
         
         if aTargetYield > baseRate {
@@ -66,26 +63,24 @@ extension Investment {
         return myFeeType
     }
     
-    private func solveForFeeIncome_MISF(aInvestment: Investment,aTargetYield: Decimal, isAfterTax: Bool) {
+    
+    private func getFeeType_IRR(aInvestment: Investment, aTargetYield: Decimal) -> FeeType {
+        var myFeeType: FeeType = .expense
         let tempInvestment: Investment = aInvestment.clone()
         tempInvestment.setFeeToDefault()
         tempInvestment.fee.amount = (0.0).toString()
-        var myTargetYield = aTargetYield
+        tempInvestment.economics.solveFor = .yield
+        tempInvestment.calculate()
+        let baseRate: Decimal = tempInvestment.getIRR_PTCF()
         
-        if isAfterTax == false {
-            myTargetYield = myTargetYield * (1.0 - tempInvestment.taxAssumptions.federalTaxRate.toDecimal())
+        if aTargetYield > baseRate {
+            myFeeType = .income
         }
         
-        tempInvestment.setAfterTaxCashflows()
-        let netPresentValue: Decimal = tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: myTargetYield, aDayCountMethod: tempInvestment.economics.dayCountMethod)
-        var feeAmount: Decimal = netPresentValue / (1.0 - tempInvestment.taxAssumptions.federalTaxRate.toDecimal())
-        feeAmount = feeAmount * -1.0
-        self.fee.amount = feeAmount.toString()
-        self.fee.feeType = .income
-        self.setFee()
+        return myFeeType
     }
 
-    private func solveForFeeExpense_MISF(aInvestment: Investment, aTargetYield: Decimal, isAfterTax: Bool) {
+    private func solveForFee_MISF(aInvestment: Investment, aTargetYield: Decimal, isAfterTax: Bool, aFeeType: FeeType) {
         let tempInvestment: Investment = aInvestment.clone()
         tempInvestment.setFeeToDefault()
         var x1: Decimal = tempInvestment.asset.lessorCost.toDecimal() * 0.025
@@ -93,6 +88,7 @@ extension Investment {
         var mxbFee: Decimal = 0.0
         var iCounter: Int = 1
         tempInvestment.fee.amount = (x1).toString()
+        tempInvestment.fee.feeType = aFeeType
 
         //1. Set target yield to after tax if input is before tax
         var yield: Decimal = aTargetYield
@@ -100,23 +96,24 @@ extension Investment {
             yield = yield * (1.0 - self.taxAssumptions.federalTaxRate.toDecimal())
         }
         
-       //2. Get NPV for y1, x = 0.0
-        var y1 = getNPVAfterNewFee_AT(aInvestment: tempInvestment, discountRate: aTargetYield)
+       //2. Get NPV for y1, x = 0.025
+        var y1 = getNPVAfterNewFee_AT(aInvestment: tempInvestment, discountRate: yield)
+        print("\(y1.toString(decPlaces: 4))")
         if abs(y1) > toleranceLumpSums {
             if y1 > 0.0 {
-                x2 = incrementFee(aInvestment: tempInvestment, aFeeStartingValue: x1, aTargetYield: aTargetYield, aCounter: 1)
+                x2 = incrementFee(aInvestment: tempInvestment, aFeeStartingValue: x1, aTargetYield: yield, aCounter: 1)
             } else {
-                x2 = decrementFee(aInvestment: tempInvestment, aFeeStartingValue: x1, aTargetYield: aTargetYield, aCounter: 1)
+                x2 = decrementFee(aInvestment: tempInvestment, aFeeStartingValue: x1, aTargetYield: yield, aCounter: 1)
             }
             
             tempInvestment.fee.amount = x2.toString()
-            var y2: Decimal = getNPVAfterNewFee_AT(aInvestment: tempInvestment, discountRate: aTargetYield)
+            var y2: Decimal = getNPVAfterNewFee_AT(aInvestment: tempInvestment, discountRate: yield)
            
             iCounter = 2
             while iCounter < 4 {
                 mxbFee = mxbFactor(factor1: x1, value1: y1, factor2: x2, value2: y2)
                 tempInvestment.fee.amount = mxbFee.toString()
-                let newNPV = getNPVAfterNewFee_AT(aInvestment: tempInvestment, discountRate: aTargetYield)
+                let newNPV = getNPVAfterNewFee_AT(aInvestment: tempInvestment, discountRate: yield)
                 if abs(newNPV) < toleranceLumpSums {
                     break
                 }
@@ -125,19 +122,23 @@ extension Investment {
                 y1 = newNPV
                 
                 if newNPV > 0.0 {
-                    x2 = incrementFee(aInvestment: tempInvestment, aFeeStartingValue: mxbFee, aTargetYield: aTargetYield, aCounter: iCounter)
+                    x2 = incrementFee(aInvestment: tempInvestment, aFeeStartingValue: mxbFee, aTargetYield: yield, aCounter: iCounter)
                     tempInvestment.fee.amount = x2.toString()
-                    y2 = getNPVAfterNewFee_AT(aInvestment: tempInvestment, discountRate: aTargetYield)
                 } else {
-                    x2 = decrementFee(aInvestment: tempInvestment, aFeeStartingValue: mxbFee, aTargetYield: aTargetYield, aCounter: iCounter)
+                    x2 = decrementFee(aInvestment: tempInvestment, aFeeStartingValue: mxbFee, aTargetYield: yield, aCounter: iCounter)
                     tempInvestment.fee.amount = x2.toString()
-                    y2 = getNPVAfterNewFee_AT(aInvestment: tempInvestment, discountRate: aTargetYield)
                 }
+                y2 = getNPVAfterNewFee_AT(aInvestment: tempInvestment, discountRate: yield)
+                
                 iCounter += 1
             }
             
+            if mxbFee.isEquivalentToZero(aTolerance: 1.0) {
+                mxbFee = 0.0
+            }
+            
             self.fee.amount = mxbFee.toString(decPlaces: 4)
-            self.fee.feeType = .expense
+            self.fee.feeType = aFeeType
             self.setFee()
         }
        
@@ -156,11 +157,15 @@ extension Investment {
         let tempInvestment: Investment = aInvestment.clone()
         var startingFeeAmount: Decimal = aFeeStartingValue
         let factor: Decimal = power(base: 10.0, exp: aCounter)
+        var factor2: Decimal = 1.0
+        if tempInvestment.fee.feeType == .income {
+            factor2 = -1.0
+        }
         tempInvestment.fee.amount = startingFeeAmount.toString()
         
         var npv: Decimal = getNPVAfterNewFee_AT(aInvestment: tempInvestment, discountRate: aTargetYield)
         while npv > 0.0 {
-            startingFeeAmount =  startingFeeAmount + startingFeeAmount / factor
+            startingFeeAmount =  startingFeeAmount + startingFeeAmount / factor * factor2
             tempInvestment.fee.amount = startingFeeAmount.toString()
             npv = getNPVAfterNewFee_AT(aInvestment: tempInvestment, discountRate: aTargetYield)
         }
@@ -172,11 +177,15 @@ extension Investment {
         let tempInvestment: Investment = aInvestment.clone()
         var startingFeeAmount: Decimal = aFeeStartingValue
         let factor: Decimal = power(base: 10.0, exp: aCounter)
+        var factor2: Decimal = 1.0
+        if tempInvestment.fee.feeType == .income {
+            factor2 = -1.0
+        }
         tempInvestment.fee.amount = startingFeeAmount.toString()
         
         var npv: Decimal = getNPVAfterNewFee_AT(aInvestment: tempInvestment, discountRate: aTargetYield)
         while npv < 0.0 {
-            startingFeeAmount =  startingFeeAmount - startingFeeAmount / factor
+            startingFeeAmount =  startingFeeAmount - startingFeeAmount / factor * factor2
             tempInvestment.fee.amount = startingFeeAmount.toString()
             npv = getNPVAfterNewFee_AT(aInvestment: tempInvestment, discountRate: aTargetYield)
         }
@@ -184,49 +193,87 @@ extension Investment {
         return startingFeeAmount
     }
     
-    private func solveForFee_IRROfPTCF(aInvestment: Investment,aTargetYield: Decimal) {
-        //Clone the investment and set x1 = 0.0
+    private func solveForFee_IRROfPTCF(aInvestment: Investment, aTargetYield: Decimal, aFeeType: FeeType) {
         let tempInvestment: Investment = aInvestment.clone()
-        let x1: String = "0.0"
-        tempInvestment.fee.amount = x1
+        let x1: Decimal = 0.0
+        var x2: Decimal = 0.0
+        
+        tempInvestment.fee.amount = x1.toString()
+        tempInvestment.fee.feeType = aFeeType
         
         //2. Get NPV for y1, x = 0.0
-         tempInvestment.setBeforeTaxCashflows()
-        let y1: Decimal = tempInvestment.beforeTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: self.economics.dayCountMethod)
-         tempInvestment.beforeTaxCashflows.items.removeAll()
+        let y1: Decimal = getNPVAfterNewFee_IRR(aInvestment: tempInvestment, discountRate: aTargetYield)
         
-        //3a. Set x2 = 2.0% of Asset Cost
-        let x2:Decimal = self.getAssetCost(asCashflow: false) * 0.02
-        tempInvestment.fee.amount = x2.toString(decPlaces: 4)
-        
-        //3b. Set x2 type to either expense of income fee type
-        var myFeeType: FeeType = .expense
-        if y1 < 0.0 {
-            tempInvestment.fee.feeType = .income
-            myFeeType = .income
+        if y1 > 0.0 {
+            x2 = incrementFee_IRR(aInvestment: tempInvestment, aTargetYield: aTargetYield, aCounter: 1)
         } else {
-            tempInvestment.fee.feeType = .expense
+            x2 = decrementFee_IRR(aInvestment: tempInvestment, aTargetYield: aTargetYield, aCounter: 1)
         }
         
-        //4. Calculate y2, then use mxbFactor function to calculate final fee
-        tempInvestment.setBeforeTaxCashflows()
-        let y2: Decimal = tempInvestment.beforeTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: self.economics.dayCountMethod)
-        var newFeeAmount = mxbFactor(factor1: x1.toDecimal(), value1: y1, factor2: x2, value2: y2)
-        newFeeAmount = checkedFeeAmount(aFeeAmount: newFeeAmount, aAssetCost: self.getAssetCost(asCashflow: false))
+        tempInvestment.fee.amount = x2.toString()
+        let y2: Decimal = getNPVAfterNewFee_IRR(aInvestment: tempInvestment, discountRate: aTargetYield)
+        var newFeeAmount:Decimal = mxbFactor(factor1: x1, value1: y1, factor2: x2, value2: y2)
         
-        //5. Then set the fee in the actual investment to the value of the mxbFactor function
+        if newFeeAmount.isEquivalentToZero(aTolerance: 1.0) {
+            newFeeAmount = 0.0
+        }
         self.fee.amount = newFeeAmount.toString(decPlaces: 4)
-        self.fee.feeType = myFeeType
-        tempInvestment.beforeTaxCashflows.items.removeAll()
+        self.fee.feeType = aFeeType
+        self.setFee()
     }
     
-    private func checkedFeeAmount(aFeeAmount: Decimal, aAssetCost: Decimal) -> Decimal {
-        var checkedFeeAmount: Decimal = aFeeAmount
-        if abs(checkedFeeAmount / aAssetCost) < 0.0005 {
-            checkedFeeAmount = 0.0
+    private func getNPVAfterNewFee_IRR(aInvestment: Investment, discountRate: Decimal) -> Decimal {
+        let tempInvestment: Investment = aInvestment.clone()
+        tempInvestment.setBeforeTaxCashflows()
+        let newNPV: Decimal = tempInvestment.beforeTaxCashflows.ModXNPV(aDiscountRate: discountRate, aDayCountMethod: self.economics.dayCountMethod)
+        tempInvestment.beforeTaxCashflows.items.removeAll()
+        
+        return newNPV
+    }
+    
+    private func incrementFee_IRR(aInvestment: Investment, aTargetYield: Decimal, aCounter: Int) -> Decimal {
+        let tempInvestment: Investment = aInvestment.clone()
+        var startingFeeAmount: Decimal = aInvestment.asset.lessorCost.toDecimal() * 0.02
+        let factor: Decimal = power(base: 10.0, exp: aCounter)
+        var factor2: Decimal = 1.0
+        if tempInvestment.fee.feeType == .income {
+            factor2 = -1.0
+        }
+        tempInvestment.fee.amount = startingFeeAmount.toString()
+        
+        var npv: Decimal = getNPVAfterNewFee_IRR(aInvestment: tempInvestment, discountRate: aTargetYield)
+        while npv > 0.0 {
+            startingFeeAmount =  startingFeeAmount + startingFeeAmount / factor * factor2
+            tempInvestment.fee.amount = startingFeeAmount.toString()
+            npv = getNPVAfterNewFee_IRR(aInvestment: tempInvestment, discountRate: aTargetYield)
         }
         
-        return checkedFeeAmount
+        return startingFeeAmount
+        
     }
+    
+    
+    private func decrementFee_IRR(aInvestment: Investment, aTargetYield: Decimal, aCounter: Int) -> Decimal {
+        let tempInvestment: Investment = aInvestment.clone()
+        var startingFeeAmount: Decimal = aInvestment.asset.lessorCost.toDecimal() * 0.02
+        let factor: Decimal = power(base: 10.0, exp: aCounter)
+        var factor2: Decimal = 1.0
+        if tempInvestment.fee.feeType == .income {
+            factor2 = -1.0
+        }
+        tempInvestment.fee.amount = startingFeeAmount.toString()
+        
+        var npv: Decimal = getNPVAfterNewFee_IRR(aInvestment: tempInvestment, discountRate: aTargetYield)
+        while npv > 0.0 {
+            startingFeeAmount =  startingFeeAmount + startingFeeAmount / factor * factor2
+            tempInvestment.fee.amount = startingFeeAmount.toString()
+            npv = getNPVAfterNewFee_IRR(aInvestment: tempInvestment, discountRate: aTargetYield)
+        }
+        
+        return startingFeeAmount
+    }
+    
+    
+
     
 }

@@ -167,7 +167,7 @@ extension Investment{
             newFactor = mxbFactor(factor1: x1, value1: y1, factor2: x2, value2: y2)
             let myBalance = getNPVAfterNewFactor_BT(aInvestment: tempInvestment, aFactor: newFactor, discountRate: yield)
             
-            if abs(myBalance) < tolerancePaymentAmounts {
+            if abs(myBalance) < tolerance() {
                 break
             }
             x1 = newFactor

@@ -117,31 +117,70 @@ extension Investment{
     }
     
     
-    private func solveForCost_IRROfPTCF(aTargetYield: Decimal){
+    private func solveForCost_IRROfPTCF(aTargetYield: Decimal) {
         let tempInvestment: Investment = self.clone()
         let x1 = tempInvestment.asset.lessorCost.toDecimal()
+        var x2: Decimal = x1
+        let y1: Decimal = tempInvestment.getNPVAfterNewCost_IRR(aInvestment: tempInvestment, aDiscountRate: aTargetYield)
+        
+        if abs(y1) > 0.05 {
+            if y1 > 0.0 {
+                x2 = incrementCost_IRR(aInvestment: tempInvestment, aStartCost: x1, aTargetYield: aTargetYield, aCounter: 1)
+            } else {
+                x2 = decrementCost_IRR(aInvestment: tempInvestment, aStartCost: x1, aTargetYield: aTargetYield, aCounter: 1)
+            }
+            
+            tempInvestment.asset.lessorCost = x2.toString(decPlaces: 4)
+            let y2 = tempInvestment.getNPVAfterNewCost_IRR(aInvestment: tempInvestment, aDiscountRate: aTargetYield)
+           
+            let newAmount = mxbFactor(factor1: x1, value1: y1, factor2: x2, value2: y2)
+            
+            self.asset.lessorCost = newAmount.toString(decPlaces: 4)
+        }
+    }
+    
+    private func incrementCost_IRR(aInvestment: Investment, aStartCost: Decimal, aTargetYield: Decimal, aCounter: Int) -> Decimal {
+        let tempInvestment: Investment = aInvestment.clone()
+        var startingCost: Decimal = aStartCost
+        let factor: Decimal = power(base: 10.0, exp: aCounter)
 
-       //2. Get NPV for y1, x = current asset cost
-        tempInvestment.setBeforeTaxCashflows()
-        let y1: Decimal = tempInvestment.beforeTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: self.economics.dayCountMethod)
-        tempInvestment.beforeTaxCashflows.items.removeAll()
+        tempInvestment.asset.lessorCost = startingCost.toString()
         
-        //3a. Set x2 = 50.0% of Asset Cost
-        let x2:Decimal = self.getAssetCost(asCashflow: false) * 0.50
-        tempInvestment.asset.lessorCost = x2.toString(decPlaces: 4)
-        
-        //4. Calculate y2, then use mxbFactor function to calculate final fee
-        tempInvestment.setBeforeTaxCashflows()
-        let y2: Decimal = tempInvestment.beforeTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: self.economics.dayCountMethod)
-        var newAmount = mxbFactor(factor1: x1, value1: y1, factor2: x2, value2: y2)
-        
-        if newAmount < 0.0 {
-            newAmount = 0.0
+        var npv: Decimal = getNPVAfterNewCost_IRR(aInvestment: tempInvestment, aDiscountRate: aTargetYield)
+        while npv > 0.0 {
+            startingCost =  startingCost + startingCost / factor
+            tempInvestment.asset.lessorCost = startingCost.toString()
+            npv = getNPVAfterNewCost_IRR(aInvestment: tempInvestment, aDiscountRate: aTargetYield)
         }
         
-        //5. Then set the asset cost in the actual investment to the value of the mxbFactor function
-        self.asset.lessorCost = newAmount.toString(decPlaces: 4)
+        return startingCost
+    }
+    
+    private func decrementCost_IRR(aInvestment: Investment, aStartCost: Decimal, aTargetYield: Decimal, aCounter: Int) -> Decimal {
+        let tempInvestment: Investment = aInvestment.clone()
+        var startingCost: Decimal = aStartCost
+        let factor: Decimal = power(base: 10.0, exp: aCounter)
+        
+        tempInvestment.asset.lessorCost = startingCost.toString()
+        
+        var npv: Decimal = getNPVAfterNewCost_IRR(aInvestment: tempInvestment, aDiscountRate: aTargetYield)
+        while npv < 0.0 {
+            startingCost =  startingCost - startingCost / factor
+            tempInvestment.asset.lessorCost = startingCost.toString()
+            npv = getNPVAfterNewCost_IRR(aInvestment: tempInvestment, aDiscountRate: aTargetYield)
+        }
+        
+        return startingCost
+    }
+    
+    
+    private func getNPVAfterNewCost_IRR(aInvestment: Investment, aDiscountRate: Decimal) -> Decimal {
+        let tempInvestment: Investment = aInvestment.clone()
+        tempInvestment.setBeforeTaxCashflows()
+        let newNPV: Decimal = tempInvestment.beforeTaxCashflows.ModXNPV(aDiscountRate: aDiscountRate, aDayCountMethod: self.economics.dayCountMethod)
         tempInvestment.beforeTaxCashflows.items.removeAll()
+        
+        return newNPV
     }
     
     

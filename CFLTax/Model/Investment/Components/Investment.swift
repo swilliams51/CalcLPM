@@ -208,7 +208,7 @@ public class Investment {
             
             return true
         } else if aYieldMethod == .MISF_BT {
-            aTargetYield = aTargetYield / (1 - tempInvestment.taxAssumptions.federalTaxRate.toDecimal())
+            aTargetYield = aTargetYield * (1 - tempInvestment.taxAssumptions.federalTaxRate.toDecimal())
             tempInvestment.fee.feeType = .expense
             tempInvestment.setAfterTaxCashflows()
             if tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: tempInvestment.economics.dayCountMethod) > 0.0 {
@@ -232,6 +232,7 @@ public class Investment {
             tempInvestment.beforeTaxCashflows.removeAll()
             
             tempInvestment.fee.feeType = .income
+            tempInvestment.setBeforeTaxCashflows()
             if tempInvestment.beforeTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: tempInvestment.economics.dayCountMethod) < 0.0 {
                 return false
             }
@@ -309,10 +310,6 @@ public class Investment {
             
             return true
         }
-        
-        
-        
-       
     }
     
     public func calculate(plannedIncome: String = "0.0", unplannedDate: Date = Date()) {

@@ -36,19 +36,19 @@ extension Investment {
         }
         
        //2. Get NPV for y1, x = 0.0
-        var y1 = getNPVAfterNewResidual_AT(aInvestment: tempInvestment, aResidual: x1, discountRate: aTargetYield)
+        var y1 = getNPVAfterNewResidual_AT(aInvestment: tempInvestment, aResidual: x1, discountRate: yield)
         if abs(y1) > toleranceLumpSums {
             if y1 > 0.0 {
                 x2 = decrementResidual_AT(aInvestment: tempInvestment, discountRate: yield, aResidual: x1, aNPV: y1, iCounter: 1)
             } else {
                 x2 = incrementResidual_AT(aInvestment: tempInvestment, discountRate: yield, aResidual: x1, aNPV: y1, iCounter: 1)
             }
-            var y2: Decimal = getNPVAfterNewResidual_AT(aInvestment: tempInvestment, aResidual: x2, discountRate: aTargetYield)
+            var y2: Decimal = getNPVAfterNewResidual_AT(aInvestment: tempInvestment, aResidual: x2, discountRate: yield)
             
             iCounter = 2
             while iCounter < 6 {
                 mxbResidual = mxbFactor(factor1: x1, value1: y1, factor2: x2, value2: y2)
-                let newNPV = getNPVAfterNewResidual_AT(aInvestment: tempInvestment, aResidual: mxbResidual, discountRate: aTargetYield)
+                let newNPV = getNPVAfterNewResidual_AT(aInvestment: tempInvestment, aResidual: mxbResidual, discountRate: yield)
                 
                 if abs(newNPV) < toleranceLumpSums {
                     break
