@@ -11,7 +11,6 @@ import Foundation
 extension Rent {
     mutating func firstAndLast(freq: Frequency, baseCommence: Date, EOMRule: Bool) {
       
-        
         //Insert Two Duplicate Groups
         let newGroup: Group = self.groups[0].clone()
         self.groups.insert(newGroup, at: 0)
@@ -29,6 +28,7 @@ extension Rent {
         groups[0].endDate = currEndDate
         groups[0].locked = false
         groups[0].noOfPayments = 1
+        groups[0].isInterim = false
         groups[0].unDeletable = false
         
         //Modify 2nd Group
@@ -39,6 +39,7 @@ extension Rent {
         groups[1].locked = false
         groups[1].noOfPayments = currNoOfPayments - 2
         groups[1].startDate = currStartDate
+        groups[1].isInterim = false
         groups[1].unDeletable = true
         
         //Modify 3rd Group
@@ -49,6 +50,7 @@ extension Rent {
         groups[2].locked = false
         groups[2].noOfPayments = 1
         groups[2].startDate = currStartDate
+        groups[2].isInterim = false
         groups[2].unDeletable = false
         
     }
@@ -71,6 +73,7 @@ extension Rent {
         groups[0].endDate = currEndDate
         groups[0].locked = false
         groups[0].noOfPayments = 1
+        groups[0].isInterim = false
         groups[0].unDeletable = false
         
         //Modify 2nd Group
@@ -81,6 +84,7 @@ extension Rent {
         groups[1].locked = false
         groups[1].noOfPayments = currNoOfPayments - 3
         groups[1].startDate = currStartDate
+        groups[1].isInterim = false
         groups[1].unDeletable = true
         
         //Modify 3rd Group
@@ -91,6 +95,7 @@ extension Rent {
         groups[2].locked = false
         groups[2].noOfPayments = 2
         groups[2].startDate = currStartDate
+        groups[2].isInterim = false
         groups[2].unDeletable = false
         
     }
@@ -130,6 +135,7 @@ extension Rent {
         groups[0].locked = false
         groups[0].noOfPayments = noOfLevelOne
         groups[0].startDate = currStartDate
+        groups[0].isInterim = false
         groups[0].unDeletable = true
         
         if oddNoOfPayments == true {
@@ -140,6 +146,7 @@ extension Rent {
             groups[1].locked = false
             groups[1].noOfPayments = 1
             groups[1].startDate = currStartDate
+            groups[1].isInterim = false
             groups[1].unDeletable = false
             
             currStartDate = groups[0].endDate
@@ -149,6 +156,7 @@ extension Rent {
             groups[2].locked = false
             groups[2].noOfPayments = noOfLevelOne
             groups[2].startDate = currStartDate
+            groups[2].isInterim = false
             groups[2].unDeletable = false
         } else {
             currStartDate = groups[0].endDate
@@ -158,6 +166,7 @@ extension Rent {
             groups[1].locked = false
             groups[1].noOfPayments = noOfLevelOne
             groups[1].startDate = currStartDate
+            groups[1].isInterim = false
             groups[1].unDeletable = false
         }
     }

@@ -279,13 +279,14 @@ public class Investment {
             
             return true
         } else if aYieldMethod == .MISF_BT {
-            aTargetYield = aTargetYield / (1 - tempInvestment.taxAssumptions.federalTaxRate.toDecimal())
+            aTargetYield = aTargetYield * (1 - tempInvestment.taxAssumptions.federalTaxRate.toDecimal())
             tempInvestment.asset.residualValue = minAmount.toString(decPlaces: 4)
             tempInvestment.setAfterTaxCashflows()
             if tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: tempInvestment.economics.dayCountMethod) > 0.0 {
                 return false
             }
             tempInvestment.afterTaxCashflows.removeAll()
+            
             //If NPV > 0 when Residual = 0 then invalid (the residual cannot be less than 0)
             tempInvestment.asset.residualValue = maxAmount.toString(decPlaces: 4)
             tempInvestment.setAfterTaxCashflows()

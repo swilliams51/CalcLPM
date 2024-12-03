@@ -507,7 +507,7 @@ public func areDatesEqual(date1: Date, date2: Date) -> Bool {
 
 
 public func areDatesUnequal(date1: Date, date2: Date) -> Bool {
-    if !areDatesEqual(date1: date1, date2: date2) {
+    if areDatesEqual(date1: date1, date2: date2) == false {
         return true
     } else {
         return false

@@ -12,7 +12,6 @@ public class BaseRentalIncomes: Cashflows {
     
     
     public func createTable(aInvestment: Investment) {
-        
         let eomRule: Bool = aInvestment.leaseTerm.endOfMonthRule
         let dayCountMethod: DayCountMethod = aInvestment.economics.dayCountMethod
         let fiscalMonEnd: Int = aInvestment.taxAssumptions.fiscalMonthEnd.rawValue
