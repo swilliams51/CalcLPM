@@ -218,6 +218,8 @@ extension EconomicsView {
     var leftSideDiscountRateItem: some View {
         HStack {
             Text("Discount Rate: \(Image(systemName: "return"))")
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
                 .foregroundColor(isDark ? .white : .black)
                 .font(myFont)
             Image(systemName: "questionmark.circle")

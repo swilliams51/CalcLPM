@@ -98,7 +98,6 @@ extension Investment {
         
        //2. Get NPV for y1, x = 0.025
         var y1 = getNPVAfterNewFee_AT(aInvestment: tempInvestment, discountRate: yield)
-        print("\(y1.toString(decPlaces: 4))")
         if abs(y1) > toleranceLumpSums {
             if y1 > 0.0 {
                 x2 = incrementFee(aInvestment: tempInvestment, aFeeStartingValue: x1, aTargetYield: yield, aCounter: 1)

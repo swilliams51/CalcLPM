@@ -162,6 +162,7 @@ extension DepreciationView {
             Text("\(amountFormatter(amount: myInvestment.asset.lessorCost, locale: myLocale))")
         }
         .font(myFont)
+        .padding(.bottom, 10)
         .popover(isPresented: $showPop1) {
             PopoverView(myHelp: $payHelp1, isDark: $isDark)
         }
@@ -197,7 +198,6 @@ extension DepreciationView {
             }
         }
         .font(myFont)
-        .padding(.bottom, 5)
     }
 }
 
@@ -277,6 +277,7 @@ extension DepreciationView {
             Spacer()
             rightSideAmountItem
         }
+        .padding(.top, 10)
     }
     
     var leftSideAmountItem: some View {
@@ -334,6 +335,7 @@ extension DepreciationView {
             Spacer()
             rightSideSalvageItem
         }
+        .padding(.bottom, 10)
     }
     
     var leftSideSalvageItem: some View {

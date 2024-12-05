@@ -31,7 +31,7 @@ struct TaxAssumptionsView: View {
         VStack {
             MenuHeaderView(name: "Tax Assumptions", path: $path, isDark: $isDark)
             Form {
-                Section (header: Text("Details").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
+                Section (header: Text("Federal Income Tax Profile").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
                     federalTaxRateItem
                     fiscalMonthEndItem
                     dayOfMonthTaxesPaidItem
@@ -122,9 +122,11 @@ extension TaxAssumptionsView {
     
     var leftSideAmountItem: some View {
         HStack {
-            Text("Federal Tax Rate: \(Image(systemName: "return"))")
+            Text("Tax Rate: \(Image(systemName: "return"))")
                 .foregroundColor(isDark ? .white : .black)
                 .font(myFont)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
         }
        
     }

@@ -19,7 +19,7 @@ struct InvestmentAmortizationView: View {
             InvestAmortHeaderView(name: "A/T Ending Balances", path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("\(currentFile)")
-                    .font(myFont2)) {
+                    .font(myFont3)) {
                     ScrollView {
                         Grid (alignment: .trailing, horizontalSpacing: 30, verticalSpacing: 10)
                         {
@@ -49,26 +49,40 @@ struct InvestmentAmortizationView: View {
             Text("Cost:")
             Text("1.00")
         }
-        .font(myFont2)
+        .font(myFont3)
     }
     
     var amortHeaderGridRow: some View {
         GridRow {
             Text("Date")
             Text("Cashflow")
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
             Text("Interest")
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
             Text("Balance")
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
         }
-        .font(myFont2)
+        .font(myFont3)
         .bold()
     }
     
     @ViewBuilder func amortGridRow(item: Amortization) -> some View {
         GridRow {
             Text(item.dueDate.toStringDateShort(yrDigits: 2))
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
             Text("\(expressedAsFactor(amount: item.cashflow))")
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
             Text("\(expressedAsFactor(amount:item.interest))")
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
             Text("\(expressedAsFactor(amount:item.endBalance))")
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
         }
         .gridColumnAlignment(.trailing)
         .font(myFont2)
@@ -80,7 +94,7 @@ struct InvestmentAmortizationView: View {
             Text("\(expressedAsFactor(amount: myAmortizations.totalCashflow))")
             Text("\(expressedAsFactor(amount: myAmortizations.totalInterest))")
             Text("")
-        }.font(myFont2)
+        }.font(myFont3)
     }
     
     private func myViewAsPct() {

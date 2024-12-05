@@ -114,7 +114,6 @@ extension Investment{
     private func getNPVAfterNewCost_AT(aInvestment: Investment, aDiscountRate: Decimal) -> Decimal{
         let newInvestment: Investment = aInvestment.clone()
         newInvestment.setAfterTaxCashflows()
-        print("\(newInvestment.afterTaxCashflows.getTotal())")
         let newNPV: Decimal = newInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: aDiscountRate, aDayCountMethod: self.economics.dayCountMethod)
         newInvestment.afterTaxCashflows.items.removeAll()
         

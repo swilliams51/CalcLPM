@@ -13,6 +13,7 @@ public let tolerancePaymentAmounts: Decimal = 0.050
 public let toleranceLumpSums: Decimal = 0.005
 public let myFont: Font = .subheadline
 public let myFont2: Font = .footnote
+public let myFont3: Font = .caption
 public let maximumLessorCost: String = "9999999.99"
 public let minimumLessorCost: String = "999.99"
 public let maximumYield: String = "0.15"

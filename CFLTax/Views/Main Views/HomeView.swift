@@ -10,7 +10,7 @@ import SwiftUI
 struct HomeView: View {
     @State public var myInvestment: Investment = Investment(aFile: sampleFile, resetDates: true)
     @State public var path: [Int] = [Int]()
-    @State public var isDark: Bool = true
+    @State public var isDark: Bool = false
     @State var selectedGroup: Group = Group()
     @State var index: Int = 0
     @State var myDepreciationSchedule: DepreciationIncomes = DepreciationIncomes()

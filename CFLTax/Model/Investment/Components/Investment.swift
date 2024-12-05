@@ -262,6 +262,8 @@ public class Investment {
         var aTargetYield: Decimal = tempInvestment.economics.yieldTarget.toDecimal()
         let aYieldMethod: YieldMethod = tempInvestment.economics.yieldMethod
         
+        
+        
         if aYieldMethod == .MISF_AT {
             //If NPV < 0 when Residual = Lessor Cost then invalid (the Residual cannot be greater than Lessor Cost)
             tempInvestment.asset.residualValue = minAmount.toString(decPlaces: 4)
