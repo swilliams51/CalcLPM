@@ -43,6 +43,8 @@ struct PopoverView: View {
         Text(myHelp.instruction)
             .font(.body)
             .multilineTextAlignment(.center)
+            .lineLimit(15)
+            .minimumScaleFactor(0.5)
             .padding()
     }
 }

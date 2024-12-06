@@ -198,15 +198,15 @@ struct HomeView: View {
             Image(systemName: "questionmark.circle")
                 .font(myFont)
                 .foregroundColor(.blue)
-                .onTapGesture {
-                    self.showPop2 = true
-                }
             Spacer()
             Image(systemName: "chevron.right")
         }
         .contentShape(Rectangle())
         .onTapGesture {
-            path.append(8)
+            self.isLoading = true
+            Task {
+                await goToEBOView()
+            }
         }
     }
     
@@ -253,6 +253,10 @@ struct HomeView: View {
             path.append(26)
         }
         .disabled(investmentHasChanged() ? true : false)
+    }
+    
+    private func goToEBOView() async{
+        self.path.append(8)
     }
     
     private func calculate() async {
