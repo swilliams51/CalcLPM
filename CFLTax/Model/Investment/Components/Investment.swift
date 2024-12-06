@@ -261,21 +261,20 @@ public class Investment {
         let maxAmount: Decimal = tempInvestment.asset.lessorCost.toDecimal()
         var aTargetYield: Decimal = tempInvestment.economics.yieldTarget.toDecimal()
         let aYieldMethod: YieldMethod = tempInvestment.economics.yieldMethod
-        
-        
+        let minimumResidual: Decimal = tempInvestment.asset.lessorCost.toDecimal() * 0.01
         
         if aYieldMethod == .MISF_AT {
             //If NPV < 0 when Residual = Lessor Cost then invalid (the Residual cannot be greater than Lessor Cost)
             tempInvestment.asset.residualValue = minAmount.toString(decPlaces: 4)
             tempInvestment.setAfterTaxCashflows()
-            if tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: tempInvestment.economics.dayCountMethod) > 0.0 {
+            if tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: tempInvestment.economics.dayCountMethod) > minimumResidual {
                 return false
             }
             tempInvestment.afterTaxCashflows.removeAll()
             //If NPV > 0 when Residual = 0 then invalid (the residual cannot be less than 0)
             tempInvestment.asset.residualValue = maxAmount.toString(decPlaces: 4)
             tempInvestment.setAfterTaxCashflows()
-            if tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: tempInvestment.economics.dayCountMethod) < 0.0 {
+            if tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: tempInvestment.economics.dayCountMethod) < minimumResidual {
                 return false
             }
             
@@ -284,7 +283,7 @@ public class Investment {
             aTargetYield = aTargetYield * (1 - tempInvestment.taxAssumptions.federalTaxRate.toDecimal())
             tempInvestment.asset.residualValue = minAmount.toString(decPlaces: 4)
             tempInvestment.setAfterTaxCashflows()
-            if tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: tempInvestment.economics.dayCountMethod) > 0.0 {
+            if tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: tempInvestment.economics.dayCountMethod) > minimumResidual {
                 return false
             }
             tempInvestment.afterTaxCashflows.removeAll()
@@ -292,7 +291,7 @@ public class Investment {
             //If NPV > 0 when Residual = 0 then invalid (the residual cannot be less than 0)
             tempInvestment.asset.residualValue = maxAmount.toString(decPlaces: 4)
             tempInvestment.setAfterTaxCashflows()
-            if tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: tempInvestment.economics.dayCountMethod) < 0.0 {
+            if tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: tempInvestment.economics.dayCountMethod) < minimumResidual {
                 return false
             }
             
@@ -300,14 +299,14 @@ public class Investment {
         } else {
             tempInvestment.asset.residualValue = minAmount.toString(decPlaces: 4)
             tempInvestment.setBeforeTaxCashflows()
-            if tempInvestment.beforeTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: tempInvestment.economics.dayCountMethod) > 0.0 {
+            if tempInvestment.beforeTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: tempInvestment.economics.dayCountMethod) > minimumResidual {
                 return false
             }
             tempInvestment.beforeTaxCashflows.removeAll()
             
             tempInvestment.asset.residualValue = maxAmount.toString(decPlaces: 4)
             tempInvestment.setBeforeTaxCashflows()
-            if tempInvestment.beforeTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: tempInvestment.economics.dayCountMethod) < 0.0 {
+            if tempInvestment.beforeTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: tempInvestment.economics.dayCountMethod) < minimumResidual {
                 return false
             }
             

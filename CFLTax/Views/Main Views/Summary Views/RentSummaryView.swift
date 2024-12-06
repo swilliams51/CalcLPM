@@ -21,7 +21,6 @@ struct RentSummaryView: View {
     @State var discountRate: String = "0.00"
     @State private var amounts: [String] = [String]()
     
-    
     @State private var showPop: Bool = false
     @State private var payHelp = implicitRateHelp
     @State private var showPop1: Bool = false
@@ -30,7 +29,6 @@ struct RentSummaryView: View {
     @State private var payHelp2 = pvTwoHelp
     @State private var showPop3: Bool = false
     @State private var payHelp3 = pvImplicitHelp
-    
     
     //@State var lineHeight: CGFloat = 12
     @State var frameHeight: CGFloat = 12
@@ -64,8 +62,8 @@ struct RentSummaryView: View {
             self.implicitRate = myInvestment.getImplicitRate().toString(decPlaces: 6)
             self.discountRate = myInvestment.economics.discountRateForRent
             self.presentValue = myInvestment.getPVOfObligations(aDiscountRate: implicitRate.toDecimal()).toString(decPlaces: 6)
-            self.presentValue1 = myInvestment.getPVOfRents().toString(decPlaces: 6)
-            self.presentValue2 = myInvestment.getPVOfObligations(aDiscountRate: discountRate.toDecimal()).toString(decPlaces: 6)
+            self.presentValue1 = myInvestment.getPVOfRents().toString(decPlaces: 8)
+            self.presentValue2 = myInvestment.getPVOfObligations(aDiscountRate: discountRate.toDecimal()).toString(decPlaces: 8)
            
             for x in 0..<myInvestment.rent.groups.count {
                 let strAmount: String = myInvestment.rent.groups[x].amount

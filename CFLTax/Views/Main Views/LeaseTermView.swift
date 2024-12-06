@@ -18,7 +18,7 @@ struct LeaseTermView: View {
     @State var paymentFrequencyOnEntry: Frequency = .monthly
     @State var endOfMonthRule: Bool = false
     @State var baseTermInMonths: Int = 12
-   
+    @State var rangeOfDates: ClosedRange<Date> = Date()...Date()
     
     //Alerts and Popovers
     @State private var showPop1: Bool = false
@@ -33,8 +33,8 @@ struct LeaseTermView: View {
             MenuHeaderView(name: "Lease Term", path: $path, isDark: $isDark)
             Form {
                 Section (header: Text("Details").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
-                    baseCommenceDateItem
                     paymentFrequencyItem
+                    baseCommenceDateItem
                     eomRuleItem
                     baseTermInMonthsItem
                 }
@@ -50,6 +50,7 @@ struct LeaseTermView: View {
             self.paymentFrequencyOnEntry = myInvestment.leaseTerm.paymentFrequency
             self.myPaymentFrequency = myInvestment.leaseTerm.paymentFrequency
             self.endOfMonthRule = myInvestment.leaseTerm.endOfMonthRule
+            self.rangeOfDates = getRangeOfBaseTermCommenceDates()
         }
     }
     
@@ -63,13 +64,10 @@ struct LeaseTermView: View {
                     self.showPop1.toggle()
                 }
             Spacer()
-            DatePicker("", selection: $baseCommenceDate, in: rangeBaseTermCommenceDates, displayedComponents:[.date])
+            DatePicker("", selection: $baseCommenceDate, in: rangeOfDates, displayedComponents:[.date])
                 .transformEffect(.init(scaleX: 1.0, y: 0.90))
                 .environment(\.locale, myLocale)
                 .font(myFont)
-                .onChange(of: baseCommenceDate) { oldValue, newValue in
-                  
-                }
         }
         .disabled(false)
         .popover(isPresented: $showPop1) {
@@ -87,6 +85,9 @@ struct LeaseTermView: View {
                         .font(myFont)
 
                }
+            }
+            .onChange(of: myPaymentFrequency) { oldValue, newValue in
+                rangeOfDates = getRangeOfBaseTermCommenceDates()
             }
         }
     }
@@ -151,11 +152,11 @@ struct LeaseTermView: View {
         path.removeLast()
     }
     
-    var rangeBaseTermCommenceDates: ClosedRange<Date> {
-        let start: Date = myInvestment.asset.fundingDate
+    func getRangeOfBaseTermCommenceDates() -> ClosedRange<Date> {
+        let start: Date = baseCommenceDate
         var maxInterim: Int
 
-        switch myInvestment.leaseTerm.paymentFrequency {
+        switch myPaymentFrequency {
         case .quarterly:
             maxInterim = 3
         case .semiannual:
