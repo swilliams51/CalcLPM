@@ -60,6 +60,9 @@ let numberOfPaymentsHelp =
 let paymentAmountHelp: Help =
         Help(title: "Payment Amount", instruction: "A valid Payment Amount must be a decimal that is equal to or greater than 0.00 but less than the Lessor's Cost of the Asset. To enter a Payment Amount that is greater than the Lessor’s Cost first go to the Asset form and enter a temporary amount for Lessor’s Cost. The return to the Payment Group details form and enter the desired Payment Amount.  Any decimal amount entered that is less than 1.00 will be interpreted as being a percent of Lessor Cost. For example, if the Lessor Cost of the Asset is 1,000,000.00, then an entry of 0.15 will be converted to an entry of 150,000.00.")
 
+let lockedPaymentHelp: Help =
+        Help(title: "Locked Payment", instruction: "This option is used when solving for Unlocked Payments on the Economics form. A Payment Group that is locked will not be adjusted when solving for Unlocked Payments.  Use this option when the payment amounts are known for one or more Payment Groups. However, there must be at least one Payment Group that is unlocked in order to use the solve for Unlocked Payments option.")
+
 //let renameHelp =
 //        Help(title: "Rename Help", instruction: "In order to rename a file, the renaming section must be active, the current name of the file must exist in the collection, the new file name must not already exist in the collection, and it must be a valid file name.")
 

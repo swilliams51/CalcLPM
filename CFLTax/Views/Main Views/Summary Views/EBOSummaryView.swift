@@ -37,7 +37,7 @@ struct EBOSummaryView: View {
        VStack {
            ReportHeaderView(name: "EBO Summary", viewAsPct: myViewAsPct, path: $path, isDark: $isDark)
            Form {
-              Section(header: Text("EBO Yields")) {
+              Section(header: Text("EBO Yields"), footer: Text("File Name: \(currentFile)")) {
                   afterTaxYieldItem
                   beforeTaxYieldItem
                   preTaxIRRItem

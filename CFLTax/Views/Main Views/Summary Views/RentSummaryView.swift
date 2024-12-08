@@ -37,7 +37,7 @@ struct RentSummaryView: View {
         VStack {
             ReportHeaderView(name: "Rentals", viewAsPct: myViewAsPct, path: $path, isDark: $isDark)
             Form {
-                Section(header: Text("Accounting")) {
+                Section(header: Text("Accounting"), footer: Text("File Name: \(currentFile)")) {
                     implicitRateItem
                     pvAtImplicitRateItem
                 }

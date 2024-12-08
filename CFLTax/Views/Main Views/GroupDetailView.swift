@@ -30,8 +30,10 @@ struct GroupDetailView: View {
     @State private var showAlert: Bool = false
     @State private var showPop1: Bool = false
     @State private var showPop2: Bool = false
+    @State private var showPop3: Bool = false
     @State private var payHelp1 = numberOfPaymentsHelp
     @State private var payHelp2 = paymentAmountHelp
+    @State private var payHelp3 = lockedPaymentHelp
    
     //Payment textfield variables
     private let pasteBoard = UIPasteboard.general
@@ -69,9 +71,7 @@ struct GroupDetailView: View {
         .onAppear{
             viewOnAppear()
         }
-        .alert(isPresented: $showAlert, content: getAlert)
-       
-        }
+    }
 }
 
 #Preview {
@@ -116,44 +116,62 @@ extension GroupDetailView {
                 self.resetForPaymentTypeChange()
             }
             .font(myFont)
+            
         }
+        .padding(.bottom, 10)
     }
     
     var noOfPaymentsItem: some View {
         VStack {
-            HStack {
-                Text("No. of payments:")
-                    .font(myFont)
-                Image(systemName: "questionmark.circle")
-                    .foregroundColor(.blue)
-                    .onTapGesture {
-                        self.showPop1 = true
-                    }
-                Spacer()
-                Text("\(selectedGroup.noOfPayments.toString())")
-                    .font(myFont)
-            }
-            Slider(value: $noOfPayments, in: rangeOfPayments, step: 1) {
-
-            }
-            .accentColor(ColorTheme().accent)
-            .disabled(sliderIsLocked)
-            .onChange(of: noOfPayments) { oldValue, newValue in
-                self.selectedGroup.noOfPayments = newValue.toInteger()
-            }
-            HStack {
-                Spacer()
-                Stepper("", value: $noOfPayments, in: rangeOfPayments, step: 1, onEditingChanged: { _ in
-                   
-                }).labelsHidden()
-                .transformEffect(.init(scaleX: 1.0, y: 0.9))
-                .disabled(sliderIsLocked)
-            }
+            noOfPaymentsSubItem
+            sliderSubItem
+            stepperSubItem
         }
         .popover(isPresented: $showPop1) {
             PopoverView(myHelp: $payHelp1, isDark: $isDark)
         }
     }
+    
+    var noOfPaymentsSubItem: some View {
+        HStack {
+            Text("No. of payments:")
+                .font(myFont)
+            Image(systemName: "questionmark.circle")
+                .foregroundColor(.blue)
+                .onTapGesture {
+                    self.showPop1 = true
+                }
+            Spacer()
+            Text("\(selectedGroup.noOfPayments.toString())")
+                .font(myFont)
+        } .padding(.bottom, 10)
+    }
+    
+    var sliderSubItem: some View {
+        Slider(value: $noOfPayments, in: rangeOfPayments, step: 1) {
+            
+        }
+        .accentColor(ColorTheme().accent)
+        .disabled(sliderIsLocked)
+        .onChange(of: noOfPayments) { oldValue, newValue in
+            self.selectedGroup.noOfPayments = newValue.toInteger()
+        }
+        .padding(.bottom, 10)
+    }
+    
+    var stepperSubItem: some View {
+        HStack {
+            Spacer()
+            Stepper("", value: $noOfPayments, in: rangeOfPayments, step: 1,
+                    onEditingChanged: { _ in
+                
+            }).labelsHidden()
+                .transformEffect(.init(scaleX: 1.0, y: 0.9))
+                .disabled(sliderIsLocked)
+        }
+        .padding(.bottom, 10)
+    }
+    
     
     var paymentTimingItem: some View {
         Picker(selection: $selectedGroup.timing, label: Text("Timing:").font(myFont)) {
@@ -161,20 +179,29 @@ extension GroupDetailView {
                 Text(PaymentTiming.toString())
                     .font(myFont)
             }
-            .onChange(of: selectedGroup.timing) { oldValue, newValue in
-              
-            }
-        }.disabled(timingIsLocked)
+        }
+        .disabled(timingIsLocked)
     }
     
     var paymentLockedItem: some View {
-        Toggle(isOn: $selectedGroup.locked) {
-            Text(selectedGroup.locked ? "Locked:" : "Unlocked:")
-                .font(myFont)
+        HStack {
+            Text(selectedGroup.locked ? "Locked" : "Unlocked")
+            Image(systemName: "questionmark.circle")
+                .foregroundColor(.blue)
+                .onTapGesture {
+                    self.showPop3 = true
+                }
+            Spacer()
+            Toggle(isOn: $selectedGroup.locked) {
+            }
         }
         .disabled(self.selectedGroup.isCalculatedPaymentType() ? true : false)
         .font(myFont)
+        .popover(isPresented: $showPop3) {
+            PopoverView(myHelp: $payHelp3, isDark: $isDark)
+        }
     }
+    
 }
 
 //Payment Amount TextField
@@ -185,11 +212,12 @@ extension GroupDetailView {
             Spacer()
             rightSideAmountItem
         }
+        .padding(.bottom, 10)
     }
     
     var leftSideAmountItem: some View {
         HStack {
-            Text(isCalculatedPayment ? "amount:" : "amount: \(Image(systemName: "return"))")
+            Text(isCalculatedPayment ? "Amount:" : "Amount: \(Image(systemName: "return"))")
                 .font(myFont)
                 .foregroundColor(isDark ? .white : .black)
             Image(systemName: "questionmark.circle")
@@ -228,6 +256,9 @@ extension GroupDetailView {
                 .frame(width: 100, height: 30, alignment: .trailing)
                 .foregroundColor(isDark ? .white : .black)
         }
+        .alert(isPresented: $showAlert) {
+            Alert(title: Text("Payment Amount Error"), message: Text(alertPaymentAmount), dismissButton: .default(Text("OK")))
+        }
         
     }
     
@@ -243,7 +274,7 @@ extension GroupDetailView {
     }
     
     func paymentTextFieldIsLocked() -> Bool {
-        if selectedGroup.isCalculatedPaymentType() == true || selectedGroup.locked == true {
+        if selectedGroup.isCalculatedPaymentType() == true {
             return true
         } else {
             return false
@@ -295,7 +326,6 @@ extension GroupDetailView {
        
         if isAmountValid(strAmount: selectedGroup.amount, decLow: 0.0, decHigh: maximumPaymentAmount, inclusiveLow: true, inclusiveHigh: true) == false {
             self.selectedGroup.amount = self.paymentAmountOnEntry
-            alertTitle = alertPaymentAmount
             showAlert.toggle()
         } else {
             if self.selectedGroup.amount.toDecimal() > 0.00 && self.selectedGroup.amount.toDecimal() <= 1.0 {

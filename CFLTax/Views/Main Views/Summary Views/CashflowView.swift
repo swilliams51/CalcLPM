@@ -32,7 +32,7 @@ struct CashflowView: View {
         VStack {
             ReportHeaderView(name: "Cashflow Summary", viewAsPct: myViewAsPct, path: $path, isDark: $isDark)
             Form {
-                Section(header: Text("Cashflow")) {
+                Section(header: Text("Cashflow"), footer: Text("File Name: \(currentFile)")) {
                     assetCostItem
                     feeAmountItem
                     totalCashOutItem
@@ -51,19 +51,19 @@ struct CashflowView: View {
             myInvestment.calculate()
             myInvestment.hasChanged = false
             
-            self.assetCost = myInvestment.getAssetCost(asCashflow: true).toString(decPlaces: 2)
-            self.feeAmount = myInvestment.getFeeAmount().toString(decPlaces: 2)
+            self.assetCost = myInvestment.getAssetCost(asCashflow: true).toString(decPlaces: 3)
+            self.feeAmount = myInvestment.getFeeAmount().toString(decPlaces: 3)
             
-            self.rentAmount = myInvestment.getTotalRent().toDecimal().toString(decPlaces: 2)
-            self.residualAmount = myInvestment.getAssetResidualValue().toString(decPlaces: 2)
+            self.rentAmount = myInvestment.getTotalRent().toDecimal().toString(decPlaces: 3)
+            self.residualAmount = myInvestment.getAssetResidualValue().toString(decPlaces: 3)
             self.bTProfit = myInvestment.getBeforeTaxCash().toDecimal().toString(decPlaces: 2)
-            self.taxesPaid = myInvestment.getTaxesPaid().toDecimal().toString(decPlaces: 2)
-            self.aTCash = myInvestment.getAfterTaxCash().toDecimal().toString(decPlaces: 2)
+            self.taxesPaid = myInvestment.getTaxesPaid().toDecimal().toString(decPlaces: 3)
+            self.aTCash = myInvestment.getAfterTaxCash().toDecimal().toString(decPlaces: 3)
             
             let myTotalOut: Decimal = assetCost.toDecimal() + feeAmount.toDecimal()
-            totalCashOut = myTotalOut.toString(decPlaces: 2)
+            totalCashOut = myTotalOut.toString(decPlaces: 3)
             let myTotalIn: Decimal = rentAmount.toDecimal() + residualAmount.toDecimal()
-            totalCashIn = myTotalIn.toString(decPlaces: 2)
+            totalCashIn = myTotalIn.toString(decPlaces: 3)
             
         }
     }

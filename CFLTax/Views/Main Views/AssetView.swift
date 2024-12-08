@@ -49,9 +49,9 @@ struct AssetView: View {
     @State var assetHelp1 = assetResidualValueHelp
     @State var assetHelp2 = assetLesseeGuarantyHelp
     @State var assetHelp3 = assetFundingDateHelp
+    
+    @State private var padding: CGFloat = 7
  
-    
-    
     var body: some View {
         VStack{
             MenuHeaderView(name: "Asset", path: $path, isDark: $isDark)
@@ -137,13 +137,15 @@ extension AssetView {
                 }
             Spacer()
             DatePicker("", selection: $myAsset.fundingDate,  displayedComponents:[.date])
-                .transformEffect(.init(scaleX: 1.0, y: 0.90))
+                //.transformEffect(.init(scaleX: 1.0, y: 0.90))
                 .environment(\.locale, myLocale)
                 .onChange(of: myAsset.fundingDate) { oldValue, newValue in
                   
                 }
         }
         .font(myFont)
+        .padding(.top, padding)
+        .padding(.bottom, padding)
         .popover(isPresented: $showPop3) {
             PopoverView(myHelp: $assetHelp3, isDark: $isDark)
         }
@@ -158,6 +160,8 @@ extension AssetView {
             Spacer()
             rightSideAssetNameItem
         }
+        .padding(.top, padding)
+        .padding(.bottom, padding)
     }
     
     var leftSideAssetNameItem: some View {
@@ -202,6 +206,8 @@ extension AssetView {
             Spacer()
             rightSideLessorCostItem
         }
+        .padding(.top, padding)
+        .padding(.bottom, padding)
     }
     
     var leftSideLessorCostItem: some View {
@@ -254,6 +260,8 @@ extension AssetView {
             Spacer()
             rightSideResidualValueItem
         }
+        .padding(.top, padding)
+        .padding(.bottom, padding)
     }
     
     var leftSideResidualValueItem: some View {
@@ -314,6 +322,8 @@ extension AssetView {
             Spacer()
             rightSideLesseeGuarantyItem
         }
+        .padding(.top, padding)
+        .padding(.bottom, padding)
     }
     
     var leftSideLesseeGuarantyItem: some View {

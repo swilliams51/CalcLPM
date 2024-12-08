@@ -27,16 +27,20 @@ struct LeaseTermView: View {
     @State private var baseHelp: Help = baseTermHelp
     @State private var eomRuleHelp = leaseTermEOMRuleHelp
     
-    
     var body: some View {
         VStack {
             MenuHeaderView(name: "Lease Term", path: $path, isDark: $isDark)
             Form {
                 Section (header: Text("Details").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
                     paymentFrequencyItem
+                        .padding(.bottom, 5)
                     baseCommenceDateItem
+                        .padding(.top, 5)
+                        .padding(.bottom, 5)
                     eomRuleItem
+                        .padding(.bottom, 5)
                     baseTermInMonthsItem
+                        .padding(.bottom, 5)
                 }
                 Section(header: Text("Submit Form")) {
                     SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isFocused: false, isDark: $isDark)

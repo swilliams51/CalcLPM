@@ -20,7 +20,7 @@ struct EBOAfterTaxCashflowsView: View {
         VStack {
             ReportHeaderView(name: "After-Tax Cashflows", viewAsPct: myViewAsPct, path: $path, isDark: $isDark)
             Form {
-                Section(header: Text("\(currentFile)")) {
+                Section(header: Text("File Name: \(currentFile)")) {
                     ForEach(myATCashflows.items) { item in
                         HStack {
                             Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")

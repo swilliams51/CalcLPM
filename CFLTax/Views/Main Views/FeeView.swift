@@ -20,7 +20,6 @@ struct FeeView: View {
     @State private var amountOnEntry: String = ""
     private let pasteBoard = UIPasteboard.general
     
-   
     @State private var alertTitle: String = ""
     @State private var showAlert: Bool = false
     @State private var showPop1: Bool = false

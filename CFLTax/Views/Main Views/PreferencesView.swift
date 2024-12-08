@@ -28,7 +28,6 @@ struct PreferencesView: View {
     @State private var alertTitle: String = ""
     @State private var showAlert: Bool = false
     
-    
     var body: some View {
         VStack {
             MenuHeaderView(name: "Preferences", path: $path, isDark: $isDark)
@@ -36,7 +35,7 @@ struct PreferencesView: View {
                 Section(header: Text("Default New Lease")) {
                     defaultNewLeaseItem
                     saveCurrentAsDefaultItem
-                    resetFileItem
+                    //resetFileItem
                 }
                Section(header: Text("Mode")) {
                     colorSchemeItem
