@@ -34,6 +34,9 @@ struct EconomicsView: View {
     @State private var payHelp3 = dayCountMethodHelp
     @State private var showPop4: Bool = false
     @State private var payHelp4 = discountRateHelp
+    
+    @State private var showPop5: Bool = false
+    @State private var payHelp5 = targetYieldHelp
 
     private let pasteBoard = UIPasteboard.general
     @State private var alertTitle: String = ""
@@ -44,13 +47,16 @@ struct EconomicsView: View {
         VStack {
             MenuHeaderView(name: "Economics", path: $path, isDark: $isDark)
             Form{
-                Section(header: Text("Parameters").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))){
+                Section(header: Text("Solve For Parameters").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))){
                     yieldMethodItem
                     yieldTargetItem
                     solveForItem
+                }
+                Section(header: Text("Additional Parameters")) {
                     discountRateItem
                     dayCountMethodItem
                 }
+                   
                 Section(header: Text("Submit Form")){
                     SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isFocused: keyBoardIsActive(), isDark: $isDark)
                 }
@@ -166,6 +172,11 @@ extension EconomicsView {
             Text("Target Yield: \(Image(systemName: "return"))")
                 .foregroundColor(isDark ? .white : .black)
                 .font(myFont)
+            Image(systemName: "questionmark.circle")
+                .foregroundColor(.blue)
+                .onTapGesture {
+                    self.showPop5 = true
+                }
         }
     }
     
@@ -192,6 +203,10 @@ extension EconomicsView {
         .alert(isPresented: $showAlert1) {
             Alert(title: Text("Yield Target Error"), message: Text(alertMaxTargetYield), dismissButton: .default(Text("OK")))
         }
+        .popover(isPresented: $showPop5) {
+            PopoverView(myHelp: $payHelp5, isDark: $isDark)
+        }
+        
     }
     
     func percentFormatted(editStarted: Bool) -> String {

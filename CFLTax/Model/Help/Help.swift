@@ -79,10 +79,13 @@ let assetLesseeGuarantyHelp =
         Help(title: "Lessee Guaranty Amount", instruction: "Is the amount of the Residual Value that is guaranteed by the Lessee.  It is commonly used in TRAC Leases. The amount of the Lessee Guaranty can not exceed the Residual Value of the Asset.")
 
 let yieldMethodHelp =
-        Help(title: "Yield Method", instruction: "The method that is used to calculate the yield of the Investment.  The two primary methods are 1- the After-Tax Multiple Investment Sinking Fund (MISF-AT) method and 2- the Internal Rate of Return of the Pre-Tax Cashflows (IRR of PTCF) method.  The Sinking Fund Rate used in the MISF method is 0.00%.  The MISF-Before Tax Yield is determined indirectly by dividing the MISF-AT Yield by 1.0 minus the Federal Tax Rate.")
+        Help(title: "Yield Method", instruction: "Yield Method is either MISF or IRR, and within the MISF method the options are either after-tax or its before tax equivalent. The MISF method will use the Investment’s after-tax cashflows while the IRR method will use the before-tax cashflows.")
+
+let targetYieldHelp =
+Help(title: "Target Yield", instruction: "Target Yield is the specific IRR (expressed as a nominal annual interest rate) of the applicable Investment cashflows that the goal seeking algorithm will target when solving for the selected Solve For option.")
 
 let solveForHelp =
-        Help(title: "Solve For", instruction: "The program allows the user to solve for 1- the Lessor Cost, 2- the unlocked Rentals, 3- the Residual value, 4- the Fee Amount, or 5- any one of 3 yields. Because of rounding constraints, the targeting procedure will only be precise to +/- 1 basis point of the Target Yield.")
+        Help(title: "Solve For", instruction: "The Solve For option is used with the above two parameters. For example, if the Yield Method is MISF AT, the Target Yield is 5.00%, and the Solve For option is “Unlocked Rentals” then algorithm will solve for the unlocked payment amounts that will produce a 5.00% MISF AT Yield while holding all other investment parameters constant. Note, that if the Solve For option is “yield” then the targeting algorithm will be suppressed and all three yields will simply be calculated.")
 
 let discountRateHelp =
         Help(title: "Discount Rate", instruction: "The rate used to calculate two present value amounts, 1- PV1, which the present value of the Rental payments and 2- PV2, which is the present value of the Rentals payments plus the amount of the Lessee's Residual Guaranty. PV1 and PV2 are shown in the Rentals results screen.")

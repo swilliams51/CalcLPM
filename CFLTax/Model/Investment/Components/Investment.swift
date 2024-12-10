@@ -243,15 +243,52 @@ public class Investment {
     
     private func isLessorCostCalculationValid() -> Bool {
         let tempInvestment: Investment = self.clone()
-        let myFrequency: Frequency = tempInvestment.leaseTerm.paymentFrequency
-        let myDayCountMethod: DayCountMethod = tempInvestment.economics.dayCountMethod
-        let totalOfPayments = tempInvestment.rent.getTotalAmountOfPayments(aFreq: myFrequency, aDayCountMethod: myDayCountMethod)
-        let totalResidualValue: Decimal = tempInvestment.asset.residualValue.toDecimal()
+        tempInvestment.asset.lessorCost = minimumLessorCost
+        let aTargetYield: Decimal = tempInvestment.economics.yieldTarget.toDecimal()
+        let aYieldMethod: YieldMethod = tempInvestment.economics.yieldMethod
         
-        if totalResidualValue > totalOfPayments * 1.5 {
-            return false
+        switch aYieldMethod {
+        case .MISF_AT:
+            tempInvestment.asset.lessorCost = minimumLessorCost
+            tempInvestment.setAfterTaxCashflows()
+            if tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: tempInvestment.economics.dayCountMethod) < 0.00 {
+                return false
+            }
+            tempInvestment.afterTaxCashflows.removeAll()
+            
+            tempInvestment.asset.lessorCost = maximumLessorCost
+            tempInvestment.setAfterTaxCashflows()
+            if tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: tempInvestment.economics.dayCountMethod) > 0.00 {
+                return false
+            }
+        case .MISF_BT:
+            tempInvestment.asset.lessorCost = minimumLessorCost
+            tempInvestment.setAfterTaxCashflows()
+            if tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: tempInvestment.economics.dayCountMethod) < 0.00 {
+                return false
+            }
+            tempInvestment.afterTaxCashflows.removeAll()
+            
+            tempInvestment.asset.lessorCost = maximumLessorCost
+            tempInvestment.setAfterTaxCashflows()
+            if tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: tempInvestment.economics.dayCountMethod) > 0.00     {
+                return false
+            }
+        case .IRR_PTCF:
+            tempInvestment.asset.lessorCost = minimumLessorCost
+            tempInvestment.setBeforeTaxCashflows()
+            if tempInvestment.beforeTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: tempInvestment.economics.dayCountMethod) < 0.00 {
+                return false
+            }
+            tempInvestment.beforeTaxCashflows.removeAll()
+            
+            tempInvestment.asset.lessorCost = maximumLessorCost
+            tempInvestment.setBeforeTaxCashflows()
+            if tempInvestment.beforeTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: tempInvestment.economics.dayCountMethod) > 0.00     {
+                return false
+            }
         }
-        
+
         return true
     }
     
@@ -259,19 +296,19 @@ public class Investment {
         let tempInvestment: Investment = self.clone()
         let minAmount: Decimal = 0.0
         let maxAmount: Decimal = tempInvestment.asset.lessorCost.toDecimal()
-        var aTargetYield: Decimal = tempInvestment.economics.yieldTarget.toDecimal()
+        let aTargetYield: Decimal = tempInvestment.economics.yieldTarget.toDecimal()
         let aYieldMethod: YieldMethod = tempInvestment.economics.yieldMethod
         let minimumResidual: Decimal = tempInvestment.asset.lessorCost.toDecimal() * 0.01
         
         if aYieldMethod == .MISF_AT {
-            //If NPV < 0 when Residual = Lessor Cost then invalid (the Residual cannot be greater than Lessor Cost)
+            //Test if PV of Lease with a 0.00 residual > 0.00, if yes then calculation is invalid (residual can't be reduced further)
             tempInvestment.asset.residualValue = minAmount.toString(decPlaces: 4)
             tempInvestment.setAfterTaxCashflows()
             if tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: tempInvestment.economics.dayCountMethod) > minimumResidual {
                 return false
             }
             tempInvestment.afterTaxCashflows.removeAll()
-            //If NPV > 0 when Residual = 0 then invalid (the residual cannot be less than 0)
+            //Test if PV of Lease with a 100.00 residual < 0.00, if yes then calculation is invalid (residual can't be increased further)
             tempInvestment.asset.residualValue = maxAmount.toString(decPlaces: 4)
             tempInvestment.setAfterTaxCashflows()
             if tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: tempInvestment.economics.dayCountMethod) < minimumResidual {
@@ -280,7 +317,7 @@ public class Investment {
             
             return true
         } else if aYieldMethod == .MISF_BT {
-            aTargetYield = aTargetYield * (1 - tempInvestment.taxAssumptions.federalTaxRate.toDecimal())
+            //Test if PV of Lease with a 0.00 residual > 0.00, if yes then calculation is invalid
             tempInvestment.asset.residualValue = minAmount.toString(decPlaces: 4)
             tempInvestment.setAfterTaxCashflows()
             if tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: tempInvestment.economics.dayCountMethod) > minimumResidual {
@@ -288,7 +325,7 @@ public class Investment {
             }
             tempInvestment.afterTaxCashflows.removeAll()
             
-            //If NPV > 0 when Residual = 0 then invalid (the residual cannot be less than 0)
+            //Test if PV of Lease with a 100.00 residual < 0.00, if yes then calculation is invalid
             tempInvestment.asset.residualValue = maxAmount.toString(decPlaces: 4)
             tempInvestment.setAfterTaxCashflows()
             if tempInvestment.afterTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: tempInvestment.economics.dayCountMethod) < minimumResidual {
@@ -297,6 +334,7 @@ public class Investment {
             
             return true
         } else {
+            //Test if PV of Lease with a 0.00 residual > 0.00, if yes then calculation is invalid (residual can't be reduced further)
             tempInvestment.asset.residualValue = minAmount.toString(decPlaces: 4)
             tempInvestment.setBeforeTaxCashflows()
             if tempInvestment.beforeTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: tempInvestment.economics.dayCountMethod) > minimumResidual {
@@ -304,6 +342,7 @@ public class Investment {
             }
             tempInvestment.beforeTaxCashflows.removeAll()
             
+            //Test if PV of Lease with a 100.00 residual < 0.00, if yes then calculation is invalid
             tempInvestment.asset.residualValue = maxAmount.toString(decPlaces: 4)
             tempInvestment.setBeforeTaxCashflows()
             if tempInvestment.beforeTaxCashflows.ModXNPV(aDiscountRate: aTargetYield, aDayCountMethod: tempInvestment.economics.dayCountMethod) < minimumResidual {
