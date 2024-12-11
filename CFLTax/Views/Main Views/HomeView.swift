@@ -24,8 +24,10 @@ struct HomeView: View {
     @State private var minimumEBOAmount: Decimal = 0.0
     @State private var showPop1: Bool = false
     @State private var showPop2: Bool = false
+    @State private var showPop3: Bool = false
     @State private var feeHelp = feeHomeHelp
     @State private var eboHelp = eboHomeHelp
+    @State private var calculationHelp = calculateHomeHelp
     @AppStorage("darkMode") var darkMode: Bool = false
 
     var body: some View {
@@ -99,6 +101,10 @@ struct HomeView: View {
             }
             .popover(isPresented: $showPop2) {
                 PopoverView(myHelp: $eboHelp, isDark: $isDark)
+            }
+            
+            .popover(isPresented: $showPop3){
+                PopoverView(myHelp: $calculationHelp, isDark: $isDark)
             }
             .alert(isPresented: $isShowingCalculationErrorAlert) {
                 Alert(title: Text("Calculation Error"), message: Text(alertCalculationError), dismissButton: .default(Text("OK")))
@@ -225,7 +231,15 @@ struct HomeView: View {
     
     var calculatedItem: some View {
         HStack{
-            Text("Calculate: \(myInvestment.economics.solveFor.toString())")
+            Text("Calculate:")
+                .font(myFont)
+            Image(systemName: "questionmark.circle")
+                .font(myFont)
+                .foregroundColor(.blue)
+                .onTapGesture {
+                    self.showPop3 = true
+                }
+            Text("\(myInvestment.economics.solveFor.toString())")
                 .font(myFont)
             Spacer()
             Image(systemName: "return")
