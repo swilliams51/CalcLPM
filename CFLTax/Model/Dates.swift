@@ -118,14 +118,17 @@ func subtractOnePeriodFromDate(dateStart: Date, payperYear: Frequency, dateRefer
 
 public func getFiscalYearEnd(askDate: Date, fiscalMonthEnd: Int) -> Date {
     let year:Int = getYearComponent(dateIn: askDate)
-    let month: Int = fiscalMonthEnd
-    let day: Int = lastDayOfMonth(iMonth: month, iYear: year)
-
+    let monthAsk: Int = getMonthComponent(dateIn: askDate)
+    let day: Int = lastDayOfMonth(iMonth: fiscalMonthEnd, iYear: year)
     var comps = DateComponents()
-    comps.day = day
-    comps.month = month
-    comps.year = year
     
+    comps.day = day
+    comps.month = fiscalMonthEnd
+    comps.year = year
+    if monthAsk > fiscalMonthEnd {
+        comps.year = year + 1
+    }
+   
     let dateNew = Calendar.current.date(from: comps)!
     
     return dateNew

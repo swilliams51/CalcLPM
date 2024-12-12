@@ -204,6 +204,9 @@ struct HomeView: View {
             Image(systemName: "questionmark.circle")
                 .font(myFont)
                 .foregroundColor(.blue)
+                .onTapGesture {
+                    self.showPop2 = true
+                }
             Spacer()
             Image(systemName: "chevron.right")
         }
@@ -282,6 +285,7 @@ struct HomeView: View {
             if myInvestment.earlyBuyoutExists {
                 myInvestment.earlyBuyout.hasChanged = false
             }
+            
             self.path.append(25)
         } else {
             self.isShowingCalculationErrorAlert = true

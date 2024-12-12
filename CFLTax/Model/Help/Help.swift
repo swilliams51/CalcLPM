@@ -64,7 +64,7 @@ let eboHelp2 =
     Help(title: "Early Buyout", instruction: "The EBO Amount can not be entered manually, but instead is expressed as a spread in basis points over the full term MISF After-Tax Yield. The basis point slider is accurate to ~ +/- 1 bps.   To adjust the EBO amount move the slider to the appropriate bps spread and then press the calculate button to derive the EBO Amount. It is important to remember than any subsequent change to the Investment parameters will result in the EBO being removed from the Investment.  The EBO can be added back after all changes to the Investment are completed.")
 
 let eboHomeHelp =
-    Help(title: "Add or Remove EBO", instruction: "An EBO can be added to or removed from the Investment using the Add/Remove EBO buttons below. Note, an EBO will be automatically removed from the Investment when any investment parameter changes.")
+    Help(title: "Add or Remove EBO", instruction: "An EBO can be added to or removed from the Investment using the Add/Remove EBO buttons below. Note, an EBO will be automatically removed from the Investment when any Investment parameter changes.")
 
 let feeHomeHelp =
     Help(title: "Add/Remove Fee", instruction: "A Fee may be added to or removed from the Investment using the Add/Remove Fee buttons below. A Fee can also be added by selecting it as a solveFor option in the economics screen. Setting the Fee Amount to 0.0 will also remove a Fee from the Investment.")

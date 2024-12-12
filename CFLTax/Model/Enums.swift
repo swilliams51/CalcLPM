@@ -136,27 +136,27 @@ public enum TaxYearEnd: Int {
 extension String {
     func toTaxYearEnd() -> TaxYearEnd? {
         switch self {
-        case "January":
+        case "1":
             return .January
-        case "February":
+        case "2":
             return .February
-        case "March":
+        case "3":
             return .March
-        case "April":
+        case "4":
             return .April
-        case "May":
+        case "5":
             return .May
-        case "June":
+        case "6":
             return .June
-        case "July":
+        case "7":
             return .July
-        case "August":
+        case "8":
             return .August
-        case "September":
+        case "9":
             return .September
-        case "October":
+        case "10":
             return .October
-        case "November":
+        case "11":
             return .November
         default :
             return .December
