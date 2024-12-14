@@ -29,7 +29,7 @@ public class PeriodicDepreciableBalances: Cashflows {
         var periodicBalance: Decimal = 0.0
         
         for x in 0..<myLeaseTemplate.count() {
-            if getYearComponent(dateIn: myLeaseTemplate.items[x].dueDate) <= getYearComponent(dateIn: myCombinedCashflows.items[0].items[y].dueDate) {
+            if myLeaseTemplate.items[x].dueDate.isLessThanOrEqualTo(date: myCombinedCashflows.items[0].items[y].dueDate) {
                 periodicBalance = remainingBalance
             } else {
                 remainingBalance = remainingBalance - myCombinedCashflows.items[0].items[y].amount.toDecimal() * -1.0

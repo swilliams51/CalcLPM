@@ -128,6 +128,12 @@ public func getFiscalYearEnd(askDate: Date, fiscalMonthEnd: Int) -> Date {
     if monthAsk > fiscalMonthEnd {
         comps.year = year + 1
     }
+    
+    if comps.month == 2 && comps.day == 29 {
+        if comps.year! % 4 != 0 {
+            comps.day = 28
+        }
+    }
    
     let dateNew = Calendar.current.date(from: comps)!
     
