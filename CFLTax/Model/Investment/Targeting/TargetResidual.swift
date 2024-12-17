@@ -46,11 +46,11 @@ extension Investment {
             var y2: Decimal = getNPVAfterNewResidual_AT(aInvestment: tempInvestment, aResidual: x2, discountRate: yield)
             
             iCounter = 2
-            while iCounter < 6 {
+            while iCounter < 7 {
                 mxbResidual = mxbFactor(factor1: x1, value1: y1, factor2: x2, value2: y2)
                 let newNPV = getNPVAfterNewResidual_AT(aInvestment: tempInvestment, aResidual: mxbResidual, discountRate: yield)
                 
-                if abs(newNPV) < toleranceLumpSums {
+                if abs(newNPV) < 0.05 {
                     break
                 }
                 
@@ -130,7 +130,7 @@ extension Investment {
                 break
             }
             let myBalance = getNPVAfterNewFactor_BT(aInvestment: tempInvestment, aFactor: newFactor, discountRate: yield)
-            if abs(myBalance) < toleranceLumpSums {
+            if abs(myBalance) < 0.05 {
                 break
             }
             x1 = newFactor

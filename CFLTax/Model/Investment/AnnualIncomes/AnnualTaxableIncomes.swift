@@ -110,12 +110,11 @@ public class AnnualTaxableIncomes: CollCashflows {
             if x == items[0].count() - 1 { // if Last Tax Year
                 let annualTaxPaymentUnplanned: Decimal = items[0].items[x].amount.toDecimal() * aInvestment.taxAssumptions.federalTaxRate.toDecimal() * -1.0
                 let annualTaxPaymentPlanned: Decimal = plannedIncome.toDecimal() * aInvestment.taxAssumptions.federalTaxRate.toDecimal() * -1.0
-                let myTerminationTaxPayments: Cashflows = periodicTaxPaymentsForTermination(totalTaxPaymentUnplanned: annualTaxPaymentUnplanned, totalTaxPaymentPlanned: annualTaxPaymentPlanned, unPlannedDate: unplannedDate, dateTaxPayment: dateTaxPayment, nextFiscalDate: nextFiscalYearEnd, taxPayMonths: taxPaymentMonths, referDate: referDate, aEOMRule: eomRule)
+                let myTerminationTaxPayments: Cashflows = periodicTaxPaymentsForTermination(totalTaxPaymentUnplanned: annualTaxPaymentUnplanned, totalTaxPaymentPlanned: annualTaxPaymentPlanned, unPlannedDate: unplannedDate, firstDateInFiscalYear: dateTaxPayment, nextFiscalDate: nextFiscalYearEnd, taxPayMonths: taxPaymentMonths, referDate: referDate, aEOMRule: eomRule)
                 for x in 0..<myTerminationTaxPayments.items.count {
                     let myCashflow = Cashflow(dueDate: myTerminationTaxPayments.items[x].dueDate, amount: myTerminationTaxPayments.items[x].amount)
                     periodicTaxPayments.add(item: myCashflow)
                 }
-                
             }
             if x < items[0].count() - 1 {
                 let periodicTaxPayment = totalTaxPayable / Decimal(numberOfPayments)
@@ -134,33 +133,57 @@ public class AnnualTaxableIncomes: CollCashflows {
         return periodicTaxPayments
     }
     
-    
-    private func periodicTaxPaymentsForTermination(totalTaxPaymentUnplanned: Decimal, totalTaxPaymentPlanned: Decimal, unPlannedDate: Date, dateTaxPayment: Date, nextFiscalDate: Date, taxPayMonths: [Int], referDate: Date, aEOMRule: Bool) -> Cashflows {
-        let taxPaymentMonths: [Int] = taxPayMonths
-        let periodicTaxPaymentPlanned: Decimal = totalTaxPaymentPlanned / 4.0 //197463.22 / 4 = 41467.26
-        let remainingNoOfTaxPaymentsAfterTermination: Int = getRemainNoOfTaxPmtsInYear_Month(aFirstTaxPaymentDate: unPlannedDate, aFiscalYearEnd: nextFiscalDate)
-        var periodicTaxPaymentUnplanned: Decimal = 0.0
-        if remainingNoOfTaxPaymentsAfterTermination == 0 {
-            periodicTaxPaymentUnplanned = totalTaxPaymentUnplanned - totalTaxPaymentPlanned
-        } else {
-            periodicTaxPaymentUnplanned = (totalTaxPaymentUnplanned - totalTaxPaymentPlanned) / Decimal(remainingNoOfTaxPaymentsAfterTermination)
-        }
-        
-        var totalPeriodicTaxPayment: Decimal = 0.0
-        var dateStart: Date = dateTaxPayment
-        var x: Int = 1
+    private func periodicTaxPaymentsForTermination(totalTaxPaymentUnplanned: Decimal, totalTaxPaymentPlanned: Decimal, unPlannedDate: Date, firstDateInFiscalYear: Date, nextFiscalDate: Date, taxPayMonths: [Int], referDate: Date, aEOMRule: Bool) -> Cashflows {
+        let taxPaymentMonths: [Int] = taxPayMonths //[4,6,9,12]
+       //197463.22 / 4 = 41467.26
+        let remainingNoOfTaxPaymentsAfterTermination: Int = getRemainNoOfTaxPmtsAfterDate(askDate: unPlannedDate, aFiscalYearEnd: nextFiscalDate)
+        let totalAnnualTaxPayment: Decimal = totalTaxPaymentUnplanned
+        let periodicTaxPaymentPlanned: Decimal = totalTaxPaymentPlanned / 4.0
+        var periodicTaxPaymentUnplanned: Decimal = totalTaxPaymentUnplanned
+        var periodicTaxPayment: Decimal = 0.0
+        var dateStart: Date = firstDateInFiscalYear
         
         let taxPaymentsForTermination: Cashflows = Cashflows()
+        var taxPaymentNumber: Int = 1
+        
+        switch remainingNoOfTaxPaymentsAfterTermination {
+        case 4 :
+            periodicTaxPaymentUnplanned = periodicTaxPaymentUnplanned / 4.0
+        case 3:
+            periodicTaxPaymentUnplanned = (totalAnnualTaxPayment  - periodicTaxPaymentPlanned) / 3.0
+        case 2:
+            periodicTaxPaymentUnplanned = (totalAnnualTaxPayment - (2.0 * periodicTaxPaymentPlanned)) / 2.0
+        default:
+            periodicTaxPaymentUnplanned = (totalAnnualTaxPayment  - ( 3.0 * periodicTaxPaymentPlanned))
+        }
+        
         while dateStart.isLessThan(date: nextFiscalDate) {
             if isAskMonthATaxPaymentMonth(aAskDate: dateStart, aTaxPaymentMonths: taxPaymentMonths) {
-                if x > (4 - remainingNoOfTaxPaymentsAfterTermination) {
-                    totalPeriodicTaxPayment = periodicTaxPaymentPlanned + periodicTaxPaymentUnplanned
-                } else {
-                    totalPeriodicTaxPayment = periodicTaxPaymentPlanned
+                switch remainingNoOfTaxPaymentsAfterTermination {
+                case 4:
+                    periodicTaxPayment = periodicTaxPaymentUnplanned
+                case 3:
+                    if taxPaymentNumber == 1 {
+                        periodicTaxPayment = periodicTaxPaymentPlanned
+                    } else {
+                        periodicTaxPayment = periodicTaxPaymentUnplanned
+                    }
+                case 2:
+                    if taxPaymentNumber <= 2 {
+                        periodicTaxPayment = periodicTaxPaymentPlanned
+                    } else {
+                        periodicTaxPayment = periodicTaxPaymentUnplanned
+                    }
+                default:
+                    if taxPaymentNumber <= 3 {
+                        periodicTaxPayment = periodicTaxPaymentPlanned
+                    } else {
+                        periodicTaxPayment = periodicTaxPaymentUnplanned
+                    }
                 }
-                let myCashflow = Cashflow(dueDate: dateStart, amount: totalPeriodicTaxPayment.toString(decPlaces: 4))
+                let myCashflow = Cashflow(dueDate: dateStart, amount: periodicTaxPayment.toString(decPlaces: 4))
                 taxPaymentsForTermination.items.append(myCashflow)
-                x += 1
+                taxPaymentNumber += 1
             }
             dateStart = addOnePeriodToDate(dateStart: dateStart, payPerYear: .monthly, dateRefer: referDate, bolEOMRule: aEOMRule)
         }
@@ -291,6 +314,22 @@ public class AnnualTaxableIncomes: CollCashflows {
             }
         }
             
+        return 4 - counter
+    }
+    
+    func getRemainNoOfTaxPmtsAfterDate(askDate: Date, aFiscalYearEnd: Date) -> Int {
+        let myTaxPaymentMonths: [Int] = getTaxPaymentMonths(aFiscalMonthEnd: getMonthComponent(dateIn: aFiscalYearEnd))
+        //[4,6,9,12]; [10,12,3,6]
+        let askMonth: Int = getMonthComponent(dateIn: askDate) // 11
+        var counter: Int = 0
+        
+        for x in 0..<myTaxPaymentMonths.count {
+            if myTaxPaymentMonths[x] >= askMonth {
+                counter = x
+                break
+            }
+        }
+        
         return 4 - counter
     }
     

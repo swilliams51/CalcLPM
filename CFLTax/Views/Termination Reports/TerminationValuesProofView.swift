@@ -35,8 +35,8 @@ struct TerminationValuesProofView: View {
     @State var viewAsPct: Bool = false
     
     var body: some View {
+        ReportHeaderView(name: "Termination Values Proof", viewAsPct: myViewAsPct, path: $path, isDark: $isDark)
         VStack {
-            ReportHeaderView(name: "Termination Values Proof", viewAsPct: myViewAsPct, path: $path, isDark: $isDark)
             terminationDateItem
             Grid(alignment: .trailing, horizontalSpacing: 20, verticalSpacing: 5) {
                 terminationValueRowItem
@@ -54,13 +54,9 @@ struct TerminationValuesProofView: View {
                 blankRowItem
                 actualInvestmentBalanceRowItem
             }
-            Spacer()
             terminationDateButtonsRow
-        }
-        Spacer()
-        .background(Color.black.opacity(isDark ? 1.0 : 0.1))
-        .ignoresSafeArea(.all)
-       
+            Spacer()
+        }.background(isDark ? Color.black : Color.white)
         .navigationBarBackButtonHidden(true)
         .onAppear {
             self.myComponentValues.createTable(aInvestment: self.myInvestment)
@@ -140,6 +136,7 @@ extension TerminationValuesProofView {
             Text("Termination Date: ")
             Text("\(myTVDate.toStringDateShort(yrDigits: 2))")
         }
+        .foregroundColor(isDark ? Color.white : Color.black)
         .font(myFont)
         .padding()
     }
@@ -147,103 +144,180 @@ extension TerminationValuesProofView {
     var terminationValueRowItem: some View {
         GridRow() {
             Text("Termination Value:")
+                .font(myFont)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
             Text("Blank Cell")
                 .foregroundColor(.clear)
-            Text("\(getFormattedValue(amount: myTV.toString(),viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, places: 0))")
+            Text("\(getFormattedValue(amount: myTV.toString(),viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, pctPlaces: 0, amtPlaces: 0))")
                 .gridColumnAlignment(.trailing)
-        }.font(myFont)
+                .font(myFont)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+        }
+        .foregroundColor(isDark ? Color.white : Color.black)
     }
     
     var depreciationRowItem: some View {
         GridRow() {
             Text("Depreciable Balance:")
-            Text("\(getFormattedValue(amount: myDeprecBalance.toString(), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, places: 0))")
+                .font(myFont)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+            Text("\(getFormattedValue(amount: myDeprecBalance.toString(), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, pctPlaces: 0, amtPlaces: 0))")
+                .font(myFont)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
             Text("Blank Cell")
                 .foregroundColor(.clear)
-        }.font(myFont)
+        }
+        .foregroundColor(isDark ? Color.white : Color.black)
     }
     
     var gainOnTerminationRowItem: some View {
         GridRow() {
             Text("Gain on Termination:")
-            Text("\(getFormattedValue(amount: myGain.toString(), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, places: 0))")
+                .font(myFont)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+            Text("\(getFormattedValue(amount: myGain.toString(), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, pctPlaces: 0, amtPlaces: 0))")
+                .font(myFont)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
             Text("Blank Cell")
                 .foregroundColor(.clear)
-        }.font(myFont)
+        }
+        .foregroundColor(isDark ? Color.white : Color.black)
     }
     
      var taxOnGainRowItem: some View {
          GridRow() {
              Text("Tax on Gain:")
+                 .font(myFont)
+                 .lineLimit(1)
+                 .minimumScaleFactor(0.5)
              Text("Blank Cell")
                  .foregroundColor(.clear)
-             Text("\(getFormattedValue(amount: myTaxOnGain.toString(), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, places: 0))")
-         }.font(myFont)
+             Text("\(getFormattedValue(amount: myTaxOnGain.toString(), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, pctPlaces: 0, amtPlaces: 0))")
+                 .font(myFont)
+                 .lineLimit(1)
+                 .minimumScaleFactor(0.5)
+         }
+         .foregroundColor(isDark ? Color.white : Color.black)
     }
     
     var ytdIncomeRowItem: some View {
         GridRow() {
             Text("YTD Income:")
-            Text("\(getFormattedValue(amount: myYTDIncome.toString(), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, places: 0))")
+                .font(myFont)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+            Text("\(getFormattedValue(amount: myYTDIncome.toString(), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, pctPlaces: 0, amtPlaces: 0))")
+                .font(myFont)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
             Text("Blank Cell")
                 .gridColumnAlignment(.trailing)
                 .foregroundColor(.clear)
-        }.font(myFont)
+        }
+        .foregroundColor(isDark ? Color.white : Color.black)
     }
     
     var advanceRentRowItem: some View {
         GridRow() {
             Text("Advance Rent:")
-            Text("\(getFormattedValue(amount: myAdvanceRent.toString(), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, places: 0))")
+                .font(myFont)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+            Text("\(getFormattedValue(amount: myAdvanceRent.toString(), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, pctPlaces: 0, amtPlaces: 0))")
+                .font(myFont)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
             Text("Blank Cell")
                 .foregroundColor(.clear)
-       }.font(myFont)
+       }
+        .foregroundColor(isDark ? Color.white : Color.black)
     }
     
     var adjustedYTDIncomeRowItem: some View {
         GridRow() {
             Text("Adj YTD Income:")
-            Text("\(getFormattedValue(amount: myAdjustedYTDIncome.toString(), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, places: 0))")
+                .font(myFont)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+            Text("\(getFormattedValue(amount: myAdjustedYTDIncome.toString(), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, pctPlaces: 0, amtPlaces: 0))")
+                .font(myFont)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
             Text("Blank Cell")
                 .gridColumnAlignment(.trailing)
                 .foregroundColor(.clear)
-        }.font(myFont)
+        }
+        .foregroundColor(isDark ? Color.white : Color.black)
     }
     
     var taxOnAdjustedYTDIncomeRowItem: some View {
         GridRow() {
             Text("Tax on Adj Income:")
+                .font(myFont)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
             Text("Blank Cell")
                 .foregroundColor(.clear)
-            Text("\(getFormattedValue(amount: myTaxOnYTDIncome.toString(),viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, places: 0))")
-        }.font(myFont)
+            Text("\(getFormattedValue(amount: myTaxOnYTDIncome.toString(),viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, pctPlaces: 0, amtPlaces: 0))")
+                .font(myFont)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+        }
+        .foregroundColor(isDark ? Color.white : Color.black)
     }
     
     var taxesPaidYTDRowItem: some View {
         GridRow() {
             Text("Taxes Paid YTD:")
+                .font(myFont)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
             Text("Blank Cell")
                 .foregroundColor(.clear)
-            Text("\(getFormattedValue(amount: myTaxesPaidYTD.toString(), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, places: 0))")
-        }.font(myFont)
+            Text("\(getFormattedValue(amount: myTaxesPaidYTD.toString(), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, pctPlaces: 0, amtPlaces: 0))")
+                .font(myFont)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+        }
+        .foregroundColor(isDark ? Color.white : Color.black)
     }
     
     var calculatedInvestmentBalanceRowItem: some View {
         GridRow() {
             Text("Investment Balance:")
+                .font(myFont)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
             Text("Blank Cell")
                 .foregroundColor(.clear)
-            Text("\(getFormattedValue(amount: myCalculatedIB.toString(), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, places: 0))")
-        }.font(myFont)
+            Text("\(getFormattedValue(amount: myCalculatedIB.toString(), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, pctPlaces: 0, amtPlaces: 0))")
+                .font(myFont)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+        }
+        .foregroundColor(isDark ? Color.white : Color.black)
     }
     
     var adjustedInvestmentBalanceRowItem: some View {
         GridRow() {
             Text("Investment Balance:")
+                .font(myFont)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
             Text("Blank Cell")
                 .foregroundColor(.clear)
-            Text("\(getFormattedValue(amount: myAdjustedIB.toString(), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, places: 0))")
-        }.font(myFont)
+            Text("\(getFormattedValue(amount: myAdjustedIB.toString(), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, pctPlaces: 0, amtPlaces: 0))")
+                .font(myFont)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+        }
+        .foregroundColor(isDark ? Color.white : Color.black)
     }
     
     var blankRowItem: some View {
@@ -254,16 +328,23 @@ extension TerminationValuesProofView {
                 .foregroundColor(.clear)
             Text("Blank Cell")
                 .foregroundColor(.clear)
-        }.font(myFont)
+        }
     }
     
     var actualInvestmentBalanceRowItem: some View {
         GridRow() {
             Text("Investment Balance:")
+                .font(myFont)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
             Text("Blank Cell")
                 .foregroundColor(.clear)
-            Text("\(getFormattedValue(amount: myActualIB.toString(), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, places: 0))")
-        }.font(myFont)
+            Text("\(getFormattedValue(amount: myActualIB.toString(), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment, pctPlaces: 0, amtPlaces: 0))")
+                .font(myFont)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+        }
+        .foregroundColor(isDark ? Color.white : Color.black)
     }
     
     

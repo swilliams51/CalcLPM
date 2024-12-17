@@ -55,16 +55,16 @@ public func dateFormatter (dateIn: Date, locale: Locale) -> String {
     return dFormatter.string(from: dateIn)
 }
 
-public func getFormattedValue (amount: String, viewAsPercentOfCost: Bool, aInvestment: Investment, places: Int = 3) -> String {
+public func getFormattedValue (amount: String, viewAsPercentOfCost: Bool, aInvestment: Investment, pctPlaces: Int = 3, amtPlaces: Int = 2) -> String {
     if viewAsPercentOfCost {
         let decAmount = amount.toDecimal()
         let decCost = aInvestment.getAssetCost(asCashflow: false)
         let decPercent = decAmount / decCost
         let strPercent: String = decPercent.toString(decPlaces: 8)
         
-        return percentFormatter(percent: strPercent, locale: myLocale, places: places)
+        return percentFormatter(percent: strPercent, locale: myLocale, places: pctPlaces)
     } else {
-         return amountFormatter(amount: amount, locale: myLocale, places: 2)
+         return amountFormatter(amount: amount, locale: myLocale, places: amtPlaces)
     }
 }
 

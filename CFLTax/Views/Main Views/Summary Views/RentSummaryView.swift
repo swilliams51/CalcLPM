@@ -89,7 +89,7 @@ struct RentSummaryView: View {
         HStack{
             Text("LRF\(index + 1):")
             Spacer()
-            Text("\(getFormattedValue(amount: getAmount(amount: amount, index: index), viewAsPercentOfCost: true, aInvestment: myInvestment, places: 6))")
+            Text("\(getFormattedValue(amount: getAmount(amount: amount, index: index), viewAsPercentOfCost: true, aInvestment: myInvestment, pctPlaces: 6))")
         }
         .font(myFont)
     }

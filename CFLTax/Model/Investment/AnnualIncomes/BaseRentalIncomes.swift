@@ -42,7 +42,7 @@ public class BaseRentalIncomes: Cashflows {
                 var y: Int = 0
                 while y < myGroups[x].noOfPayments {
                     if myGroups[x].timing == .advance { //rents are in advance
-                        let dateFromPlusOne: Date = addOnePeriodToDate(dateStart: dateFrom, payPerYear: frequency, dateRefer: dateFrom, bolEOMRule: eomRule)
+                        let dateFromPlusOne: Date = addOnePeriodToDate(dateStart: dateFrom, payPerYear: frequency, dateRefer: baseCommence, bolEOMRule: eomRule)
                         if dateFromPlusOne.isLessThanOrEqualTo(date: nextFiscalYearEnd) {
                             fiscalIncome = fiscalIncome + myGroups[x].amount.toDecimal()
                         } else {
@@ -52,7 +52,7 @@ public class BaseRentalIncomes: Cashflows {
                             fiscalIncome = 0
                         }
                     } else {
-                        let dateFromPlusOne: Date = addOnePeriodToDate(dateStart: dateFrom, payPerYear: frequency, dateRefer: dateFrom, bolEOMRule: eomRule)
+                        let dateFromPlusOne: Date = addOnePeriodToDate(dateStart: dateFrom, payPerYear: frequency, dateRefer: baseCommence, bolEOMRule: eomRule)
                         if dateFromPlusOne.isLessThanOrEqualTo(date: nextFiscalYearEnd) {
                             fiscalIncome = fiscalIncome + myGroups[x].amount.toDecimal()
                         } else if dateFrom.isLessThanOrEqualTo(date: nextFiscalYearEnd) {
@@ -65,10 +65,11 @@ public class BaseRentalIncomes: Cashflows {
                             fiscalIncome = proRataStart
                         }
                     }
-                    dateFrom = addOnePeriodToDate(dateStart: dateFrom, payPerYear: frequency, dateRefer: dateFrom, bolEOMRule: eomRule)
+                    dateFrom = addOnePeriodToDate(dateStart: dateFrom, payPerYear: frequency, dateRefer: baseCommence, bolEOMRule: eomRule)
                     y += 1
                 }
             }
+            // Not adding the last payment
         }
         
         addToRentalIncomes(aFiscalDate: finalFiscalYearEnd, aFiscalAmount: fiscalIncome.toString(decPlaces: 4))

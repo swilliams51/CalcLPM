@@ -76,7 +76,7 @@ struct ReportHeaderView: View {
                 .font(.headline)
                 .fontWeight(.bold)
                 .padding(.bottom, 20)
-                .foregroundColor(Color("HeaderColor"))
+                .foregroundColor(isDark ? .white : .black)
         }
     }
     
