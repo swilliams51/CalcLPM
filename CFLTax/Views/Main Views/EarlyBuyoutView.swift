@@ -39,7 +39,7 @@ struct EarlyBuyoutView: View {
     @State private var showAlert1: Bool = false
     @State private var showPop1: Bool = false
     @State private var showPop2: Bool = false
-    
+    @State private var isLoading: Bool = false
    
     @FocusState private var amountIsFocused: Bool
     private let pasteBoard = UIPasteboard.general
@@ -50,26 +50,34 @@ struct EarlyBuyoutView: View {
     var standard: Color = Color.theme.active
     
     var body: some View {
-        VStack {
-            MenuHeaderView(name: "Early Buyout", path: $path, isDark: $isDark)
-            Form {
-                Section (header: Text("Exercise Date").font(.footnote), footer: Text("Full Term MISF A/T Yield: \(percentFormatter(percent: baseYield.toString(decPlaces: 5), locale: myLocale, places: 3))")) {
-                    eboTermInMonsRow
-                    exerciseDateRow
-                }
-                
-                Section (header: Text("EBO Amount").font(.footnote), footer: Text("Par Value on Date: \(amountFormatter(amount: parValue, locale: myLocale, places: 2))")) {
-                    //eboAmountRow
-                    interestRateAdderRow
-                    basisPointsStepperRow2
-                    calculatedButtonItemRow
-                }
-                
-                Section(header: Text("Submit Form")) {
-                    SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isFocused: sliderMoved, isDark: $isDark)
+        ZStack {
+            VStack {
+                MenuHeaderView(name: "Early Buyout", path: $path, isDark: $isDark)
+                Form {
+                    Section (header: Text("Exercise Date").font(.footnote), footer: Text("Full Term MISF A/T Yield: \(percentFormatter(percent: baseYield.toString(decPlaces: 5), locale: myLocale, places: 3))")) {
+                        eboTermInMonsRow
+                        exerciseDateRow
+                    }
+                    
+                    Section (header: Text("EBO Amount").font(.footnote), footer: Text("Par Value on Date: \(amountFormatter(amount: parValue, locale: myLocale, places: 2))")) {
+                        //eboAmountRow
+                        interestRateAdderRow
+                        basisPointsStepperRow2
+                        calculatedButtonItemRow
+                    }
+                    
+                    Section(header: Text("Submit Form")) {
+                        SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isFocused: sliderMoved, isDark: $isDark)
+                    }
                 }
             }
+            if self.isLoading {
+                ProgressView()
+                    .scaleEffect(3)
+            }
+            
         }
+      
         .environment(\.colorScheme, isDark ? .dark : .light)
         .navigationBarBackButtonHidden(true)
         .onAppear {
@@ -96,6 +104,13 @@ struct EarlyBuyoutView: View {
     private func myDone() {
         submitForm()
         path.removeLast()
+    }
+    
+    private func calculateEBO() async {
+        self.myEBO.amount = self.myInvestment.solveForEBOAmount(aEBO: myEBO, aBaseYield: baseYield, bpsSpread: basisPoints).toString(decPlaces: 6)
+        self.sliderMoved = false
+        self.editAmountStarted = false
+        self.isLoading = false
     }
 }
 
@@ -191,11 +206,14 @@ extension EarlyBuyoutView {
     var calculatedButtonItemRow: some View {
         HStack{
             Button(action: {
-                self.myEBO.amount = self.myInvestment.solveForEBOAmount(aEBO: myEBO, aBaseYield: baseYield, bpsSpread: basisPoints).toString(decPlaces: 6)
-                self.sliderMoved = false
-                self.editAmountStarted = false
+                if sliderMoved {
+                    self.isLoading = true
+                    Task {
+                        await calculateEBO()
+                    }
+                }
             }) {
-                Text("Calculate")
+                Text(sliderMoved ? "Calculate" : "EBO Amount:")
                     .font(myFont)
                     .foregroundColor(sliderMoved ? .blue : .gray)
             }

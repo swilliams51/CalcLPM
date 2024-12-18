@@ -272,7 +272,7 @@ struct HomeView: View {
         .disabled(investmentHasChanged() ? true : false)
     }
     
-    private func goToEBOView() async{
+    private func goToEBOView() async {
         self.path.append(8)
     }
     
