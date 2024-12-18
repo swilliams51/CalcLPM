@@ -319,18 +319,33 @@ public class AnnualTaxableIncomes: CollCashflows {
     
     func getRemainNoOfTaxPmtsAfterDate(askDate: Date, aFiscalYearEnd: Date) -> Int {
         let myTaxPaymentMonths: [Int] = getTaxPaymentMonths(aFiscalMonthEnd: getMonthComponent(dateIn: aFiscalYearEnd))
-        //[4,6,9,12]; [10,12,3,6]
-        let askMonth: Int = getMonthComponent(dateIn: askDate) // 11
+        //[4,6,9,12]; [10,12,3,6], [8,10,1,4], [5,7,10,1], [11,1,4,7]
+        var askMonth: Int = getMonthComponent(dateIn: askDate) // 11
+        var monthFound: Bool = false
         var counter: Int = 0
         
-        for x in 0..<myTaxPaymentMonths.count {
-            if myTaxPaymentMonths[x] >= askMonth {
-                counter = x
-                break
+        while monthFound == false {
+            for x in 0..<myTaxPaymentMonths.count {
+                if myTaxPaymentMonths[x] == askMonth {
+                    counter = x
+                    monthFound = true
+                    break
+                }
+            }
+            if monthFound == false {
+                askMonth = getNewAskMonth(monthIn: askMonth)
             }
         }
         
         return 4 - counter
+    }
+    
+    func getNewAskMonth(monthIn: Int) -> Int {
+        if monthIn == 12 {
+            return 1
+        } else {
+            return monthIn + 1
+        }
     }
     
     func getFirstTaxPaymentDate_Month(aFundingDate: Date, aFiscalYearEnd: Date, aDayOfMonth: Int) -> Date {
