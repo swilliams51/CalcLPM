@@ -25,6 +25,7 @@ struct MenuHeaderView: View {
             }
 
         }
+        .environment(\.colorScheme, isDark ? .dark : .light)
         .frame(width: UIScreen.main.bounds.width, height: 75)
         .onAppear {
             if self.path.count == 1 {

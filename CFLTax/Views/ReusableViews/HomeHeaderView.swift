@@ -24,6 +24,7 @@ struct HomeHeaderView: View {
             }
         }
         .frame(width: UIScreen.main.bounds.width, height: 75)
+        .environment(\.colorScheme, isDark ? .dark : .light)
     }
 
 }

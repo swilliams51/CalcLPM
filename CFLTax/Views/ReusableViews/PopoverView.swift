@@ -11,6 +11,8 @@ struct PopoverView: View {
     @Binding var myHelp: Help
     @Binding var isDark: Bool
     
+    @State private var lines: Int = 18
+    
     var body: some View {
         VStack {
             helpLead
@@ -43,7 +45,7 @@ struct PopoverView: View {
         Text(myHelp.instruction)
             .font(.body)
             .multilineTextAlignment(.center)
-            .lineLimit(15)
+            .lineLimit(lines)
             .minimumScaleFactor(0.5)
             .padding()
     }

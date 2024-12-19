@@ -13,9 +13,8 @@ extension Date {
         let iDay: String = String(getDayComponent(dateIn: self))
         let iMonth: String = String(getMonthComponent(dateIn: self))
         let iYear: String = String(getYearComponent(dateIn: self))
-        let strYear:String = String(iYear.suffix(yrDigits))
         
-        return  iMonth + "/" + iDay + "/" + strYear
+        return  iMonth + "/" + iDay + "/" + iYear
     }
 }
 
