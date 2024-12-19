@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SplashScreenView: View {
-    private let phrase: String = "Tax lease pricing made easy!!"
+    private let phrase: String = "U.S. Tax Lease Pricing Made Easy!!"
     private let timer = Timer.publish(every: 0.075, on: .main, in: .common).autoconnect()
     @State private var counter: Int = 0
     @State private var banner: String = ""
@@ -20,20 +20,20 @@ struct SplashScreenView: View {
             Color.launch.background
                 .ignoresSafeArea()
             HStack {
-                Text("Leasey")
-                    .font(.largeTitle)
-                    .foregroundColor(.black)
+                Text("CalcLPM")
+                    .font(.largeTitle).fontWeight(.bold)
+                    .foregroundColor(.white)
             }
             .offset(y: -80)
             
-            Image("LeaseyLogo")
+            Image("CalcLPM Logo")
                 .resizable()
-                .frame(width: 100, height: 100).fontWeight(.bold)
+                .frame(width: 100, height: 100).fontWeight(.heavy)
             
             HStack {
                 Text(banner)
                     .font(.headline).fontWeight(.bold)
-                    .foregroundColor(.black)
+                    .foregroundColor(.white)
                     .onReceive(timer) { _ in
                         if counter <= phrase.count + 1 {
                             banner = String(phrase.prefix(counter))

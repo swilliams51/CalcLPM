@@ -33,7 +33,7 @@ struct AboutView: View {
     var thankYouItem: some View {
         HStack{
             Spacer()
-            Text("Thank you for downloading Leasey!")
+            Text("Thank you for downloading CalcLPM!")
                 .font(.subheadline)
             Spacer()
     
@@ -44,7 +44,7 @@ struct AboutView: View {
             VStack{
                 HStack {
                     Spacer()
-                    Image("LeaseyLogo")
+                    Image("CalcLPM Logo")
                         .resizable()
                         .frame(width: scale * 100, height: scale * 100 , alignment: .center)
                         .padding()

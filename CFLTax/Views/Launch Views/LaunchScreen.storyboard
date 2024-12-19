@@ -16,7 +16,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="LeaseyLogo" translatesAutoresizingMaskIntoConstraints="NO" id="nLt-BS-OrA">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="CalcLPM Logo" translatesAutoresizingMaskIntoConstraints="NO" id="nLt-BS-OrA">
                                 <rect key="frame" x="121.66666666666669" y="351" width="150" height="150"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="150" id="TRm-ci-1EN"/>
@@ -40,9 +40,9 @@
         </scene>
     </scenes>
     <resources>
-        <image name="LeaseyLogo" width="512" height="512"/>
+        <image name="CalcLPM Logo" width="1024" height="1024"/>
         <namedColor name="LaunchBackgroundColor">
-            <color red="0.47684186699999997" green="0.50480759139999998" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.47699999809265137" green="0.50499999523162842" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </namedColor>
     </resources>
 </document>
