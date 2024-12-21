@@ -87,7 +87,6 @@ extension CashflowView {
             Text("\(getFormattedValue(amount: assetCost, viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))" )
         }
         .font(myFont)
-        .frame(width: UIScreen.main.bounds.width * 0.8, height: frameHeight)
    }
    
    var feeAmountItem: some View {
@@ -98,7 +97,6 @@ extension CashflowView {
                .underline()
        }
        .font(myFont)
-       .frame(width: UIScreen.main.bounds.width * 0.8, height: frameHeight)
    }
    
    var totalCashOutItem: some View {
@@ -108,7 +106,6 @@ extension CashflowView {
            Text("\(getFormattedValue(amount: totalCashOut, viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
        }
        .font(myFont)
-       .frame(width: UIScreen.main.bounds.width * 0.8, height: frameHeight)
    }
    
    var rentAmountItem: some View {
@@ -118,7 +115,6 @@ extension CashflowView {
            Text("\(getFormattedValue(amount: rentAmount, viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
        }
        .font(myFont)
-       .frame(width: UIScreen.main.bounds.width * 0.8, height: frameHeight)
    }
    
    var residualAmountItem: some View {
@@ -129,7 +125,6 @@ extension CashflowView {
                .underline()
        }
        .font(myFont)
-       .frame(width: UIScreen.main.bounds.width * 0.8, height: frameHeight)
    }
    
    var btProfitItem: some View {
@@ -140,7 +135,6 @@ extension CashflowView {
            Text("\(getFormattedValue(amount: bTProfit, viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
        }
        .font(myFont)
-       .frame(width: UIScreen.main.bounds.width * 0.8, height: frameHeight)
    }
    
    var taxesPaidItem: some View {
@@ -151,7 +145,6 @@ extension CashflowView {
                .underline()
        }
        .font(myFont)
-       .frame(width: UIScreen.main.bounds.width * 0.8, height: frameHeight)
    }
    
    var itcItem: some View {
@@ -162,7 +155,6 @@ extension CashflowView {
                .underline()
        }
        .font(myFont)
-       .frame(width: UIScreen.main.bounds.width * 0.8, height: frameHeight)
    }
    
    var atProfitItem: some View {
@@ -172,7 +164,6 @@ extension CashflowView {
            Text("\(getFormattedValue(amount: aTCash, viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
        }
        .font(myFont)
-       .frame(width: UIScreen.main.bounds.width * 0.8, height: frameHeight)
    }
    
    

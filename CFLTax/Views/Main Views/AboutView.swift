@@ -17,16 +17,34 @@ struct AboutView: View {
         VStack {
             MenuHeaderView(name: "About", path: $path, isDark: $isDark)
             Form {
-                logoItem
-                thankYouItem
-                companyDetailsItem
-                sendSuggestionsItem
+                Section{
+                    productNameItem
+                    logoItem
+                    tagLineItem
+                }
+               
+                Section {
+                    thankYouItem
+                    productDetailsItem
+                    sendSuggestionsItem
+                    emailAddressItem
+                }
+                
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
         .navigationBarBackButtonHidden(true)
         .onAppear{
             
+        }
+    }
+    
+    var productNameItem: some View {
+        HStack{
+            Spacer()
+            Text("CalcLPM")
+                .font(.headline).fontWeight(.bold)
+            Spacer()
         }
     }
     
@@ -57,33 +75,41 @@ struct AboutView: View {
             }
     }
     
-    var companyDetailsItem: some View {
+    var tagLineItem: some View {
+        HStack {
+            Spacer()
+            Text("U.S. tax lease pricing made easy!")
+            Spacer()
+        }
+    }
+    
+    var productDetailsItem: some View {
         VStack{
             HStack {
                 Spacer()
-                Text("CF Software Solutions, LLC")
-                    .font(.subheadline)
-                .padding()
+                Link("Visit CalcLPM", destination: URL(string: "https:/www.cfsoftwaresolutions.com")!)
+                    .font(myFont)
                 Spacer()
             }
-            Link("Website", destination: URL(string: "https:/www.cfsoftwaresolutions.com")!)
-                .font(myFont)
+          
         }
     }
     
     var sendSuggestionsItem: some View {
-        VStack {
-            HStack {
-                Spacer()
-                Text("Questions or comments:")
-                    .font(.subheadline)
-                    .padding()
-                Spacer()
-            }
-            
-            Text("info@cfsoftwaresolutions.com")
+        HStack {
+            Spacer()
+            Text("Questions or comments:")
+                .font(.subheadline)
+            Spacer()
+        }
+    }
+    
+    var emailAddressItem: some View {
+        HStack {
+            Spacer()
+            Text("info@calclpm.com")
                 .font(myFont)
-            
+            Spacer()
         }
     }
     

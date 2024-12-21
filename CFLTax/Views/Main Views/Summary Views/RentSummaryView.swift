@@ -131,7 +131,6 @@ extension RentSummaryView {
             Text("\(percentFormatter(percent: implicitRate, locale: myLocale, places: 3))")
                 .font(myFont)
         }
-        .frame(width: UIScreen.main.bounds.width * 0.8, height: frameHeight)
     }
     
     var pvAtImplicitRateItem: some View {
@@ -162,7 +161,6 @@ extension RentSummaryView {
                 Text("\(getFormattedValue(amount: presentValue1, viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
                     .font(myFont)
             }
-            .frame(width: UIScreen.main.bounds.width * 0.8, height: frameHeight)
     }
     
     var presentValue2Item: some View {
@@ -178,7 +176,6 @@ extension RentSummaryView {
             Text("\(getFormattedValue(amount: presentValue2, viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
                 .font(myFont)
         }
-        .frame(width: UIScreen.main.bounds.width * 0.8, height: frameHeight)
     }
     
     func getDiscountRateText() -> String {

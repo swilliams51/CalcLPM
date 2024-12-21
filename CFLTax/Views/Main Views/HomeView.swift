@@ -78,8 +78,10 @@ struct HomeView: View {
                     }, label: {
                         Image(systemName: "plus.circle")
                             .foregroundColor(ColorTheme().accent)
+                            .opacity(investmentHasChanged() ? 0.5 : 1.0)
                             .imageScale(.large)
                     })
+                    .disabled(investmentHasChanged())
                 }
             }
             .environment(\.colorScheme, isDark ? .dark : .light)
@@ -336,6 +338,7 @@ extension HomeView {
         Button(action: {
             self.myInvestment.fee.amount = "0.00"
             self.myInvestment.feeExists = false
+            self.myInvestment.hasChanged = true
         }) {
             Label("Remove Fee", systemImage: "folder.badge.minus")
                 .font(myFont)
@@ -380,6 +383,7 @@ extension HomeView {
         }) {
             Label("Add EBO", systemImage: "folder.badge.plus")
         }
+        
     }
     
     

@@ -38,7 +38,6 @@ struct SummaryOfResultsView: View {
                         simplePaybackItem
                         averageLifeItem
                     }
-                    
                     Section(header: Text("Additional Results")) {
                         cashflowItem
                         rentalsItem
@@ -50,7 +49,6 @@ struct SummaryOfResultsView: View {
                 ProgressView()
                     .scaleEffect(3)
             }
-            
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
         .navigationBarBackButtonHidden(true)
@@ -91,7 +89,6 @@ extension SummaryOfResultsView {
             Text("\(percentFormatter(percent: myATYield.toString(decPlaces: 5), locale: myLocale, places:3))")
                 .font(myFont)
         }
-        .frame(width: UIScreen.main.bounds.width * 0.8, height: frameHeight)
     }
     
     var beforeTaxYieldItem: some View {
@@ -102,7 +99,6 @@ extension SummaryOfResultsView {
             Text("\(percentFormatter(percent:myBTYield.toString(decPlaces: 5), locale: myLocale, places: 3))")
                 .font(myFont)
         }
-        .frame(width: UIScreen.main.bounds.width * 0.8, height: frameHeight)
     }
     
     
@@ -114,7 +110,6 @@ extension SummaryOfResultsView {
             Text("\(percentFormatter(percent:myIRRofPTCF.toString(decPlaces: 5), locale: myLocale, places: 3))")
                 .font(myFont)
         }
-        .frame(width: UIScreen.main.bounds.width * 0.8, height: frameHeight)
     }
 }
 

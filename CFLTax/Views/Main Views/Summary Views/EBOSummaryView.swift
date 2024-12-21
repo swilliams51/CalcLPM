@@ -56,7 +56,6 @@ struct EBOSummaryView: View {
               
            }
         }
-       //.environment(\.defaultMinListRowHeight, lineHeight)
        .environment(\.colorScheme, isDark ? .dark : .light)
        .navigationBarBackButtonHidden(true)
        .onAppear {
@@ -89,7 +88,6 @@ extension EBOSummaryView {
             Text("\(percentFormatter(percent: myATYield.toString(decPlaces: 5), locale: myLocale, places:3))")
         }
         .font(myFont)
-        .frame(width: UIScreen.main.bounds.width * 0.8, height: frameHeight)
     }
     
     var beforeTaxYieldItem: some View {
@@ -99,7 +97,6 @@ extension EBOSummaryView {
             Text("\(percentFormatter(percent:myBTYield.toString(decPlaces: 5), locale: myLocale, places: 3))")
         }
         .font(myFont)
-        .frame(width: UIScreen.main.bounds.width * 0.8, height: frameHeight)
     }
     
     
@@ -110,7 +107,6 @@ extension EBOSummaryView {
             Text("\(percentFormatter(percent:myIRRofPTCF.toString(decPlaces: 5), locale: myLocale, places: 3))")
         }
         .font(myFont)
-        .frame(width: UIScreen.main.bounds.width * 0.8, height: frameHeight)
     }
 }
 
