@@ -14,29 +14,39 @@ struct FileMenuView: View {
     @Binding var currentFile: String
     @State private var fm = LocalFileManager()
     @State private var isShowingFileNameAlert: Bool = false
+    @State private var isLoading: Bool = false
     
     @AppStorage("savedDefault") var savedDefaultLease: String = "No_Data"
     @AppStorage("useSaved") var useSavedAsDefault: Bool = false
     
     var body: some View {
-        VStack {
-            MenuHeaderView(name: "File Menu", path: $path, isDark: $isDark)
-            Form {
-                Section(footer: Text(" File Name: \(currentFile)").font(myFont)) {
-                    newFileItem
-                    openFileItem
-                    saveFileItem
-                    saveAsFileItem
-                    reportsItem
-                    terminationsItem
-                    preferencesItem
-                    aboutItem
+        ZStack {
+            VStack {
+                MenuHeaderView(name: "File Menu", path: $path, isDark: $isDark)
+                    Form {
+                        Section(footer: Text(" File Name: \(currentFile)").font(myFont)) {
+                            newFileItem
+                            openFileItem
+                            saveFileItem
+                            saveAsFileItem
+                            reportsItem
+                            terminationsItem
+                            preferencesItem
+                            aboutItem
+                        }
+                    }
                 }
+            if isLoading {
+                ProgressView()
+                    .scaleEffect(3.0)
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
         .navigationBarTitleDisplayMode(.large)
         .navigationBarBackButtonHidden(true)
+        .onAppear {
+            self.isLoading = false
+        }
     }
     
     var newFileItem: some View {

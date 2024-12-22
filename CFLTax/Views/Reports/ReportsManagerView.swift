@@ -14,25 +14,36 @@ struct ReportsManagerView: View {
     @Binding var isDark: Bool
     @Binding var currentFile: String
     
+    @State private var isLoading: Bool = false
+    
     var body: some View {
-        VStack {
-            MenuHeaderView(name: "Reports", path: $path, isDark: $isDark)
-            Form{
-                Section(header: Text("Reports"), footer: (Text("File Name: \(currentFile)").font(myFont))) {
-                    leaseRentalsItem
-                    depreciationScheduleItem
-                    feeAmortizationItem
-                    taxableIncomeItem
-                    taxesPaidItem
-                    beforeTaxLeaseCashflowsItem
-                    afterTaxLeaseCashflowsItem
-                    investmentAmortizationItem
+        ZStack {
+            VStack {
+                MenuHeaderView(name: "Reports", path: $path, isDark: $isDark)
+                Form{
+                    Section(header: Text("Reports"), footer: (Text("File Name: \(currentFile)").font(myFont))) {
+                        leaseRentalsItem
+                        depreciationScheduleItem
+                        feeAmortizationItem
+                        taxableIncomeItem
+                        taxesPaidItem
+                        beforeTaxLeaseCashflowsItem
+                        afterTaxLeaseCashflowsItem
+                        investmentAmortizationItem
+                    }
+                    
                 }
-                
+            }
+            if self.isLoading {
+                ProgressView()
+                    .scaleEffect(3.0)
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
         .navigationBarBackButtonHidden(true)
+        .onAppear{
+            self.isLoading = false
+        }
     }
     
     var leaseRentalsItem: some View {
@@ -123,8 +134,11 @@ struct ReportsManagerView: View {
         .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
-            path.append(24)
-        }
+            self.isLoading = true
+                Task{
+                    await navigate(nextView: 25)
+                }
+            }
     }
     
     var investmentAmortizationItem: some View {
@@ -136,8 +150,15 @@ struct ReportsManagerView: View {
         .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
-            path.append(35)
+            self.isLoading = true
+                Task{
+                    await navigate(nextView: 35)
+                }
+            }
         }
+    
+    private func navigate(nextView: Int) async {
+        self.path.append(nextView)
     }
 
 }

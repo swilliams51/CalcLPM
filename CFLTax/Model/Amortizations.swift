@@ -31,6 +31,7 @@ public class Amortizations {
     
     public var totalInterest: Decimal = 0.0
     public var totalCashflow: Decimal = 0.0
+    public var totalPrincipal: Decimal = 0.0
     
     public init () {
         self.items = [Amortization]()
@@ -40,6 +41,7 @@ public class Amortizations {
         // handle initial cashflow
         var runTotalInterest: Decimal = 0.0
         var runTotalCashflow: Decimal = 0.0
+        var runTotalPrincipal: Decimal = 0.0
         var currentDate = investCashflows.items[0].dueDate
         var cf: Decimal = investCashflows.items[0].amount.toDecimal()
         var accruedInterest: Decimal = 0.0
@@ -63,6 +65,7 @@ public class Amortizations {
             runTotalInterest = runTotalInterest + accruedInterest
             
             principalPaid = cf - accruedInterest
+            runTotalPrincipal = runTotalPrincipal + principalPaid
             endingBalance = self.items[x - 1].endBalance - principalPaid
             
             let currentAmortization: Amortization = Amortization(dueDate: currentDate, endBalance: endingBalance, interest: accruedInterest, cashflow: cf, principal: principalPaid)
@@ -71,6 +74,7 @@ public class Amortizations {
         
         totalInterest = runTotalInterest
         totalCashflow = runTotalCashflow
+        totalPrincipal = runTotalPrincipal
         
     }
     

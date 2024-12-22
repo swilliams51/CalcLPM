@@ -12,27 +12,45 @@ struct InvestmentAmortizationView: View {
     @Binding var path: [Int]
     @Binding var isDark: Bool
     @Binding var currentFile: String
+    
     @State var myAmortizations: Amortizations = Amortizations()
+    @Environment(\.verticalSizeClass) var verticalSizeClass
+    var isLandscape: Bool { verticalSizeClass == .compact }
     
     var body: some View {
         VStack {
             InvestAmortHeaderView(name: "A/T Ending Balances", path: $path, isDark: $isDark)
-            Form {
-                Section(header: Text("\(currentFile)")
-                    .font(myFont3)) {
-                    ScrollView {
-                        Grid (alignment: .trailing, horizontalSpacing: 30, verticalSpacing: 10)
-                        {
-                            rateAndCostGridRow
-                            amortHeaderGridRow
-                            ForEach(myAmortizations.items) { item in
-                                amortGridRow(item: item)
+            if isLandscape {
+                Form {
+                    Section(header: Text("Current File: \(currentFile)     MISF A/T Yield: \(yieldFormatted())").font(myFont)) {
+                        ScrollView {
+                            Grid (alignment: .leading, horizontalSpacing: 75, verticalSpacing: 10){
+                                amortHeaderGridRowLandscape
+                                ForEach(myAmortizations.items) { item in
+                                    amortGridRowLandscape(item: item)
+                                }
+                                amortTotalsGridRowLandscape
                             }
-                            amortTotalsGridRow
+                        }
+                    }
+                }
+            } else {
+                Form {
+                    Section(header: Text("\(currentFile)").font(myFont3)) {
+                        ScrollView {
+                            Grid (alignment: .trailing, horizontalSpacing: 30, verticalSpacing: 10){
+                                rateAndCostGridRow
+                                amortHeaderGridRowPortrait
+                                ForEach(myAmortizations.items) { item in
+                                    amortGridRowPortrait(item: item)
+                                }
+                                amortTotalsGridRowPortrait
+                            }
                         }
                     }
                 }
             }
+            
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
         .navigationBarBackButtonHidden(true)
@@ -52,7 +70,27 @@ struct InvestmentAmortizationView: View {
         .font(myFont3)
     }
     
-    var amortHeaderGridRow: some View {
+    var amortHeaderGridRowLandscape: some View {
+        GridRow {
+            Text("Date")
+            Text("Cashflow")
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+            Text("Interest")
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+            Text("Principal")
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+            Text("Balance")
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+        }
+        .font(myFont)
+        .bold()
+    }
+    
+    var amortHeaderGridRowPortrait: some View {
         GridRow {
             Text("Date")
             Text("Cashflow")
@@ -69,7 +107,30 @@ struct InvestmentAmortizationView: View {
         .bold()
     }
     
-    @ViewBuilder func amortGridRow(item: Amortization) -> some View {
+    @ViewBuilder func amortGridRowLandscape(item: Amortization) -> some View {
+        GridRow {
+            Text(item.dueDate.toStringDateShort(yrDigits: 2))
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+            Text("\(amountFormatter(amount: item.cashflow.toString(decPlaces: 3), locale: myLocale))")
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+            Text("\(amountFormatter(amount: item.interest.toString(decPlaces: 3), locale:myLocale))")
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+            Text("\(amountFormatter(amount: item.principal.toString(decPlaces: 3), locale:myLocale))")
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+            Text("\(amountFormatter(amount: item.endBalance.toString(decPlaces: 3), locale:myLocale))")
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+        }
+        .gridColumnAlignment(.trailing)
+        .font(myFont)
+    }
+    
+    
+    @ViewBuilder func amortGridRowPortrait(item: Amortization) -> some View {
         GridRow {
             Text(item.dueDate.toStringDateShort(yrDigits: 2))
                 .lineLimit(1)
@@ -88,7 +149,7 @@ struct InvestmentAmortizationView: View {
         .font(myFont2)
     }
     
-    var amortTotalsGridRow: some View {
+    var amortTotalsGridRowPortrait: some View {
         GridRow{
             Text("Totals")
             Text("\(expressedAsFactor(amount: myAmortizations.totalCashflow))")
@@ -97,8 +158,14 @@ struct InvestmentAmortizationView: View {
         }.font(myFont3)
     }
     
-    private func myViewAsPct() {
-        
+    var amortTotalsGridRowLandscape: some View {
+        GridRow{
+            Text("Totals")
+            Text("\(amountFormatter(amount: myAmortizations.totalCashflow.toString(decPlaces: 2), locale: myLocale))")
+            Text("\(amountFormatter(amount: myAmortizations.totalInterest.toString(decPlaces: 2), locale: myLocale))")
+            Text("\(amountFormatter(amount: myAmortizations.totalPrincipal.toString(decPlaces: 2), locale: myLocale))")
+            Text("")
+        }.font(myFont)
     }
     
     func expressedAsFactor(amount: Decimal) -> String {
@@ -115,6 +182,8 @@ struct InvestmentAmortizationView: View {
         
         return strYield
     }
+    
+   
     
 }
 
