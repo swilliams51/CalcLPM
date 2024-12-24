@@ -19,7 +19,7 @@ struct InvestmentAmortizationView: View {
     
     var body: some View {
         VStack {
-            InvestAmortHeaderView(name: "A/T Ending Balances", path: $path, isDark: $isDark)
+            HeaderView(headerType: .menu, name: "Amortization", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
             if isLandscape {
                 Form {
                     Section(header: Text("Current File: \(currentFile)     MISF A/T Yield: \(yieldFormatted())").font(myFont)) {
@@ -58,6 +58,13 @@ struct InvestmentAmortizationView: View {
             self.myInvestment.calculate()
             myAmortizations.createAmortizations(investCashflows: myInvestment.afterTaxCashflows, interestRate: myInvestment.getMISF_AT_Yield(), dayCountMethod: myInvestment.economics.dayCountMethod)
         }
+    }
+    
+    private func myViewAsPct() {
+        
+    }
+    private func myGoBack() {
+        self.path.removeLast()
     }
     
     var rateAndCostGridRow: some View {
