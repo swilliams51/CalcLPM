@@ -75,6 +75,14 @@ extension Investment {
         return exerciseDate
     }
     
+    public func getExerciseDate(eboTermInMonths: Int, stepInterval: Frequency) -> Date {
+        let noOfPaymentPeriods: Int = eboTermInMonths * 12 / stepInterval.rawValue
+        let startDate: Date = self.leaseTerm.baseCommenceDate
+        let exerciseDate = addPeriodsToDate(dateStart: startDate, payPerYear: stepInterval, noOfPeriods: noOfPaymentPeriods, referDate: startDate, bolEOMRule: self.leaseTerm.endOfMonthRule)
+        
+        return exerciseDate
+    }
+    
     public func getEBOPremium_bps(aEBO: EarlyBuyout, aBaseYield: Decimal) -> Double {
         let eboYield: Decimal = solveForEBOYield(aEBO: aEBO)
         let eboPremium: Decimal = eboYield - aBaseYield
@@ -104,6 +112,7 @@ extension Investment {
     
     public func solveForEBOYield(aEBO: EarlyBuyout) -> Decimal {
         let myEBOInvestment: Investment = self.clone()
+        myEBOInvestment.earlyBuyout = aEBO
         let dateOfUnplanned: Date = myEBOInvestment.earlyBuyout.exerciseDate
         let myPlannedIncome: Decimal = plannedIncome(aInvestment: self, dateAsk: dateOfUnplanned)
        

@@ -17,22 +17,15 @@ struct EarlyBuyoutView: View {
     
     @State private var myEBO: EarlyBuyout = EarlyBuyout()
     
-    @State private var alertTitle: String = ""
     @State private var amountColor: Int = 1
     @State private var parValuePremium: Decimal = 0.0
     @State private var basisPoints: Double = 0.00
     @State private var baseYield: Decimal = 0.05
-    @State private var sliderMoved: Bool = false
-    @State private var eboTerm: Int = 0
-    @State private var editAmountStarted: Bool = false
-    
+    @State private var sliderOneMoved: Bool = false
+    @State private var sliderTwoMoved: Bool = false
+    @State private var eboTerm: Double = 12.0
     @State private var parValue: String = "0.00"
-    @State private var premiumIsSpecified = false
-    @State private var rentDueIsPaid = true
-  
-    @State private var stepBps: Double = 1.0
-    @State private var stepValue: Int = 1
-    
+
     //Alerts and Popovers
     @State private var myEBOHelp = eboHelp
     @State private var myEBOHelp2 = eboHelp2
@@ -40,9 +33,6 @@ struct EarlyBuyoutView: View {
     @State private var showPop1: Bool = false
     @State private var showPop2: Bool = false
     @State private var isLoading: Bool = false
-   
-    @FocusState private var amountIsFocused: Bool
-    private let pasteBoard = UIPasteboard.general
     
     var defaultInactive: Color = Color.theme.inActive
     var defaultCalculated: Color = Color.theme.calculated
@@ -55,8 +45,9 @@ struct EarlyBuyoutView: View {
                 MenuHeaderView(name: "Early Buyout", path: $path, isDark: $isDark)
                 Form {
                     Section (header: Text("Exercise Date").font(.footnote), footer: Text("Full Term MISF A/T Yield: \(percentFormatter(percent: baseYield.toString(decPlaces: 5), locale: myLocale, places: 3))")) {
-                        eboTermInMonsRow
-                        exerciseDateRow
+                        eboTermInMonthsRow
+                        eboTermStepperRow
+                        calculateEBOExerciseDateRow
                     }
                     
                     Section (header: Text("EBO Amount").font(.footnote), footer: Text("Par Value on Date: \(amountFormatter(amount: parValue, locale: myLocale, places: 2))")) {
@@ -67,7 +58,7 @@ struct EarlyBuyoutView: View {
                     }
                     
                     Section(header: Text("Submit Form")) {
-                        SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isFocused: sliderMoved, isDark: $isDark)
+                        SubmitFormButtonsView(cancelName: "Cancel", doneName: "Done", cancel: myCancel, done: myDone, isFocused: getFocus(), isDark: $isDark)
                     }
                 }
             }
@@ -85,7 +76,7 @@ struct EarlyBuyoutView: View {
             self.myInvestment.calculate()
             self.baseYield = myInvestment.getMISF_AT_Yield()
             self.myEBO = self.myInvestment.earlyBuyout
-            self.eboTerm = myEBO.getEBOTermInMonths(aInvestment: myInvestment)
+            self.eboTerm = myEBO.getEBOTermInMonths(aInvestment: myInvestment).toDouble()
             self.parValue = myInvestment.getParValue(askDate: myEBO.exerciseDate).toString(decPlaces: 4)
             self.basisPoints = myInvestment.getEBOPremium_bps(aEBO: myEBO, aBaseYield: self.baseYield)
         }
@@ -94,6 +85,17 @@ struct EarlyBuyoutView: View {
         }
         .popover(isPresented: $showPop2) {
             PopoverView(myHelp: $myEBOHelp2, isDark: $isDark)
+        }
+    }
+    
+    
+    var parValueOnDateRow: some View {
+        HStack {
+            Text("Par Value on Date:")
+                .font(myFont)
+            Spacer()
+            Text(amountFormatter(amount: parValue, locale: myLocale))
+                .font(myFont)
         }
     }
     
@@ -108,114 +110,76 @@ struct EarlyBuyoutView: View {
     
     private func calculateEBO() async {
         self.myEBO.amount = self.myInvestment.solveForEBOAmount(aEBO: myEBO, aBaseYield: baseYield, bpsSpread: basisPoints).toString(decPlaces: 6)
-        self.sliderMoved = false
-        self.editAmountStarted = false
+        self.sliderTwoMoved = false
         self.isLoading = false
     }
+    
+    private func getFocus() -> Bool {
+        var isFocused: Bool = false
+        if sliderOneMoved || sliderTwoMoved {
+            isFocused = true
+        }
+        
+        return isFocused
+    }
+    
+    
 }
 
 #Preview {
     EarlyBuyoutView(myInvestment: Investment(), path: .constant([Int]()), isDark: .constant(false), currentFile: .constant("File is New"), minimumEBOAmount: .constant(0.0), maximumEBOAmount: .constant(0.0))
 }
 
-//Section Exercise Date
-extension EarlyBuyoutView {
-    var eboTermInMonsRow: some View {
-        HStack {
-            Text("Term in Mons: \(eboTerm)")
-                .font(myFont)
-            Stepper(value: $eboTerm, in: rangeBaseTermMonths, step: getStep()) {
-    
-            }.onChange(of: eboTerm) { oldTerm, newTerm in
-                let noOfPeriods: Int = newTerm  * 12 / self.myInvestment.leaseTerm.paymentFrequency.rawValue
-                self.myEBO.exerciseDate = self.myInvestment.getExerciseDate(eboTermInMonths: noOfPeriods)
-                self.parValue = self.myInvestment.getParValue(askDate: self.myEBO.exerciseDate).toString()
-                self.myEBO.amount = self.parValue
-                self.basisPoints = 0.0
-            }
-        }
-        .font(myFont)
-    }
-    
-    var exerciseDateRow: some View {
-        HStack {
-            Text("Exercise Date:")
-                .font(myFont)
-            Image(systemName: "questionmark.circle")
-                .foregroundColor(Color.blue)
-                .onTapGesture {
-                    self.showPop1 = true
-                }
-            Spacer()
-            Text(myEBO.exerciseDate.toStringDateShort(yrDigits: 4))
-                .font(myFont)
-                .onChange(of: myEBO.exerciseDate) { oldDate, newDate in
-                    self.parValue = self.myInvestment.getParValue(askDate: newDate).toString()
-                    self.myEBO.amount = self.parValue
-                }
-        }
-    }
-    
-    var parValueOnDateRow: some View {
-        HStack {
-            Text("Par Value on Date:")
-                .font(myFont)
-            Spacer()
-            Text(amountFormatter(amount: parValue, locale: myLocale))
-                .font(myFont)
-        }
-    }
-    
-}
 
+//EBO Exercise Date
 extension EarlyBuyoutView {
-    //Row 2
-    var interestRateAdderRow: some View {
+    var eboTermInMonthsRow: some View {
         VStack {
             HStack {
-                Text("MISF A/T Yield Adder:")
+                Text("EBO Term In Months:")
                     .font(myFont)
-                    .foregroundColor(premiumIsSpecified ? defaultInactive : defaultCalculated)
                 Spacer()
-                Text("\(basisPointsFormatter(basisPoints: basisPoints, locale: myLocale)) bps")
+                Text("\(eboTerm.toString(decPlaces: 0))")
                     .font(myFont)
-                    .foregroundColor(premiumIsSpecified ? defaultInactive : defaultCalculated)
             }
             
-            Slider(value: $basisPoints, in: -50...maxEBOSpread.toDouble(), step: stepBps) { editing in
+            Slider(value: $eboTerm, in: rangeBaseTermMonths, step: getStepValue()) { editing in
                 self.amountColor = 1
-                self.sliderMoved = true
+                self.sliderOneMoved = true
             }
             .accentColor(basisPoints < 0 ? .red : .green)
         }
     }
     
-    
-    var basisPointsStepperRow2: some View {
+    var eboTermStepperRow: some View {
         HStack {
             Spacer()
-            Stepper("", value: $basisPoints, in: 0...maxEBOSpread.toDouble(), step: 1, onEditingChanged: { _ in
-                self.sliderMoved = true
+            Stepper("", value: $eboTerm, in: rangeBaseTermMonths, step: 1, onEditingChanged: { _ in
+                self.sliderOneMoved = true
                 
             }).labelsHidden()
-            .transformEffect(.init(scaleX: 1.0, y: 0.9))
+                .transformEffect(.init(scaleX: 1.0, y: 0.9))
         }
     }
     
-    //Row 3a
-    var calculatedButtonItemRow: some View {
+    var calculateEBOExerciseDateRow: some View {
         HStack{
             Button(action: {
-                if sliderMoved {
-                    self.isLoading = true
-                    Task {
-                        await calculateEBO()
-                    }
-                }
+
+                self.myEBO.exerciseDate = self.myInvestment.getExerciseDate(eboTermInMonths: eboTerm.toInteger())
+                print("Exercise Date: \(myEBO.exerciseDate.toStringDateShort(yrDigits: 2))")
+                self.parValue = self.myInvestment.getParValue(askDate: myEBO.exerciseDate).toString(decPlaces: 4)
+                self.myEBO.amount = self.parValue
+                print("EBO Date: \(myEBO.exerciseDate.toStringDateShort(yrDigits: 2))  Amount: \(myEBO.amount)")
+                print("Base Yield: \(percentFormatter(percent: self.baseYield.toString(decPlaces: 6), locale: myLocale))")
+                self.basisPoints = myInvestment.getEBOPremium_bps(aEBO: myEBO, aBaseYield: self.baseYield)
+                //self.basisPoints = 0.0
+                print("Basis Points: \(basisPoints)")
+                self.sliderOneMoved = false
             }) {
-                Text(sliderMoved ? "Calculate" : "EBO Amount:")
+                Text(sliderOneMoved ? "Calculate" : "Exercise Date:")
                     .font(myFont)
-                    .foregroundColor(sliderMoved ? .blue : .gray)
+                    .foregroundColor(sliderOneMoved ? .blue : .gray)
             }
             Image(systemName: "questionmark.circle")
                 .foregroundColor(Color.blue)
@@ -223,36 +187,78 @@ extension EarlyBuyoutView {
                     self.showPop2 = true
                 }
             Spacer()
-            Text("\(eboFormatted(editStarted:editAmountStarted))")
+            Text("\(myEBO.exerciseDate.toStringDateShort(yrDigits: 4))")
                 .font(myFont)
         }
     }
     
-    func eboFormatted(editStarted: Bool) -> String {
-        if editStarted == true {
-            return self.myEBO.amount
-        } else {
-            return amountFormatter(amount: self.myEBO.amount, locale: myLocale)
+    private func getStepValue() -> Double {
+        switch myInvestment.leaseTerm.paymentFrequency {
+            case .monthly: return 1
+        case .quarterly: return 4
+        case .semiannual: return 2
+        case .annual: return 12
+        }
+    }
+}
+
+
+//EBO Amount
+extension EarlyBuyoutView {
+    var interestRateAdderRow: some View {
+        VStack {
+            HStack {
+                Text("MISF A/T Yield Adder:")
+                    .font(myFont)
+                Spacer()
+                Text("\(basisPointsFormatter(basisPoints: basisPoints, locale: myLocale)) bps")
+                    .font(myFont)
+            }
+            
+            Slider(value: $basisPoints, in: -50...maxEBOSpread.toDouble(), step: 1) { editing in
+                self.amountColor = 1
+                self.sliderTwoMoved = true
+            }
+            .accentColor(basisPoints < 0 ? .red : .green)
         }
     }
     
-    func getAlert() -> Alert{
-        return Alert(title: Text(alertTitle))
-    }
-    
-    func getStep() -> Int {
-        switch self.myInvestment.leaseTerm.paymentFrequency {
-        case .monthly:
-            return 1
-        case .quarterly:
-            return 3
-        case .semiannual:
-            return 6
-        default:
-            return 12
+    var basisPointsStepperRow2: some View {
+        HStack {
+            Spacer()
+            Stepper("", value: $basisPoints, in: 0...maxEBOSpread.toDouble(), step: 1, onEditingChanged: { _ in
+                self.sliderTwoMoved = true
+                
+            }).labelsHidden()
+            .transformEffect(.init(scaleX: 1.0, y: 0.9))
         }
     }
     
+    var calculatedButtonItemRow: some View {
+        HStack{
+            Button(action: {
+                if sliderTwoMoved {
+                    self.isLoading = true
+                    Task {
+                        await calculateEBO()
+                    }
+                }
+            }) {
+                Text(sliderTwoMoved ? "Calculate" : "EBO Amount:")
+                    .font(myFont)
+                    .foregroundColor(sliderTwoMoved ? .blue : .gray)
+            }
+            Image(systemName: "questionmark.circle")
+                .foregroundColor(Color.blue)
+                .onTapGesture {
+                    self.showPop2 = true
+                }
+            Spacer()
+            Text("\(amountFormatter(amount: self.myEBO.amount, locale: myLocale))")
+                .font(myFont)
+        }
+    }
+
     func submitForm (){
         if self.myInvestment.earlyBuyout.isEqual(to: self.myEBO) == false {
             self.myInvestment.earlyBuyout = self.myEBO
@@ -260,12 +266,14 @@ extension EarlyBuyoutView {
         }
     }
 
-    
-    var rangeBaseTermMonths: ClosedRange<Int> {
+    var rangeBaseTermMonths: ClosedRange<Double> {
         let starting: Int = 12
         let ending: Int = myInvestment.getBaseTermInMonths() - 12
+        let start:Double = Double(starting)
+        let end:Double = Double(ending)
         
-        return starting...ending
+        
+        return start...end
     }
     
     
