@@ -51,7 +51,7 @@ struct DepreciationView: View {
 
     var body: some View {
         VStack{
-            MenuHeaderView(name: "Depreciation", path: $path, isDark: $isDark)
+            HeaderView(headerType: .menu, name: "Depreciation", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("Inputs").font(myFont), footer:(Text("File Name: \(currentFile)").font(myFont))) {
                     depreciationParameters
@@ -99,6 +99,13 @@ struct DepreciationView: View {
             depreciationConvention
             salvageValueItem
         }
+    }
+    
+    private func myViewAsPct() {
+        
+    }
+    private func myGoBack() {
+        self.path.removeLast()
     }
    
     private func myCancel() {

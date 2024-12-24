@@ -34,15 +34,10 @@ struct EarlyBuyoutView: View {
     @State private var showPop2: Bool = false
     @State private var isLoading: Bool = false
     
-    var defaultInactive: Color = Color.theme.inActive
-    var defaultCalculated: Color = Color.theme.calculated
-    var activeButton: Color = Color.theme.accent
-    var standard: Color = Color.theme.active
-    
     var body: some View {
         ZStack {
             VStack {
-                MenuHeaderView(name: "Early Buyout", path: $path, isDark: $isDark)
+                HeaderView(headerType: .menu, name: "Early Buyout", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
                 Form {
                     Section (header: Text("Exercise Date").font(.footnote), footer: Text("Full Term MISF A/T Yield: \(percentFormatter(percent: baseYield.toString(decPlaces: 5), locale: myLocale, places: 3))")) {
                         eboTermInMonthsRow
@@ -97,6 +92,13 @@ struct EarlyBuyoutView: View {
             Text(amountFormatter(amount: parValue, locale: myLocale))
                 .font(myFont)
         }
+    }
+    
+    private func myViewAsPct() {
+        
+    }
+    private func myGoBack() {
+        self.path.removeLast()
     }
     
     private func myCancel() {
@@ -165,16 +167,10 @@ extension EarlyBuyoutView {
     var calculateEBOExerciseDateRow: some View {
         HStack{
             Button(action: {
-
                 self.myEBO.exerciseDate = self.myInvestment.getExerciseDate(eboTermInMonths: eboTerm.toInteger())
-                print("Exercise Date: \(myEBO.exerciseDate.toStringDateShort(yrDigits: 2))")
                 self.parValue = self.myInvestment.getParValue(askDate: myEBO.exerciseDate).toString(decPlaces: 4)
                 self.myEBO.amount = self.parValue
-                print("EBO Date: \(myEBO.exerciseDate.toStringDateShort(yrDigits: 2))  Amount: \(myEBO.amount)")
-                print("Base Yield: \(percentFormatter(percent: self.baseYield.toString(decPlaces: 6), locale: myLocale))")
                 self.basisPoints = myInvestment.getEBOPremium_bps(aEBO: myEBO, aBaseYield: self.baseYield)
-                //self.basisPoints = 0.0
-                print("Basis Points: \(basisPoints)")
                 self.sliderOneMoved = false
             }) {
                 Text(sliderOneMoved ? "Calculate" : "Exercise Date:")
@@ -259,7 +255,7 @@ extension EarlyBuyoutView {
         }
     }
 
-    func submitForm (){
+    func submitForm() {
         if self.myInvestment.earlyBuyout.isEqual(to: self.myEBO) == false {
             self.myInvestment.earlyBuyout = self.myEBO
             self.myInvestment.earlyBuyout.hasChanged = true

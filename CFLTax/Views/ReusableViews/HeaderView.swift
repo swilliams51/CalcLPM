@@ -1,15 +1,19 @@
 //
-//  ReportHeaderView.swift
+//  HeaderView.swift
 //  CFLTax
 //
-//  Created by Steven Williams on 11/19/24.
+//  Created by Steven Williams on 12/24/24.
 //
 
 import SwiftUI
 
-struct ReportHeaderView: View {
+struct HeaderView: View {
+    let headerType: HeaderViewType
     let name: String
     let viewAsPct:() -> Void
+    let goBack:() -> Void
+    let withBackButton: Bool
+    let withPctButton: Bool
     @Binding var path: [Int]
     @Binding var isDark: Bool
     
@@ -17,6 +21,11 @@ struct ReportHeaderView: View {
     @State var buttonName: String = "Back"
     @State private var isHome: Bool = false
     
+    @State var nameFont: Font = .largeTitle
+    @State var nameWeight: Font.Weight = .bold
+    @State var nameTopPadding: CGFloat = 30
+    @State var nameBottomPadding: CGFloat = 20
+   
     @Environment(\.verticalSizeClass) var verticalSizeClass
     var isLandscape: Bool { verticalSizeClass == .compact }
     
@@ -25,17 +34,45 @@ struct ReportHeaderView: View {
             Color.black.opacity(isDark ? 1.0 : 0.05)
                 .ignoresSafeArea()
             VStack {
-                buttonItems
+                if withBackButton {
+                    backButtonItem
+                        .padding(.top, 20)
+                        .padding(.bottom, 20)
+                }
+                if withPctButton {
+                    commandButtonItem
+                        .padding(.top, 20)
+                        .padding(.bottom, 20)
+                }
                 headerItem
             }
 
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
         .frame(width: getWidth(), height: getHeight())
-        .onAppear {
+        .onAppear{
             if self.path.count == 1 {
-                buttonName = "Home"
+                self.buttonName = "Home"
             }
+            setFontDetails()
+        }
+        
+    }
+    
+    private func setFontDetails() {
+        switch headerType {
+        case .home:
+            break
+        case .menu:
+            nameFont = .title
+            nameWeight = .bold
+            nameTopPadding = 10
+            nameBottomPadding = 20
+        case .report:
+            nameFont = .title
+            nameWeight = .regular
+            nameTopPadding = 10
+            nameBottomPadding = 10
         }
     }
     
@@ -56,20 +93,10 @@ struct ReportHeaderView: View {
         }
     }
     
-    var buttonItems: some View {
-        HStack{
-            backButtonItem
-            Spacer()
-            commandButtonItem
-        }
-        .padding(.top, 20)
-        .padding(.bottom, 20)
-    }
-    
     var backButtonItem: some View {
         HStack {
             Button {
-                self.path.removeLast()
+                goBack()
             } label: {
                 Image(systemName: "chevron.left")
                 Text(buttonName)
@@ -95,15 +122,17 @@ struct ReportHeaderView: View {
     var headerItem: some View {
         HStack {
             Text(name)
-                .font(.headline)
-                .fontWeight(.bold)
-                .padding(.bottom, 20)
+                .font(nameFont)
+                .fontWeight(nameWeight)
+                .padding(.top, nameTopPadding)
+                .padding(.bottom, nameBottomPadding)
                 .foregroundColor(isDark ? .white : .black)
         }
     }
     
 }
 
+
 #Preview {
-    ReportHeaderView(name: "Header", viewAsPct: {}, path: .constant([Int]()), isDark: .constant(false))
+    HeaderView(headerType: .home, name: "Header", viewAsPct: {}, goBack: {}, withBackButton: false, withPctButton: false, path: .constant([Int]()), isDark: .constant(false))
 }

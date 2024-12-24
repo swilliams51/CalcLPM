@@ -34,7 +34,7 @@ struct HomeView: View {
         NavigationStack (path: $path){
             ZStack {
                 VStack {
-                    HomeHeaderView(isDark: $isDark)
+                    HeaderView(headerType: .home, name: "Home", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: false, withPctButton: false, path: $path, isDark: $isDark)
                     Form {
                         Section(header: Text("Parameters"), footer: (Text("File Name: \(currentFile)"))) {
                             assetItem
@@ -112,6 +112,13 @@ struct HomeView: View {
                 Alert(title: Text("Calculation Error"), message: Text(alertCalculationError), dismissButton: .default(Text("OK")))
             }
         }
+    }
+    
+    private func myViewAsPct() {
+        
+    }
+    private func myGoBack() {
+        print("Go Back")
     }
     
     var assetItem: some View {

@@ -19,7 +19,7 @@ struct ReportsManagerView: View {
     var body: some View {
         ZStack {
             VStack {
-                MenuHeaderView(name: "Reports", path: $path, isDark: $isDark)
+                HeaderView(headerType: .menu, name: "Reports", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
                 Form{
                     Section(header: Text("Reports"), footer: (Text("File Name: \(currentFile)").font(myFont))) {
                         leaseRentalsItem
@@ -57,6 +57,13 @@ struct ReportsManagerView: View {
         .onTapGesture {
             path.append(21)
         }
+    }
+    
+    private func myViewAsPct() {
+        
+    }
+    private func myGoBack() {
+        self.path.removeLast()
     }
     
     var depreciationScheduleItem: some View {

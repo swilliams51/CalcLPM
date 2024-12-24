@@ -15,7 +15,7 @@ struct AboutView: View {
     @ScaledMetric var scale: CGFloat = 1
     var body: some View {
         VStack {
-            MenuHeaderView(name: "About", path: $path, isDark: $isDark)
+            HeaderView(headerType: .menu, name: "About", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
             Form {
                 Section{
                     productNameItem
@@ -34,10 +34,15 @@ struct AboutView: View {
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
         .navigationBarBackButtonHidden(true)
-        .onAppear{
-            
-        }
     }
+    
+    private func myViewAsPct() {
+        
+    }
+    private func myGoBack() {
+        self.path.removeLast()
+    }
+
     
     var productNameItem: some View {
         HStack{
@@ -54,7 +59,6 @@ struct AboutView: View {
             Text("Thank you for downloading CalcLPM!")
                 .font(.subheadline)
             Spacer()
-    
         }
     }
     

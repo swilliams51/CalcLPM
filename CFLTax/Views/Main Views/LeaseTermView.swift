@@ -29,7 +29,7 @@ struct LeaseTermView: View {
     
     var body: some View {
         VStack {
-            MenuHeaderView(name: "Lease Term", path: $path, isDark: $isDark)
+            HeaderView(headerType: .menu, name: "Lease Term", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
             Form {
                 Section (header: Text("Details").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
                     paymentFrequencyItem
@@ -132,6 +132,13 @@ struct LeaseTermView: View {
         .popover(isPresented: $showPop3) {
             PopoverView(myHelp: $baseHelp, isDark: $isDark)
         }
+    }
+    
+    private func myViewAsPct() {
+        
+    }
+    private func myGoBack() {
+        self.path.removeLast()
     }
     
     func myCancel() {

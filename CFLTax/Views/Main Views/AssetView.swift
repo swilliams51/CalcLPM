@@ -54,7 +54,7 @@ struct AssetView: View {
  
     var body: some View {
         VStack{
-            MenuHeaderView(name: "Asset", path: $path, isDark: $isDark)
+            HeaderView(headerType: .menu, name: "Asset", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("Details").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
                     assetNameItem
@@ -84,6 +84,13 @@ struct AssetView: View {
             self.residualPercentOnEntry = residualValueOnEntry.toDecimal() / lessorCostOnEntry.toDecimal()
             self.lesseeGuarantyPercentOnEntry = lesseeGuarantyOnEntry.toDecimal() / lessorCostOnEntry.toDecimal()
         }
+    }
+    
+    private func myViewAsPct() {
+        
+    }
+    private func myGoBack() {
+        self.path.removeLast()
     }
     
     private func myCancel() {

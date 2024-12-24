@@ -29,7 +29,7 @@ struct TaxAssumptionsView: View {
     
     var body: some View {
         VStack {
-            MenuHeaderView(name: "Tax Assumptions", path: $path, isDark: $isDark)
+            HeaderView(headerType: .menu, name: "Tax Assumptions", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
             Form {
                 Section (header: Text("Federal Income Tax Profile").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
                     federalTaxRateItem
@@ -52,6 +52,13 @@ struct TaxAssumptionsView: View {
         .onAppear() {
             self.myTaxAssumptions = self.myInvestment.taxAssumptions
         }
+    }
+    
+    private func myViewAsPct() {
+        
+    }
+    private func myGoBack() {
+        self.path.removeLast()
     }
     
     private func myCancel() {

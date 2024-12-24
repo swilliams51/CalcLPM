@@ -22,7 +22,7 @@ struct FileMenuView: View {
     var body: some View {
         ZStack {
             VStack {
-                MenuHeaderView(name: "File Menu", path: $path, isDark: $isDark)
+                HeaderView(headerType: .menu, name: "File Menu", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
                     Form {
                         Section(footer: Text(" File Name: \(currentFile)").font(myFont)) {
                             newFileItem
@@ -103,6 +103,13 @@ struct FileMenuView: View {
             Alert(title: Text("Invalid File Name Error"), message: Text(invalidFileNameMessage), dismissButton: .default(Text("OK")))
         }
         
+    }
+    
+    private func myViewAsPct() {
+        
+    }
+    private func myGoBack() {
+        self.path.removeLast()
     }
     
     var saveAsFileItem: some View {

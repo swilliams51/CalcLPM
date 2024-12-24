@@ -26,7 +26,7 @@ struct FileOpenView: View {
     
     var body: some View {
         VStack {
-            MenuHeaderView(name: "File Open", path: $path, isDark: $isDark)
+            HeaderView(headerType: .menu, name: "File Open", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text(textFileLabel)) {
                     numberOfSavedFilesRow
@@ -48,6 +48,13 @@ struct FileOpenView: View {
                 self.selectedFile = self.files[0]
             }
         }
+    }
+    
+    private func myViewAsPct() {
+        
+    }
+    private func myGoBack() {
+        self.path.removeLast()
     }
     
     var numberOfSavedFilesRow: some View {

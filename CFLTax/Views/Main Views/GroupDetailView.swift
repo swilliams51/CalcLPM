@@ -44,7 +44,7 @@ struct GroupDetailView: View {
     
     var body: some View {
         VStack{
-            MenuHeaderView(name: "Payment Group", path: $path, isDark: $isDark)
+            HeaderView(headerType: .menu, name: "Group Detail", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text(isInterimGroup ? "Interim Rent Details" : "Base Rent Details").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
                     VStack {
@@ -71,6 +71,13 @@ struct GroupDetailView: View {
         .onAppear{
             viewOnAppear()
         }
+    }
+    
+    private func myViewAsPct() {
+        
+    }
+    private func myGoBack() {
+        self.path.removeLast()
     }
 }
 

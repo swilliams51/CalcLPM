@@ -455,8 +455,12 @@ public enum AssetTextFieldType {
                 return "Lessee Guaranty"
             }
     }
-    
-    
+}
+
+public enum HeaderViewType {
+    case home
+    case menu
+    case report
 }
 
 

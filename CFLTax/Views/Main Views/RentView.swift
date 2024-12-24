@@ -22,7 +22,7 @@ struct RentView: View {
     
     var body: some View {
         VStack {
-            MenuHeaderView(name: "Rent", path: $path, isDark: $isDark)
+            HeaderView(headerType: .menu, name: "Rent", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("Rent").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
                     ForEach(myInvestment.rent.groups) { group in
@@ -70,6 +70,14 @@ struct RentView: View {
             Alert(title: Text("Applied Structure Warning"), message: Text(alertMaxBaseTerm), dismissButton: .default(Text("OK")))
         }
     }
+    
+    private func myViewAsPct() {
+        
+    }
+    private func myGoBack() {
+        self.path.removeLast()
+    }
+    
 }
 
 #Preview {

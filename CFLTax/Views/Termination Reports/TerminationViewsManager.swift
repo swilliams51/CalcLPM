@@ -16,7 +16,7 @@ struct TerminationViewsManager: View {
     
     var body: some View {
         VStack {
-            MenuHeaderView(name: "Reports", path: $path, isDark: $isDark)
+            HeaderView(headerType: .menu, name: "Termination Reports", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
             Form{
                 Section(header: Text("Reports"), footer: (Text("FileName: \(currentFile)"))) {
                     investmentBalanceItem
@@ -34,6 +34,14 @@ struct TerminationViewsManager: View {
         .environment(\.colorScheme, isDark ? .dark : .light)
         .navigationBarBackButtonHidden(true)
     }
+    
+    private func myViewAsPct() {
+        
+    }
+    private func myGoBack() {
+        self.path.removeLast()
+    }
+    
     var investmentBalanceItem: some View {
         HStack {
             Text("Investment Balances")

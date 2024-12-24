@@ -25,7 +25,7 @@ struct FileSaveAsView: View {
     
     var body: some View {
         VStack {
-            MenuHeaderView(name: "File Save As", path: $path, isDark: $isDark)
+            HeaderView(headerType: .menu, name: "File Save As", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("Current File Name")){
                     saveAsFileRowItem
@@ -108,6 +108,14 @@ let invalidFileNameMassage: String = "A valid file name must longer than 2 chara
 
 
 extension FileSaveAsView {
+    
+    private func myViewAsPct() {
+        
+    }
+    private func myGoBack() {
+        self.path.removeLast()
+    }
+    
     func cancel() {
         self.currentFile = self.fileNameOnEntry
         self.path.removeLast()

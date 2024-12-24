@@ -45,7 +45,7 @@ struct EconomicsView: View {
     
     var body: some View {
         VStack {
-            MenuHeaderView(name: "Economics", path: $path, isDark: $isDark)
+            HeaderView(headerType: .menu, name: "Economics", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
             Form{
                 Section(header: Text("Solve For Parameters").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))){
                     yieldMethodItem
@@ -74,6 +74,13 @@ struct EconomicsView: View {
             self.yieldTargetOnEntry = myEconomics.yieldTarget
             self.discountRateOnEntry = myEconomics.discountRateForRent
         }
+    }
+    
+    private func myViewAsPct() {
+        
+    }
+    private func myGoBack() {
+        self.path.removeLast()
     }
     
     private func keyBoardIsActive() -> Bool {

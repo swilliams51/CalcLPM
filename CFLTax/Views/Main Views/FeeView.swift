@@ -29,7 +29,7 @@ struct FeeView: View {
     
     var body: some View {
         VStack {
-            MenuHeaderView(name: "Fee", path: $path, isDark: $isDark)
+            HeaderView(headerType: .menu, name: "Fee", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
             Form{
                 Section(header: Text("Details").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
                     feeAmountItem
@@ -92,6 +92,13 @@ struct FeeView: View {
                 }
             }
         }
+    }
+    
+    private func myViewAsPct() {
+        
+    }
+    private func myGoBack() {
+        self.path.removeLast()
     }
         
     private func myCancel() {

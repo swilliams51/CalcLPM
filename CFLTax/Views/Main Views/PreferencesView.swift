@@ -30,7 +30,7 @@ struct PreferencesView: View {
     
     var body: some View {
         VStack {
-            MenuHeaderView(name: "Preferences", path: $path, isDark: $isDark)
+            HeaderView(headerType: .menu, name: "Preferences", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("Default New Lease")) {
                     defaultNewLeaseItem
@@ -116,7 +116,14 @@ struct PreferencesView: View {
 }
 
 extension PreferencesView {
+       
+    private func myViewAsPct() {
         
+    }
+    private func myGoBack() {
+        self.path.removeLast()
+    }
+    
     func myCancel() {
         self.path.removeLast()
     }
