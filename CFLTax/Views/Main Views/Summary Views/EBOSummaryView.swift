@@ -35,7 +35,7 @@ struct EBOSummaryView: View {
     
     var body: some View {
        VStack {
-           ReportHeaderView(name: "EBO Summary", viewAsPct: myViewAsPct, path: $path, isDark: $isDark)
+           HeaderView(headerType: .report, name: "EBO Summary", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: true, path: $path, isDark: $isDark)
            Form {
               Section(header: Text("EBO Yields"), footer: Text("File Name: \(currentFile)")) {
                   afterTaxYieldItem
@@ -68,6 +68,10 @@ struct EBOSummaryView: View {
            self.myArrearsRent = myInvestment.getArrearsRent(dateAsk: myEBO.exerciseDate)
            self.myTotalEBOAmountDue = myEBO.amount.toDecimal() + myArrearsRent
        }
+    }
+    
+    private func myGoBack() {
+        self.path.removeLast()
     }
     
     private func myViewAsPct() {

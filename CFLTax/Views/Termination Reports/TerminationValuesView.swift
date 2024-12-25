@@ -19,7 +19,7 @@ struct TerminationValuesView: View {
     
     var body: some View {
         VStack {
-            ReportHeaderView(name: "Termination Values", viewAsPct: myViewAsPct, path: $path, isDark: $isDark)
+            HeaderView(headerType: .report, name: "Termination Values", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: true, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("\(currentFile)")) {
                     ForEach(myTValues.items) { item in
@@ -56,6 +56,10 @@ struct TerminationValuesView: View {
     
     private func myViewAsPct() {
         self.viewAsPctOfCost.toggle()
+    }
+    
+    private func myGoBack() {
+        self.path.removeLast()
     }
     
     func getFormattedValue (amount: String) -> String {

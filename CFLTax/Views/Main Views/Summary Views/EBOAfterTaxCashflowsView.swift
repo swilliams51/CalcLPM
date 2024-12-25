@@ -18,7 +18,7 @@ struct EBOAfterTaxCashflowsView: View {
     
     var body: some View {
         VStack {
-            ReportHeaderView(name: "After-Tax Cashflows", viewAsPct: myViewAsPct, path: $path, isDark: $isDark)
+            HeaderView(headerType: .report, name: "EBO After-Tax Cashflows", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: true, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("File Name: \(currentFile)")) {
                     ForEach(myATCashflows.items) { item in
@@ -49,10 +49,15 @@ struct EBOAfterTaxCashflowsView: View {
             myATCashflows = myInvestment.getEBO_ATCashflows(aEBO: myInvestment.earlyBuyout)
         }
     }
-    
     private func myViewAsPct() {
         self.viewAsPctOfCost.toggle()
     }
+    
+    private func myGoBack() {
+        self.path.removeLast()
+    }
+    
+    
 }
 
 #Preview {

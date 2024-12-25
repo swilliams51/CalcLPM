@@ -18,7 +18,7 @@ struct InvestmentBalancesView: View {
     
     var body: some View {
         VStack {
-            ReportHeaderView(name: "Investment Balances", viewAsPct: myViewAsPct, path: $path, isDark: $isDark)
+            HeaderView(headerType: .report, name: "Investment Balances", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: true, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("\(currentFile)")) {
                     ForEach(myPeriodicInvestmentBalances.items) { item in
@@ -55,6 +55,11 @@ struct InvestmentBalancesView: View {
     private func myViewAsPct() {
         self.viewAsPct.toggle()
     }
+    
+    private func myGoBack() {
+        self.path.removeLast()
+    }
+    
 }
 
 #Preview {

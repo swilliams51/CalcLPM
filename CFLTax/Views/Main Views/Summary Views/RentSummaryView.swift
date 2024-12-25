@@ -35,7 +35,7 @@ struct RentSummaryView: View {
     
     var body: some View {
         VStack {
-            ReportHeaderView(name: "Rentals", viewAsPct: myViewAsPct, path: $path, isDark: $isDark)
+            HeaderView(headerType: .report, name: "Rent Summary", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: true, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("Accounting"), footer: Text("File Name: \(currentFile)")) {
                     implicitRateItem
@@ -98,7 +98,11 @@ struct RentSummaryView: View {
         self.viewAsPctOfCost.toggle()
     }
     
-    func getAmount(amount: String, index: Int) -> String {
+    private func myGoBack() {
+        self.path.removeLast()
+    }
+    
+    private func getAmount(amount: String, index: Int) -> String {
         var strAmount = amount
         
         if myInvestment.rent.groups[index].isInterim {

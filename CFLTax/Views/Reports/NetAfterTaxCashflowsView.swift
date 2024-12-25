@@ -17,7 +17,7 @@ struct NetAfterTaxCashflowsView: View {
     
     var body: some View {
         VStack {
-            ReportHeaderView(name: "Net A/T Cashflows", viewAsPct: myViewAsPct, path: $path, isDark: $isDark)
+            HeaderView(headerType: .report, name: "Net A/T Cashflows", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: true, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("\(currentFile)")) {
                     ForEach(myInvestment.afterTaxCashflows.items) { item in
@@ -50,7 +50,11 @@ struct NetAfterTaxCashflowsView: View {
     private func myViewAsPct() {
         self.viewAsPct.toggle()
     }
-            
+     
+    private func myGoBack() {
+        self.path.removeLast()
+    }
+    
 }
 
 

@@ -34,15 +34,18 @@ struct HeaderView: View {
             Color.black.opacity(isDark ? 1.0 : 0.05)
                 .ignoresSafeArea()
             VStack {
-                if withBackButton {
-                    backButtonItem
-                        .padding(.top, 20)
-                        .padding(.bottom, 20)
-                }
-                if withPctButton {
-                    commandButtonItem
-                        .padding(.top, 20)
-                        .padding(.bottom, 20)
+                HStack{
+                    if withBackButton {
+                        backButtonItem
+                            .padding(.top, 20)
+                            .padding(.bottom, 20)
+                    }
+                    Spacer()
+                    if withPctButton {
+                        commandButtonItem
+                            .padding(.top, 20)
+                            .padding(.bottom, 20)
+                    }
                 }
                 headerItem
             }
@@ -69,10 +72,10 @@ struct HeaderView: View {
             nameTopPadding = 10
             nameBottomPadding = 20
         case .report:
-            nameFont = .title
-            nameWeight = .regular
+            nameFont = .headline
+            nameWeight = .bold
             nameTopPadding = 10
-            nameBottomPadding = 10
+            nameBottomPadding = 20
         }
     }
     
@@ -134,5 +137,5 @@ struct HeaderView: View {
 
 
 #Preview {
-    HeaderView(headerType: .home, name: "Header", viewAsPct: {}, goBack: {}, withBackButton: false, withPctButton: false, path: .constant([Int]()), isDark: .constant(false))
+    HeaderView(headerType: .report, name: "Header", viewAsPct: {}, goBack: {}, withBackButton: true, withPctButton: true, path: .constant([Int]()), isDark: .constant(false))
 }

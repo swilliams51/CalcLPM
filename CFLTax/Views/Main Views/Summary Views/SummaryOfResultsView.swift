@@ -28,7 +28,7 @@ struct SummaryOfResultsView: View {
     var body: some View {
         ZStack {
             VStack {
-                ReportHeaderView(name: "Results", viewAsPct: myViewAsPct, path: $path, isDark: $isDark)
+                HeaderView(headerType: .report, name: "Results", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: true, path: $path, isDark: $isDark)
                 Form {
                     Section(header: Text("Profitability"), footer: (Text("File Name: \(currentFile)"))) {
                         afterTaxYieldItem
@@ -71,6 +71,10 @@ struct SummaryOfResultsView: View {
     
     private func myViewAsPct() {
         self.viewAsPctOfCost.toggle()
+    }
+    
+    private func myGoBack() {
+        self.path.removeLast()
     }
     
 }

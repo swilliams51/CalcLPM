@@ -30,7 +30,7 @@ struct CashflowView: View {
     
     var body: some View {
         VStack {
-            ReportHeaderView(name: "Cashflow Summary", viewAsPct: myViewAsPct, path: $path, isDark: $isDark)
+            HeaderView(headerType: .report, name: "Cashflow Summary", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: true, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("Cashflow"), footer: Text("File Name: \(currentFile)")) {
                     assetCostItem
@@ -44,7 +44,6 @@ struct CashflowView: View {
                 }
             }
         }
-        //.environment(\.defaultMinListRowHeight, lineHeight)
         .environment(\.colorScheme, isDark ? .dark : .light)
         .navigationBarBackButtonHidden(true)
         .onAppear{
@@ -72,6 +71,9 @@ struct CashflowView: View {
         self.viewAsPctOfCost.toggle()
     }
     
+    private func myGoBack() {
+        self.path.removeLast()
+    }
 }
 
 #Preview {

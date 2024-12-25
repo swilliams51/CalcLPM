@@ -35,7 +35,7 @@ struct TerminationValuesProofView: View {
     @State var viewAsPct: Bool = false
     
     var body: some View {
-        ReportHeaderView(name: "Termination Values Proof", viewAsPct: myViewAsPct, path: $path, isDark: $isDark)
+        HeaderView(headerType: .report, name: "Termination Values Proof", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: true, path: $path, isDark: $isDark)
         VStack {
             terminationDateItem
             Grid(alignment: .trailing, horizontalSpacing: 20, verticalSpacing: 5) {
@@ -95,6 +95,11 @@ struct TerminationValuesProofView: View {
     private func myViewAsPct() {
         self.viewAsPct.toggle()
     }
+    
+    private func myGoBack() {
+        self.path.removeLast()
+    }
+    
 }
    
 
