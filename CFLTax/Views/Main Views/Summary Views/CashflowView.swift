@@ -29,7 +29,7 @@ struct CashflowView: View {
     @State var frameHeight: CGFloat = 12
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             HeaderView(headerType: .report, name: "Cashflow Summary", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: true, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("Cashflow"), footer: Text("File Name: \(currentFile)")) {

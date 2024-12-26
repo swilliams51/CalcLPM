@@ -17,7 +17,7 @@ struct InvestmentBalancesView: View {
     @State var viewAsPct: Bool = false
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             HeaderView(headerType: .report, name: "Investment Balances", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: true, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("\(currentFile)")) {

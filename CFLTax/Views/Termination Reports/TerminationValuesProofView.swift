@@ -36,25 +36,28 @@ struct TerminationValuesProofView: View {
     
     var body: some View {
         HeaderView(headerType: .report, name: "Termination Values Proof", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: true, path: $path, isDark: $isDark)
-        VStack {
-            terminationDateItem
-            Grid(alignment: .trailing, horizontalSpacing: 20, verticalSpacing: 5) {
-                terminationValueRowItem
-                depreciationRowItem
-                gainOnTerminationRowItem
-                taxOnGainRowItem
-                ytdIncomeRowItem
-                advanceRentRowItem
-                adjustedYTDIncomeRowItem
-                taxOnAdjustedYTDIncomeRowItem
-                taxesPaidYTDRowItem
-                calculatedInvestmentBalanceRowItem
-                advanceRentRowItem
-                adjustedInvestmentBalanceRowItem
-                blankRowItem
-                actualInvestmentBalanceRowItem
+        VStack (spacing: 0){
+            ScrollView {
+                terminationDateItem
+                Grid(alignment: .trailing, horizontalSpacing: 20, verticalSpacing: 5) {
+                    terminationValueRowItem
+                    depreciationRowItem
+                    gainOnTerminationRowItem
+                    taxOnGainRowItem
+                    ytdIncomeRowItem
+                    advanceRentRowItem
+                    adjustedYTDIncomeRowItem
+                    taxOnAdjustedYTDIncomeRowItem
+                    taxesPaidYTDRowItem
+                    calculatedInvestmentBalanceRowItem
+                    advanceRentRowItem
+                    adjustedInvestmentBalanceRowItem
+                    blankRowItem
+                    actualInvestmentBalanceRowItem
+                }
+                terminationDateButtonsRow
             }
-            terminationDateButtonsRow
+            
             Spacer()
         }.background(isDark ? Color.black : Color.white)
         .navigationBarBackButtonHidden(true)

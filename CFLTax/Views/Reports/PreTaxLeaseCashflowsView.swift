@@ -16,8 +16,8 @@ struct PreTaxLeaseCashflowsView: View {
     @State var viewAsPct: Bool = false
     
     var body: some View {
-        VStack {
-            HeaderView(headerType: .report, name: "Pre-Tax Cashflows", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: true, path: $path, isDark: $isDark)
+        VStack(spacing: 0) {
+            HeaderView(headerType: .report, name: "B/T Cashflows", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: true, path: $path, isDark: $isDark)
             Form{
                 Section(header: Text("\(currentFile)")) {
                     ForEach(myInvestment.beforeTaxCashflows.items) { item in

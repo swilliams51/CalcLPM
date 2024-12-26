@@ -24,7 +24,7 @@ struct FileSaveAsView: View {
     private let pasteBoard = UIPasteboard.general
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             HeaderView(headerType: .menu, name: "File Save As", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("Current File Name")){

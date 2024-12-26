@@ -21,7 +21,7 @@ struct FileMenuView: View {
     
     var body: some View {
         ZStack {
-            VStack {
+            VStack(spacing: 0) {
                 HeaderView(headerType: .menu, name: "File Menu", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
                     Form {
                         Section(footer: Text(" File Name: \(currentFile)").font(myFont)) {

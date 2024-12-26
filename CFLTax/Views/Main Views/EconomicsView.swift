@@ -44,10 +44,10 @@ struct EconomicsView: View {
     @State private var showAlert2: Bool = false
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             HeaderView(headerType: .menu, name: "Economics", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
             Form{
-                Section(header: Text("Solve For Parameters").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))){
+                Section(header: Text("Solve For").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))){
                     yieldMethodItem
                     yieldTargetItem
                     solveForItem

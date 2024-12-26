@@ -27,7 +27,7 @@ struct SummaryOfResultsView: View {
     
     var body: some View {
         ZStack {
-            VStack {
+            VStack (spacing: 0) {
                 HeaderView(headerType: .report, name: "Results", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: true, path: $path, isDark: $isDark)
                 Form {
                     Section(header: Text("Profitability"), footer: (Text("File Name: \(currentFile)"))) {

@@ -18,7 +18,7 @@ struct TerminationValuesView: View {
     @State var viewAsPctOfCost: Bool = false
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             HeaderView(headerType: .report, name: "Termination Values", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: true, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("\(currentFile)")) {

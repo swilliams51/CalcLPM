@@ -28,7 +28,7 @@ struct LeaseTermView: View {
     @State private var eomRuleHelp = leaseTermEOMRuleHelp
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0) {
             HeaderView(headerType: .menu, name: "Lease Term", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
             Form {
                 Section (header: Text("Details").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {

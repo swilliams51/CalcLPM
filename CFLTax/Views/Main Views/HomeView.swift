@@ -33,7 +33,7 @@ struct HomeView: View {
     var body: some View {
         NavigationStack (path: $path){
             ZStack {
-                VStack {
+                VStack (spacing: 0) {
                     HeaderView(headerType: .home, name: "Home", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: false, withPctButton: false, path: $path, isDark: $isDark)
                     Form {
                         Section(header: Text("Parameters"), footer: (Text("File Name: \(currentFile)"))) {

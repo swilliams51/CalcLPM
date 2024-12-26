@@ -36,7 +36,7 @@ struct EarlyBuyoutView: View {
     
     var body: some View {
         ZStack {
-            VStack {
+            VStack(spacing: 0) {
                 HeaderView(headerType: .menu, name: "Early Buyout", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
                 Form {
                     Section (header: Text("Exercise Date").font(.footnote), footer: Text("Full Term MISF A/T Yield: \(percentFormatter(percent: baseYield.toString(decPlaces: 5), locale: myLocale, places: 3))")) {
@@ -97,7 +97,15 @@ struct EarlyBuyoutView: View {
     private func myViewAsPct() {
         
     }
+    
     private func myGoBack() {
+        self.isLoading = true
+        Task {
+            await goBack()
+        }
+    }
+    
+    private func goBack() async{
         self.path.removeLast()
     }
     

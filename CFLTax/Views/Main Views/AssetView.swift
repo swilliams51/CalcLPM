@@ -53,7 +53,7 @@ struct AssetView: View {
     @State private var padding: CGFloat = 7
  
     var body: some View {
-        VStack{
+        VStack(spacing: 0) {
             HeaderView(headerType: .menu, name: "Asset", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("Details").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {

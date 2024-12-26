@@ -43,7 +43,7 @@ struct GroupDetailView: View {
     @FocusState private var paymentAmountIsFocused: Bool
     
     var body: some View {
-        VStack{
+        VStack(spacing: 0){
             HeaderView(headerType: .menu, name: "Group Detail", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text(isInterimGroup ? "Interim Rent Details" : "Base Rent Details").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {

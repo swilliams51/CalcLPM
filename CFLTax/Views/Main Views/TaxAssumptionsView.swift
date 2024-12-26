@@ -28,10 +28,10 @@ struct TaxAssumptionsView: View {
     @State var payHelp = dayOfMonthHelp
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0){
             HeaderView(headerType: .menu, name: "Tax Assumptions", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
             Form {
-                Section (header: Text("Federal Income Tax Profile").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
+                Section (header: Text("Federal Income Tax").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
                     federalTaxRateItem
                     fiscalMonthEndItem
                     dayOfMonthTaxesPaidItem

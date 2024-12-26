@@ -23,8 +23,6 @@ struct HeaderView: View {
     
     @State var nameFont: Font = .largeTitle
     @State var nameWeight: Font.Weight = .bold
-    @State var nameTopPadding: CGFloat = 30
-    @State var nameBottomPadding: CGFloat = 20
    
     @Environment(\.verticalSizeClass) var verticalSizeClass
     var isLandscape: Bool { verticalSizeClass == .compact }
@@ -34,22 +32,15 @@ struct HeaderView: View {
             Color.black.opacity(isDark ? 1.0 : 0.05)
                 .ignoresSafeArea()
             VStack {
-                HStack{
-                    if withBackButton {
-                        backButtonItem
-                            .padding(.top, 20)
-                            .padding(.bottom, 20)
-                    }
-                    Spacer()
-                    if withPctButton {
-                        commandButtonItem
-                            .padding(.top, 20)
-                            .padding(.bottom, 20)
-                    }
+                if headerType == .home {
+                    homeViewItem
+                } else if headerType == .menu {
+                    menuViewItem
+                } else {
+                    reportViewItem
                 }
-                headerItem
+                
             }
-
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
         .frame(width: getWidth(), height: getHeight())
@@ -62,6 +53,47 @@ struct HeaderView: View {
         
     }
     
+    var homeViewItem: some View {
+        HStack{
+            Spacer()
+            headerItem
+            Spacer()
+        }
+    }
+    
+    var menuViewItem: some View {
+        VStack {
+            HStack{
+                backButtonItem
+                Spacer()
+                Text("filler")
+                    .foregroundStyle(.clear)
+                    .padding(.trailing, 20)
+            }
+            HStack{
+                headerItem
+                    .padding(.top, 20)
+            }
+        }
+       
+    }
+    
+    var reportViewItem: some View {
+        VStack {
+            HStack {
+                backButtonItem
+                Spacer()
+                commandButtonItem
+            }
+            HStack {
+                headerItem
+                    .padding(.top, 20)
+            }
+        }
+        
+    }
+    
+    
     private func setFontDetails() {
         switch headerType {
         case .home:
@@ -69,13 +101,9 @@ struct HeaderView: View {
         case .menu:
             nameFont = .title
             nameWeight = .bold
-            nameTopPadding = 10
-            nameBottomPadding = 20
         case .report:
-            nameFont = .headline
+            nameFont = .title2
             nameWeight = .bold
-            nameTopPadding = 10
-            nameBottomPadding = 20
         }
     }
     
@@ -89,10 +117,10 @@ struct HeaderView: View {
     
     func getHeight() -> CGFloat {
         if isLandscape {
-            return UIScreen.main.bounds.width * 0.10
+            return UIScreen.main.bounds.width * 0.15
         } else {
             //return 75
-           return UIScreen.main.bounds.height * 0.08
+           return UIScreen.main.bounds.height * 0.15
         }
     }
     
@@ -106,7 +134,6 @@ struct HeaderView: View {
             }
             .tint(Color("BackButtonColor"))
             .padding(.leading, 20)
-            Spacer()
         }
     }
     
@@ -127,8 +154,6 @@ struct HeaderView: View {
             Text(name)
                 .font(nameFont)
                 .fontWeight(nameWeight)
-                .padding(.top, nameTopPadding)
-                .padding(.bottom, nameBottomPadding)
                 .foregroundColor(isDark ? .white : .black)
         }
     }
@@ -137,5 +162,5 @@ struct HeaderView: View {
 
 
 #Preview {
-    HeaderView(headerType: .report, name: "Header", viewAsPct: {}, goBack: {}, withBackButton: true, withPctButton: true, path: .constant([Int]()), isDark: .constant(false))
+    HeaderView(headerType: .report, name: "Home", viewAsPct: {}, goBack: {}, withBackButton: true, withPctButton: true, path: .constant([Int]()), isDark: .constant(false))
 }

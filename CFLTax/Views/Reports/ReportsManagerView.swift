@@ -18,7 +18,7 @@ struct ReportsManagerView: View {
     
     var body: some View {
         ZStack {
-            VStack {
+            VStack(spacing: 0) {
                 HeaderView(headerType: .menu, name: "Reports", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
                 Form{
                     Section(header: Text("Reports"), footer: (Text("File Name: \(currentFile)").font(myFont))) {

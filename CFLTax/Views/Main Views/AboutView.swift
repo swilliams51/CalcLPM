@@ -14,7 +14,7 @@ struct AboutView: View {
     
     @ScaledMetric var scale: CGFloat = 1
     var body: some View {
-        VStack {
+        VStack (spacing: 0) {
             HeaderView(headerType: .menu, name: "About", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
             Form {
                 Section{

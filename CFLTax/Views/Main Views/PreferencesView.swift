@@ -29,7 +29,7 @@ struct PreferencesView: View {
     @State private var showAlert: Bool = false
     
     var body: some View {
-        VStack {
+        VStack (spacing: 0) {
             HeaderView(headerType: .menu, name: "Preferences", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("Default New Lease")) {

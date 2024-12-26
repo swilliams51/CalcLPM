@@ -21,8 +21,8 @@ struct RentView: View {
     @State var showAlert2: Bool = false
     
     var body: some View {
-        VStack {
-            HeaderView(headerType: .menu, name: "Rent", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
+        VStack(spacing: 0) {
+            HeaderView(headerType: .menu, name: "Payment Groups", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("Rent").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
                     ForEach(myInvestment.rent.groups) { group in

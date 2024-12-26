@@ -25,7 +25,7 @@ struct FileOpenView: View {
     @State private var templateMode: Bool = false
     
     var body: some View {
-        VStack {
+        VStack(spacing: 0){
             HeaderView(headerType: .menu, name: "File Open", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text(textFileLabel)) {

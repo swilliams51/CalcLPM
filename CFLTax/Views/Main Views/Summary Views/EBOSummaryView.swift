@@ -30,35 +30,42 @@ struct EBOSummaryView: View {
     @State var myAfterTaxCashflow: Decimal = 0.0
     @State var myTaxesPaid: Decimal = 0.0
     
-    //@State var lineHeight: CGFloat = 12
-    @State var frameHeight: CGFloat = 14
+    @State private var isLoading: Bool = false
     
     var body: some View {
-       VStack {
-           HeaderView(headerType: .report, name: "EBO Summary", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: true, path: $path, isDark: $isDark)
-           Form {
-              Section(header: Text("EBO Yields"), footer: Text("File Name: \(currentFile)")) {
-                  afterTaxYieldItem
-                  beforeTaxYieldItem
-                  preTaxIRRItem
-              }
-              
-              Section(header: Text("EBO Details"), footer: Text("Exercise Date: \(dateFormatter(dateIn: myEBO.exerciseDate, locale: myLocale))")) {
-                  eboAmountItem
-                  arrearsRentItem
-                  eboTotalDueItem
-              }
-              
-              Section(header: Text("EBO Cashflow")) {
-                  preTaxEBOCashItem
-                  afterTaxEBOCashItem
-              }
-              
-           }
+        ZStack {
+            VStack(spacing: 0){
+                HeaderView(headerType: .report, name: "EBO Summary", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: true, path: $path, isDark: $isDark)
+                Form {
+                   Section(header: Text("EBO Yields"), footer: Text("File Name: \(currentFile)")) {
+                       afterTaxYieldItem
+                       beforeTaxYieldItem
+                       preTaxIRRItem
+                   }
+                   
+                   Section(header: Text("EBO Details"), footer: Text("Exercise Date: \(dateFormatter(dateIn: myEBO.exerciseDate, locale: myLocale))")) {
+                       eboAmountItem
+                       arrearsRentItem
+                       eboTotalDueItem
+                   }
+                   
+                   Section(header: Text("EBO Cashflow")) {
+                       preTaxEBOCashItem
+                       afterTaxEBOCashItem
+                   }
+                   
+                }
+             }
+            if self.isLoading {
+                ProgressView()
+                    .scaleEffect(3.0)
+            }
         }
+      
        .environment(\.colorScheme, isDark ? .dark : .light)
        .navigationBarBackButtonHidden(true)
        .onAppear {
+           self.isLoading = false
            self.myTaxRate = myInvestment.taxAssumptions.federalTaxRate.toDecimal()
            self.myEBO = myInvestment.earlyBuyout
            self.myATYield = myInvestment.solveForEBOYield(aEBO: myEBO)
@@ -70,13 +77,22 @@ struct EBOSummaryView: View {
        }
     }
     
-    private func myGoBack() {
-        self.path.removeLast()
-    }
-    
     private func myViewAsPct() {
         self.viewAsPctOfCost.toggle()
     }
+    
+    private func myGoBack() {
+        self.isLoading = true
+        Task {
+            await goBack()
+        }
+    }
+    
+    private func goBack() async{
+        self.path.removeLast()
+    }
+    
+    
 }
 
 #Preview {

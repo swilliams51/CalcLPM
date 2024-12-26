@@ -18,7 +18,7 @@ struct InvestmentAmortizationView: View {
     var isLandscape: Bool { verticalSizeClass == .compact }
     
     var body: some View {
-        VStack {
+        VStack (spacing: 0) {
             HeaderView(headerType: .menu, name: "Amortization", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
             if isLandscape {
                 Form {

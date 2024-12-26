@@ -16,8 +16,8 @@ struct NetAfterTaxCashflowsView: View {
     @State var viewAsPct: Bool = false
     
     var body: some View {
-        VStack {
-            HeaderView(headerType: .report, name: "Net A/T Cashflows", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: true, path: $path, isDark: $isDark)
+        VStack(spacing: 0){
+            HeaderView(headerType: .report, name: "A/T Cashflows", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: true, path: $path, isDark: $isDark)
             Form {
                 Section(header: Text("\(currentFile)")) {
                     ForEach(myInvestment.afterTaxCashflows.items) { item in
