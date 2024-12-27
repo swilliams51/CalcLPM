@@ -89,6 +89,8 @@ let leaseTermEOMRuleHelp =
     Help(title: "End of Month Rule", instruction: "If the Base Term Commencement Date starts on last day of a month having 30 days and the EOM Rule is on, then the subsequent Rental payment due dates for the months with 31 days will occur on the 31st of the applicable month.  If the EOM Rule is off then payment due dates for the months with 31 days will occur on the 30th. The payment dues date will occur on the last day of February in either case.")
 
 
+let maxGuarantyHelp =    Help(title: "Maximum Guaranty", instruction: "The maximum amount of residual that can be guaranteed by the lessee such that the present value of the rents and the residual guaranty are less than 90% of the Lessor's Cost of the Asset.")
+
 let numberOfPaymentsHelp =
         Help(title: "Number of Payments", instruction: "The total number of Base Term Payments for all non-interim Payment Groups must not exceed 180 months when adjusting for the Payment Frequency. For example, if the Payment Frequency is monthly, then the total number of payments must not exceed 180.  If the payment frequency is semiannually, then the total number of Base Term Payments cannot exceed 90.")
 

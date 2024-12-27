@@ -117,10 +117,10 @@ struct HeaderView: View {
     
     func getHeight() -> CGFloat {
         if isLandscape {
-            return UIScreen.main.bounds.width * 0.15
+            return UIScreen.main.bounds.width * 0.14
         } else {
             //return 75
-           return UIScreen.main.bounds.height * 0.15
+           return UIScreen.main.bounds.height * 0.14
         }
     }
     

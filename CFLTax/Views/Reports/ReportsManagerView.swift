@@ -143,7 +143,7 @@ struct ReportsManagerView: View {
         .onTapGesture {
             self.isLoading = true
                 Task{
-                    await navigate(nextView: 25)
+                    await navigate(nextView: 24)
                 }
             }
     }

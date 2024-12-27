@@ -16,6 +16,7 @@ struct RentSummaryView: View {
     @State private var viewAsPctOfCost: Bool = false
     @State var implicitRate: String = "0.00"
     @State var presentValue: String = "0.00"
+    @State var maxGuaranty: String = "0.00"
     @State var presentValue1: String = "0.00"
     @State var presentValue2: String = "0.00"
     @State var discountRate: String = "0.00"
@@ -29,6 +30,8 @@ struct RentSummaryView: View {
     @State private var payHelp2 = pvTwoHelp
     @State private var showPop3: Bool = false
     @State private var payHelp3 = pvImplicitHelp
+    @State private var showPop4: Bool = false
+    @State private var payHelp4 = maxGuarantyHelp
     
     //@State var lineHeight: CGFloat = 12
     @State var frameHeight: CGFloat = 12
@@ -40,6 +43,7 @@ struct RentSummaryView: View {
                 Section(header: Text("Accounting"), footer: Text("File Name: \(currentFile)")) {
                     implicitRateItem
                     pvAtImplicitRateItem
+                    maxLesseeGuarantyItem
                 }
                 
                 Section(header: Text("Present Values")) {
@@ -61,6 +65,7 @@ struct RentSummaryView: View {
         .onAppear {
             self.implicitRate = myInvestment.getImplicitRate().toString(decPlaces: 6)
             self.discountRate = myInvestment.economics.discountRateForRent
+            self.maxGuaranty = myInvestment.getMaxLesseeGuaranty().toString(decPlaces: 6)
             self.presentValue = myInvestment.getPVOfObligations(aDiscountRate: implicitRate.toDecimal()).toString(decPlaces: 6)
             self.presentValue1 = myInvestment.getPVOfRents().toString(decPlaces: 8)
             self.presentValue2 = myInvestment.getPVOfObligations(aDiscountRate: discountRate.toDecimal()).toString(decPlaces: 8)
@@ -81,6 +86,9 @@ struct RentSummaryView: View {
         }
         .popover(isPresented: $showPop3 ) {
             PopoverView(myHelp: $payHelp3, isDark: $isDark)
+        }
+        .popover(isPresented: $showPop4 ) {
+            PopoverView(myHelp: $payHelp4, isDark: $isDark)
         }
         
     }
@@ -148,6 +156,21 @@ extension RentSummaryView {
                 }
             Spacer()
             Text("\(getFormattedValue(amount: presentValue, viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
+                .font(myFont)
+        }
+    }
+    
+    var maxLesseeGuarantyItem: some View {
+        HStack{
+            Text("Max Lessee Gty:")
+                    .font(myFont)
+            Image(systemName: "questionmark.circle")
+                .foregroundColor(Color.theme.accent)
+                .onTapGesture {
+                    self.showPop4 = true
+                }
+            Spacer()
+            Text("\(getFormattedValue(amount: maxGuaranty, viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
                 .font(myFont)
         }
     }

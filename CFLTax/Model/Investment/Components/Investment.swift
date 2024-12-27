@@ -520,6 +520,20 @@ public class Investment {
         return pvOfRents
     }
     
+    public func getMaxLesseeGuaranty() -> Decimal{
+        let presentValueOfRents: Decimal = self.getPVOfRents()
+        let ninetyPercentOfAsset: Decimal = self.asset.lessorCost.toDecimal() * 0.895
+        let presentValueDiff: Decimal = ninetyPercentOfAsset - presentValueOfRents
+        if presentValueDiff <= 0.0 {
+            return 0.0
+        }
+        let myLeaseCashflows: LeaseTemplateCashflows = LeaseTemplateCashflows()
+        myLeaseCashflows.createTemplate(aInvestment: self)
+        let futureValueOfDiff: Decimal = myLeaseCashflows.XNFV(aPVAmount: presentValueDiff, aCompoundRate: self.getImplicitRate(), aDayCount: self.economics.dayCountMethod)
+        
+        return futureValueOfDiff
+    }
+    
     public func getPVOfObligations(aDiscountRate: Decimal) -> Decimal{
         let tempCashflow = RentalCashflows()
         tempCashflow.createTable(aInvestment: self)

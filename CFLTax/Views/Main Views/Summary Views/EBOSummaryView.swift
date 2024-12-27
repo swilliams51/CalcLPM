@@ -88,7 +88,7 @@ struct EBOSummaryView: View {
         }
     }
     
-    private func goBack() async{
+    private func goBack() async {
         self.path.removeLast()
     }
     

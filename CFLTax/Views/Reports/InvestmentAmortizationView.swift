@@ -24,7 +24,7 @@ struct InvestmentAmortizationView: View {
                 Form {
                     Section(header: Text("Current File: \(currentFile)     MISF A/T Yield: \(yieldFormatted())").font(myFont)) {
                         ScrollView {
-                            Grid (alignment: .leading, horizontalSpacing: 75, verticalSpacing: 10){
+                            Grid (alignment: .leading, horizontalSpacing: 70, verticalSpacing: 10){
                                 amortHeaderGridRowLandscape
                                 ForEach(myAmortizations.items) { item in
                                     amortGridRowLandscape(item: item)
@@ -70,6 +70,8 @@ struct InvestmentAmortizationView: View {
     var rateAndCostGridRow: some View {
         GridRow {
             Text("MISF AT:")
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
             Text("\(yieldFormatted())")
             Text("Cost:")
             Text("1.00")

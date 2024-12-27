@@ -24,29 +24,35 @@ struct CashflowView: View {
     @State var taxesPaid: String = "-7100.00"
     @State var itc: String = "0.00"
     @State var aTCash: String = "-100000.00"
+    @State var isLoading: Bool = false
 
-    //@State var lineHeight: CGFloat = 12
-    @State var frameHeight: CGFloat = 12
     
     var body: some View {
-        VStack(spacing: 0) {
-            HeaderView(headerType: .report, name: "Cashflow Summary", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: true, path: $path, isDark: $isDark)
-            Form {
-                Section(header: Text("Cashflow"), footer: Text("File Name: \(currentFile)")) {
-                    assetCostItem
-                    feeAmountItem
-                    totalCashOutItem
-                    rentAmountItem
-                    residualAmountItem
-                    btProfitItem
-                    taxesPaidItem
-                    atProfitItem
+        ZStack{
+            VStack(spacing: 0) {
+                HeaderView(headerType: .report, name: "Cashflow Summary", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: true, path: $path, isDark: $isDark)
+                Form {
+                    Section(header: Text("Cashflow"), footer: Text("File Name: \(currentFile)")) {
+                        assetCostItem
+                        feeAmountItem
+                        totalCashOutItem
+                        rentAmountItem
+                        residualAmountItem
+                        btProfitItem
+                        taxesPaidItem
+                        atProfitItem
+                    }
                 }
+            }
+            if isLoading {
+                ProgressView()
+                    .scaleEffect(3.0)
             }
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
         .navigationBarBackButtonHidden(true)
         .onAppear{
+            self.isLoading = false
             myInvestment.calculate()
             myInvestment.hasChanged = false
             
@@ -63,7 +69,6 @@ struct CashflowView: View {
             totalCashOut = myTotalOut.toString(decPlaces: 3)
             let myTotalIn: Decimal = rentAmount.toDecimal() + residualAmount.toDecimal()
             totalCashIn = myTotalIn.toString(decPlaces: 3)
-            
         }
     }
     
@@ -72,6 +77,13 @@ struct CashflowView: View {
     }
     
     private func myGoBack() {
+        self.isLoading = true
+        Task {
+            await goBack()
+        }
+    }
+    
+    private func goBack() async {
         self.path.removeLast()
     }
 }
