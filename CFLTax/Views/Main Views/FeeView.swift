@@ -73,7 +73,7 @@ struct FeeView: View {
                     self.showPop2 = true
                 }
             Spacer()
-            Text("\(myFee.datePaid.toStringDateShort(yrDigits: 2))")
+            Text("\(myFee.datePaid.toStringDateShort())")
                 .font(myFont)
         }
         .popover(isPresented: $showPop2) {

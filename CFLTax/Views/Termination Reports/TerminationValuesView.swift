@@ -24,7 +24,7 @@ struct TerminationValuesView: View {
                 Section(header: Text("\(currentFile)")) {
                     ForEach(myTValues.items) { item in
                         HStack {
-                            Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
+                            Text("\(item.dueDate.toStringDateShort())")
                             Spacer()
                             Text("\(CFLTax.getFormattedValue(amount: item.amount, viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
                         }

@@ -23,7 +23,7 @@ struct EBOAfterTaxCashflowsView: View {
                 Section(header: Text("File Name: \(currentFile)")) {
                     ForEach(myATCashflows.items) { item in
                         HStack {
-                            Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
+                            Text("\(item.dueDate.toStringDateShort())")
                             Spacer()
                             Text("\(getFormattedValue(amount: item.amount, viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
                         }

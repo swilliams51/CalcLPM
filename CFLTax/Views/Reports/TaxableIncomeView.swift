@@ -24,7 +24,7 @@ struct TaxableIncomeView: View {
                 Section(header: Text("\(currentFile)")) {
                     ForEach(myNetTaxableIncomes.items) { item in
                         HStack {
-                            Text("\(item.dueDate.toStringDateShort(yrDigits: 2))")
+                            Text("\(item.dueDate.toStringDateShort())")
                             Spacer()
                             Text("\(getFormattedValue(amount: item.amount, viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment))")
                         }

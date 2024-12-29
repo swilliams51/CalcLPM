@@ -521,7 +521,9 @@ public class Investment {
     }
     
     public func getMaxLesseeGuaranty() -> Decimal{
-        let presentValueOfRents: Decimal = self.getPVOfRents()
+        let myRentalCashflows: RentalCashflows = RentalCashflows()
+        myRentalCashflows.createTable(aInvestment: self)
+        let presentValueOfRents: Decimal = myRentalCashflows.XNPV(aDiscountRate: self.getImplicitRate(), aDayCountMethod: self.economics.dayCountMethod)
         let ninetyPercentOfAsset: Decimal = self.asset.lessorCost.toDecimal() * 0.895
         let presentValueDiff: Decimal = ninetyPercentOfAsset - presentValueOfRents
         if presentValueDiff <= 0.0 {

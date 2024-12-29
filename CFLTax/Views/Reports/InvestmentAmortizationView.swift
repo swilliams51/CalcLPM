@@ -118,7 +118,7 @@ struct InvestmentAmortizationView: View {
     
     @ViewBuilder func amortGridRowLandscape(item: Amortization) -> some View {
         GridRow {
-            Text(item.dueDate.toStringDateShort(yrDigits: 2))
+            Text(item.dueDate.toStringDateShort())
                 .lineLimit(1)
                 .minimumScaleFactor(0.5)
             Text("\(amountFormatter(amount: item.cashflow.toString(decPlaces: 3), locale: myLocale))")

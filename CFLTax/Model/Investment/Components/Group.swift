@@ -108,10 +108,10 @@ public struct Group: Identifiable {
     
     public func writeGroup() -> String {
         let strAmount: String = self.amount
-        let strEndDate: String = self.endDate.toStringDateShort(yrDigits: 4)
+        let strEndDate: String = self.endDate.toStringDateShort()
         let strLocked: String = self.locked.toString()
         let strNoOfPayments: String = self.noOfPayments.toString()
-        let strStartDate: String = self.startDate.toStringDateShort(yrDigits: 4)
+        let strStartDate: String = self.startDate.toStringDateShort()
         let strTiming: String = self.timing.toString()
         let strType: String = self.paymentType.toString()
         let strIsInterim: String = self.isInterim.toString()

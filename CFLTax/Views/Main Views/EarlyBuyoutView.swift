@@ -191,7 +191,7 @@ extension EarlyBuyoutView {
                     self.showPop2 = true
                 }
             Spacer()
-            Text("\(myEBO.exerciseDate.toStringDateShort(yrDigits: 4))")
+            Text("\(myEBO.exerciseDate.toStringDateShort())")
                 .font(myFont)
         }
     }

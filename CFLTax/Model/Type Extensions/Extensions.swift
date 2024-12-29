@@ -80,11 +80,26 @@ extension String {
 
 extension String {
     public func toDate() -> Date {
-        //date in mm/dd/yy or yyyy-mm-dd
-        let myArray: [String] = self.components(separatedBy: "/")
-        let intMonth: Int = Int(myArray[0])!
-        let intDay: Int = Int(myArray[1])!
-        let intYear: Int = Int(myArray[2])!
+        //date in mm/dd/yy, mm/dd/yyy or yyyy-mm-dd
+        var intMonth: Int = 0
+        var intDay: Int = 0
+        var intYear: Int = 0
+        
+        if self.contains("/") {
+            let myArray: [String] = self.components(separatedBy: "/")
+            intMonth = Int(myArray[0])!
+            intDay = Int(myArray[1])!
+            if myArray[2].count == 2 {
+                intYear = Int(myArray[2])! + 2000
+            } else {
+                intYear = Int(myArray[2])!
+            }
+        } else {
+            let myArray: [String] = self.components(separatedBy: "-")
+            intDay = Int(myArray[2])!
+            intMonth = Int(myArray[1])!
+            intYear = Int(myArray[0])!
+        }
         
         var components = DateComponents()
         components.day = intDay

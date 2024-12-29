@@ -9,11 +9,16 @@ import Foundation
 
 
 extension Date {
-    func toStringDateShort(yrDigits: Int) -> String {
+    func toStringDateShort(yrDigits: Int = 4) -> String {
         let iDay: String = String(getDayComponent(dateIn: self))
         let iMonth: String = String(getMonthComponent(dateIn: self))
-        let iYear: String = String(getYearComponent(dateIn: self))
+        var intYear: Int = getYearComponent(dateIn: self)
         
+        if yrDigits == 2 {
+            intYear = intYear - 2000
+        }
+        let iYear: String = String(intYear)
+    
         return  iMonth + "/" + iDay + "/" + iYear
     }
 }

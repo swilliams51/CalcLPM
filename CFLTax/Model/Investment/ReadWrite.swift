@@ -51,7 +51,7 @@ extension Investment {
     public func writeAsset(aAsset: Asset) -> String {
         let strName: String = aAsset.name
         let strCost: String = aAsset.lessorCost
-        let strFundingDate: String = aAsset.fundingDate.toStringDateShort(yrDigits: 4)
+        let strFundingDate: String = aAsset.fundingDate.toStringDateShort()
         let strResidualValue: String = aAsset.residualValue
         let strLesseeGuaranty: String = aAsset.lesseeGuarantyAmount
         let strThirdPartyGuaranty: String = aAsset.thirdPartyGuarantyAmount
@@ -63,7 +63,7 @@ extension Investment {
     }
     
     public func writeLeaseTerm(aLeaseTerm: LeaseTerm) -> String {
-        let strBaseCommence = aLeaseTerm.baseCommenceDate.toStringDateShort(yrDigits: 4)
+        let strBaseCommence = aLeaseTerm.baseCommenceDate.toStringDateShort()
         let strPaymentFrequency: String = aLeaseTerm.paymentFrequency.toString()
         let strEOMRule: String = aLeaseTerm.endOfMonthRule.toString()
         
@@ -87,10 +87,10 @@ extension Investment {
     
     public func writeGroup(aGroup: Group) -> String {
         let strAmount: String = aGroup.amount
-        let strEndDate: String = aGroup.endDate.toStringDateShort(yrDigits: 4)
+        let strEndDate: String = aGroup.endDate.toStringDateShort()
         let strLocked: String = aGroup.locked.toString()
         let strNoOfPayments: String = aGroup.noOfPayments.toString()
-        let strStartDate: String = aGroup.startDate.toStringDateShort(yrDigits: 4)
+        let strStartDate: String = aGroup.startDate.toStringDateShort()
         let strTiming: String = aGroup.timing.toString()
         let strType: String = aGroup.paymentType.toString()
         let strIsInterim: String = aGroup.isInterim.toString()
@@ -147,7 +147,7 @@ extension Investment {
     public func writeFee(aFee: Fee) -> String {
         let strAmount: String = aFee.amount
         let strFeeType: String = aFee.feeType.toString()
-        let strDatePaid: String = aFee.datePaid.toStringDateShort(yrDigits: 4)
+        let strDatePaid: String = aFee.datePaid.toStringDateShort()
         
         let feeProperties: Array = [strAmount, strFeeType, strDatePaid]
         let strFeeProperties = feeProperties.joined(separator: ",")
@@ -157,7 +157,7 @@ extension Investment {
     
     public func writeEBO(aEBO: EarlyBuyout) -> String {
         let strEboAmount: String = aEBO.amount
-        let strExerciseDate: String = aEBO.exerciseDate.toStringDateShort(yrDigits: 4)
+        let strExerciseDate: String = aEBO.exerciseDate.toStringDateShort()
         let strRentDueIsPaid: String = aEBO.advanceRentDueIsPaid.toString()
         
         let eboProperties: Array = [strEboAmount, strExerciseDate, strRentDueIsPaid]
@@ -298,7 +298,7 @@ extension Cashflows {
     public func writeCashflows () -> String {
         var strCashflows: String = ""
         for i in 0..<items.count {
-            let strDueDate = items[i].dueDate.toStringDateShort(yrDigits: 4)
+            let strDueDate = items[i].dueDate.toStringDateShort()
             let strAmount = items[i].amount
             let strOneCashflow = strDueDate + "," + strAmount
             strCashflows = strCashflows + strOneCashflow + str_split_Cashflows
