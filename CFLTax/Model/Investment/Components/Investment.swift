@@ -568,7 +568,7 @@ public class Investment {
             nextLeaseDate = addOnePeriodToDate(dateStart: nextLeaseDate, payPerYear: self.leaseTerm.paymentFrequency, dateRefer: self.leaseTerm.baseCommenceDate, bolEOMRule: self.leaseTerm.endOfMonthRule)
         }
         
-        if nextLeaseDate == self.getLeaseMaturityDate() {
+        if nextLeaseDate.isEqualTo(date: self.getLeaseMaturityDate()){
             let myCashflow: Cashflow = Cashflow(dueDate: nextLeaseDate, amount: "0.0")
             myCashflows.add(item: myCashflow)
         }

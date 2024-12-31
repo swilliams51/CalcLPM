@@ -46,7 +46,7 @@ public class Cashflows {
     }
     
     public func sortByDueDate() {
-        items.sort { $0.dueDate < $1.dueDate }
+        items.sort { $0.dueDate.isLessThanOrEqualTo(date: $1.dueDate) }
     }
     
     public func getTotal() -> Decimal {

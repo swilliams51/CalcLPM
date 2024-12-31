@@ -37,7 +37,7 @@ public class FeeIncomes: Cashflows {
         dateStart = aFee.datePaid
         
         if aFee.feeType == .expense {
-            while currentFiscalDate < aMaturityDate {
+            while currentFiscalDate.isLessThan(date: aMaturityDate) {
                 let daysInFiscal = dayCount(aDate1: dateStart, aDate2: currentFiscalDate, aDayCount: aInvestment.economics.dayCountMethod)
                 let expAmount = perDiemFee * Decimal(daysInFiscal) * -1.0
                 let currentFiscalFeeExpense: Cashflow = Cashflow(dueDate: currentFiscalDate, amount: expAmount.toString(decPlaces: places))

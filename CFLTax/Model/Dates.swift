@@ -489,9 +489,9 @@ public func dateDefault () -> Date {
 public func isDatePeriodic(compareDate: Date, askDate: Date, aFreq: Frequency, endOfMonthRule: Bool, referDate: Date) -> Bool {
     var bolIsPeriodic: Bool = false
     
-    if compareDate < askDate {
+    if compareDate.isLessThan(date: askDate) {
         let newDate = addOnePeriodToDate(dateStart: compareDate, payPerYear: aFreq, dateRefer: referDate, bolEOMRule: endOfMonthRule)
-        if newDate == askDate {
+        if newDate.isEqualTo(date: askDate){
             bolIsPeriodic = true
         }
     }

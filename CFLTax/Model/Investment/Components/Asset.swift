@@ -37,7 +37,7 @@ public struct Asset {
     func isEqual(to other: Asset) -> Bool {
         var isEqual: Bool = false
         if name == other.name &&
-        fundingDate == other.fundingDate &&
+            fundingDate.isEqualTo(date: other.fundingDate) &&
         lessorCost == other.lessorCost &&
         residualValue == other.residualValue &&
         lesseeGuarantyAmount == other.lesseeGuarantyAmount &&

@@ -35,7 +35,7 @@ public struct EarlyBuyout {
     func isEqual(to other: EarlyBuyout) -> Bool {
         var isEqual: Bool = false
         if self.amount == other.amount &&
-            self.exerciseDate == other.exerciseDate &&
+            self.exerciseDate.isEqualTo(date: other.exerciseDate) &&
             self.advanceRentDueIsPaid == other.advanceRentDueIsPaid {
             isEqual = true
         }

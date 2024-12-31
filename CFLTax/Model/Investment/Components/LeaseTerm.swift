@@ -27,7 +27,7 @@ public struct LeaseTerm {
     
     public func isEqual(to other: LeaseTerm) -> Bool {
         var isEqual = false
-        if baseCommenceDate != other.baseCommenceDate && paymentFrequency == other.paymentFrequency && endOfMonthRule == other.endOfMonthRule{
+        if baseCommenceDate.isEqualTo(date: other.baseCommenceDate) && paymentFrequency == other.paymentFrequency && endOfMonthRule == other.endOfMonthRule{
             isEqual = true
         }
         

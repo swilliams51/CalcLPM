@@ -26,14 +26,14 @@ extension Investment {
     
     func resetForBaseTermCommenceDateChange() {
         if self.rent.groups[0].isInterim == true {
-            if self.leaseTerm.baseCommenceDate == self.asset.fundingDate {
+            if self.leaseTerm.baseCommenceDate.isEqualTo(date: self.asset.fundingDate) {
                 self.rent.groups.remove(at: 0)
                 resetFirstGroup(isInterim: false)
             } else {
                 resetFirstGroup(isInterim: true)
             }
         } else {
-            if self.leaseTerm.baseCommenceDate == self.asset.fundingDate {
+            if self.leaseTerm.baseCommenceDate.isEqualTo(date: self.asset.fundingDate) {
                 resetFirstGroup(isInterim: false)
             } else {
                 let myAmount: String = "CALCULATED"

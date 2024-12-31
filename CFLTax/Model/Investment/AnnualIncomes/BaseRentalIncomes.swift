@@ -27,7 +27,7 @@ public class BaseRentalIncomes: Cashflows {
         
         //if base commencement date starts after the First FYE then add 0.00 to Base Rental Incomes
         if aInvestment.rent.groups[0].isInterim == true {
-            if aInvestment.rent.groups[0].endDate > nextFiscalYearEnd {
+            if aInvestment.rent.groups[0].endDate.isGreaterThan(date: nextFiscalYearEnd){
                 addToRentalIncomes(aFiscalDate: nextFiscalYearEnd, aFiscalAmount: "0.00")
                 counter += 1
                 nextFiscalYearEnd = addNextFiscalYearEnd(aDateIn: nextFiscalYearEnd)

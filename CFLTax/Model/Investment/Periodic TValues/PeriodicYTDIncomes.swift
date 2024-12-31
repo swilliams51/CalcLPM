@@ -62,7 +62,7 @@ public class PeriodicYTDIncomes: Cashflows {
     private func createYTDInterimRents(aInterimRent: Group) {
         var cfAmount: Decimal = 0.0
         
-        if myBaseCommencementDate > myFiscalYearEnd {
+        if myBaseCommencementDate.isGreaterThan(date: myFiscalYearEnd) {
             if aInterimRent.timing == .advance {
                 cfAmount = aInterimRent.amount.toDecimal()
                 interimRentCF.items.append(Cashflow(dueDate: aInterimRent.startDate, amount: cfAmount.toString(decPlaces: 4)))
