@@ -12,7 +12,7 @@ import Foundation
 public class PeriodicYTDIncomes: Cashflows {
     var myPeriodicRentals: RentalCashflows = RentalCashflows()
     var myDayCountMethod: DayCountMethod =  .actualThreeSixtyFive
-    var myFreq: Frequency = .monthly
+    var myFrequency: Frequency = .monthly
     var myFundingDate: Date = Date()
     var myBaseCommencementDate: Date = Date()
     var myFiscalYearEnd: Date = Date()
@@ -23,7 +23,7 @@ public class PeriodicYTDIncomes: Cashflows {
     
     public func createTable(aInvestment: Investment) {
         myDayCountMethod = aInvestment.economics.dayCountMethod
-        myFreq = aInvestment.leaseTerm.paymentFrequency
+        myFrequency = aInvestment.leaseTerm.paymentFrequency
         myFundingDate = aInvestment.asset.fundingDate
         myBaseCommencementDate = aInvestment.leaseTerm.baseCommenceDate
         myFiscalYearEnd = getFiscalYearEnd(askDate: myFundingDate, fiscalMonthEnd: aInvestment.taxAssumptions.fiscalMonthEnd.rawValue)
@@ -101,7 +101,7 @@ public class PeriodicYTDIncomes: Cashflows {
     private func createYTDBaseRents(aRent: Rent, baseStart: Int = 0) {
         let dateRef: Date = myBaseCommencementDate
         var dateFrom: Date = myBaseCommencementDate
-        var dateTo: Date = addOnePeriodToDate(dateStart: dateFrom, payPerYear: myFreq, dateRefer: dateRef, bolEOMRule: myEOMRule)
+        var dateTo: Date = addOnePeriodToDate(dateStart: dateFrom, payPerYear: myFrequency, dateRefer: dateRef, bolEOMRule: myEOMRule)
         var dateFiscal: Date = myFiscalYearEnd
         
         if myBaseCommencementDate.isGreaterThan(date: myFiscalYearEnd) {
@@ -128,7 +128,7 @@ public class PeriodicYTDIncomes: Cashflows {
                     if dateTo.isLessThanOrEqualTo(date: dateFiscal) {
                         ytdIncome = ytdIncome + currentBaseRent
                         baseRentCF.items.append(Cashflow(dueDate: dateTo, amount: ytdIncome.toString()))
-                    } else if dateFrom <= dateFiscal {
+                    } else if dateFrom.isLessThanOrEqualTo(date: dateFiscal) {
                         //calculate the prorated rent from dateFiscal to 1st payment end date of following year
                         let proRatedRent: Decimal = proRatedBaseRent(dateStart: dateFiscal, dateEnd: dateTo, base: currentBaseRent)
                         ytdIncome = proRatedRent
@@ -136,8 +136,8 @@ public class PeriodicYTDIncomes: Cashflows {
                         dateFiscal = addNextFiscalYearEnd(aDateIn: dateFiscal)
                     }
                 }
-                dateFrom = addOnePeriodToDate(dateStart: dateFrom, payPerYear: myFreq, dateRefer: dateRef, bolEOMRule: myEOMRule)
-                dateTo = addOnePeriodToDate(dateStart: dateTo, payPerYear: myFreq, dateRefer: dateRef, bolEOMRule: myEOMRule)
+                dateFrom = addOnePeriodToDate(dateStart: dateFrom, payPerYear: myFrequency, dateRefer: dateRef, bolEOMRule: myEOMRule)
+                dateTo = addOnePeriodToDate(dateStart: dateTo, payPerYear: myFrequency, dateRefer: dateRef, bolEOMRule: myEOMRule)
                 if x == aRent.groups.count - 1 {
                     if aRent.groups[x].timing == .advance && y == aRent.groups[x].noOfPayments {
                         ytdIncome = ytdIncome + 0.00
@@ -152,7 +152,8 @@ public class PeriodicYTDIncomes: Cashflows {
     
     private func proRatedBaseRent(dateStart: Date, dateEnd: Date, base: Decimal) -> Decimal {
         let dayCount:Int = dayCount(aDate1: dateStart, aDate2: dateEnd, aDayCount: myDayCountMethod)
-        let dailyRent: Decimal = base * Decimal(myFreq.rawValue) / 360
+        let daysInYear: Double = daysInYear(aDate1: dateStart, aDate2: dateEnd, aDayCountMethod: myDayCountMethod)
+        let dailyRent: Decimal = base * Decimal(myFrequency.rawValue) / Decimal(daysInYear)
         let proRatedRent: Decimal = dailyRent * Decimal(dayCount)
         
         return proRatedRent

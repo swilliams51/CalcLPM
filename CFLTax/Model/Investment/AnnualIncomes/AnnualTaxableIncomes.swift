@@ -110,6 +110,7 @@ public class AnnualTaxableIncomes: CollCashflows {
             if x == items[0].count() - 1 { // if Last Tax Year
                 let annualTaxPaymentUnplanned: Decimal = items[0].items[x].amount.toDecimal() * aInvestment.taxAssumptions.federalTaxRate.toDecimal() * -1.0
                 let annualTaxPaymentPlanned: Decimal = plannedIncome.toDecimal() * aInvestment.taxAssumptions.federalTaxRate.toDecimal() * -1.0
+                
                 let myTerminationTaxPayments: Cashflows = periodicTaxPaymentsForTermination(totalTaxPaymentUnplanned: annualTaxPaymentUnplanned, totalTaxPaymentPlanned: annualTaxPaymentPlanned, unPlannedDate: unplannedDate, firstDateInFiscalYear: dateTaxPayment, nextFiscalDate: nextFiscalYearEnd, taxPayMonths: taxPaymentMonths, referDate: referDate, aEOMRule: eomRule)
                 for x in 0..<myTerminationTaxPayments.items.count {
                     let myCashflow = Cashflow(dueDate: myTerminationTaxPayments.items[x].dueDate, amount: myTerminationTaxPayments.items[x].amount)
@@ -157,7 +158,7 @@ public class AnnualTaxableIncomes: CollCashflows {
             periodicTaxPaymentUnplanned = (totalAnnualTaxPayment  - ( 3.0 * periodicTaxPaymentPlanned))
         }
         
-        while dateStart.isLessThan(date: nextFiscalDate) {
+        while dateStart.isLessThanOrEqualTo(date: nextFiscalDate) {
             if isAskMonthATaxPaymentMonth(aAskDate: dateStart, aTaxPaymentMonths: taxPaymentMonths) {
                 switch remainingNoOfTaxPaymentsAfterTermination {
                 case 4:
@@ -229,7 +230,7 @@ public class AnnualTaxableIncomes: CollCashflows {
         var askDateIsTaxPmtDate: Bool = false
 
         for x in 0..<aTaxPaymentDates.count {
-            if aAskDate == aTaxPaymentDates[x] {
+            if aAskDate.isEqualTo(date: aTaxPaymentDates[x]) {
                 askDateIsTaxPmtDate = true
                 break
             }

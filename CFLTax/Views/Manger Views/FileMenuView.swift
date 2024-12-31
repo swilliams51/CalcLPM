@@ -63,6 +63,8 @@ struct FileMenuView: View {
             } else {
                 self.myInvestment.resetToDefault()
             }
+            //reset investment set to no fee and no ebo
+            
             self.currentFile = "File is New"
             path.removeLast()
         }

@@ -16,12 +16,12 @@ public let myFont2: Font = .footnote
 public let myFont3: Font = .caption
 public let maximumLessorCost: String = "9999999.99"
 public let minimumLessorCost: String = "9999.99"
-public let maximumYield: String = "0.15"
+public let maximumYield: String = "0.20"
 public let maximumFeePercent: String = "0.15"
 public let maxEBOSpread: Int = 500
 public let feeAmortizationMethod: FeeAmortizationMethod = .monthly
-public let maxBaseTerm: Int = 180
-public let removeCharacters: Set<Character> = [",", "$","-", "+","%","*","#","|","&","/","!"]
+public let maxBaseTerm: Int = 144
+public let removeCharacters: Set<Character> = [",","$","-","+","%","*","#","|","&","!"]
 public let str_split_Cashflows = "#"
 
 

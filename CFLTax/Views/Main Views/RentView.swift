@@ -22,9 +22,9 @@ struct RentView: View {
     
     var body: some View {
         VStack(spacing: 0) {
-            HeaderView(headerType: .menu, name: "Payment Groups", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
+            HeaderView(headerType: .menu, name: "Rent Groups", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: false, path: $path, isDark: $isDark)
             Form {
-                Section(header: Text("Rent").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
+                Section(header: Text("Rent Schedule").font(myFont), footer: (Text("File Name: \(currentFile)").font(myFont))) {
                     ForEach(myInvestment.rent.groups) { group in
                         groupDisplayRow(group: group)
                     }

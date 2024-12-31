@@ -17,7 +17,7 @@ public class ResidualIncomes: Cashflows {
         let aFiscalMonthEnd: Int = aInvestment.taxAssumptions.fiscalMonthEnd.rawValue
         var currentFiscalDate = getFiscalYearEnd(askDate: myAsset.fundingDate, fiscalMonthEnd: aFiscalMonthEnd)
         
-        while currentFiscalDate.isLessThanOrEqualTo(date: aMaturityDate) {
+        while currentFiscalDate.isLessThan(date: aMaturityDate) {
             let residualIncomeAmount = Cashflow(dueDate: currentFiscalDate, amount: "0.00")
             items.append(residualIncomeAmount)
             currentFiscalDate = addNextFiscalYearEnd(aDateIn: currentFiscalDate)

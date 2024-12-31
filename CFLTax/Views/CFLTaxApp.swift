@@ -6,10 +6,16 @@
 //
 
 import SwiftUI
+import Firebase
 
 @main
 struct CFLTaxApp: App {
     @State private var showLaunchView: Bool = true
+    
+    init() {
+        FirebaseApp.configure()
+        print("Firebase App Initialized")
+    }
     
     var body: some Scene {
         WindowGroup {

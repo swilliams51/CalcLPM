@@ -83,18 +83,18 @@ public class Investment {
     }
     
     public func setEBO() {
-        if earlyBuyout.amount.toDecimal() != 0.0 {
-            earlyBuyoutExists = true
-        } else {
+        if earlyBuyout.amount.toDecimal() == 0.0 {
             earlyBuyoutExists = false
+        } else {
+            earlyBuyoutExists = true
         }
     }
     
     public func setFee() {
-        if self.getFeeAmount() != 0.0 {
-            self.feeExists = true
-        } else {
+        if self.getFeeAmount() == 0.0 {
             self.feeExists = false
+        } else {
+            self.feeExists = true
         }
     }
     
@@ -437,7 +437,7 @@ public class Investment {
     }
     
     public func getFeeAmount() -> Decimal {
-        if self.fee.amount.isEmpty {
+        if self.fee.amount == "0.0" {
             return 0.0
         }
         var factor: Decimal = 1.0
@@ -556,7 +556,7 @@ public class Investment {
         let myCashflow: Cashflow = Cashflow(dueDate: self.asset.fundingDate, amount: "0.0")
         myCashflows.add(item: myCashflow)
         
-        if self.leaseTerm.baseCommenceDate !=  self.asset.fundingDate {
+        if self.leaseTerm.baseCommenceDate.isNotEqualTo(date: self.asset.fundingDate) {
             let myCashflow: Cashflow = Cashflow(dueDate: self.leaseTerm.baseCommenceDate, amount: "0.0")
             myCashflows.add(item: myCashflow)
         }
