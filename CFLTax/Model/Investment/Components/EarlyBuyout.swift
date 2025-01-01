@@ -68,7 +68,7 @@ extension Investment {
     }
     
     public func getExerciseDate(eboTermInMonths: Int) -> Date {
-        let noOfPaymentPeriods: Int = eboTermInMonths * 12 / self.leaseTerm.paymentFrequency.rawValue
+        let noOfPaymentPeriods: Int = eboTermInMonths / (12 / self.leaseTerm.paymentFrequency.rawValue)
         let startDate: Date = self.leaseTerm.baseCommenceDate
         let exerciseDate = addPeriodsToDate(dateStart: startDate, payPerYear: self.leaseTerm.paymentFrequency, noOfPeriods: noOfPaymentPeriods, referDate: startDate, bolEOMRule: self.leaseTerm.endOfMonthRule)
         
@@ -76,7 +76,7 @@ extension Investment {
     }
     
     public func getExerciseDate(eboTermInMonths: Int, stepInterval: Frequency) -> Date {
-        let noOfPaymentPeriods: Int = eboTermInMonths * 12 / stepInterval.rawValue
+        let noOfPaymentPeriods: Int = eboTermInMonths / (12 / stepInterval.rawValue)
         let startDate: Date = self.leaseTerm.baseCommenceDate
         let exerciseDate = addPeriodsToDate(dateStart: startDate, payPerYear: stepInterval, noOfPeriods: noOfPaymentPeriods, referDate: startDate, bolEOMRule: self.leaseTerm.endOfMonthRule)
         
@@ -128,6 +128,20 @@ extension Investment {
         return yieldToReturn
     }
     
+    public func getEBOAllInRate(aEBO: EarlyBuyout) -> Decimal {
+        let myEBOInvestment: Investment = self.clone()
+        if myEBOInvestment.feeExists {
+            myEBOInvestment.fee.amount = "0.0"
+            myEBOInvestment.setFee()
+        }
+        myEBOInvestment.rent = eboRent(aInvestment: myEBOInvestment, chopDate: aEBO.exerciseDate)
+        myEBOInvestment.asset.residualValue = aEBO.amount
+        myEBOInvestment.economics.solveFor = .yield
+        myEBOInvestment.economics.yieldMethod = .IRR_PTCF
+        myEBOInvestment.calculate()
+        
+        return myEBOInvestment.getIRR_PTCF()
+    }
     
     public func solveEBOIRR_Of_PTCF(aEBO: EarlyBuyout) -> Decimal {
         let myEBOInvestment: Investment = self.clone()
@@ -151,7 +165,7 @@ extension Investment {
     
     public func eboRent(aInvestment: Investment, chopDate: Date) -> Rent {
         let tempInvestment: Investment = aInvestment.clone()
-        let noOfPeriodsInBaseTerm: Int = payPeriodsInEBOTerm(aInvestment: tempInvestment, dateAsk: chopDate)
+        let noOfPeriodsInEBOTerm: Int = payPeriodsInEBOTerm(aInvestment: tempInvestment, dateAsk: chopDate)
         var myRent: Rent = Rent()
         var start: Int = 0
         var startDate = tempInvestment.leaseTerm.baseCommenceDate
@@ -161,11 +175,11 @@ extension Investment {
         }
         
         var totalNoOfPaymentsAdded: Int = 0
-        while totalNoOfPaymentsAdded < noOfPeriodsInBaseTerm { // 0 < 48
+        while totalNoOfPaymentsAdded < noOfPeriodsInEBOTerm { // 0 < 48
             var group: Group = Group()
             group.makeEquivalent(to: tempInvestment.rent.groups[start])
             let groupNoOfPayments: Int = group.noOfPayments // 60
-            let noToAdd: Int = min(groupNoOfPayments, noOfPeriodsInBaseTerm - totalNoOfPaymentsAdded)
+            let noToAdd: Int = min(groupNoOfPayments, noOfPeriodsInEBOTerm - totalNoOfPaymentsAdded)
             group.noOfPayments = noToAdd
             group.endDate = addPeriodsToDate(dateStart: startDate, payPerYear: tempInvestment.leaseTerm.paymentFrequency, noOfPeriods: noToAdd, referDate: tempInvestment.leaseTerm.baseCommenceDate, bolEOMRule: tempInvestment.leaseTerm.endOfMonthRule)
             startDate = group.endDate

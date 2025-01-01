@@ -20,6 +20,7 @@ struct RentSummaryView: View {
     @State var presentValue1: String = "0.00"
     @State var presentValue2: String = "0.00"
     @State var discountRate: String = "0.00"
+    @State var eboAllInRate: String = "0.00"
     @State private var amounts: [String] = [String]()
     
     @State private var showPop: Bool = false
@@ -57,9 +58,13 @@ struct RentSummaryView: View {
                     }
                 }
                 
+                if myInvestment.earlyBuyoutExists{
+                    Section(header: Text("Early Buyout")) {
+                        eboAllInRateItem
+                    }
+                }
             }
         }
-        //.environment(\.defaultMinListRowHeight, lineHeight)
         .environment(\.colorScheme, isDark ? .dark : .light)
         .navigationBarBackButtonHidden(true)
         .onAppear {
@@ -69,6 +74,10 @@ struct RentSummaryView: View {
             self.presentValue = myInvestment.getPVOfObligations(aDiscountRate: implicitRate.toDecimal()).toString(decPlaces: 6)
             self.presentValue1 = myInvestment.getPVOfRents().toString(decPlaces: 8)
             self.presentValue2 = myInvestment.getPVOfObligations(aDiscountRate: discountRate.toDecimal()).toString(decPlaces: 8)
+            
+            if myInvestment.earlyBuyoutExists{
+                self.eboAllInRate = myInvestment.getEBOAllInRate(aEBO: self.myInvestment.earlyBuyout).toString(decPlaces: 6)
+            }
            
             for x in 0..<myInvestment.rent.groups.count {
                 let strAmount: String = myInvestment.rent.groups[x].amount
@@ -201,6 +210,16 @@ extension RentSummaryView {
                 }
             Spacer()
             Text("\(getFormattedValue(amount: presentValue2, viewAsPercentOfCost: viewAsPctOfCost, aInvestment: myInvestment))")
+                .font(myFont)
+        }
+    }
+    
+    var eboAllInRateItem: some View {
+        HStack{
+            Text("All-In Rate:")
+                .font(myFont)
+            Spacer()
+            Text("\(percentFormatter(percent: eboAllInRate, locale: myLocale, places: 3))")
                 .font(myFont)
         }
     }
