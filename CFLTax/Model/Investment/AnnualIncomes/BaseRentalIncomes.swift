@@ -84,7 +84,7 @@ public class BaseRentalIncomes: Cashflows {
         
         let dateEndFullPeriod: Date = addOnePeriodToDate(dateStart: dateStart, payPerYear: aFrequency, dateRefer: baseCommence, bolEOMRule: aEOMRule)
         let daysInFullPeriod = dayCount(aDate1: dateStart, aDate2: dateEndFullPeriod, aDayCount: aDayCountMethod)
-        let daysInPartialPeriod = dayCount(aDate1: dateStart, aDate2: dateEnd, aDayCount: .actualActual)
+        let daysInPartialPeriod = dayCount(aDate1: dateStart, aDate2: dateEnd, aDayCount: aDayCountMethod)
         let ratio: Decimal = Decimal(daysInPartialPeriod) / Decimal(daysInFullPeriod)
         let proRataRent: Decimal = rentAmount * ratio
         

@@ -44,7 +44,7 @@ struct TaxableIncomeView: View {
         .environment(\.colorScheme, isDark ? .dark : .light)
         .navigationBarBackButtonHidden(true)
         .onAppear {
-            myNetTaxableIncomes =   myTaxableIncomes.createNetTaxableIncomes(aInvestment: myInvestment)
+            myNetTaxableIncomes = myTaxableIncomes.createNetTaxableIncomes(aInvestment: myInvestment)
         }
     }
     
