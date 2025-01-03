@@ -21,7 +21,7 @@ public let maximumFeePercent: String = "0.15"
 public let maxEBOSpread: Int = 500
 public let feeAmortizationMethod: FeeAmortizationMethod = .monthly
 public let maxBaseTerm: Int = 144
-public let removeCharacters: Set<Character> = [",","$","-","+","%","*","#","|","&","!"]
+public let removeCharacters: Set<Character> = [",","$","-","+","%","*","#","|","&","!","?", "/", "(",")"]
 public let str_split_Cashflows = "#"
 
 

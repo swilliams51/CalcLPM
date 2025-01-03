@@ -11,7 +11,7 @@ import Foundation
 @Observable
 public class PeriodicYTDIncomes: Cashflows {
     var myPeriodicRentals: RentalCashflows = RentalCashflows()
-    var myDayCountMethod: DayCountMethod =  .actualThreeSixtyFive
+    var myDayCountMethod: DayCountMethod =  .thirtyThreeSixty
     var myFrequency: Frequency = .monthly
     var myFundingDate: Date = Date()
     var myBaseCommencementDate: Date = Date()

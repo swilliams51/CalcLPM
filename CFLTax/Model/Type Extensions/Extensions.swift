@@ -175,7 +175,7 @@ extension String {
 
 extension String {
     func hasIllegalChars() -> Bool {
-        let myIllegalChars = "!@$%^&|"
+        let myIllegalChars = "!@#$%^&*,:;<>?()[]|/"
         let charSet = CharacterSet(charactersIn: myIllegalChars)
         if (self.rangeOfCharacter(from: charSet) != nil) {
             return true

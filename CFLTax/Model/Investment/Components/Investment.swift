@@ -524,7 +524,7 @@ public class Investment {
         let myRentalCashflows: RentalCashflows = RentalCashflows()
         myRentalCashflows.createTable(aInvestment: self)
         let presentValueOfRents: Decimal = myRentalCashflows.XNPV(aDiscountRate: self.getImplicitRate(), aDayCountMethod: self.economics.dayCountMethod)
-        let ninetyPercentOfAsset: Decimal = self.asset.lessorCost.toDecimal() * 0.895
+        let ninetyPercentOfAsset: Decimal = self.asset.lessorCost.toDecimal() * 0.899995
         let presentValueDiff: Decimal = ninetyPercentOfAsset - presentValueOfRents
         if presentValueDiff <= 0.0 {
             return 0.0

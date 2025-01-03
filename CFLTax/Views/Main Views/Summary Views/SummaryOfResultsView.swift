@@ -69,6 +69,14 @@ struct SummaryOfResultsView: View {
         self.path.append(14)
     }
     
+    private func goToRentals() async {
+        self.path.append(15)
+    }
+    
+    private func goToEarlyBuyout() async {
+        self.path.append(16)
+    }
+    
     private func myViewAsPct() {
         self.viewAsPctOfCost.toggle()
     }
@@ -174,7 +182,10 @@ extension SummaryOfResultsView {
         .font(myFont)
         .contentShape(Rectangle())
         .onTapGesture {
-            path.append(15)
+            self.isLoading = true
+            Task {
+                await goToRentals()
+            }
         }
     }
     
@@ -189,9 +200,13 @@ extension SummaryOfResultsView {
         .contentShape(Rectangle())
         .onTapGesture {
             if myInvestment.earlyBuyoutExists {
-                path.append(16)
+                self.isLoading = true
+                Task {
+                    await goToEarlyBuyout()
+                    
+                }
+                
             }
-           
         }
     }
 }
