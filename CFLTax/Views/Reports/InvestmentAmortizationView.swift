@@ -50,7 +50,6 @@ struct InvestmentAmortizationView: View {
                     }
                 }
             }
-            
         }
         .environment(\.colorScheme, isDark ? .dark : .light)
         .navigationBarBackButtonHidden(true)
@@ -73,8 +72,14 @@ struct InvestmentAmortizationView: View {
                 .lineLimit(1)
                 .minimumScaleFactor(0.5)
             Text("\(yieldFormatted())")
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
             Text("Cost:")
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
             Text("1.00")
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
         }
         .font(myFont3)
     }
@@ -161,8 +166,14 @@ struct InvestmentAmortizationView: View {
     var amortTotalsGridRowPortrait: some View {
         GridRow{
             Text("Totals")
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
             Text("\(expressedAsFactor(amount: myAmortizations.totalCashflow))")
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
             Text("\(expressedAsFactor(amount: myAmortizations.totalInterest))")
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
             Text("")
         }.font(myFont3)
     }
@@ -171,8 +182,14 @@ struct InvestmentAmortizationView: View {
         GridRow{
             Text("Totals")
             Text("\(amountFormatter(amount: myAmortizations.totalCashflow.toString(decPlaces: 2), locale: myLocale))")
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
             Text("\(amountFormatter(amount: myAmortizations.totalInterest.toString(decPlaces: 2), locale: myLocale))")
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
             Text("\(amountFormatter(amount: myAmortizations.totalPrincipal.toString(decPlaces: 2), locale: myLocale))")
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
             Text("")
         }.font(myFont)
     }

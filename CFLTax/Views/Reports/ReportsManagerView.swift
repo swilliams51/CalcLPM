@@ -23,6 +23,7 @@ struct ReportsManagerView: View {
                 Form{
                     Section(header: Text("Reports"), footer: (Text("File Name: \(currentFile)").font(myFont))) {
                         leaseRentalsItem
+                        unevenRentTestItem
                         depreciationScheduleItem
                         feeAmortizationItem
                         taxableIncomeItem
@@ -46,6 +47,13 @@ struct ReportsManagerView: View {
         }
     }
     
+    private func myViewAsPct() {
+        
+    }
+    private func myGoBack() {
+        self.path.removeLast()
+    }
+    
     var leaseRentalsItem: some View {
         HStack {
             Text("Schedule of Rents")
@@ -59,11 +67,17 @@ struct ReportsManagerView: View {
         }
     }
     
-    private func myViewAsPct() {
-        
-    }
-    private func myGoBack() {
-        self.path.removeLast()
+    var unevenRentTestItem: some View {
+        HStack {
+            Text("Uneven Rent Test")
+            Spacer()
+            Image(systemName: "chevron.right")
+        }
+        .font(myFont)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            path.append(20)
+        }
     }
     
     var depreciationScheduleItem: some View {

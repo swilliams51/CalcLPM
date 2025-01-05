@@ -13,6 +13,7 @@ struct ViewsManager: View {
     @Bindable var myRentalSchedule: RentalCashflows
     @Bindable var myTaxableIncomes: AnnualTaxableIncomes
     @Bindable var myFeeAmortization: FeeIncomes
+    @Bindable var myAnnualizedRent: AnnualizedRentalCashflows
     @Binding var path: [Int]
     @Binding var isDark: Bool
     @Binding var selectedGroup: Group
@@ -39,7 +40,7 @@ struct ViewsManager: View {
         case 7:
             EconomicsView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 8:
-          EarlyBuyoutView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile, minimumEBOAmount: $minimumEBOAmount, maximumEBOAmount: $maximumEBOAmount)
+            EarlyBuyoutView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile, minimumEBOAmount: $minimumEBOAmount, maximumEBOAmount: $maximumEBOAmount)
         case 9:
             Text("No Lessor Cost")
         case 10:
@@ -59,11 +60,11 @@ struct ViewsManager: View {
         case 17:
             EBOBeforeTaxCashflowsView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 18:
-          EBOAfterTaxCashflowsView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
+            EBOAfterTaxCashflowsView(myInvestment: myInvestment, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 19:
             Text("No Fee")
         case 20:
-           Text("No Salvage")
+          AnnualizedRentView(myInvestment: myInvestment,myAnnualizedRent: myAnnualizedRent, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 21:
           RentScheduleView(myInvestment: myInvestment, myRentalSchedule: myRentalSchedule, path: $path, isDark: $isDark, currentFile: $currentFile)
         case 22:
@@ -121,5 +122,5 @@ struct ViewsManager: View {
 }
 
 #Preview {
-    ViewsManager(myInvestment: Investment(), myDepreciationSchedule: DepreciationIncomes(), myRentalSchedule: RentalCashflows(), myTaxableIncomes: AnnualTaxableIncomes(), myFeeAmortization: FeeIncomes(), path: .constant([Int]()), isDark: .constant(false), selectedGroup: .constant(Group()), currentFile: .constant("File is New"), minimumEBOAmount: .constant(0), maximumEBOAmount: .constant(0), selectedView: 36)
+    ViewsManager(myInvestment: Investment(), myDepreciationSchedule: DepreciationIncomes(), myRentalSchedule: RentalCashflows(), myTaxableIncomes: AnnualTaxableIncomes(), myFeeAmortization: FeeIncomes(), myAnnualizedRent: AnnualizedRentalCashflows(), path: .constant([Int]()), isDark: .constant(false), selectedGroup: .constant(Group()), currentFile: .constant("File is New"), minimumEBOAmount: .constant(0), maximumEBOAmount: .constant(0), selectedView: 36)
 }

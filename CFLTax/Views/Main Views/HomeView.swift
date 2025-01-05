@@ -16,6 +16,8 @@ struct HomeView: View {
     @State var myDepreciationSchedule: DepreciationIncomes = DepreciationIncomes()
     @State var myRentalSchedule: RentalCashflows = RentalCashflows()
     @State var myTaxableIncomes: AnnualTaxableIncomes = AnnualTaxableIncomes()
+    @State var myAnnualizedRent: AnnualizedRentalCashflows = AnnualizedRentalCashflows()
+    
     @State var isLoading: Bool = false
     @State private var myFeeAmortization: FeeIncomes = FeeIncomes()
     @State private var isShowingCalculationErrorAlert: Bool = false
@@ -86,7 +88,7 @@ struct HomeView: View {
             }
             .environment(\.colorScheme, isDark ? .dark : .light)
             .navigationDestination(for: Int.self) { selectedView in
-                ViewsManager(myInvestment: myInvestment, myDepreciationSchedule: myDepreciationSchedule, myRentalSchedule: myRentalSchedule, myTaxableIncomes: myTaxableIncomes, myFeeAmortization: myFeeAmortization, path: $path, isDark: $isDark, selectedGroup: $selectedGroup, currentFile: $currentFile, minimumEBOAmount: $minimumEBOAmount, maximumEBOAmount: $maximumEBOAmount, selectedView: selectedView)
+                ViewsManager(myInvestment: myInvestment, myDepreciationSchedule: myDepreciationSchedule, myRentalSchedule: myRentalSchedule, myTaxableIncomes: myTaxableIncomes, myFeeAmortization: myFeeAmortization, myAnnualizedRent: myAnnualizedRent, path: $path, isDark: $isDark, selectedGroup: $selectedGroup, currentFile: $currentFile, minimumEBOAmount: $minimumEBOAmount, maximumEBOAmount: $maximumEBOAmount, selectedView: selectedView)
             }
             .onAppear{
                 self.isLoading = false
