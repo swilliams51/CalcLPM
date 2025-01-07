@@ -12,6 +12,8 @@ import Foundation
 public class AnnualizedRentalCashflows: Cashflows {
     public var averageMonthlyRent: Decimal = 0.0
     public var averageAnnualizedRent: Decimal = 0.0
+    public var maxAnnualizedRent: Decimal = 0.0
+    public var minAnnualizedRent: Decimal = 0.0
     
     public func createTable(aInvestment: Investment) {
         //Test to compare the average annual rent to each annualized rent
@@ -20,27 +22,31 @@ public class AnnualizedRentalCashflows: Cashflows {
         let referDate: Date = aInvestment.leaseTerm.baseCommenceDate
         let eomRule: Bool = aInvestment.leaseTerm.endOfMonthRule
         let myBaseRentalCashflows: Cashflows = baseRentals(aInvestment: aInvestment)
+        let aFreq: Int = aInvestment.leaseTerm.paymentFrequency.rawValue
         let totalRent: Decimal = myBaseRentalCashflows.getTotal()
-        let startDate: Date = myBaseRentalCashflows.items[0].dueDate
-        var currentYear: Date = addOnePeriodToDate(dateStart: startDate, payPerYear: .annual, dateRefer: referDate, bolEOMRule: eomRule)
-        let monthsInLease: Int = monthsDifference(start: startDate, end: aInvestment.getLeaseMaturityDate(), inclusive: true)
+        //If arrears
+        var startDate: Date = myBaseRentalCashflows.items[0].dueDate
+        if myBaseRentalCashflows.items[0].amount.toDecimal() > 0.0 {
+            startDate = subtractOnePeriodFromDate(dateStart: startDate, payperYear: .monthly, dateRefer: referDate, bolEOMRule: eomRule)
+        }
+        
+        var currentYear: Date = startDate
+        let monthsInLease: Int = aInvestment.getBaseTermInMonths()
         averageMonthlyRent = totalRent / Decimal(monthsInLease)
-        averageAnnualizedRent = averageMonthlyRent * Decimal(12)
+        setMaxMinRents()
         var finalYearAdded: Bool = false
         var runTotal: Decimal = 0.0
         var counter: Int = 0
         
         while counter < myBaseRentalCashflows.count() {
-            while myBaseRentalCashflows.items[counter].dueDate.isLessThan(date: currentYear) {
+            while myBaseRentalCashflows.items[counter].dueDate.isLessThanOrEqualTo(date: currentYear) {
                 if counter >= myBaseRentalCashflows.count() - 1 {
                    //get Annualized
-                    if myBaseRentalCashflows.items[counter].amount.toDecimal() > 0.0 {
-                        runTotal = runTotal + myBaseRentalCashflows.items[counter].amount.toDecimal()
-                        let monthsToEndOfYear: Int = monthsDifference(start: myBaseRentalCashflows.items[counter].dueDate, end: currentYear , inclusive: false) - 1
-                        if monthsToEndOfYear > 0 {
-                            let monthlyRental: Decimal = runTotal / (12.0 - Decimal(monthsToEndOfYear))
-                            runTotal = monthlyRental * Decimal(12)
-                        }
+                    let monthsToEndOfYear: Int = monthsDifference(start: myBaseRentalCashflows.items[counter].dueDate, end: currentYear , inclusive: false)
+                    runTotal = runTotal + myBaseRentalCashflows.items[counter].amount.toDecimal()
+                    if monthsToEndOfYear > 0 {
+                        let monthlyRent = runTotal / (12 - Decimal(monthsToEndOfYear))
+                        runTotal = monthlyRent * 12
                     }
                     items.append(Cashflow(dueDate: currentYear, amount: runTotal.toString(decPlaces: 3)))
                     counter += 1
@@ -59,6 +65,27 @@ public class AnnualizedRentalCashflows: Cashflows {
         
     }
     
+    public func runUnevenRentTest() -> Bool {
+        var testResult: Bool = true
+        
+        for x in 0..<items.count {
+            if items[x].amount.toDecimal() > 0 {
+                if items[x].amount.toDecimal() > maxAnnualizedRent || items[x].amount.toDecimal() < minAnnualizedRent {
+                    testResult = false
+                    break
+                }
+            }
+        }
+        
+        return testResult
+    }
+    
+    private func setMaxMinRents () {
+        averageAnnualizedRent = averageMonthlyRent * Decimal(12)
+        maxAnnualizedRent = averageAnnualizedRent * Decimal(1.1)
+        minAnnualizedRent = averageAnnualizedRent * Decimal(0.9)
+    }
+    
     private func baseRentals(aInvestment: Investment) -> Cashflows {
         let aRent: Rent = aInvestment.rent
         let aLeaseTerm: LeaseTerm = aInvestment.leaseTerm
@@ -73,40 +100,32 @@ public class AnnualizedRentalCashflows: Cashflows {
         
         for x in counter..<aRent.groups.count {
             var y = 0
-            if aRent.groups[x].timing == .advance {
-                while y < aRent.groups[x].noOfPayments {
+            while y < aRent.groups[x].noOfPayments {
+                if aRent.groups[x].timing == .advance {
+                    //base rent in advance
                     let myStartCF = Cashflow(dueDate: dateStart, amount: aRent.groups[x].amount)
                     myBaseRents.add(item: myStartCF)
                     dateStart = addOnePeriodToDate(dateStart: dateStart, payPerYear: aLeaseTerm.paymentFrequency, dateRefer: aLeaseTerm.baseCommenceDate, bolEOMRule: eomRule)
                     let myEndCF = Cashflow(dueDate: dateStart, amount: "0.00")
                     myBaseRents.add(item: myEndCF)
-                    y += 1
-                }
-                
-            } else {
-                while y <= aRent.groups[x].noOfPayments {
+                } else {
+                    //base rent in arrears
                     let myStartCF = Cashflow(dueDate: dateStart, amount: "0.00")
                     myBaseRents.add(item: myStartCF)
                     dateStart = addOnePeriodToDate(dateStart: dateStart, payPerYear: aLeaseTerm.paymentFrequency, dateRefer: aLeaseTerm.baseCommenceDate, bolEOMRule: eomRule)
-                    let myEndCf = Cashflow(dueDate: dateStart, amount: aRent.groups[x].amount)
-                    myBaseRents.add(item: myEndCf)
-                    y += 1
+                    let myEndCF = Cashflow(dueDate: dateStart, amount: aRent.groups[x].amount)
+                    myBaseRents.add(item: myEndCF)
                 }
+                y += 1
             }
         }
         myBaseRents.consolidateCashflows()
         
-        if myBaseRents.items[myBaseRents.count() - 1].amount.toDecimal() == 0 {
-            myBaseRents.items.remove(at: myBaseRents.count() - 1)
-        }
-        
-        if myBaseRents.items[0].amount.toDecimal() == 0 {
-            myBaseRents.items.remove(at: 0)
-        }
-        
         return myBaseRents
     }
     
+    
+   
     
     
     

@@ -20,6 +20,26 @@ struct AnnualizedRentView: View {
         VStack(spacing: 0) {
             HeaderView(headerType: .report, name: "Uneven Rent Test", viewAsPct: myViewAsPct, goBack: myGoBack, withBackButton: true, withPctButton: true, path: $path, isDark: $isDark)
             Form {
+                Section(header: Text("Annualized Rent")) {
+                    HStack {
+                        Text("Average Annual Rent:")
+                        Spacer()
+                        Text("\(getFormattedValue(amount: myAnnualizedRent.averageAnnualizedRent.toString(decPlaces: 4), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment))")
+                    }.font(myFont)
+                    
+                    HStack {
+                        Text("90% of Annual Rent:")
+                        Spacer()
+                        Text("\(getFormattedValue(amount: myAnnualizedRent.minAnnualizedRent.toString(decPlaces: 4), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment))")
+                    }.font(myFont)
+                    
+                    HStack {
+                        Text("110% of Annual Rent:")
+                        Spacer()
+                        Text("\(getFormattedValue(amount: myAnnualizedRent.maxAnnualizedRent.toString(decPlaces: 4), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment))")
+                    }.font(myFont)
+                    
+                }
                 Section(header: Text("\(currentFile)")) {
                     ForEach(myAnnualizedRent.items) { item in
                         HStack {
@@ -30,14 +50,14 @@ struct AnnualizedRentView: View {
                         .font(myFont)
                     }
                 }
+
                 
-                Section(header: Text("Totals")) {
+                Section(header: Text("Results")) {
                     HStack {
-                        Text("\(myAnnualizedRent.items.count)")
+                        Text("Guideline Passed:")
                         Spacer()
-                        Text("\(getFormattedValue(amount: myAnnualizedRent.getTotal().toString(decPlaces: 4), viewAsPercentOfCost: viewAsPct, aInvestment: myInvestment))")
-                    }
-                    .font(myFont)
+                        Text("\(myAnnualizedRent.runUnevenRentTest())")
+                    }.font(myFont)
                 }
             }
         }
