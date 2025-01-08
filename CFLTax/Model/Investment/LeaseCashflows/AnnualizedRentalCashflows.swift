@@ -15,6 +15,20 @@ public class AnnualizedRentalCashflows: Cashflows {
     public var maxAnnualizedRent: Decimal = 0.0
     public var minAnnualizedRent: Decimal = 0.0
     
+    fileprivate func getLastAnnualizedRent(_ myBaseRentalCashflows: Cashflows, _ counter: Int, _ currentYear: Date, _ runTotal: inout Decimal) {
+        //This section extrapolates the annualized rent based upon the final rental payment
+        
+        var monthsToEndOfYear: Int = monthsDifference(start: myBaseRentalCashflows.items[counter].dueDate, end: currentYear , inclusive: false)
+        runTotal = runTotal + myBaseRentalCashflows.items[counter].amount.toDecimal()
+        if myBaseRentalCashflows.items[counter].amount.toDecimal() == 0.0 {
+            monthsToEndOfYear += 1
+        }
+        if monthsToEndOfYear > 0 {
+            let monthlyRent = runTotal / (12 - Decimal(monthsToEndOfYear))
+            runTotal = monthlyRent * 12
+        }
+    }
+    
     public func createTable(aInvestment: Investment) {
         //Test to compare the average annual rent to each annualized rent
         //If the an annualized rent for any year is < 90% of the average rent or greater than 110% of the average annual rent then the test fails
@@ -22,7 +36,6 @@ public class AnnualizedRentalCashflows: Cashflows {
         let referDate: Date = aInvestment.leaseTerm.baseCommenceDate
         let eomRule: Bool = aInvestment.leaseTerm.endOfMonthRule
         let myBaseRentalCashflows: Cashflows = baseRentals(aInvestment: aInvestment)
-        let aFreq: Int = aInvestment.leaseTerm.paymentFrequency.rawValue
         let totalRent: Decimal = myBaseRentalCashflows.getTotal()
         //If arrears
         var startDate: Date = myBaseRentalCashflows.items[0].dueDate
@@ -41,13 +54,7 @@ public class AnnualizedRentalCashflows: Cashflows {
         while counter < myBaseRentalCashflows.count() {
             while myBaseRentalCashflows.items[counter].dueDate.isLessThanOrEqualTo(date: currentYear) {
                 if counter >= myBaseRentalCashflows.count() - 1 {
-                   //get Annualized
-                    let monthsToEndOfYear: Int = monthsDifference(start: myBaseRentalCashflows.items[counter].dueDate, end: currentYear , inclusive: false)
-                    runTotal = runTotal + myBaseRentalCashflows.items[counter].amount.toDecimal()
-                    if monthsToEndOfYear > 0 {
-                        let monthlyRent = runTotal / (12 - Decimal(monthsToEndOfYear))
-                        runTotal = monthlyRent * 12
-                    }
+                    getLastAnnualizedRent(myBaseRentalCashflows, counter, currentYear, &runTotal)
                     items.append(Cashflow(dueDate: currentYear, amount: runTotal.toString(decPlaces: 3)))
                     counter += 1
                     finalYearAdded = true
