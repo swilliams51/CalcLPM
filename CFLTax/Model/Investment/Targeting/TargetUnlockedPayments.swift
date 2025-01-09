@@ -163,7 +163,7 @@ extension Investment{
         var y2 = getNPVAfterNewFactor_BT(aInvestment: tempInvestment, aFactor: x2, discountRate: yield)
         
         iCount = 2
-        while iCount < 10 {
+        while iCount < maxIterations {
             newFactor = mxbFactor(factor1: x1, value1: y1, factor2: x2, value2: y2)
             let myBalance = getNPVAfterNewFactor_BT(aInvestment: tempInvestment, aFactor: newFactor, discountRate: yield)
             

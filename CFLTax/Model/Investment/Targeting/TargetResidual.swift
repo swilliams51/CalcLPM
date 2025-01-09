@@ -46,7 +46,7 @@ extension Investment {
             var y2: Decimal = getNPVAfterNewResidual_AT(aInvestment: tempInvestment, aResidual: x2, discountRate: yield)
             
             iCounter = 2
-            while iCounter < 7 {
+            while iCounter < maxIterations {
                 mxbResidual = mxbFactor(factor1: x1, value1: y1, factor2: x2, value2: y2)
                 let newNPV = getNPVAfterNewResidual_AT(aInvestment: tempInvestment, aResidual: mxbResidual, discountRate: yield)
                 
@@ -123,7 +123,7 @@ extension Investment {
         var y2: Decimal = getNPVAfterNewFactor_BT(aInvestment: tempInvestment, aFactor: x2, discountRate: yield)
         
         var counter:Int = 1
-        while counter < 10 {
+        while counter < maxIterations {
             newFactor = mxbFactor(factor1: x1, value1: y1, factor2: x2, value2: y2)
             if newFactor < 0.0 {
                 newFactor = 0.0

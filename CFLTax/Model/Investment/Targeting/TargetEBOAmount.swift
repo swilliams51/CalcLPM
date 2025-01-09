@@ -31,7 +31,7 @@ extension Investment {
             var y2: Decimal = getNPVAfterNewEBOAmount_AT(aInvestment: tempInvestment, aEBOAmount: x2, discountRate: aTargetYield, aPlannedIncome: aPlannedIncome, aUnplannedDate: aUnplannedDate)
             
             iCounter = 2
-            while iCounter < 6 {
+            while iCounter < maxIterations {
                 mxbEBOAmount = mxbFactor(factor1: x1, value1: y1, factor2: x2, value2: y2)
                 let newNPV = getNPVAfterNewEBOAmount_AT(aInvestment: tempInvestment, aEBOAmount: mxbEBOAmount, discountRate: aTargetYield, aPlannedIncome: aPlannedIncome, aUnplannedDate: aUnplannedDate)
                 

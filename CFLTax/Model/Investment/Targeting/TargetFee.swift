@@ -109,7 +109,7 @@ extension Investment {
             var y2: Decimal = getNPVAfterNewFee_AT(aInvestment: tempInvestment, discountRate: yield)
            
             iCounter = 2
-            while iCounter < 4 {
+            while iCounter < maxIterations {
                 mxbFee = mxbFactor(factor1: x1, value1: y1, factor2: x2, value2: y2)
                 tempInvestment.fee.amount = mxbFee.toString()
                 let newNPV = getNPVAfterNewFee_AT(aInvestment: tempInvestment, discountRate: yield)
