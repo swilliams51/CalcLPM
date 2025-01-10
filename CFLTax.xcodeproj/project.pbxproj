@@ -12,6 +12,7 @@
 		DB3CA4562D2EEAAF004A4E35 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = DB3CA4542D2EEAAF004A4E35 /* PrivacyInfo.xcprivacy */; };
 		DB3CA45A2D2F1AFD004A4E35 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DB3CA4592D2F1AFD004A4E35 /* GoogleService-Info.plist */; };
 		DB3CA45C2D2F1C95004A4E35 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = DB3CA45B2D2F1C95004A4E35 /* FirebaseCore */; };
+		DB3CA63B2D306C14004A4E35 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = DB3CA63A2D306C14004A4E35 /* FirebaseAnalyticsOnDeviceConversion */; };
 		DB98D1CB2D21F01D0091FDAA /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = DB98D1CA2D21F01D0091FDAA /* FirebaseAnalytics */; };
 /* End PBXBuildFile section */
 
@@ -33,6 +34,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				DB3CA45C2D2F1C95004A4E35 /* FirebaseCore in Frameworks */,
+				DB3CA63B2D306C14004A4E35 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
 				DB98D1CB2D21F01D0091FDAA /* FirebaseAnalytics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -40,6 +42,13 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		DB3CA6392D306C14004A4E35 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		DBB171252C6514EA00365B9A = {
 			isa = PBXGroup;
 			children = (
@@ -48,6 +57,7 @@
 				DB3CA4542D2EEAAF004A4E35 /* PrivacyInfo.xcprivacy */,
 				DB3CA4532D2EEAAF004A4E35 /* Assets.xcassets */,
 				DBB171302C6514EA00365B9A /* CFLTax */,
+				DB3CA6392D306C14004A4E35 /* Frameworks */,
 				DBB1712F2C6514EA00365B9A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -82,6 +92,7 @@
 			packageProductDependencies = (
 				DB98D1CA2D21F01D0091FDAA /* FirebaseAnalytics */,
 				DB3CA45B2D2F1C95004A4E35 /* FirebaseCore */,
+				DB3CA63A2D306C14004A4E35 /* FirebaseAnalyticsOnDeviceConversion */,
 			);
 			productName = CFLTax;
 			productReference = DBB1712E2C6514EA00365B9A /* CFLTax.app */;
@@ -374,6 +385,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = DB98D1C92D21F01D0091FDAA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseCore;
+		};
+		DB3CA63A2D306C14004A4E35 /* FirebaseAnalyticsOnDeviceConversion */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DB98D1C92D21F01D0091FDAA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalyticsOnDeviceConversion;
 		};
 		DB98D1CA2D21F01D0091FDAA /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
