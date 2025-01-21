@@ -120,7 +120,7 @@ struct HomeView: View {
         
     }
     private func myGoBack() {
-        print("Go Back")
+       
     }
     
     var assetItem: some View {
@@ -260,10 +260,17 @@ struct HomeView: View {
         }
         .contentShape(Rectangle())
         .onTapGesture {
-            self.isLoading = true
-            Task {
-                await calculate()
+            if myInvestment.isSolveForValid() {
+                self.isLoading = true
+                resetInvestment()
+                Task {
+                    await goToResultsView()
+                }
+            } else {
+                self.isShowingCalculationErrorAlert = true
+                self.isLoading = false
             }
+           
         }
     }
     
@@ -284,25 +291,64 @@ struct HomeView: View {
     }
     
     private func goToEBOView() async {
+        try? await Task.sleep(nanoseconds: 500_000_000)
         self.path.append(8)
     }
     
-    private func calculate() async {
-        if myInvestment.isSolveForValid() {
-            myInvestment.hasChanged = false
-            if myInvestment.feeExists {
-                myInvestment.fee.hasChanged = false
-            }
-            if myInvestment.earlyBuyoutExists {
-                myInvestment.earlyBuyout.hasChanged = false
-            }
-            
-            self.path.append(25)
-        } else {
-            self.isShowingCalculationErrorAlert = true
-            self.isLoading = false
+    private func goToResultsView() async {
+        try? await Task.sleep(nanoseconds: 1_000_000_000)
+        self.path.append(25)
+    }
+    
+    private func resetInvestment() {
+        myInvestment.hasChanged = false
+        if myInvestment.feeExists {
+            myInvestment.fee.hasChanged = false
+        }
+        if myInvestment.earlyBuyoutExists {
+            myInvestment.earlyBuyout.hasChanged = false
         }
     }
+    
+//    private func calculate() {
+//        if myInvestment.isSolveForValid() {
+//           
+//            myInvestment.hasChanged = false
+//            if myInvestment.feeExists {
+//                myInvestment.fee.hasChanged = false
+//            }
+//            if myInvestment.earlyBuyoutExists {
+//                myInvestment.earlyBuyout.hasChanged = false
+//            }
+//            
+//            Task {
+//                await goToResultsView()
+//            }
+//            self.isLoading = false
+//        } else {
+//            self.isShowingCalculationErrorAlert = true
+//            self.isLoading = false
+//        }
+//    }
+//    
+//    private func calculate2() async {
+//        if myInvestment.isSolveForValid() {
+//            myInvestment.hasChanged = false
+//            if myInvestment.feeExists {
+//                myInvestment.fee.hasChanged = false
+//            }
+//            if myInvestment.earlyBuyoutExists {
+//                myInvestment.earlyBuyout.hasChanged = false
+//            }
+//            
+//           // await goToResultsView()
+//            self.path.append(25)
+//            self.isLoading = false
+//        } else {
+//            self.isShowingCalculationErrorAlert = true
+//            self.isLoading = false
+//        }
+//    }
     
     private func investmentHasChanged() -> Bool {
         if myInvestment.hasChanged {

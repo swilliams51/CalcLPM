@@ -66,14 +66,17 @@ struct SummaryOfResultsView: View {
     }
     
     private func goToCashflows() async {
+        try? await Task.sleep(nanoseconds: 500_000)
         self.path.append(14)
     }
     
     private func goToRentals() async {
+        try? await Task.sleep(nanoseconds: 500_000)
         self.path.append(15)
     }
     
     private func goToEarlyBuyout() async {
+        try? await Task.sleep(nanoseconds: 500_000)
         self.path.append(16)
     }
     
@@ -81,8 +84,15 @@ struct SummaryOfResultsView: View {
         self.viewAsPctOfCost.toggle()
     }
     
-    private func myGoBack() {
+    private func myGoBack2() async {
+        try? await Task.sleep(nanoseconds: 500_000)
         self.path.removeLast()
+    }
+    
+    private func myGoBack() {
+       
+        self.path.removeLast()
+       
     }
     
 }
