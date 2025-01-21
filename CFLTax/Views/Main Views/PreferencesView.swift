@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-import RevenueCatUI
+//import RevenueCatUI
 
 struct PreferencesView: View {
     @Bindable var myInvestment: Investment
@@ -28,7 +28,7 @@ struct PreferencesView: View {
     
     @State private var alertTitle: String = ""
     @State private var showAlert: Bool = false
-    @State private var showDebug: Bool = false
+    //@State private var showDebug: Bool = false
     
     var body: some View {
         VStack (spacing: 0) {
@@ -41,7 +41,7 @@ struct PreferencesView: View {
                 }
                Section(header: Text("Mode")) {
                     colorSchemeItem
-                    revenueCatOverlayItem
+                    //revenueCatOverlayItem
                    
                 }
                 Section(header: Text("Submit Form")){
@@ -57,7 +57,7 @@ struct PreferencesView: View {
             }
             self.useMySavedAsDefault = useSavedAsDefault
         }
-        .debugRevenueCatOverlay(isPresented: $showDebug)
+        //.debugRevenueCatOverlay(isPresented: $showDebug)
     }
     
     var defaultNewLeaseItem: some View {
@@ -114,17 +114,17 @@ struct PreferencesView: View {
         }
     }
     
-    var revenueCatOverlayItem: some View {
-        HStack {
-            Text("RevenueCat Overlay")
-            Spacer()
-            Text("Show")
-                .onTapGesture{
-                    self.showDebug = true
-                }
-        }
-        .font(myFont)
-    }
+//    var revenueCatOverlayItem: some View {
+//        HStack {
+//            Text("RevenueCat Overlay")
+//            Spacer()
+//            Text("Show")
+//                .onTapGesture{
+//                    self.showDebug = true
+//                }
+//        }
+//        .font(myFont)
+//    }
 }
 
 #Preview {
