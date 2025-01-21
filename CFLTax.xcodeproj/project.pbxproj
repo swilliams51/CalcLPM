@@ -13,6 +13,9 @@
 		DB3CA45A2D2F1AFD004A4E35 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = DB3CA4592D2F1AFD004A4E35 /* GoogleService-Info.plist */; };
 		DB3CA45C2D2F1C95004A4E35 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = DB3CA45B2D2F1C95004A4E35 /* FirebaseCore */; };
 		DB3CA63B2D306C14004A4E35 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */ = {isa = PBXBuildFile; productRef = DB3CA63A2D306C14004A4E35 /* FirebaseAnalyticsOnDeviceConversion */; };
+		DB434C6A2D3FFEA000B774EF /* RevenueCat in Frameworks */ = {isa = PBXBuildFile; productRef = DB434C692D3FFEA000B774EF /* RevenueCat */; };
+		DB434C6C2D3FFEA000B774EF /* RevenueCatUI in Frameworks */ = {isa = PBXBuildFile; productRef = DB434C6B2D3FFEA000B774EF /* RevenueCatUI */; };
+		DB434C6E2D40024800B774EF /* RevenueCatPaywall.storekit in Resources */ = {isa = PBXBuildFile; fileRef = DB434C6D2D40024800B774EF /* RevenueCatPaywall.storekit */; };
 		DB98D1CB2D21F01D0091FDAA /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = DB98D1CA2D21F01D0091FDAA /* FirebaseAnalytics */; };
 /* End PBXBuildFile section */
 
@@ -21,6 +24,7 @@
 		DB3CA4532D2EEAAF004A4E35 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		DB3CA4542D2EEAAF004A4E35 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		DB3CA4592D2F1AFD004A4E35 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		DB434C6D2D40024800B774EF /* RevenueCatPaywall.storekit */ = {isa = PBXFileReference; lastKnownFileType = text; path = RevenueCatPaywall.storekit; sourceTree = "<group>"; };
 		DBB1712E2C6514EA00365B9A /* CFLTax.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CFLTax.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -33,8 +37,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DB434C6A2D3FFEA000B774EF /* RevenueCat in Frameworks */,
 				DB3CA45C2D2F1C95004A4E35 /* FirebaseCore in Frameworks */,
 				DB3CA63B2D306C14004A4E35 /* FirebaseAnalyticsOnDeviceConversion in Frameworks */,
+				DB434C6C2D3FFEA000B774EF /* RevenueCatUI in Frameworks */,
 				DB98D1CB2D21F01D0091FDAA /* FirebaseAnalytics in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -52,6 +58,7 @@
 		DBB171252C6514EA00365B9A = {
 			isa = PBXGroup;
 			children = (
+				DB434C6D2D40024800B774EF /* RevenueCatPaywall.storekit */,
 				DB3CA3E42D2EEAAF004A4E35 /* CFLTaxApp.swift */,
 				DB3CA4592D2F1AFD004A4E35 /* GoogleService-Info.plist */,
 				DB3CA4542D2EEAAF004A4E35 /* PrivacyInfo.xcprivacy */,
@@ -93,6 +100,8 @@
 				DB98D1CA2D21F01D0091FDAA /* FirebaseAnalytics */,
 				DB3CA45B2D2F1C95004A4E35 /* FirebaseCore */,
 				DB3CA63A2D306C14004A4E35 /* FirebaseAnalyticsOnDeviceConversion */,
+				DB434C692D3FFEA000B774EF /* RevenueCat */,
+				DB434C6B2D3FFEA000B774EF /* RevenueCatUI */,
 			);
 			productName = CFLTax;
 			productReference = DBB1712E2C6514EA00365B9A /* CFLTax.app */;
@@ -124,6 +133,7 @@
 			mainGroup = DBB171252C6514EA00365B9A;
 			packageReferences = (
 				DB98D1C92D21F01D0091FDAA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				DB434C682D3FFEA000B774EF /* XCRemoteSwiftPackageReference "purchases-ios" */,
 			);
 			productRefGroup = DBB1712F2C6514EA00365B9A /* Products */;
 			projectDirPath = "";
@@ -142,6 +152,7 @@
 				DB3CA4552D2EEAAF004A4E35 /* Assets.xcassets in Resources */,
 				DB3CA4562D2EEAAF004A4E35 /* PrivacyInfo.xcprivacy in Resources */,
 				DB3CA45A2D2F1AFD004A4E35 /* GoogleService-Info.plist in Resources */,
+				DB434C6E2D40024800B774EF /* RevenueCatPaywall.storekit in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -378,6 +389,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		DB434C682D3FFEA000B774EF /* XCRemoteSwiftPackageReference "purchases-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/RevenueCat/purchases-ios.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 5.14.6;
+			};
+		};
 		DB98D1C92D21F01D0091FDAA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -398,6 +417,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = DB98D1C92D21F01D0091FDAA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAnalyticsOnDeviceConversion;
+		};
+		DB434C692D3FFEA000B774EF /* RevenueCat */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DB434C682D3FFEA000B774EF /* XCRemoteSwiftPackageReference "purchases-ios" */;
+			productName = RevenueCat;
+		};
+		DB434C6B2D3FFEA000B774EF /* RevenueCatUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = DB434C682D3FFEA000B774EF /* XCRemoteSwiftPackageReference "purchases-ios" */;
+			productName = RevenueCatUI;
 		};
 		DB98D1CA2D21F01D0091FDAA /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
